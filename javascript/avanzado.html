@@ -808,6 +808,352 @@ store.<span class="function">undo</span>(); <span class="comment">// Vuelve them
             </div>
         </section>
 
+        <!-- ================================================
+             7. GIT Y GITHUB
+             ================================================ -->
+        <section id="git" class="mb-5">
+            <div class="example-card">
+                <div class="example-header" style="background: linear-gradient(135deg, #f34f29, #211f1f);">
+                    <h3 class="mb-0 text-white"><i class="bi bi-git me-2"></i>7. Git & GitHub - Comandos Esenciales</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Todos los comandos que necesitas para control de versiones y repositorios.</p>
+                    
+                    <div class="code-block" style="max-height: none;">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/* ============================================
+   🔧 CONFIGURACIÓN INICIAL
+   ============================================ */</span>
+
+<span class="comment">// Configurar nombre y email (solo una vez)</span>
+git config --global user.name <span class="string">"Tu Nombre"</span>
+git config --global user.email <span class="string">"tu@email.com"</span>
+
+<span class="comment">// Ver configuración actual</span>
+git config --list
+
+
+<span class="comment">/* ============================================
+   📁 CREAR/CLONAR REPOSITORIO
+   ============================================ */</span>
+
+<span class="comment">// Iniciar un nuevo repositorio</span>
+git init
+
+<span class="comment">// Clonar repositorio existente</span>
+git clone https://github.com/usuario/repo.git
+
+<span class="comment">// Clonar en carpeta específica</span>
+git clone https://github.com/usuario/repo.git mi-carpeta
+
+
+<span class="comment">/* ============================================
+   📝 COMANDOS BÁSICOS DEL DÍA A DÍA
+   ============================================ */</span>
+
+<span class="comment">// Ver estado de archivos</span>
+git status
+
+<span class="comment">// Agregar archivos al staging</span>
+git add archivo.js           <span class="comment">// Un archivo específico</span>
+git add .                    <span class="comment">// Todos los archivos</span>
+git add *.js                 <span class="comment">// Todos los .js</span>
+git add src/                 <span class="comment">// Todo en carpeta src</span>
+
+<span class="comment">// Hacer commit</span>
+git commit -m <span class="string">"Mensaje descriptivo del cambio"</span>
+
+<span class="comment">// Add + Commit en un solo paso (solo archivos ya trackeados)</span>
+git commit -am <span class="string">"Mensaje del commit"</span>
+
+<span class="comment">// Ver historial de commits</span>
+git log                      <span class="comment">// Completo</span>
+git log --oneline            <span class="comment">// Resumido</span>
+git log --oneline -5         <span class="comment">// Últimos 5</span>
+
+
+<span class="comment">/* ============================================
+   🌿 RAMAS (BRANCHES)
+   ============================================ */</span>
+
+<span class="comment">// Ver ramas</span>
+git branch                   <span class="comment">// Locales</span>
+git branch -a                <span class="comment">// Todas (locales + remotas)</span>
+
+<span class="comment">// Crear rama</span>
+git branch nombre-rama
+
+<span class="comment">// Cambiar de rama</span>
+git checkout nombre-rama
+git switch nombre-rama       <span class="comment">// Forma moderna</span>
+
+<span class="comment">// Crear y cambiar a nueva rama (un solo comando)</span>
+git checkout -b nueva-rama
+git switch -c nueva-rama     <span class="comment">// Forma moderna</span>
+
+<span class="comment">// Eliminar rama</span>
+git branch -d nombre-rama    <span class="comment">// Si ya está mergeada</span>
+git branch -D nombre-rama    <span class="comment">// Forzar eliminación</span>
+
+<span class="comment">// Renombrar rama actual</span>
+git branch -m nuevo-nombre
+
+
+<span class="comment">/* ============================================
+   🔀 MERGE Y REBASE
+   ============================================ */</span>
+
+<span class="comment">// Merge: unir otra rama a la actual</span>
+git merge nombre-rama
+
+<span class="comment">// Si hay conflictos:</span>
+<span class="comment">// 1. Editar archivos con conflictos</span>
+<span class="comment">// 2. git add archivos-resueltos</span>
+<span class="comment">// 3. git commit</span>
+
+<span class="comment">// Abortar merge con conflictos</span>
+git merge --abort
+
+<span class="comment">// Rebase (reorganizar commits)</span>
+git rebase main
+
+
+<span class="comment">/* ============================================
+   ☁️ GITHUB - REPOSITORIOS REMOTOS
+   ============================================ */</span>
+
+<span class="comment">// Ver remotos configurados</span>
+git remote -v
+
+<span class="comment">// Agregar remoto (después de crear repo en GitHub)</span>
+git remote add origin https://github.com/usuario/repo.git
+
+<span class="comment">// Cambiar URL del remoto</span>
+git remote set-url origin https://github.com/usuario/nuevo-repo.git
+
+<span class="comment">// Subir cambios (push)</span>
+git push origin main         <span class="comment">// Primera vez</span>
+git push                     <span class="comment">// Después, si ya está configurado</span>
+
+<span class="comment">// Push y establecer upstream (tracking)</span>
+git push -u origin main
+
+<span class="comment">// Subir nueva rama a GitHub</span>
+git push -u origin nombre-rama
+
+<span class="comment">// Bajar cambios (pull)</span>
+git pull origin main
+git pull                     <span class="comment">// Si ya tiene tracking</span>
+
+<span class="comment">// Fetch (descargar sin merge)</span>
+git fetch origin
+
+
+<span class="comment">/* ============================================
+   ⏪ DESHACER CAMBIOS
+   ============================================ */</span>
+
+<span class="comment">// Descartar cambios en archivo (NO commiteado)</span>
+git checkout -- archivo.js
+git restore archivo.js       <span class="comment">// Forma moderna</span>
+
+<span class="comment">// Quitar del staging (después de git add)</span>
+git reset archivo.js
+git restore --staged archivo.js
+
+<span class="comment">// Deshacer último commit (mantiene cambios)</span>
+git reset --soft HEAD~1
+
+<span class="comment">// Deshacer último commit (descarta cambios)</span>
+git reset --hard HEAD~1
+
+<span class="comment">// Revertir commit específico (crea nuevo commit)</span>
+git revert abc123
+
+
+<span class="comment">/* ============================================
+   📦 STASH - GUARDAR CAMBIOS TEMPORALES
+   ============================================ */</span>
+
+<span class="comment">// Guardar cambios temporalmente</span>
+git stash
+git stash save <span class="string">"Descripción de los cambios"</span>
+
+<span class="comment">// Ver lista de stashes</span>
+git stash list
+
+<span class="comment">// Recuperar último stash</span>
+git stash pop                <span class="comment">// Aplica y elimina</span>
+git stash apply              <span class="comment">// Aplica sin eliminar</span>
+
+<span class="comment">// Eliminar stash</span>
+git stash drop               <span class="comment">// El más reciente</span>
+git stash clear              <span class="comment">// Todos</span>
+
+
+<span class="comment">/* ============================================
+   🏷️ TAGS - VERSIONES
+   ============================================ */</span>
+
+<span class="comment">// Crear tag</span>
+git tag v1.0.0
+git tag -a v1.0.0 -m <span class="string">"Versión 1.0.0"</span>
+
+<span class="comment">// Ver tags</span>
+git tag
+
+<span class="comment">// Subir tags a GitHub</span>
+git push origin v1.0.0       <span class="comment">// Un tag</span>
+git push origin --tags       <span class="comment">// Todos los tags</span>
+
+
+<span class="comment">/* ============================================
+   🚀 FLUJO TÍPICO DE TRABAJO
+   ============================================ */</span>
+
+<span class="comment">// 1. Clonar o crear repo</span>
+git clone https://github.com/usuario/repo.git
+cd repo
+
+<span class="comment">// 2. Crear rama para nueva feature</span>
+git checkout -b feature/login
+
+<span class="comment">// 3. Trabajar y hacer commits</span>
+git add .
+git commit -m <span class="string">"Agregar formulario de login"</span>
+
+<span class="comment">// 4. Subir rama a GitHub</span>
+git push -u origin feature/login
+
+<span class="comment">// 5. Crear Pull Request en GitHub</span>
+
+<span class="comment">// 6. Después del merge, actualizar main local</span>
+git checkout main
+git pull origin main
+
+<span class="comment">// 7. Eliminar rama local ya mergeada</span>
+git branch -d feature/login
+
+
+<span class="comment">/* ============================================
+   📋 .gitignore - ARCHIVOS A IGNORAR
+   ============================================ */</span>
+
+<span class="comment">// Crear archivo .gitignore en la raíz del proyecto:</span>
+
+<span class="comment"># Dependencias</span>
+node_modules/
+vendor/
+
+<span class="comment"># Build</span>
+dist/
+build/
+
+<span class="comment"># Environment</span>
+.env
+.env.local
+
+<span class="comment"># IDE</span>
+.vscode/
+.idea/
+
+<span class="comment"># OS</span>
+.DS_Store
+Thumbs.db
+
+<span class="comment"># Logs</span>
+*.log
+logs/</pre>
+                    </div>
+
+                    <!-- Tabla de comandos rápidos -->
+                    <div class="mt-4">
+                        <h5 class="text-warning mb-3"><i class="bi bi-lightning-fill me-2"></i>Comandos Más Usados</h5>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-bordered">
+                                <thead style="background: #313244;">
+                                    <tr>
+                                        <th>Acción</th>
+                                        <th>Comando</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Ver estado</td><td><code>git status</code></td></tr>
+                                    <tr><td>Agregar todo</td><td><code>git add .</code></td></tr>
+                                    <tr><td>Commit</td><td><code>git commit -m "mensaje"</code></td></tr>
+                                    <tr><td>Subir</td><td><code>git push</code></td></tr>
+                                    <tr><td>Bajar</td><td><code>git pull</code></td></tr>
+                                    <tr><td>Nueva rama</td><td><code>git checkout -b nombre</code></td></tr>
+                                    <tr><td>Cambiar rama</td><td><code>git checkout nombre</code></td></tr>
+                                    <tr><td>Ver ramas</td><td><code>git branch</code></td></tr>
+                                    <tr><td>Unir rama</td><td><code>git merge nombre</code></td></tr>
+                                    <tr><td>Ver historial</td><td><code>git log --oneline</code></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             8. ANALIZADOR DE PROYECTOS
+             ================================================ -->
+        <section id="analizador" class="mb-5">
+            <div class="example-card" style="border: 2px solid #f7df1e;">
+                <div class="example-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <h3 class="mb-0 text-white"><i class="bi bi-lightbulb-fill me-2"></i>8. Analizador de Proyectos - ¿Qué Usar?</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Describe tu proyecto o trabajo y te diré qué recursos de esta guía te sirven y por dónde empezar.</p>
+                    
+                    <!-- Input del proyecto -->
+                    <div class="mb-4">
+                        <label class="form-label text-warning fw-bold">
+                            <i class="bi bi-pencil-square me-2"></i>Describe tu proyecto o trabajo:
+                        </label>
+                        <textarea id="projectInput" class="form-control bg-dark text-light border-secondary" rows="4" 
+                            placeholder="Ejemplo: Tengo que hacer una tienda online con carrito, login de usuarios, y que guarde los pedidos. Tiene que verse bien en móvil..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-warning btn-lg fw-bold mb-4" onclick="analyzeProject()">
+                        <i class="bi bi-search me-2"></i>Analizar Proyecto
+                    </button>
+                    
+                    <!-- Resultados del análisis -->
+                    <div id="analysisResult" style="display: none;">
+                        <div class="alert alert-success border-0" style="background: rgba(166, 227, 161, 0.1); border-left: 4px solid #a6e3a1 !important;">
+                            <h5 class="text-success"><i class="bi bi-check-circle-fill me-2"></i>Recursos que Necesitas:</h5>
+                            <div id="resourcesList"></div>
+                        </div>
+                        
+                        <div class="alert border-0 mt-3" style="background: rgba(137, 180, 250, 0.1); border-left: 4px solid #89b4fa !important;">
+                            <h5 style="color: #89b4fa;"><i class="bi bi-signpost-split me-2"></i>Por Dónde Empezar:</h5>
+                            <ol id="stepsList" style="color: #cdd6f4;"></ol>
+                        </div>
+                        
+                        <div class="alert border-0 mt-3" style="background: rgba(249, 226, 175, 0.1); border-left: 4px solid #f9e2af !important;">
+                            <h5 style="color: #f9e2af;"><i class="bi bi-lightbulb me-2"></i>Tips Adicionales:</h5>
+                            <div id="tipsList" style="color: #cdd6f4;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Ejemplos rápidos -->
+                    <div class="mt-4 p-3 rounded" style="background: #11111b;">
+                        <h6 class="text-warning mb-3"><i class="bi bi-stars me-2"></i>Prueba con estos ejemplos:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-outline-light btn-sm" onclick="setExample('tienda')">🛒 Tienda Online</button>
+                            <button class="btn btn-outline-light btn-sm" onclick="setExample('login')">🔐 Sistema Login</button>
+                            <button class="btn btn-outline-light btn-sm" onclick="setExample('dashboard')">📊 Dashboard</button>
+                            <button class="btn btn-outline-light btn-sm" onclick="setExample('landing')">🚀 Landing Page</button>
+                            <button class="btn btn-outline-light btn-sm" onclick="setExample('crud')">📝 CRUD con API</button>
+                            <button class="btn btn-outline-light btn-sm" onclick="setExample('portfolio')">💼 Portfolio</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Navegación -->
         <div class="d-flex justify-content-between mt-5">
             <a href="dom.html" class="btn btn-outline-warning">
@@ -826,6 +1172,355 @@ store.<span class="function">undo</span>(); <span class="comment">// Vuelve them
             navigator.clipboard.writeText(code);
             btn.innerHTML = '<i class="bi bi-check2"></i> Copiado!';
             setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard"></i>', 2000);
+        }
+
+        // ====== ANALIZADOR DE PROYECTOS ======
+        const projectResources = {
+            // Palabras clave y sus recursos asociados
+            keywords: {
+                // E-commerce
+                'tienda': ['ecommerce', 'carrito', 'productos', 'checkout'],
+                'carrito': ['ecommerce', 'carrito', 'localStorage'],
+                'productos': ['ecommerce', 'cards', 'grid'],
+                'compra': ['ecommerce', 'checkout', 'formularios'],
+                'checkout': ['ecommerce', 'checkout', 'formularios', 'validaciones'],
+                'pedidos': ['ecommerce', 'localStorage', 'admin'],
+                'inventario': ['ecommerce-avanzado', 'localStorage'],
+                'cupones': ['ecommerce-avanzado'],
+                
+                // Auth
+                'login': ['auth', 'formularios', 'validaciones', 'localStorage'],
+                'registro': ['auth', 'formularios', 'validaciones'],
+                'usuario': ['auth', 'localStorage', 'sesion'],
+                'contraseña': ['auth', 'validaciones'],
+                'autenticación': ['auth', 'auth-avanzado'],
+                'sesión': ['auth-avanzado', 'localStorage'],
+                'roles': ['auth-avanzado'],
+                'permisos': ['auth-avanzado'],
+                'jwt': ['auth-avanzado', 'apis'],
+                
+                // UI/Bootstrap
+                'responsive': ['bootstrap', 'grid', 'utilidades'],
+                'móvil': ['bootstrap', 'grid'],
+                'diseño': ['bootstrap', 'componentes'],
+                'navbar': ['bootstrap', 'componentes'],
+                'cards': ['bootstrap', 'componentes'],
+                'modal': ['bootstrap', 'componentes'],
+                'formulario': ['bootstrap', 'formularios', 'validaciones'],
+                'tabla': ['bootstrap', 'componentes'],
+                'botones': ['bootstrap', 'componentes'],
+                'animaciones': ['bootstrap-avanzado'],
+                'glassmorphism': ['bootstrap-avanzado'],
+                
+                // JavaScript
+                'dom': ['javascript', 'dom', 'eventos'],
+                'eventos': ['javascript', 'eventos'],
+                'arrays': ['javascript', 'arrays-objetos'],
+                'objetos': ['javascript', 'arrays-objetos'],
+                'funciones': ['javascript', 'funciones'],
+                'async': ['javascript', 'async'],
+                'promesas': ['javascript', 'async'],
+                'validaciones': ['javascript', 'validaciones'],
+                'guardar': ['javascript', 'localStorage'],
+                'localStorage': ['javascript', 'localStorage'],
+                
+                // APIs
+                'api': ['apis', 'fetch', 'async'],
+                'fetch': ['apis', 'fetch'],
+                'json': ['apis', 'json-server'],
+                'crud': ['apis', 'json-server', 'fetch'],
+                'servidor': ['apis', 'json-server'],
+                'datos': ['apis', 'fetch', 'localStorage'],
+                
+                // Templates
+                'landing': ['templates', 'landing'],
+                'dashboard': ['templates', 'dashboard', 'admin'],
+                'admin': ['admin', 'dashboard'],
+                'panel': ['admin', 'dashboard'],
+                'portfolio': ['templates', 'landing'],
+                
+                // Avanzado
+                'profesional': ['avanzado'],
+                'patrones': ['javascript-avanzado', 'patrones'],
+                'arquitectura': ['javascript-avanzado'],
+            },
+            
+            // Información de cada recurso
+            resources: {
+                'bootstrap': {
+                    name: '📐 Bootstrap Básico',
+                    link: '../bootstrap/componentes.html',
+                    desc: 'Componentes, Grid, Utilidades'
+                },
+                'grid': {
+                    name: '📱 Sistema Grid',
+                    link: '../bootstrap/grid.html',
+                    desc: 'Layout responsive con columnas'
+                },
+                'componentes': {
+                    name: '🧩 Componentes Bootstrap',
+                    link: '../bootstrap/componentes.html',
+                    desc: 'Navbar, Cards, Modales, etc.'
+                },
+                'formularios': {
+                    name: '📝 Formularios Bootstrap',
+                    link: '../bootstrap/formularios.html',
+                    desc: 'Inputs, validación visual, estilos'
+                },
+                'utilidades': {
+                    name: '🛠️ Utilidades CSS',
+                    link: '../bootstrap/utilidades.html',
+                    desc: 'Espaciado, colores, display, flex'
+                },
+                'bootstrap-avanzado': {
+                    name: '🔥 Bootstrap Avanzado',
+                    link: '../bootstrap/avanzado.html',
+                    desc: 'Glassmorphism, efectos, animaciones'
+                },
+                'javascript': {
+                    name: '💛 JavaScript Básico',
+                    link: 'dom.html',
+                    desc: 'Fundamentos de JS'
+                },
+                'dom': {
+                    name: '🌳 DOM Manipulation',
+                    link: 'dom.html',
+                    desc: 'Seleccionar y modificar elementos'
+                },
+                'eventos': {
+                    name: '🎯 Eventos',
+                    link: 'eventos.html',
+                    desc: 'Click, submit, input, etc.'
+                },
+                'arrays-objetos': {
+                    name: '📦 Arrays y Objetos',
+                    link: 'arrays-objetos.html',
+                    desc: 'map, filter, reduce, spread'
+                },
+                'funciones': {
+                    name: '⚡ Funciones',
+                    link: 'funciones.html',
+                    desc: 'Arrow functions, callbacks'
+                },
+                'async': {
+                    name: '⏳ Async/Await',
+                    link: 'async.html',
+                    desc: 'Promesas, fetch, código asíncrono'
+                },
+                'localStorage': {
+                    name: '💾 LocalStorage',
+                    link: 'storage.html',
+                    desc: 'Guardar datos en el navegador'
+                },
+                'validaciones': {
+                    name: '✅ Validaciones JS',
+                    link: 'validaciones.html',
+                    desc: 'Validar formularios con JS'
+                },
+                'patrones': {
+                    name: '🧩 Patrones de Diseño',
+                    link: 'patrones.html',
+                    desc: 'Module, Observer, Factory'
+                },
+                'javascript-avanzado': {
+                    name: '🔥 JavaScript Avanzado',
+                    link: 'avanzado.html',
+                    desc: 'Closures, Proxy, Generators'
+                },
+                'auth': {
+                    name: '🔐 Login/Registro',
+                    link: '../auth/login.html',
+                    desc: '5+ diseños de formularios auth'
+                },
+                'auth-avanzado': {
+                    name: '🔥 Auth Avanzado',
+                    link: '../auth/avanzado.html',
+                    desc: 'JWT, RBAC, Session Manager'
+                },
+                'ecommerce': {
+                    name: '🏪 Tienda Online',
+                    link: '../ecommerce/tienda.html',
+                    desc: 'Catálogo de productos'
+                },
+                'carrito': {
+                    name: '🛒 Carrito de Compras',
+                    link: '../ecommerce/carrito.html',
+                    desc: 'Añadir, quitar, calcular total'
+                },
+                'checkout': {
+                    name: '💳 Checkout',
+                    link: '../ecommerce/checkout.html',
+                    desc: 'Proceso de compra'
+                },
+                'ecommerce-avanzado': {
+                    name: '🔥 E-commerce Avanzado',
+                    link: '../ecommerce/avanzado.html',
+                    desc: 'Cart Manager, cupones, inventario'
+                },
+                'apis': {
+                    name: '📡 Fetch API',
+                    link: '../apis/fetch.html',
+                    desc: 'Consumir APIs REST'
+                },
+                'fetch': {
+                    name: '📡 Fetch API',
+                    link: '../apis/fetch.html',
+                    desc: 'GET, POST, PUT, DELETE'
+                },
+                'json-server': {
+                    name: '🗄️ JSON Server',
+                    link: '../apis/json-server.html',
+                    desc: 'Backend fake para desarrollo'
+                },
+                'apis-avanzado': {
+                    name: '🔥 APIs Avanzado',
+                    link: '../apis/avanzado.html',
+                    desc: 'Interceptores, cache, retry'
+                },
+                'templates': {
+                    name: '🎨 Templates',
+                    link: '../templates/landing.html',
+                    desc: 'Páginas listas para usar'
+                },
+                'landing': {
+                    name: '🚀 Landing Pages',
+                    link: '../templates/landing.html',
+                    desc: '5+ diseños de landing'
+                },
+                'dashboard': {
+                    name: '📊 Dashboard',
+                    link: '../templates/dashboard.html',
+                    desc: 'Panel de control con gráficos'
+                },
+                'admin': {
+                    name: '👨‍💼 Panel Admin',
+                    link: '../admin/index.html',
+                    desc: 'Gestión usuarios, pedidos, productos'
+                },
+                'proyecto-final': {
+                    name: '⭐ Proyecto Final',
+                    link: '../ejemplo-proyecto/index.html',
+                    desc: 'Todo integrado en un ejemplo'
+                }
+            }
+        };
+
+        function analyzeProject() {
+            const input = document.getElementById('projectInput').value.toLowerCase();
+            if (!input.trim()) {
+                alert('Por favor, describe tu proyecto');
+                return;
+            }
+
+            const foundResources = new Set();
+            const steps = [];
+            const tips = [];
+
+            // Buscar palabras clave en el input
+            for (const [keyword, resources] of Object.entries(projectResources.keywords)) {
+                if (input.includes(keyword)) {
+                    resources.forEach(r => foundResources.add(r));
+                }
+            }
+
+            // Si no encontró nada específico, dar recursos generales
+            if (foundResources.size === 0) {
+                foundResources.add('bootstrap');
+                foundResources.add('javascript');
+                foundResources.add('dom');
+                foundResources.add('eventos');
+            }
+
+            // Generar HTML de recursos
+            let resourcesHTML = '<div class="row g-3 mt-2">';
+            foundResources.forEach(resourceKey => {
+                const resource = projectResources.resources[resourceKey];
+                if (resource) {
+                    resourcesHTML += `
+                        <div class="col-md-6">
+                            <a href="${resource.link}" class="d-block p-3 rounded text-decoration-none" 
+                               style="background: #1e1e2e; border: 1px solid #313244;">
+                                <strong style="color: #f7df1e;">${resource.name}</strong>
+                                <br><small style="color: #6c7086;">${resource.desc}</small>
+                            </a>
+                        </div>
+                    `;
+                }
+            });
+            resourcesHTML += '</div>';
+
+            // Generar pasos según el tipo de proyecto detectado
+            if (input.includes('tienda') || input.includes('ecommerce') || input.includes('productos')) {
+                steps.push('Empieza con la <strong>estructura HTML + Bootstrap</strong> (navbar, grid para productos)');
+                steps.push('Crea las <strong>cards de productos</strong> usando el componente de Bootstrap');
+                steps.push('Implementa el <strong>carrito con localStorage</strong> para guardar los items');
+                steps.push('Agrega el <strong>sistema de login</strong> si es necesario');
+                steps.push('Crea el <strong>checkout</strong> con formulario de envío');
+                steps.push('Añade <strong>validaciones</strong> a todos los formularios');
+                tips.push('💡 Revisa el <a href="../ejemplo-proyecto/index.html" style="color: #f7df1e;">Proyecto Final</a> que tiene todo esto integrado');
+                tips.push('💡 Usa el <a href="../ecommerce/avanzado.html" style="color: #f7df1e;">CartManager Avanzado</a> para un carrito profesional');
+            } else if (input.includes('login') || input.includes('registro') || input.includes('autenticación')) {
+                steps.push('Diseña el <strong>formulario de login/registro</strong> con Bootstrap');
+                steps.push('Agrega <strong>validaciones en tiempo real</strong> con JavaScript');
+                steps.push('Implementa <strong>localStorage</strong> para guardar usuarios');
+                steps.push('Crea la lógica de <strong>verificación de credenciales</strong>');
+                steps.push('Maneja el <strong>estado de sesión</strong> del usuario');
+                tips.push('💡 Mira el <a href="../auth/auth-sistema.html" style="color: #f7df1e;">Sistema Auth Completo</a> que ya funciona');
+                tips.push('💡 Para algo más pro, revisa <a href="../auth/avanzado.html" style="color: #f7df1e;">Auth Avanzado</a> con JWT y roles');
+            } else if (input.includes('dashboard') || input.includes('admin') || input.includes('panel')) {
+                steps.push('Crea el <strong>layout con sidebar</strong> usando Bootstrap');
+                steps.push('Diseña las <strong>cards de estadísticas</strong>');
+                steps.push('Agrega <strong>tablas para listar datos</strong>');
+                steps.push('Implementa <strong>gráficos</strong> si los necesitas (Chart.js)');
+                steps.push('Conecta con <strong>localStorage o API</strong> para los datos');
+                tips.push('💡 El <a href="../admin/index.html" style="color: #f7df1e;">Panel Admin</a> ya tiene todo esto listo');
+                tips.push('💡 Usa el <a href="../templates/dashboard.html" style="color: #f7df1e;">Template Dashboard</a> como base');
+            } else if (input.includes('api') || input.includes('crud') || input.includes('fetch')) {
+                steps.push('Entiende cómo funciona <strong>fetch y async/await</strong>');
+                steps.push('Crea las funciones para <strong>GET, POST, PUT, DELETE</strong>');
+                steps.push('Diseña la <strong>UI para mostrar los datos</strong>');
+                steps.push('Implementa <strong>formularios para crear/editar</strong>');
+                steps.push('Agrega <strong>manejo de errores</strong> y loading states');
+                tips.push('💡 Usa <a href="../apis/json-server.html" style="color: #f7df1e;">JSON Server</a> para simular un backend');
+                tips.push('💡 Revisa <a href="../apis/avanzado.html" style="color: #f7df1e;">APIs Avanzado</a> para interceptores y cache');
+            } else if (input.includes('landing') || input.includes('portfolio')) {
+                steps.push('Define las <strong>secciones de tu página</strong> (hero, features, contact)');
+                steps.push('Usa el <strong>sistema Grid</strong> para el layout');
+                steps.push('Agrega <strong>navbar fija</strong> con scroll suave');
+                steps.push('Diseña <strong>cards y secciones</strong> atractivas');
+                steps.push('Haz que sea <strong>100% responsive</strong>');
+                tips.push('💡 Copia una de las <a href="../templates/landing.html" style="color: #f7df1e;">5 Landing Pages</a> como base');
+                tips.push('💡 Usa <a href="../bootstrap/avanzado.html" style="color: #f7df1e;">Bootstrap Avanzado</a> para efectos pro');
+            } else {
+                steps.push('Empieza con la <strong>estructura HTML básica</strong>');
+                steps.push('Agrega <strong>Bootstrap</strong> para estilos rápidos');
+                steps.push('Implementa la <strong>interactividad con JavaScript</strong>');
+                steps.push('Usa <strong>localStorage</strong> si necesitas guardar datos');
+                steps.push('Prueba en <strong>diferentes tamaños de pantalla</strong>');
+                tips.push('💡 Revisa el <a href="cheatsheet.html" style="color: #f7df1e;">Cheatsheet</a> para referencias rápidas');
+            }
+
+            // Mostrar resultados
+            document.getElementById('resourcesList').innerHTML = resourcesHTML;
+            document.getElementById('stepsList').innerHTML = steps.map(s => `<li class="mb-2">${s}</li>`).join('');
+            document.getElementById('tipsList').innerHTML = tips.map(t => `<p class="mb-2">${t}</p>`).join('');
+            document.getElementById('analysisResult').style.display = 'block';
+            
+            // Scroll al resultado
+            document.getElementById('analysisResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function setExample(type) {
+            const examples = {
+                'tienda': 'Necesito hacer una tienda online con catálogo de productos, carrito de compras, y proceso de checkout. Los usuarios deben poder registrarse y ver sus pedidos.',
+                'login': 'Tengo que crear un sistema de login y registro con validaciones. Debe guardar los usuarios y mantener la sesión activa.',
+                'dashboard': 'Quiero hacer un panel de administración con estadísticas, tablas de datos, y gráficos. Debe tener sidebar y ser responsive.',
+                'landing': 'Necesito una landing page moderna con hero section, features, testimonios y formulario de contacto. Debe verse bien en móvil.',
+                'crud': 'Tengo que hacer un CRUD completo que consuma una API REST. Listar datos, crear nuevos, editar y eliminar.',
+                'portfolio': 'Quiero crear mi portfolio personal con sección de proyectos, about me, skills y contacto.'
+            };
+            document.getElementById('projectInput').value = examples[type];
+            analyzeProject();
         }
     </script>
 </body>
