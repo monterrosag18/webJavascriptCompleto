@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIs Avanzado - Patrones y Técnicas Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #1a1a2e; color: #eee; }
+        .hero-api {
+            background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .code-block {
+            background: #16213e;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid #1f4068;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .function { color: #82aaff; }
+        .code-block .number { color: #f78c6c; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .example-card {
+            background: #16213e;
+            border-radius: 16px;
+            border: 1px solid #1f4068;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .example-header {
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            color: white;
+            padding: 20px;
+        }
+        .example-body { padding: 25px; }
+        .badge-advanced {
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+        a { color: #00b4d8; }
+    </style>
+</head>
+<body>
+    <section class="hero-api">
+        <div class="container">
+            <a href="../index.html" class="btn btn-outline-light btn-sm mb-4">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la Guía
+            </a>
+            <span class="badge-advanced mb-3 d-inline-block">NIVEL AVANZADO</span>
+            <h1 class="display-4 fw-bold">APIs Avanzado</h1>
+            <p class="lead">Interceptores, Retry, Cache, AbortController, Rate Limiting y más</p>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        <!-- ================================================
+             1. FETCH WRAPPER AVANZADO
+             ================================================ -->
+        <section id="wrapper" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-box me-2"></i>1. Fetch Wrapper con Interceptores</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Cliente HTTP personalizado con interceptores, manejo de errores y autenticación automática.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * HTTP CLIENT AVANZADO
+ * Con interceptores, retry, timeout y manejo de errores
+ */</span>
+
+<span class="keyword">class</span> HttpClient {
+    <span class="function">constructor</span>(baseURL = <span class="string">''</span>) {
+        <span class="keyword">this</span>.baseURL = baseURL;
+        <span class="keyword">this</span>.interceptors = {
+            request: [],
+            response: []
+        };
+    }
+    
+    <span class="comment">// Agregar interceptor de request</span>
+    <span class="function">addRequestInterceptor</span>(fn) {
+        <span class="keyword">this</span>.interceptors.request.<span class="function">push</span>(fn);
+    }
+    
+    <span class="comment">// Agregar interceptor de response</span>
+    <span class="function">addResponseInterceptor</span>(fn) {
+        <span class="keyword">this</span>.interceptors.response.<span class="function">push</span>(fn);
+    }
+    
+    <span class="comment">// Método principal de fetch</span>
+    <span class="keyword">async</span> <span class="function">request</span>(endpoint, options = {}) {
+        <span class="keyword">let</span> config = {
+            url: <span class="keyword">this</span>.baseURL + endpoint,
+            method: <span class="string">'GET'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+            },
+            ...options
+        };
+        
+        <span class="comment">// Ejecutar interceptores de request</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> interceptor <span class="keyword">of</span> <span class="keyword">this</span>.interceptors.request) {
+            config = <span class="keyword">await</span> <span class="function">interceptor</span>(config);
+        }
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">let</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(config.url, config);
+            
+            <span class="comment">// Ejecutar interceptores de response</span>
+            <span class="keyword">for</span> (<span class="keyword">const</span> interceptor <span class="keyword">of</span> <span class="keyword">this</span>.interceptors.response) {
+                response = <span class="keyword">await</span> <span class="function">interceptor</span>(response);
+            }
+            
+            <span class="keyword">if</span> (!response.ok) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> HttpError(response.status, response.statusText);
+            }
+            
+            <span class="keyword">return</span> response.<span class="function">json</span>();
+            
+        } <span class="keyword">catch</span> (error) {
+            <span class="keyword">throw</span> error;
+        }
+    }
+    
+    <span class="comment">// Métodos de conveniencia</span>
+    <span class="function">get</span>(url, options) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...options, method: <span class="string">'GET'</span> }); }
+    <span class="function">post</span>(url, data, options) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...options, method: <span class="string">'POST'</span>, body: <span class="keyword">JSON</span>.<span class="function">stringify</span>(data) }); }
+    <span class="function">put</span>(url, data, options) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...options, method: <span class="string">'PUT'</span>, body: <span class="keyword">JSON</span>.<span class="function">stringify</span>(data) }); }
+    <span class="function">delete</span>(url, options) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...options, method: <span class="string">'DELETE'</span> }); }
+}
+
+<span class="comment">// Clase de error personalizada</span>
+<span class="keyword">class</span> HttpError <span class="keyword">extends</span> Error {
+    <span class="function">constructor</span>(status, message) {
+        <span class="keyword">super</span>(message);
+        <span class="keyword">this</span>.status = status;
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> api = <span class="keyword">new</span> HttpClient(<span class="string">'https://api.ejemplo.com'</span>);
+
+<span class="comment">// Interceptor: Agregar token automáticamente</span>
+api.<span class="function">addRequestInterceptor</span>((config) => {
+    <span class="keyword">const</span> token = localStorage.<span class="function">getItem</span>(<span class="string">'token'</span>);
+    <span class="keyword">if</span> (token) {
+        config.headers[<span class="string">'Authorization'</span>] = <span class="string">`Bearer ${token}`</span>;
+    }
+    <span class="keyword">return</span> config;
+});
+
+<span class="comment">// Interceptor: Log de requests</span>
+api.<span class="function">addRequestInterceptor</span>((config) => {
+    console.<span class="function">log</span>(<span class="string">`📡 ${config.method} ${config.url}`</span>);
+    <span class="keyword">return</span> config;
+});
+
+<span class="comment">// Interceptor: Refresh token si expira</span>
+api.<span class="function">addResponseInterceptor</span>(<span class="keyword">async</span> (response) => {
+    <span class="keyword">if</span> (response.status === <span class="number">401</span>) {
+        console.<span class="function">log</span>(<span class="string">'🔄 Token expirado, renovando...'</span>);
+        <span class="keyword">await</span> <span class="function">refreshToken</span>();
+    }
+    <span class="keyword">return</span> response;
+});
+
+<span class="comment">// Usar el cliente</span>
+<span class="keyword">const</span> users = <span class="keyword">await</span> api.<span class="function">get</span>(<span class="string">'/users'</span>);
+<span class="keyword">const</span> newUser = <span class="keyword">await</span> api.<span class="function">post</span>(<span class="string">'/users'</span>, { name: <span class="string">'Juan'</span> });</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             2. RETRY CON EXPONENTIAL BACKOFF
+             ================================================ -->
+        <section id="retry" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-arrow-repeat me-2"></i>2. Retry con Exponential Backoff</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Reintentar peticiones fallidas con espera exponencial.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * FETCH CON RETRY Y EXPONENTIAL BACKOFF
+ */</span>
+
+<span class="keyword">async function</span> <span class="function">fetchWithRetry</span>(url, options = {}, maxRetries = <span class="number">3</span>) {
+    <span class="keyword">let</span> lastError;
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> attempt = <span class="number">0</span>; attempt < maxRetries; attempt++) {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, options);
+            
+            <span class="keyword">if</span> (!response.ok) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">`HTTP ${response.status}`</span>);
+            }
+            
+            <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+            
+        } <span class="keyword">catch</span> (error) {
+            lastError = error;
+            
+            <span class="comment">// Calcular delay exponencial: 1s, 2s, 4s, 8s...</span>
+            <span class="keyword">const</span> delay = <span class="keyword">Math</span>.<span class="function">pow</span>(<span class="number">2</span>, attempt) * <span class="number">1000</span>;
+            
+            console.<span class="function">log</span>(<span class="string">`⚠️ Intento ${attempt + 1} fallido. Reintentando en ${delay}ms...`</span>);
+            
+            <span class="comment">// Esperar antes de reintentar</span>
+            <span class="keyword">await</span> <span class="keyword">new</span> Promise(r => <span class="function">setTimeout</span>(r, delay));
+        }
+    }
+    
+    <span class="keyword">throw</span> lastError;
+}
+
+<span class="comment">// ====== VERSIÓN AVANZADA CON OPCIONES ======</span>
+<span class="keyword">async function</span> <span class="function">fetchWithRetryAdvanced</span>(url, {
+    maxRetries = <span class="number">3</span>,
+    baseDelay = <span class="number">1000</span>,
+    maxDelay = <span class="number">30000</span>,
+    retryOn = [<span class="number">408</span>, <span class="number">429</span>, <span class="number">500</span>, <span class="number">502</span>, <span class="number">503</span>, <span class="number">504</span>],
+    onRetry = <span class="keyword">null</span>,
+    ...fetchOptions
+} = {}) {
+    <span class="keyword">let</span> lastError;
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> attempt = <span class="number">0</span>; attempt <= maxRetries; attempt++) {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, fetchOptions);
+            
+            <span class="comment">// Solo reintentar en ciertos códigos de error</span>
+            <span class="keyword">if</span> (!response.ok && retryOn.<span class="function">includes</span>(response.status) && attempt < maxRetries) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">`HTTP ${response.status}`</span>);
+            }
+            
+            <span class="keyword">if</span> (!response.ok) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">`HTTP ${response.status}: ${response.statusText}`</span>);
+            }
+            
+            <span class="keyword">return</span> response;
+            
+        } <span class="keyword">catch</span> (error) {
+            lastError = error;
+            
+            <span class="keyword">if</span> (attempt >= maxRetries) <span class="keyword">break</span>;
+            
+            <span class="comment">// Exponential backoff con jitter (aleatoridad)</span>
+            <span class="keyword">const</span> exponentialDelay = <span class="keyword">Math</span>.<span class="function">min</span>(
+                baseDelay * <span class="keyword">Math</span>.<span class="function">pow</span>(<span class="number">2</span>, attempt),
+                maxDelay
+            );
+            <span class="keyword">const</span> jitter = <span class="keyword">Math</span>.<span class="function">random</span>() * <span class="number">0.3</span> * exponentialDelay;
+            <span class="keyword">const</span> delay = exponentialDelay + jitter;
+            
+            <span class="comment">// Callback opcional</span>
+            <span class="keyword">if</span> (onRetry) {
+                <span class="function">onRetry</span>({ attempt, delay, error });
+            }
+            
+            <span class="keyword">await</span> <span class="keyword">new</span> Promise(r => <span class="function">setTimeout</span>(r, delay));
+        }
+    }
+    
+    <span class="keyword">throw</span> lastError;
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> data = <span class="keyword">await</span> <span class="function">fetchWithRetryAdvanced</span>(<span class="string">'https://api.ejemplo.com/data'</span>, {
+    maxRetries: <span class="number">5</span>,
+    baseDelay: <span class="number">1000</span>,
+    onRetry: ({ attempt, delay }) => {
+        console.<span class="function">log</span>(<span class="string">`🔄 Retry #${attempt + 1} en ${delay}ms`</span>);
+    }
+});</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             3. ABORT CONTROLLER
+             ================================================ -->
+        <section id="abort" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-x-circle me-2"></i>3. AbortController y Timeout</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Cancelar peticiones y establecer timeouts.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * FETCH CON TIMEOUT Y CANCELACIÓN
+ */</span>
+
+<span class="comment">// Fetch con timeout</span>
+<span class="keyword">async function</span> <span class="function">fetchWithTimeout</span>(url, options = {}, timeout = <span class="number">5000</span>) {
+    <span class="keyword">const</span> controller = <span class="keyword">new</span> AbortController();
+    <span class="keyword">const</span> timeoutId = <span class="function">setTimeout</span>(() => controller.<span class="function">abort</span>(), timeout);
+    
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, {
+            ...options,
+            signal: controller.signal
+        });
+        
+        <span class="function">clearTimeout</span>(timeoutId);
+        <span class="keyword">return</span> response;
+        
+    } <span class="keyword">catch</span> (error) {
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        <span class="keyword">if</span> (error.name === <span class="string">'AbortError'</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">`⏱️ Timeout: Request exceeded ${timeout}ms`</span>);
+        }
+        
+        <span class="keyword">throw</span> error;
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">try</span> {
+    <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="function">fetchWithTimeout</span>(<span class="string">'/api/slow-endpoint'</span>, {}, <span class="number">3000</span>);
+} <span class="keyword">catch</span> (error) {
+    console.<span class="function">log</span>(error.message); <span class="comment">// ⏱️ Timeout: Request exceeded 3000ms</span>
+}
+
+
+<span class="comment">// ====== CANCELAR PETICIONES MANUALMENTE ======</span>
+<span class="keyword">class</span> CancellableRequest {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.controller = <span class="keyword">null</span>;
+    }
+    
+    <span class="keyword">async</span> <span class="function">fetch</span>(url, options = {}) {
+        <span class="comment">// Cancelar petición anterior si existe</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.controller) {
+            <span class="keyword">this</span>.controller.<span class="function">abort</span>();
+        }
+        
+        <span class="keyword">this</span>.controller = <span class="keyword">new</span> AbortController();
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, {
+                ...options,
+                signal: <span class="keyword">this</span>.controller.signal
+            });
+            <span class="keyword">return</span> response.<span class="function">json</span>();
+        } <span class="keyword">catch</span> (error) {
+            <span class="keyword">if</span> (error.name === <span class="string">'AbortError'</span>) {
+                console.<span class="function">log</span>(<span class="string">'🚫 Request cancelado'</span>);
+                <span class="keyword">return</span> <span class="keyword">null</span>;
+            }
+            <span class="keyword">throw</span> error;
+        }
+    }
+    
+    <span class="function">cancel</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.controller) {
+            <span class="keyword">this</span>.controller.<span class="function">abort</span>();
+        }
+    }
+}
+
+<span class="comment">// Uso: Búsqueda que cancela peticiones anteriores</span>
+<span class="keyword">const</span> searchRequest = <span class="keyword">new</span> CancellableRequest();
+
+searchInput.<span class="function">addEventListener</span>(<span class="string">'input'</span>, <span class="keyword">async</span> (e) => {
+    <span class="keyword">const</span> query = e.target.value;
+    
+    <span class="comment">// Automáticamente cancela la búsqueda anterior</span>
+    <span class="keyword">const</span> results = <span class="keyword">await</span> searchRequest.<span class="function">fetch</span>(<span class="string">`/api/search?q=${query}`</span>);
+    
+    <span class="keyword">if</span> (results) {
+        <span class="function">displayResults</span>(results);
+    }
+});
+
+
+<span class="comment">// ====== ABORT EN COMPONENTES (cleanup) ======</span>
+<span class="comment">// Para React/Vue/etc cuando el componente se desmonta</span>
+
+<span class="keyword">function</span> <span class="function">useAbortableFetch</span>() {
+    <span class="keyword">const</span> controller = <span class="keyword">new</span> AbortController();
+    
+    <span class="keyword">const</span> fetchData = <span class="keyword">async</span> (url) => {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(url, { signal: controller.signal });
+            <span class="keyword">return</span> res.<span class="function">json</span>();
+        } <span class="keyword">catch</span> (e) {
+            <span class="keyword">if</span> (e.name !== <span class="string">'AbortError'</span>) <span class="keyword">throw</span> e;
+        }
+    };
+    
+    <span class="keyword">const</span> abort = () => controller.<span class="function">abort</span>();
+    
+    <span class="keyword">return</span> { fetchData, abort };
+}
+
+<span class="comment">// En un componente</span>
+<span class="keyword">const</span> { fetchData, abort } = <span class="function">useAbortableFetch</span>();
+
+<span class="comment">// Al montar: cargar datos</span>
+<span class="function">fetchData</span>(<span class="string">'/api/data'</span>).<span class="function">then</span>(setData);
+
+<span class="comment">// Al desmontar: cancelar</span>
+<span class="function">abort</span>();</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             4. CACHÉ DE PETICIONES
+             ================================================ -->
+        <section id="cache" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-hdd me-2"></i>4. Sistema de Caché para APIs</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Cachear respuestas para evitar peticiones innecesarias.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * SISTEMA DE CACHÉ PARA FETCH
+ */</span>
+
+<span class="keyword">class</span> FetchCache {
+    <span class="function">constructor</span>(defaultTTL = <span class="number">60000</span>) { <span class="comment">// 1 minuto por defecto</span>
+        <span class="keyword">this</span>.cache = <span class="keyword">new</span> Map();
+        <span class="keyword">this</span>.defaultTTL = defaultTTL;
+    }
+    
+    <span class="comment">// Generar key única para la petición</span>
+    <span class="function">_getCacheKey</span>(url, options = {}) {
+        <span class="keyword">return</span> <span class="string">`${options.method || 'GET'}:${url}:${JSON.stringify(options.body || '')}`</span>;
+    }
+    
+    <span class="comment">// Verificar si el cache es válido</span>
+    <span class="function">_isValid</span>(entry) {
+        <span class="keyword">return</span> entry && Date.<span class="function">now</span>() < entry.expiresAt;
+    }
+    
+    <span class="comment">// Fetch con caché</span>
+    <span class="keyword">async</span> <span class="function">fetch</span>(url, options = {}, ttl = <span class="keyword">this</span>.defaultTTL) {
+        <span class="keyword">const</span> key = <span class="keyword">this</span>.<span class="function">_getCacheKey</span>(url, options);
+        
+        <span class="comment">// Verificar caché</span>
+        <span class="keyword">const</span> cached = <span class="keyword">this</span>.cache.<span class="function">get</span>(key);
+        <span class="keyword">if</span> (<span class="keyword">this</span>.<span class="function">_isValid</span>(cached)) {
+            console.<span class="function">log</span>(<span class="string">'📦 Desde caché:'</span>, url);
+            <span class="keyword">return</span> cached.data;
+        }
+        
+        <span class="comment">// Hacer petición</span>
+        console.<span class="function">log</span>(<span class="string">'🌐 Fetch:'</span>, url);
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, options);
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        
+        <span class="comment">// Guardar en caché</span>
+        <span class="keyword">this</span>.cache.<span class="function">set</span>(key, {
+            data,
+            expiresAt: Date.<span class="function">now</span>() + ttl
+        });
+        
+        <span class="keyword">return</span> data;
+    }
+    
+    <span class="comment">// Invalidar caché</span>
+    <span class="function">invalidate</span>(urlPattern) {
+        <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">of</span> <span class="keyword">this</span>.cache.<span class="function">keys</span>()) {
+            <span class="keyword">if</span> (key.<span class="function">includes</span>(urlPattern)) {
+                <span class="keyword">this</span>.cache.<span class="function">delete</span>(key);
+            }
+        }
+    }
+    
+    <span class="comment">// Limpiar todo el caché</span>
+    <span class="function">clear</span>() {
+        <span class="keyword">this</span>.cache.<span class="function">clear</span>();
+    }
+}
+
+
+<span class="comment">// ====== CACHÉ CON STALE-WHILE-REVALIDATE ======</span>
+<span class="keyword">class</span> SWRCache {
+    <span class="function">constructor</span>(freshTime = <span class="number">30000</span>, staleTime = <span class="number">300000</span>) {
+        <span class="keyword">this</span>.cache = <span class="keyword">new</span> Map();
+        <span class="keyword">this</span>.freshTime = freshTime;   <span class="comment">// Tiempo que se considera "fresh"</span>
+        <span class="keyword">this</span>.staleTime = staleTime;   <span class="comment">// Tiempo máximo de stale</span>
+    }
+    
+    <span class="keyword">async</span> <span class="function">fetch</span>(url, options = {}) {
+        <span class="keyword">const</span> key = url;
+        <span class="keyword">const</span> cached = <span class="keyword">this</span>.cache.<span class="function">get</span>(key);
+        <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+        
+        <span class="comment">// Si está fresh, devolver caché directamente</span>
+        <span class="keyword">if</span> (cached && now < cached.freshUntil) {
+            console.<span class="function">log</span>(<span class="string">'✨ Fresh cache'</span>);
+            <span class="keyword">return</span> cached.data;
+        }
+        
+        <span class="comment">// Si está stale pero válido, devolver y revalidar en background</span>
+        <span class="keyword">if</span> (cached && now < cached.staleUntil) {
+            console.<span class="function">log</span>(<span class="string">'📦 Stale cache (revalidando...)'</span>);
+            <span class="keyword">this</span>.<span class="function">_revalidate</span>(url, options, key); <span class="comment">// No await!</span>
+            <span class="keyword">return</span> cached.data;
+        }
+        
+        <span class="comment">// Si no hay caché o expiró, fetch normal</span>
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">_fetchAndCache</span>(url, options, key);
+    }
+    
+    <span class="keyword">async</span> <span class="function">_fetchAndCache</span>(url, options, key) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, options);
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+        
+        <span class="keyword">this</span>.cache.<span class="function">set</span>(key, {
+            data,
+            freshUntil: now + <span class="keyword">this</span>.freshTime,
+            staleUntil: now + <span class="keyword">this</span>.staleTime
+        });
+        
+        <span class="keyword">return</span> data;
+    }
+    
+    <span class="keyword">async</span> <span class="function">_revalidate</span>(url, options, key) {
+        <span class="keyword">try</span> {
+            <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">_fetchAndCache</span>(url, options, key);
+            console.<span class="function">log</span>(<span class="string">'✅ Revalidación completada'</span>);
+        } <span class="keyword">catch</span> (e) {
+            console.<span class="function">log</span>(<span class="string">'❌ Revalidación fallida'</span>);
+        }
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> swrCache = <span class="keyword">new</span> SWRCache();
+
+<span class="comment">// Primera llamada: fetch normal</span>
+<span class="keyword">await</span> swrCache.<span class="function">fetch</span>(<span class="string">'/api/users'</span>);
+
+<span class="comment">// Llamada inmediata: desde fresh cache</span>
+<span class="keyword">await</span> swrCache.<span class="function">fetch</span>(<span class="string">'/api/users'</span>);
+
+<span class="comment">// Después de 30s: devuelve stale y revalida en background</span>
+<span class="keyword">await</span> swrCache.<span class="function">fetch</span>(<span class="string">'/api/users'</span>);</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             5. EJEMPLO COMPLETO
+             ================================================ -->
+        <section id="complete" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-star-fill me-2"></i>5. Cliente API Completo</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Todo junto: interceptores, retry, timeout, caché.</p>
+                    
+                    <div class="code-block" style="max-height: 600px;">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * API CLIENT PROFESIONAL
+ * Combina: Interceptores, Retry, Timeout, Caché, Cancelación
+ */</span>
+
+<span class="keyword">class</span> APIClient {
+    <span class="function">constructor</span>(config = {}) {
+        <span class="keyword">this</span>.baseURL = config.baseURL || <span class="string">''</span>;
+        <span class="keyword">this</span>.timeout = config.timeout || <span class="number">10000</span>;
+        <span class="keyword">this</span>.maxRetries = config.maxRetries || <span class="number">3</span>;
+        <span class="keyword">this</span>.cache = <span class="keyword">new</span> Map();
+        <span class="keyword">this</span>.cacheTTL = config.cacheTTL || <span class="number">60000</span>;
+        <span class="keyword">this</span>.interceptors = { request: [], response: [] };
+        <span class="keyword">this</span>.pendingRequests = <span class="keyword">new</span> Map();
+    }
+    
+    <span class="comment">// Interceptores</span>
+    <span class="function">useRequestInterceptor</span>(fn) { <span class="keyword">this</span>.interceptors.request.<span class="function">push</span>(fn); <span class="keyword">return</span> <span class="keyword">this</span>; }
+    <span class="function">useResponseInterceptor</span>(fn) { <span class="keyword">this</span>.interceptors.response.<span class="function">push</span>(fn); <span class="keyword">return</span> <span class="keyword">this</span>; }
+    
+    <span class="comment">// Request principal</span>
+    <span class="keyword">async</span> <span class="function">request</span>(endpoint, options = {}) {
+        <span class="keyword">const</span> url = <span class="keyword">this</span>.baseURL + endpoint;
+        <span class="keyword">const</span> cacheKey = <span class="string">`${options.method || 'GET'}:${url}`</span>;
+        
+        <span class="comment">// Verificar caché (solo GET)</span>
+        <span class="keyword">if</span> ((!options.method || options.method === <span class="string">'GET'</span>) && options.cache !== <span class="keyword">false</span>) {
+            <span class="keyword">const</span> cached = <span class="keyword">this</span>.<span class="function">_getFromCache</span>(cacheKey);
+            <span class="keyword">if</span> (cached) <span class="keyword">return</span> cached;
+        }
+        
+        <span class="comment">// Deduplicar peticiones idénticas en vuelo</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.pendingRequests.<span class="function">has</span>(cacheKey)) {
+            <span class="keyword">return</span> <span class="keyword">this</span>.pendingRequests.<span class="function">get</span>(cacheKey);
+        }
+        
+        <span class="keyword">const</span> requestPromise = <span class="keyword">this</span>.<span class="function">_executeRequest</span>(url, options, cacheKey);
+        <span class="keyword">this</span>.pendingRequests.<span class="function">set</span>(cacheKey, requestPromise);
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">return</span> <span class="keyword">await</span> requestPromise;
+        } <span class="keyword">finally</span> {
+            <span class="keyword">this</span>.pendingRequests.<span class="function">delete</span>(cacheKey);
+        }
+    }
+    
+    <span class="keyword">async</span> <span class="function">_executeRequest</span>(url, options, cacheKey) {
+        <span class="keyword">let</span> config = {
+            url,
+            method: <span class="string">'GET'</span>,
+            headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+            ...options
+        };
+        
+        <span class="comment">// Ejecutar interceptores de request</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> interceptor <span class="keyword">of</span> <span class="keyword">this</span>.interceptors.request) {
+            config = <span class="keyword">await</span> <span class="function">interceptor</span>(config);
+        }
+        
+        <span class="comment">// Ejecutar con retry</span>
+        <span class="keyword">let</span> lastError;
+        <span class="keyword">for</span> (<span class="keyword">let</span> attempt = <span class="number">0</span>; attempt <= <span class="keyword">this</span>.maxRetries; attempt++) {
+            <span class="keyword">try</span> {
+                <span class="keyword">const</span> controller = <span class="keyword">new</span> AbortController();
+                <span class="keyword">const</span> timeoutId = <span class="function">setTimeout</span>(() => controller.<span class="function">abort</span>(), <span class="keyword">this</span>.timeout);
+                
+                <span class="keyword">let</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(config.url, {
+                    ...config,
+                    signal: controller.signal
+                });
+                
+                <span class="function">clearTimeout</span>(timeoutId);
+                
+                <span class="comment">// Ejecutar interceptores de response</span>
+                <span class="keyword">for</span> (<span class="keyword">const</span> interceptor <span class="keyword">of</span> <span class="keyword">this</span>.interceptors.response) {
+                    response = <span class="keyword">await</span> <span class="function">interceptor</span>(response, config);
+                }
+                
+                <span class="keyword">if</span> (!response.ok) {
+                    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">`HTTP ${response.status}`</span>);
+                }
+                
+                <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+                
+                <span class="comment">// Guardar en caché</span>
+                <span class="keyword">if</span> (config.method === <span class="string">'GET'</span>) {
+                    <span class="keyword">this</span>.<span class="function">_saveToCache</span>(cacheKey, data);
+                }
+                
+                <span class="keyword">return</span> data;
+                
+            } <span class="keyword">catch</span> (error) {
+                lastError = error;
+                <span class="keyword">if</span> (attempt < <span class="keyword">this</span>.maxRetries) {
+                    <span class="keyword">await</span> <span class="keyword">new</span> Promise(r => <span class="function">setTimeout</span>(r, <span class="keyword">Math</span>.<span class="function">pow</span>(<span class="number">2</span>, attempt) * <span class="number">1000</span>));
+                }
+            }
+        }
+        
+        <span class="keyword">throw</span> lastError;
+    }
+    
+    <span class="function">_getFromCache</span>(key) {
+        <span class="keyword">const</span> cached = <span class="keyword">this</span>.cache.<span class="function">get</span>(key);
+        <span class="keyword">if</span> (cached && Date.<span class="function">now</span>() < cached.expiresAt) {
+            <span class="keyword">return</span> cached.data;
+        }
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+    
+    <span class="function">_saveToCache</span>(key, data) {
+        <span class="keyword">this</span>.cache.<span class="function">set</span>(key, {
+            data,
+            expiresAt: Date.<span class="function">now</span>() + <span class="keyword">this</span>.cacheTTL
+        });
+    }
+    
+    <span class="comment">// Métodos de conveniencia</span>
+    <span class="function">get</span>(url, opts) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...opts, method: <span class="string">'GET'</span> }); }
+    <span class="function">post</span>(url, data, opts) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...opts, method: <span class="string">'POST'</span>, body: JSON.<span class="function">stringify</span>(data) }); }
+    <span class="function">put</span>(url, data, opts) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...opts, method: <span class="string">'PUT'</span>, body: JSON.<span class="function">stringify</span>(data) }); }
+    <span class="function">delete</span>(url, opts) { <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(url, { ...opts, method: <span class="string">'DELETE'</span> }); }
+    
+    <span class="function">clearCache</span>() { <span class="keyword">this</span>.cache.<span class="function">clear</span>(); }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> api = <span class="keyword">new</span> APIClient({
+    baseURL: <span class="string">'https://api.ejemplo.com'</span>,
+    timeout: <span class="number">5000</span>,
+    maxRetries: <span class="number">3</span>,
+    cacheTTL: <span class="number">60000</span>
+});
+
+<span class="comment">// Agregar interceptor de auth</span>
+api.<span class="function">useRequestInterceptor</span>((config) => {
+    config.headers[<span class="string">'Authorization'</span>] = <span class="string">`Bearer ${getToken()}`</span>;
+    <span class="keyword">return</span> config;
+});
+
+<span class="comment">// Agregar interceptor de errores</span>
+api.<span class="function">useResponseInterceptor</span>(<span class="keyword">async</span> (response, config) => {
+    <span class="keyword">if</span> (response.status === <span class="number">401</span>) {
+        <span class="keyword">await</span> <span class="function">refreshToken</span>();
+        <span class="comment">// Reintentar request original</span>
+    }
+    <span class="keyword">return</span> response;
+});
+
+<span class="comment">// Usar la API</span>
+<span class="keyword">const</span> users = <span class="keyword">await</span> api.<span class="function">get</span>(<span class="string">'/users'</span>);
+<span class="keyword">const</span> user = <span class="keyword">await</span> api.<span class="function">post</span>(<span class="string">'/users'</span>, { name: <span class="string">'Juan'</span> });</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="fetch.html" class="btn btn-outline-info">
+                <i class="bi bi-arrow-left me-2"></i>APIs Básico
+            </a>
+            <a href="../ecommerce/avanzado.html" class="btn btn-info">
+                E-commerce Avanzado <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerHTML = '<i class="bi bi-check2"></i> Copiado!';
+            setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard"></i>', 2000);
+        }
+    </script>
+</body>
+</html>

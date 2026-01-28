@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - Panel de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f5f7; min-height: 100vh; }
+        
+        /* Navbar */
+        .user-navbar {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary) !important;
+        }
+        
+        /* Sidebar */
+        .user-sidebar {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .user-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0 auto 20px;
+        }
+        
+        .user-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .user-email {
+            color: #6b7280;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+        
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #374151;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-nav .nav-link:hover {
+            background: #f3f4f6;
+        }
+        
+        .sidebar-nav .nav-link.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .sidebar-nav .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Content Cards */
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .content-card-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .content-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .content-card-body {
+            padding: 25px;
+        }
+        
+        /* Stats */
+        .stat-box {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        }
+        
+        .stat-box i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+        
+        .stat-box h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box.primary { background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(99,102,241,0.2)); color: var(--primary); }
+        .stat-box.success { background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.2)); color: var(--success); }
+        .stat-box.warning { background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.2)); color: var(--warning); }
+        
+        /* Order Item */
+        .order-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .order-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(99,102,241,0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+        
+        .order-id {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .order-status {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pendiente { background: rgba(245,158,11,0.15); color: #d97706; }
+        .status-procesando { background: rgba(59,130,246,0.15); color: #2563eb; }
+        .status-enviado { background: rgba(99,102,241,0.15); color: var(--primary); }
+        .status-entregado { background: rgba(16,185,129,0.15); color: var(--success); }
+        .status-cancelado { background: rgba(239,68,68,0.15); color: var(--danger); }
+        
+        .order-products {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .order-product-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .order-total {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        /* Form */
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+        
+        /* Alerts */
+        .alert-dismissible {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .user-sidebar {
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="user-navbar">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="../index.html">
+                    <i class="bi bi-code-slash me-2"></i>WebGuía
+                </a>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="../ecommerce/tienda.html" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-shop me-2"></i>Ir a la Tienda
+                    </a>
+                    <button class="btn btn-light btn-sm" onclick="logout()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-4">
+                <div class="user-sidebar">
+                    <div class="user-avatar-large" id="userAvatar">U</div>
+                    <h5 class="user-name" id="userName">Usuario</h5>
+                    <p class="user-email" id="userEmail">email@ejemplo.com</p>
+                    
+                    <nav class="sidebar-nav">
+                        <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Mi Dashboard</span>
+                        </a>
+                        <a href="#pedidos" class="nav-link" data-section="pedidos">
+                            <i class="bi bi-bag"></i>
+                            <span>Mis Pedidos</span>
+                        </a>
+                        <a href="#perfil" class="nav-link" data-section="perfil">
+                            <i class="bi bi-person"></i>
+                            <span>Mi Perfil</span>
+                        </a>
+                        <a href="#direcciones" class="nav-link" data-section="direcciones">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>Direcciones</span>
+                        </a>
+                        <a href="#favoritos" class="nav-link" data-section="favoritos">
+                            <i class="bi bi-heart"></i>
+                            <span>Favoritos</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-lg-9 col-md-8">
+                <!-- Dashboard Section -->
+                <section id="section-dashboard" class="content-section">
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-speedometer2 text-primary"></i>Mi Dashboard</h5>
+                        </div>
+                        <div class="content-card-body">
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="stat-box primary">
+                                        <i class="bi bi-bag-check"></i>
+                                        <h3 id="statTotalOrders">0</h3>
+                                        <small>Pedidos Totales</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-box success">
+                                        <i class="bi bi-currency-dollar"></i>
+                                        <h3>$<span id="statTotalSpent">0</span></h3>
+                                        <small>Total Gastado</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="stat-box warning">
+                                        <i class="bi bi-clock-history"></i>
+                                        <h3 id="statPending">0</h3>
+                                        <small>En Proceso</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-bag text-primary"></i>Pedidos Recientes</h5>
+                            <a href="#pedidos" class="btn btn-sm btn-outline-primary" onclick="showSection('pedidos')">Ver todos</a>
+                        </div>
+                        <div class="content-card-body" id="recentOrdersList">
+                            <!-- Se llena con JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pedidos Section -->
+                <section id="section-pedidos" class="content-section d-none">
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-bag text-primary"></i>Mis Pedidos</h5>
+                            <select class="form-select form-select-sm" style="width: auto;" id="filterOrders">
+                                <option value="all">Todos</option>
+                                <option value="pendiente">Pendientes</option>
+                                <option value="enviado">Enviados</option>
+                                <option value="entregado">Entregados</option>
+                            </select>
+                        </div>
+                        <div class="content-card-body" id="allOrdersList">
+                            <!-- Se llena con JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Perfil Section -->
+                <section id="section-perfil" class="content-section d-none">
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-person text-primary"></i>Mi Perfil</h5>
+                        </div>
+                        <div class="content-card-body">
+                            <form id="profileForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nombre Completo</label>
+                                        <input type="text" class="form-control" id="profileName">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="profileEmail" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="tel" class="form-control" id="profilePhone">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Fecha de Nacimiento</label>
+                                        <input type="date" class="form-control" id="profileBirthdate">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-check-lg me-2"></i>Guardar Cambios
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-shield-lock text-primary"></i>Cambiar Contraseña</h5>
+                        </div>
+                        <div class="content-card-body">
+                            <form id="passwordForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Contraseña Actual</label>
+                                        <input type="password" class="form-control" id="currentPassword" required>
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="newPassword" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Confirmar Nueva Contraseña</label>
+                                        <input type="password" class="form-control" id="confirmPassword" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-outline-primary">
+                                            <i class="bi bi-key me-2"></i>Cambiar Contraseña
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Direcciones Section -->
+                <section id="section-direcciones" class="content-section d-none">
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-geo-alt text-primary"></i>Mis Direcciones</h5>
+                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal">
+                                <i class="bi bi-plus-lg me-2"></i>Agregar
+                            </button>
+                        </div>
+                        <div class="content-card-body" id="addressesList">
+                            <!-- Se llena con JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Favoritos Section -->
+                <section id="section-favoritos" class="content-section d-none">
+                    <div class="content-card">
+                        <div class="content-card-header">
+                            <h5><i class="bi bi-heart text-primary"></i>Mis Favoritos</h5>
+                        </div>
+                        <div class="content-card-body" id="favoritesList">
+                            <div class="empty-state">
+                                <i class="bi bi-heart"></i>
+                                <h5>No tienes favoritos aún</h5>
+                                <p>Los productos que marques como favoritos aparecerán aquí</p>
+                                <a href="../ecommerce/tienda.html" class="btn btn-primary mt-3">
+                                    <i class="bi bi-shop me-2"></i>Ir a la Tienda
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Agregar Dirección -->
+    <div class="modal fade" id="addressModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Dirección</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addressForm">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la Dirección</label>
+                            <input type="text" class="form-control" id="addressName" placeholder="Ej: Casa, Oficina" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Dirección Completa</label>
+                            <textarea class="form-control" id="addressFull" rows="2" required></textarea>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="addressCity" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Código Postal</label>
+                                <input type="text" class="form-control" id="addressZip" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="addressForm" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================
+        // PANEL DE USUARIO
+        // ============================================
+        
+        class UserPanel {
+            constructor() {
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                this.orders = [];
+                this.addresses = [];
+                
+                // Verificar autenticación
+                if (!this.currentUser) {
+                    window.location.href = '../auth/login.html';
+                    return;
+                }
+                
+                this.init();
+            }
+            
+            init() {
+                this.loadUserData();
+                this.loadOrders();
+                this.loadAddresses();
+                this.updateStats();
+                this.renderRecentOrders();
+                this.bindEvents();
+            }
+            
+            loadUserData() {
+                const initial = (this.currentUser.nombre || this.currentUser.name || this.currentUser.email || 'U').charAt(0).toUpperCase();
+                const name = this.currentUser.nombre || this.currentUser.name || 'Usuario';
+                
+                document.getElementById('userAvatar').textContent = initial;
+                document.getElementById('userName').textContent = name;
+                document.getElementById('userEmail').textContent = this.currentUser.email;
+                
+                // Formulario de perfil
+                document.getElementById('profileName').value = name;
+                document.getElementById('profileEmail').value = this.currentUser.email;
+                document.getElementById('profilePhone').value = this.currentUser.telefono || '';
+                document.getElementById('profileBirthdate').value = this.currentUser.fechaNacimiento || '';
+            }
+            
+            loadOrders() {
+                // Cargar pedidos del usuario desde allOrders
+                const allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                this.orders = allOrders.filter(o => 
+                    o.email === this.currentUser.email || 
+                    o.cliente === this.currentUser.email ||
+                    o.cliente === this.currentUser.nombre
+                );
+            }
+            
+            loadAddresses() {
+                this.addresses = JSON.parse(localStorage.getItem(`addresses_${this.currentUser.email}`)) || [];
+            }
+            
+            saveAddresses() {
+                localStorage.setItem(`addresses_${this.currentUser.email}`, JSON.stringify(this.addresses));
+            }
+            
+            updateStats() {
+                document.getElementById('statTotalOrders').textContent = this.orders.length;
+                
+                const totalSpent = this.orders.reduce((sum, o) => sum + (o.total || 0), 0);
+                document.getElementById('statTotalSpent').textContent = totalSpent.toLocaleString();
+                
+                const pending = this.orders.filter(o => 
+                    o.estado === 'pendiente' || o.estado === 'procesando' || o.estado === 'enviado'
+                ).length;
+                document.getElementById('statPending').textContent = pending;
+            }
+            
+            renderRecentOrders() {
+                const container = document.getElementById('recentOrdersList');
+                const recent = [...this.orders].reverse().slice(0, 3);
+                
+                if (recent.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="bi bi-bag"></i>
+                            <h5>No tienes pedidos aún</h5>
+                            <p>¡Haz tu primera compra!</p>
+                            <a href="../ecommerce/tienda.html" class="btn btn-primary mt-3">
+                                <i class="bi bi-shop me-2"></i>Ir a la Tienda
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = recent.map(order => this.renderOrderItem(order)).join('');
+            }
+            
+            renderAllOrders(filter = 'all') {
+                const container = document.getElementById('allOrdersList');
+                let filtered = [...this.orders].reverse();
+                
+                if (filter !== 'all') {
+                    filtered = filtered.filter(o => o.estado === filter);
+                }
+                
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="bi bi-bag"></i>
+                            <h5>No hay pedidos</h5>
+                            <p>No tienes pedidos ${filter !== 'all' ? 'con este estado' : ''}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = filtered.map(order => this.renderOrderItem(order)).join('');
+            }
+            
+            renderOrderItem(order) {
+                const id = order.id || order.numero || '000';
+                const estado = order.estado || 'pendiente';
+                const fecha = order.fecha ? new Date(order.fecha).toLocaleDateString('es-ES', { dateStyle: 'long' }) : 'N/A';
+                const items = order.productos || order.items || [];
+                const total = order.total || 0;
+                
+                const statusText = {
+                    'pendiente': 'Pendiente',
+                    'procesando': 'Procesando',
+                    'enviado': 'Enviado',
+                    'entregado': 'Entregado',
+                    'cancelado': 'Cancelado'
+                }[estado] || estado;
+                
+                const colors = [
+                    'linear-gradient(135deg, #667eea, #764ba2)',
+                    'linear-gradient(135deg, #4facfe, #00f2fe)',
+                    'linear-gradient(135deg, #43e97b, #38f9d7)',
+                    'linear-gradient(135deg, #fa709a, #fee140)'
+                ];
+                
+                return `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div>
+                                <span class="order-id">Pedido #${id}</span>
+                                <span class="text-muted ms-3">${fecha}</span>
+                            </div>
+                            <span class="order-status status-${estado}">${statusText}</span>
+                        </div>
+                        <div class="order-products">
+                            ${items.slice(0, 4).map((item, i) => `
+                                <div class="order-product-thumb" style="background: ${colors[i % colors.length]}" title="${item.nombre || item.name || 'Producto'}">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                            `).join('')}
+                            ${items.length > 4 ? `<div class="order-product-thumb" style="background: #6b7280;">+${items.length - 4}</div>` : ''}
+                        </div>
+                        <div class="order-footer">
+                            <span class="text-muted">${items.length} producto(s)</span>
+                            <span class="order-total">$${total.toLocaleString()}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            renderAddresses() {
+                const container = document.getElementById('addressesList');
+                
+                if (this.addresses.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="bi bi-geo-alt"></i>
+                            <h5>No tienes direcciones guardadas</h5>
+                            <p>Agrega una dirección para tus envíos</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = this.addresses.map((addr, index) => `
+                    <div class="d-flex justify-content-between align-items-start p-3 border rounded mb-3">
+                        <div>
+                            <h6 class="mb-1">
+                                <i class="bi bi-geo-alt text-primary me-2"></i>${addr.nombre}
+                                ${addr.principal ? '<span class="badge bg-primary ms-2">Principal</span>' : ''}
+                            </h6>
+                            <p class="mb-1">${addr.direccion}</p>
+                            <small class="text-muted">${addr.ciudad}, ${addr.codigoPostal}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="userPanel.deleteAddress(${index})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            addAddress(data) {
+                this.addresses.push({
+                    nombre: data.nombre,
+                    direccion: data.direccion,
+                    ciudad: data.ciudad,
+                    codigoPostal: data.codigoPostal,
+                    principal: this.addresses.length === 0
+                });
+                this.saveAddresses();
+                this.renderAddresses();
+            }
+            
+            deleteAddress(index) {
+                if (confirm('¿Eliminar esta dirección?')) {
+                    this.addresses.splice(index, 1);
+                    this.saveAddresses();
+                    this.renderAddresses();
+                }
+            }
+            
+            updateProfile(data) {
+                // Actualizar currentUser
+                this.currentUser.nombre = data.nombre;
+                this.currentUser.telefono = data.telefono;
+                this.currentUser.fechaNacimiento = data.fechaNacimiento;
+                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                
+                // Actualizar en registeredUsers
+                const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+                const userIndex = users.findIndex(u => u.email === this.currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex] = { ...users[userIndex], ...data };
+                    localStorage.setItem('registeredUsers', JSON.stringify(users));
+                }
+                
+                this.loadUserData();
+                this.showAlert('Perfil actualizado correctamente', 'success');
+            }
+            
+            changePassword(currentPwd, newPwd) {
+                // Verificar contraseña actual
+                if (this.currentUser.password !== currentPwd) {
+                    this.showAlert('La contraseña actual es incorrecta', 'danger');
+                    return false;
+                }
+                
+                // Actualizar contraseña
+                this.currentUser.password = newPwd;
+                localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                
+                // Actualizar en registeredUsers
+                const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+                const userIndex = users.findIndex(u => u.email === this.currentUser.email);
+                if (userIndex !== -1) {
+                    users[userIndex].password = newPwd;
+                    localStorage.setItem('registeredUsers', JSON.stringify(users));
+                }
+                
+                this.showAlert('Contraseña actualizada correctamente', 'success');
+                return true;
+            }
+            
+            showAlert(message, type = 'success') {
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} alert-dismissible fade show`;
+                alert.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                setTimeout(() => alert.remove(), 5000);
+            }
+            
+            bindEvents() {
+                // Navegación
+                document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const section = link.dataset.section;
+                        showSection(section);
+                        
+                        // Actualizar active
+                        document.querySelectorAll('.sidebar-nav .nav-link').forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                    });
+                });
+                
+                // Filtro de pedidos
+                document.getElementById('filterOrders').addEventListener('change', (e) => {
+                    this.renderAllOrders(e.target.value);
+                });
+                
+                // Formulario de perfil
+                document.getElementById('profileForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.updateProfile({
+                        nombre: document.getElementById('profileName').value,
+                        telefono: document.getElementById('profilePhone').value,
+                        fechaNacimiento: document.getElementById('profileBirthdate').value
+                    });
+                });
+                
+                // Formulario de contraseña
+                document.getElementById('passwordForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newPwd = document.getElementById('newPassword').value;
+                    const confirmPwd = document.getElementById('confirmPassword').value;
+                    
+                    if (newPwd !== confirmPwd) {
+                        this.showAlert('Las contraseñas no coinciden', 'danger');
+                        return;
+                    }
+                    
+                    if (this.changePassword(
+                        document.getElementById('currentPassword').value,
+                        newPwd
+                    )) {
+                        e.target.reset();
+                    }
+                });
+                
+                // Formulario de dirección
+                document.getElementById('addressForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addAddress({
+                        nombre: document.getElementById('addressName').value,
+                        direccion: document.getElementById('addressFull').value,
+                        ciudad: document.getElementById('addressCity').value,
+                        codigoPostal: document.getElementById('addressZip').value
+                    });
+                    bootstrap.Modal.getInstance(document.getElementById('addressModal')).hide();
+                    e.target.reset();
+                });
+            }
+        }
+        
+        // Mostrar sección
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('d-none'));
+            document.getElementById(`section-${section}`).classList.remove('d-none');
+            
+            // Cargar datos específicos de la sección
+            if (section === 'pedidos') {
+                userPanel.renderAllOrders();
+            } else if (section === 'direcciones') {
+                userPanel.renderAddresses();
+            }
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = '../index.html';
+        }
+        
+        // Inicializar
+        let userPanel;
+        document.addEventListener('DOMContentLoaded', () => {
+            userPanel = new UserPanel();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funciones en JavaScript - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #f093fb, #f5576c, #4facfe);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .number { color: #f78c6c; }
+        .code-block .function { color: #82aaff; }
+        .code-block .comment { color: #676e95; font-style: italic; }
+        .code-block .variable { color: #ffcb6b; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .btn-copy:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        
+        .concept-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+        .concept-card h4 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .comparison-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .tip-box.warning {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        
+        .output-box {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dom.html">DOM</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="eventos.html">Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="arrays-objetos.html">Arrays/Objetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="funciones.html">Funciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="async.html">Async</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="section-header text-center mb-5 mx-3 mx-md-5 mt-4">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-lightning-charge me-3"></i>Funciones en JavaScript
+        </h1>
+        <p class="lead mb-0">
+            Desde funciones básicas hasta conceptos avanzados como closures y currying
+        </p>
+    </section>
+
+    <div class="container py-4">
+        <!-- Índice -->
+        <div class="card mb-5">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-list-ol me-2"></i>Contenidos
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><a href="#declaracion">1. Declaración de Funciones</a></li>
+                            <li><a href="#expresiones">2. Expresiones de Función</a></li>
+                            <li><a href="#arrow">3. Arrow Functions</a></li>
+                            <li><a href="#parametros">4. Parámetros</a></li>
+                            <li><a href="#return">5. Return y Valores</a></li>
+                            <li><a href="#scope">6. Scope (Alcance)</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><a href="#closures">7. Closures</a></li>
+                            <li><a href="#callbacks">8. Callbacks</a></li>
+                            <li><a href="#higher-order">9. Higher-Order Functions</a></li>
+                            <li><a href="#iife">10. IIFE</a></li>
+                            <li><a href="#recursion">11. Recursión</a></li>
+                            <li><a href="#avanzado">12. Técnicas Avanzadas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Declaración de Funciones -->
+        <section id="declaracion" class="concept-card">
+            <h4><span class="badge bg-primary me-2">1</span>Declaración de Funciones (Function Declaration)</h4>
+            <p>La forma tradicional de crear funciones. Son "hoisted" (elevadas), pueden usarse antes de su declaración.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// DECLARACIÓN DE FUNCIONES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Sintaxis básica</span>
+<span class="keyword">function</span> <span class="function">saludar</span>() {
+    console.<span class="function">log</span>(<span class="string">'¡Hola!'</span>);
+}
+
+<span class="comment">// Con parámetros</span>
+<span class="keyword">function</span> <span class="function">saludarA</span>(nombre) {
+    console.<span class="function">log</span>(<span class="string">`¡Hola, ${nombre}!`</span>);
+}
+
+<span class="comment">// Con return</span>
+<span class="keyword">function</span> <span class="function">sumar</span>(a, b) {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">// Llamar funciones</span>
+<span class="function">saludar</span>(); <span class="comment">// '¡Hola!'</span>
+<span class="function">saludarA</span>(<span class="string">'Ana'</span>); <span class="comment">// '¡Hola, Ana!'</span>
+<span class="keyword">const</span> resultado = <span class="function">sumar</span>(<span class="number">5</span>, <span class="number">3</span>); <span class="comment">// 8</span>
+
+<span class="comment">// Hoisting - Funciona antes de la declaración</span>
+console.<span class="function">log</span>(<span class="function">multiplicar</span>(<span class="number">4</span>, <span class="number">5</span>)); <span class="comment">// 20 ✓</span>
+
+<span class="keyword">function</span> <span class="function">multiplicar</span>(a, b) {
+    <span class="keyword">return</span> a * b;
+}
+
+<span class="comment">// Función dentro de función</span>
+<span class="keyword">function</span> <span class="function">externa</span>() {
+    <span class="keyword">function</span> <span class="function">interna</span>() {
+        console.<span class="function">log</span>(<span class="string">'Soy interna'</span>);
+    }
+    <span class="function">interna</span>();
+}
+<span class="function">externa</span>(); <span class="comment">// 'Soy interna'</span></pre>
+            </div>
+        </section>
+
+        <!-- 2. Expresiones de Función -->
+        <section id="expresiones" class="concept-card">
+            <h4><span class="badge bg-primary me-2">2</span>Expresiones de Función (Function Expression)</h4>
+            <p>Funciones asignadas a variables. NO son hoisted.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EXPRESIONES DE FUNCIÓN</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Función anónima asignada a variable</span>
+<span class="keyword">const</span> saludar = <span class="keyword">function</span>() {
+    console.<span class="function">log</span>(<span class="string">'¡Hola!'</span>);
+};
+
+<span class="comment">// Función con nombre (named function expression)</span>
+<span class="keyword">const</span> factorial = <span class="keyword">function</span> <span class="function">fact</span>(n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">return</span> n * <span class="function">fact</span>(n - <span class="number">1</span>); <span class="comment">// Puede llamarse a sí misma</span>
+};
+console.<span class="function">log</span>(<span class="function">factorial</span>(<span class="number">5</span>)); <span class="comment">// 120</span>
+
+<span class="comment">// NO hay hoisting - esto da error</span>
+<span class="comment">// console.log(dividir(10, 2)); // ❌ Error!</span>
+
+<span class="keyword">const</span> dividir = <span class="keyword">function</span>(a, b) {
+    <span class="keyword">return</span> a / b;
+};
+
+console.<span class="function">log</span>(<span class="function">dividir</span>(<span class="number">10</span>, <span class="number">2</span>)); <span class="comment">// 5 ✓</span>
+
+<span class="comment">// Función como argumento</span>
+<span class="keyword">const</span> numeros = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];
+<span class="keyword">const</span> dobles = numeros.<span class="function">map</span>(<span class="keyword">function</span>(n) {
+    <span class="keyword">return</span> n * <span class="number">2</span>;
+});
+console.<span class="function">log</span>(dobles); <span class="comment">// [2, 4, 6, 8]</span>
+
+<span class="comment">// Función que retorna función</span>
+<span class="keyword">const</span> crearSumador = <span class="keyword">function</span>(x) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(y) {
+        <span class="keyword">return</span> x + y;
+    };
+};
+
+<span class="keyword">const</span> sumar5 = <span class="function">crearSumador</span>(<span class="number">5</span>);
+console.<span class="function">log</span>(<span class="function">sumar5</span>(<span class="number">3</span>)); <span class="comment">// 8</span>
+console.<span class="function">log</span>(<span class="function">sumar5</span>(<span class="number">10</span>)); <span class="comment">// 15</span></pre>
+            </div>
+        </section>
+
+        <!-- 3. Arrow Functions -->
+        <section id="arrow" class="concept-card">
+            <h4><span class="badge bg-primary me-2">3</span>Arrow Functions (ES6)</h4>
+            <p>Sintaxis corta y moderna. No tienen su propio <code>this</code>.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// ARROW FUNCTIONS (=>)</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Sintaxis básica</span>
+<span class="keyword">const</span> saludar = () => {
+    console.<span class="function">log</span>(<span class="string">'¡Hola!'</span>);
+};
+
+<span class="comment">// Con un parámetro (paréntesis opcionales)</span>
+<span class="keyword">const</span> doble = n => n * <span class="number">2</span>;
+<span class="keyword">const</span> doble2 = (n) => n * <span class="number">2</span>; <span class="comment">// Equivalente</span>
+
+<span class="comment">// Con múltiples parámetros (paréntesis obligatorios)</span>
+<span class="keyword">const</span> sumar = (a, b) => a + b;
+
+<span class="comment">// Return implícito (una sola expresión)</span>
+<span class="keyword">const</span> cuadrado = x => x * x;
+console.<span class="function">log</span>(<span class="function">cuadrado</span>(<span class="number">4</span>)); <span class="comment">// 16</span>
+
+<span class="comment">// Return explícito (con llaves)</span>
+<span class="keyword">const</span> calcular = (a, b) => {
+    <span class="keyword">const</span> suma = a + b;
+    <span class="keyword">const</span> producto = a * b;
+    <span class="keyword">return</span> { suma, producto };
+};
+console.<span class="function">log</span>(<span class="function">calcular</span>(<span class="number">3</span>, <span class="number">4</span>)); <span class="comment">// { suma: 7, producto: 12 }</span>
+
+<span class="comment">// Retornar objeto literal (envolver en paréntesis)</span>
+<span class="keyword">const</span> crearUsuario = (nombre, edad) => ({ nombre, edad });
+console.<span class="function">log</span>(<span class="function">crearUsuario</span>(<span class="string">'Ana'</span>, <span class="number">25</span>)); <span class="comment">// { nombre: 'Ana', edad: 25 }</span>
+
+<span class="comment">// Con arrays</span>
+<span class="keyword">const</span> numeros = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">const</span> pares = numeros.<span class="function">filter</span>(n => n % <span class="number">2</span> === <span class="number">0</span>);
+<span class="keyword">const</span> dobles = numeros.<span class="function">map</span>(n => n * <span class="number">2</span>);
+<span class="keyword">const</span> suma = numeros.<span class="function">reduce</span>((acc, n) => acc + n, <span class="number">0</span>);
+
+<span class="comment">// Arrow functions y 'this'</span>
+<span class="keyword">const</span> objeto = {
+    nombre: <span class="string">'Mi Objeto'</span>,
+    
+    <span class="comment">// Método tradicional - 'this' es el objeto</span>
+    <span class="function">metodoNormal</span>() {
+        console.<span class="function">log</span>(<span class="keyword">this</span>.nombre); <span class="comment">// 'Mi Objeto'</span>
+    },
+    
+    <span class="comment">// Arrow - 'this' es el contexto donde se definió</span>
+    metodoArrow: () => {
+        console.<span class="function">log</span>(<span class="keyword">this</span>.nombre); <span class="comment">// undefined (this es window)</span>
+    },
+    
+    <span class="comment">// Útil dentro de callbacks</span>
+    <span class="function">iniciar</span>() {
+        <span class="function">setTimeout</span>(() => {
+            console.<span class="function">log</span>(<span class="keyword">this</span>.nombre); <span class="comment">// 'Mi Objeto' ✓</span>
+        }, <span class="number">1000</span>);
+    }
+};</pre>
+            </div>
+
+            <div class="tip-box warning">
+                <h6><i class="bi bi-exclamation-triangle me-2"></i>Cuándo NO usar Arrow Functions</h6>
+                <ul class="mb-0">
+                    <li>Como métodos de objetos (si necesitas <code>this</code>)</li>
+                    <li>Como constructores (<code>new</code>)</li>
+                    <li>Cuando necesitas <code>arguments</code></li>
+                    <li>En event handlers del DOM (si necesitas <code>this</code> = elemento)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. Parámetros -->
+        <section id="parametros" class="concept-card">
+            <h4><span class="badge bg-primary me-2">4</span>Parámetros y Argumentos</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PARÁMETROS EN FUNCIONES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Parámetros vs Argumentos</span>
+<span class="comment">// Parámetros: variables en la definición</span>
+<span class="comment">// Argumentos: valores pasados al llamar</span>
+
+<span class="comment">// 1. Valores por defecto (ES6)</span>
+<span class="keyword">function</span> <span class="function">saludar</span>(nombre = <span class="string">'Invitado'</span>, saludo = <span class="string">'Hola'</span>) {
+    console.<span class="function">log</span>(<span class="string">`${saludo}, ${nombre}!`</span>);
+}
+<span class="function">saludar</span>(); <span class="comment">// 'Hola, Invitado!'</span>
+<span class="function">saludar</span>(<span class="string">'Ana'</span>); <span class="comment">// 'Hola, Ana!'</span>
+<span class="function">saludar</span>(<span class="string">'Ana'</span>, <span class="string">'Buenos días'</span>); <span class="comment">// 'Buenos días, Ana!'</span>
+
+<span class="comment">// Default con expresiones</span>
+<span class="keyword">function</span> <span class="function">crearId</span>(prefijo = <span class="string">'ID'</span>, numero = Date.<span class="function">now</span>()) {
+    <span class="keyword">return</span> <span class="string">`${prefijo}-${numero}`</span>;
+}
+
+<span class="comment">// 2. Rest parameters (...args)</span>
+<span class="keyword">function</span> <span class="function">sumarTodos</span>(...numeros) {
+    <span class="keyword">return</span> numeros.<span class="function">reduce</span>((acc, n) => acc + n, <span class="number">0</span>);
+}
+console.<span class="function">log</span>(<span class="function">sumarTodos</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)); <span class="comment">// 15</span>
+
+<span class="comment">// Rest con parámetros normales</span>
+<span class="keyword">function</span> <span class="function">mostrarEquipo</span>(capitan, ...jugadores) {
+    console.<span class="function">log</span>(<span class="string">`Capitán: ${capitan}`</span>);
+    console.<span class="function">log</span>(<span class="string">`Jugadores: ${jugadores.join(', ')}`</span>);
+}
+<span class="function">mostrarEquipo</span>(<span class="string">'Ana'</span>, <span class="string">'Carlos'</span>, <span class="string">'Elena'</span>, <span class="string">'David'</span>);
+
+<span class="comment">// 3. Destructuring en parámetros</span>
+<span class="keyword">function</span> <span class="function">mostrarUsuario</span>({ nombre, edad, ciudad = <span class="string">'Desconocida'</span> }) {
+    console.<span class="function">log</span>(<span class="string">`${nombre}, ${edad} años, ${ciudad}`</span>);
+}
+<span class="function">mostrarUsuario</span>({ nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span> });
+
+<span class="comment">// Destructuring de array</span>
+<span class="keyword">function</span> <span class="function">procesar</span>([primero, segundo, ...resto]) {
+    console.<span class="function">log</span>(primero, segundo, resto);
+}
+<span class="function">procesar</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]); <span class="comment">// 1 2 [3, 4]</span>
+
+<span class="comment">// 4. Objeto arguments (solo funciones normales)</span>
+<span class="keyword">function</span> <span class="function">antiguaForma</span>() {
+    console.<span class="function">log</span>(<span class="keyword">arguments</span>.length);
+    console.<span class="function">log</span>(<span class="keyword">arguments</span>[<span class="number">0</span>]);
+    <span class="comment">// Convertir a array</span>
+    <span class="keyword">const</span> args = Array.<span class="function">from</span>(<span class="keyword">arguments</span>);
+}
+<span class="function">antiguaForma</span>(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>); <span class="comment">// 3, 'a'</span>
+
+<span class="comment">// 5. Spread para pasar argumentos</span>
+<span class="keyword">const</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+console.<span class="function">log</span>(Math.<span class="function">max</span>(...nums)); <span class="comment">// 3</span>
+
+<span class="keyword">function</span> <span class="function">crear</span>(a, b, c) {
+    <span class="keyword">return</span> a + b + c;
+}
+console.<span class="function">log</span>(<span class="function">crear</span>(...nums)); <span class="comment">// 6</span></pre>
+            </div>
+        </section>
+
+        <!-- 5. Return -->
+        <section id="return" class="concept-card">
+            <h4><span class="badge bg-primary me-2">5</span>Return y Valores de Retorno</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// RETURN EN FUNCIONES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Return termina la ejecución</span>
+<span class="keyword">function</span> <span class="function">verificarEdad</span>(edad) {
+    <span class="keyword">if</span> (edad < <span class="number">0</span>) {
+        <span class="keyword">return</span> <span class="string">'Edad inválida'</span>; <span class="comment">// Sale aquí</span>
+    }
+    <span class="keyword">if</span> (edad < <span class="number">18</span>) {
+        <span class="keyword">return</span> <span class="string">'Menor de edad'</span>;
+    }
+    <span class="keyword">return</span> <span class="string">'Mayor de edad'</span>;
+}
+
+<span class="comment">// Sin return = undefined</span>
+<span class="keyword">function</span> <span class="function">sinReturn</span>() {
+    console.<span class="function">log</span>(<span class="string">'Ejecutando...'</span>);
+}
+<span class="keyword">const</span> resultado = <span class="function">sinReturn</span>();
+console.<span class="function">log</span>(resultado); <span class="comment">// undefined</span>
+
+<span class="comment">// Return vacío = undefined</span>
+<span class="keyword">function</span> <span class="function">returnVacio</span>() {
+    <span class="keyword">return</span>;
+}
+console.<span class="function">log</span>(<span class="function">returnVacio</span>()); <span class="comment">// undefined</span>
+
+<span class="comment">// Retornar múltiples valores (con objeto o array)</span>
+<span class="keyword">function</span> <span class="function">estadisticas</span>(numeros) {
+    <span class="keyword">const</span> suma = numeros.<span class="function">reduce</span>((a, b) => a + b, <span class="number">0</span>);
+    <span class="keyword">const</span> promedio = suma / numeros.length;
+    <span class="keyword">const</span> maximo = Math.<span class="function">max</span>(...numeros);
+    <span class="keyword">const</span> minimo = Math.<span class="function">min</span>(...numeros);
+    
+    <span class="keyword">return</span> { suma, promedio, maximo, minimo };
+}
+
+<span class="keyword">const</span> stats = <span class="function">estadisticas</span>([<span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">20</span>]);
+console.<span class="function">log</span>(stats.promedio); <span class="comment">// 12.5</span>
+
+<span class="comment">// Destructuring del return</span>
+<span class="keyword">const</span> { suma, maximo } = <span class="function">estadisticas</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);
+
+<span class="comment">// Retornar con array</span>
+<span class="keyword">function</span> <span class="function">dividirConResto</span>(a, b) {
+    <span class="keyword">return</span> [Math.<span class="function">floor</span>(a / b), a % b];
+}
+<span class="keyword">const</span> [cociente, resto] = <span class="function">dividirConResto</span>(<span class="number">17</span>, <span class="number">5</span>);
+console.<span class="function">log</span>(cociente, resto); <span class="comment">// 3, 2</span>
+
+<span class="comment">// Retornar función</span>
+<span class="keyword">function</span> <span class="function">crearMultiplicador</span>(factor) {
+    <span class="keyword">return</span> (numero) => numero * factor;
+}
+<span class="keyword">const</span> triplicar = <span class="function">crearMultiplicador</span>(<span class="number">3</span>);
+console.<span class="function">log</span>(<span class="function">triplicar</span>(<span class="number">10</span>)); <span class="comment">// 30</span></pre>
+            </div>
+        </section>
+
+        <!-- 6. Scope -->
+        <section id="scope" class="concept-card">
+            <h4><span class="badge bg-primary me-2">6</span>Scope (Alcance)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// SCOPE - ALCANCE DE VARIABLES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// GLOBAL SCOPE</span>
+<span class="keyword">var</span> globalVar = <span class="string">'Soy global'</span>;
+<span class="keyword">let</span> globalLet = <span class="string">'También global'</span>;
+
+<span class="comment">// FUNCTION SCOPE (var)</span>
+<span class="keyword">function</span> <span class="function">ejemploVar</span>() {
+    <span class="keyword">var</span> dentroFuncion = <span class="string">'Solo visible aquí'</span>;
+    console.<span class="function">log</span>(dentroFuncion); <span class="comment">// ✓</span>
+    
+    <span class="keyword">if</span> (<span class="keyword">true</span>) {
+        <span class="keyword">var</span> dentroIf = <span class="string">'var ignora bloques'</span>;
+    }
+    console.<span class="function">log</span>(dentroIf); <span class="comment">// ✓ Accesible (var no respeta bloques)</span>
+}
+<span class="comment">// console.log(dentroFuncion); // ❌ Error</span>
+
+<span class="comment">// BLOCK SCOPE (let, const)</span>
+<span class="keyword">function</span> <span class="function">ejemploLet</span>() {
+    <span class="keyword">let</span> funcionLet = <span class="string">'En función'</span>;
+    
+    <span class="keyword">if</span> (<span class="keyword">true</span>) {
+        <span class="keyword">let</span> bloqueLet = <span class="string">'Solo en este bloque'</span>;
+        <span class="keyword">const</span> bloqueConst = <span class="string">'También en bloque'</span>;
+        console.<span class="function">log</span>(bloqueLet); <span class="comment">// ✓</span>
+    }
+    <span class="comment">// console.log(bloqueLet); // ❌ Error</span>
+}
+
+<span class="comment">// LEXICAL SCOPE (Alcance léxico)</span>
+<span class="keyword">function</span> <span class="function">externa</span>() {
+    <span class="keyword">const</span> externaVar = <span class="string">'Soy de externa'</span>;
+    
+    <span class="keyword">function</span> <span class="function">interna</span>() {
+        <span class="keyword">const</span> internaVar = <span class="string">'Soy de interna'</span>;
+        console.<span class="function">log</span>(externaVar); <span class="comment">// ✓ Accede a variable de externa</span>
+        console.<span class="function">log</span>(globalVar); <span class="comment">// ✓ Accede a global</span>
+    }
+    
+    <span class="function">interna</span>();
+    <span class="comment">// console.log(internaVar); // ❌ No puede acceder</span>
+}
+
+<span class="comment">// SCOPE CHAIN (Cadena de alcance)</span>
+<span class="keyword">const</span> nivel0 = <span class="string">'Global'</span>;
+
+<span class="keyword">function</span> <span class="function">nivel1</span>() {
+    <span class="keyword">const</span> varNivel1 = <span class="string">'Nivel 1'</span>;
+    
+    <span class="keyword">function</span> <span class="function">nivel2</span>() {
+        <span class="keyword">const</span> varNivel2 = <span class="string">'Nivel 2'</span>;
+        
+        <span class="keyword">function</span> <span class="function">nivel3</span>() {
+            console.<span class="function">log</span>(nivel0); <span class="comment">// ✓ Busca hacia arriba</span>
+            console.<span class="function">log</span>(varNivel1); <span class="comment">// ✓</span>
+            console.<span class="function">log</span>(varNivel2); <span class="comment">// ✓</span>
+        }
+        <span class="function">nivel3</span>();
+    }
+    <span class="function">nivel2</span>();
+}
+
+<span class="comment">// SHADOWING (Sombreado)</span>
+<span class="keyword">const</span> x = <span class="number">10</span>;
+
+<span class="keyword">function</span> <span class="function">sombra</span>() {
+    <span class="keyword">const</span> x = <span class="number">20</span>; <span class="comment">// Sombrea la x global</span>
+    console.<span class="function">log</span>(x); <span class="comment">// 20</span>
+}
+<span class="function">sombra</span>();
+console.<span class="function">log</span>(x); <span class="comment">// 10</span></pre>
+            </div>
+        </section>
+
+        <!-- 7. Closures -->
+        <section id="closures" class="concept-card">
+            <h4><span class="badge bg-success me-2">7</span>Closures (Clausuras)</h4>
+            <p>Una función que recuerda el entorno donde fue creada, incluso después de que ese entorno haya terminado.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CLOSURES - CLAUSURAS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Ejemplo básico de closure</span>
+<span class="keyword">function</span> <span class="function">crearContador</span>() {
+    <span class="keyword">let</span> contador = <span class="number">0</span>; <span class="comment">// Variable "privada"</span>
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>() {
+        contador++;
+        <span class="keyword">return</span> contador;
+    };
+}
+
+<span class="keyword">const</span> contador1 = <span class="function">crearContador</span>();
+console.<span class="function">log</span>(<span class="function">contador1</span>()); <span class="comment">// 1</span>
+console.<span class="function">log</span>(<span class="function">contador1</span>()); <span class="comment">// 2</span>
+console.<span class="function">log</span>(<span class="function">contador1</span>()); <span class="comment">// 3</span>
+
+<span class="keyword">const</span> contador2 = <span class="function">crearContador</span>();
+console.<span class="function">log</span>(<span class="function">contador2</span>()); <span class="comment">// 1 (contador independiente)</span>
+
+<span class="comment">// Closure con múltiples funciones</span>
+<span class="keyword">function</span> <span class="function">crearCuentaBancaria</span>(saldoInicial) {
+    <span class="keyword">let</span> saldo = saldoInicial;
+    
+    <span class="keyword">return</span> {
+        <span class="function">depositar</span>(cantidad) {
+            saldo += cantidad;
+            <span class="keyword">return</span> saldo;
+        },
+        <span class="function">retirar</span>(cantidad) {
+            <span class="keyword">if</span> (cantidad <= saldo) {
+                saldo -= cantidad;
+                <span class="keyword">return</span> saldo;
+            }
+            <span class="keyword">return</span> <span class="string">'Saldo insuficiente'</span>;
+        },
+        <span class="function">verSaldo</span>() {
+            <span class="keyword">return</span> saldo;
+        }
+    };
+}
+
+<span class="keyword">const</span> miCuenta = <span class="function">crearCuentaBancaria</span>(<span class="number">1000</span>);
+console.<span class="function">log</span>(miCuenta.<span class="function">depositar</span>(<span class="number">500</span>)); <span class="comment">// 1500</span>
+console.<span class="function">log</span>(miCuenta.<span class="function">retirar</span>(<span class="number">200</span>)); <span class="comment">// 1300</span>
+console.<span class="function">log</span>(miCuenta.<span class="function">verSaldo</span>()); <span class="comment">// 1300</span>
+
+<span class="comment">// Closure en loop (problema clásico)</span>
+<span class="comment">// ❌ PROBLEMA con var</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+        console.<span class="function">log</span>(i); <span class="comment">// 3, 3, 3 (todas ven el mismo i)</span>
+    }, <span class="number">100</span>);
+}
+
+<span class="comment">// ✓ SOLUCIÓN con let (block scope)</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {
+    <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+        console.<span class="function">log</span>(j); <span class="comment">// 0, 1, 2</span>
+    }, <span class="number">100</span>);
+}
+
+<span class="comment">// ✓ SOLUCIÓN con closure</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> k = <span class="number">0</span>; k < <span class="number">3</span>; k++) {
+    (<span class="keyword">function</span>(num) {
+        <span class="function">setTimeout</span>(<span class="keyword">function</span>() {
+            console.<span class="function">log</span>(num); <span class="comment">// 0, 1, 2</span>
+        }, <span class="number">100</span>);
+    })(k);
+}
+
+<span class="comment">// Módulo con closure (Module Pattern)</span>
+<span class="keyword">const</span> miModulo = (<span class="keyword">function</span>() {
+    <span class="keyword">let</span> privado = <span class="string">'Soy privado'</span>;
+    
+    <span class="keyword">function</span> <span class="function">metodoPrivado</span>() {
+        console.<span class="function">log</span>(privado);
+    }
+    
+    <span class="keyword">return</span> {
+        <span class="function">metodoPublico</span>() {
+            <span class="function">metodoPrivado</span>();
+        },
+        <span class="function">cambiarPrivado</span>(nuevo) {
+            privado = nuevo;
+        }
+    };
+})();
+
+miModulo.<span class="function">metodoPublico</span>(); <span class="comment">// 'Soy privado'</span></pre>
+            </div>
+        </section>
+
+        <!-- 8. Callbacks -->
+        <section id="callbacks" class="concept-card">
+            <h4><span class="badge bg-success me-2">8</span>Callbacks</h4>
+            <p>Una función pasada como argumento a otra función.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CALLBACKS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Callback básico</span>
+<span class="keyword">function</span> <span class="function">procesarUsuario</span>(id, callback) {
+    <span class="comment">// Simulamos obtener usuario</span>
+    <span class="keyword">const</span> usuario = { id, nombre: <span class="string">'Ana'</span> };
+    <span class="function">callback</span>(usuario);
+}
+
+<span class="function">procesarUsuario</span>(<span class="number">1</span>, <span class="keyword">function</span>(user) {
+    console.<span class="function">log</span>(<span class="string">`Usuario: ${user.nombre}`</span>);
+});
+
+<span class="comment">// Con arrow function</span>
+<span class="function">procesarUsuario</span>(<span class="number">2</span>, user => console.<span class="function">log</span>(user));
+
+<span class="comment">// Callback con error (patrón Node.js)</span>
+<span class="keyword">function</span> <span class="function">dividir</span>(a, b, callback) {
+    <span class="keyword">if</span> (b === <span class="number">0</span>) {
+        <span class="function">callback</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'No se puede dividir por cero'</span>), <span class="keyword">null</span>);
+    } <span class="keyword">else</span> {
+        <span class="function">callback</span>(<span class="keyword">null</span>, a / b);
+    }
+}
+
+<span class="function">dividir</span>(<span class="number">10</span>, <span class="number">2</span>, (error, resultado) => {
+    <span class="keyword">if</span> (error) {
+        console.<span class="function">error</span>(error.message);
+    } <span class="keyword">else</span> {
+        console.<span class="function">log</span>(<span class="string">'Resultado:'</span>, resultado); <span class="comment">// 5</span>
+    }
+});
+
+<span class="comment">// Callbacks con setTimeout</span>
+console.<span class="function">log</span>(<span class="string">'Inicio'</span>);
+
+<span class="function">setTimeout</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Después de 1 segundo'</span>);
+}, <span class="number">1000</span>);
+
+console.<span class="function">log</span>(<span class="string">'Fin'</span>);
+<span class="comment">// Salida: Inicio, Fin, Después de 1 segundo</span>
+
+<span class="comment">// Callback Hell (Problema)</span>
+<span class="function">obtenerUsuario</span>(<span class="number">1</span>, (usuario) => {
+    <span class="function">obtenerPedidos</span>(usuario.id, (pedidos) => {
+        <span class="function">obtenerProductos</span>(pedidos[<span class="number">0</span>].id, (productos) => {
+            <span class="function">obtenerDetalles</span>(productos[<span class="number">0</span>].id, (detalles) => {
+                console.<span class="function">log</span>(detalles);
+                <span class="comment">// Esto se vuelve difícil de mantener</span>
+            });
+        });
+    });
+});
+
+<span class="comment">// Callbacks en array methods</span>
+<span class="keyword">const</span> numeros = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+numeros.<span class="function">forEach</span>((num, index) => {
+    console.<span class="function">log</span>(<span class="string">`Índice ${index}: ${num}`</span>);
+});
+
+<span class="keyword">const</span> dobles = numeros.<span class="function">map</span>(n => n * <span class="number">2</span>);
+<span class="keyword">const</span> pares = numeros.<span class="function">filter</span>(n => n % <span class="number">2</span> === <span class="number">0</span>);
+<span class="keyword">const</span> suma = numeros.<span class="function">reduce</span>((acc, n) => acc + n, <span class="number">0</span>);
+
+<span class="comment">// Callback para ordenar</span>
+<span class="keyword">const</span> usuarios = [
+    { nombre: <span class="string">'Carlos'</span>, edad: <span class="number">30</span> },
+    { nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span> },
+    { nombre: <span class="string">'Elena'</span>, edad: <span class="number">28</span> }
+];
+
+usuarios.<span class="function">sort</span>((a, b) => a.edad - b.edad); <span class="comment">// Por edad</span>
+usuarios.<span class="function">sort</span>((a, b) => a.nombre.<span class="function">localeCompare</span>(b.nombre)); <span class="comment">// Por nombre</span></pre>
+            </div>
+        </section>
+
+        <!-- 9. Higher-Order Functions -->
+        <section id="higher-order" class="concept-card">
+            <h4><span class="badge bg-success me-2">9</span>Higher-Order Functions</h4>
+            <p>Funciones que reciben funciones como argumento o retornan funciones.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// HIGHER-ORDER FUNCTIONS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// 1. Función que recibe función</span>
+<span class="keyword">function</span> <span class="function">ejecutarDosVeces</span>(fn) {
+    <span class="function">fn</span>();
+    <span class="function">fn</span>();
+}
+
+<span class="function">ejecutarDosVeces</span>(() => console.<span class="function">log</span>(<span class="string">'¡Hola!'</span>));
+<span class="comment">// '¡Hola!' x2</span>
+
+<span class="comment">// 2. Función que retorna función</span>
+<span class="keyword">function</span> <span class="function">crearSaludador</span>(saludo) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(nombre) {
+        console.<span class="function">log</span>(<span class="string">`${saludo}, ${nombre}!`</span>);
+    };
+}
+
+<span class="keyword">const</span> saludarES = <span class="function">crearSaludador</span>(<span class="string">'Hola'</span>);
+<span class="keyword">const</span> saludarEN = <span class="function">crearSaludador</span>(<span class="string">'Hello'</span>);
+
+<span class="function">saludarES</span>(<span class="string">'Ana'</span>); <span class="comment">// 'Hola, Ana!'</span>
+<span class="function">saludarEN</span>(<span class="string">'John'</span>); <span class="comment">// 'Hello, John!'</span>
+
+<span class="comment">// 3. Crear HOF propias</span>
+<span class="keyword">function</span> <span class="function">miMap</span>(array, transformar) {
+    <span class="keyword">const</span> resultado = [];
+    <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> array) {
+        resultado.<span class="function">push</span>(<span class="function">transformar</span>(item));
+    }
+    <span class="keyword">return</span> resultado;
+}
+
+<span class="keyword">const</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+console.<span class="function">log</span>(<span class="function">miMap</span>(nums, x => x * <span class="number">2</span>)); <span class="comment">// [2, 4, 6]</span>
+
+<span class="keyword">function</span> <span class="function">miFilter</span>(array, condicion) {
+    <span class="keyword">const</span> resultado = [];
+    <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> array) {
+        <span class="keyword">if</span> (<span class="function">condicion</span>(item)) {
+            resultado.<span class="function">push</span>(item);
+        }
+    }
+    <span class="keyword">return</span> resultado;
+}
+
+<span class="comment">// 4. Composición de funciones</span>
+<span class="keyword">const</span> duplicar = x => x * <span class="number">2</span>;
+<span class="keyword">const</span> incrementar = x => x + <span class="number">1</span>;
+<span class="keyword">const</span> cuadrado = x => x * x;
+
+<span class="comment">// Componer manualmente</span>
+<span class="keyword">const</span> resultado = <span class="function">cuadrado</span>(<span class="function">duplicar</span>(<span class="function">incrementar</span>(<span class="number">3</span>)));
+console.<span class="function">log</span>(resultado); <span class="comment">// ((3+1)*2)² = 64</span>
+
+<span class="comment">// Función compose</span>
+<span class="keyword">const</span> compose = (...fns) => x => fns.<span class="function">reduceRight</span>((acc, fn) => <span class="function">fn</span>(acc), x);
+<span class="keyword">const</span> pipe = (...fns) => x => fns.<span class="function">reduce</span>((acc, fn) => <span class="function">fn</span>(acc), x);
+
+<span class="keyword">const</span> calcular = <span class="function">pipe</span>(incrementar, duplicar, cuadrado);
+console.<span class="function">log</span>(<span class="function">calcular</span>(<span class="number">3</span>)); <span class="comment">// 64</span>
+
+<span class="comment">// 5. Curry</span>
+<span class="keyword">function</span> <span class="function">curry</span>(fn) {
+    <span class="keyword">return</span> <span class="keyword">function</span> <span class="function">curried</span>(...args) {
+        <span class="keyword">if</span> (args.length >= fn.length) {
+            <span class="keyword">return</span> fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }
+        <span class="keyword">return</span> <span class="keyword">function</span>(...nextArgs) {
+            <span class="keyword">return</span> <span class="function">curried</span>.<span class="function">apply</span>(<span class="keyword">this</span>, args.<span class="function">concat</span>(nextArgs));
+        };
+    };
+}
+
+<span class="keyword">function</span> <span class="function">suma</span>(a, b, c) {
+    <span class="keyword">return</span> a + b + c;
+}
+
+<span class="keyword">const</span> sumaCurried = <span class="function">curry</span>(suma);
+console.<span class="function">log</span>(<span class="function">sumaCurried</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)); <span class="comment">// 6</span>
+console.<span class="function">log</span>(<span class="function">sumaCurried</span>(<span class="number">1</span>, <span class="number">2</span>)(<span class="number">3</span>)); <span class="comment">// 6</span>
+console.<span class="function">log</span>(<span class="function">sumaCurried</span>(<span class="number">1</span>)(<span class="number">2</span>, <span class="number">3</span>)); <span class="comment">// 6</span>
+
+<span class="comment">// 6. Partial application</span>
+<span class="keyword">function</span> <span class="function">partial</span>(fn, ...presetArgs) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(...laterArgs) {
+        <span class="keyword">return</span> fn(...presetArgs, ...laterArgs);
+    };
+}
+
+<span class="keyword">const</span> sumar10 = <span class="function">partial</span>(suma, <span class="number">10</span>);
+console.<span class="function">log</span>(<span class="function">sumar10</span>(<span class="number">5</span>, <span class="number">3</span>)); <span class="comment">// 18</span></pre>
+            </div>
+        </section>
+
+        <!-- 10. IIFE -->
+        <section id="iife" class="concept-card">
+            <h4><span class="badge bg-warning text-dark me-2">10</span>IIFE (Immediately Invoked Function Expression)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// IIFE - Función Autoejecutable</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Sintaxis básica</span>
+(<span class="keyword">function</span>() {
+    console.<span class="function">log</span>(<span class="string">'¡Me ejecuto inmediatamente!'</span>);
+})();
+
+<span class="comment">// Con arrow function</span>
+(() => {
+    console.<span class="function">log</span>(<span class="string">'IIFE con arrow'</span>);
+})();
+
+<span class="comment">// Con parámetros</span>
+((<span class="keyword">nombre</span>) => {
+    console.<span class="function">log</span>(<span class="string">`Hola, ${nombre}!`</span>);
+})(<span class="string">'Ana'</span>);
+
+<span class="comment">// IIFE con return</span>
+<span class="keyword">const</span> resultado = (<span class="keyword">function</span>() {
+    <span class="keyword">const</span> privado = <span class="number">10</span>;
+    <span class="keyword">return</span> privado * <span class="number">2</span>;
+})();
+console.<span class="function">log</span>(resultado); <span class="comment">// 20</span>
+
+<span class="comment">// Uso: Crear scope privado</span>
+(<span class="keyword">function</span>() {
+    <span class="keyword">var</span> secreto = <span class="string">'Nadie me ve fuera'</span>;
+    <span class="comment">// ... código que usa secreto</span>
+})();
+<span class="comment">// console.log(secreto); // ❌ Error</span>
+
+<span class="comment">// Module Pattern con IIFE</span>
+<span class="keyword">const</span> Calculadora = (<span class="keyword">function</span>() {
+    <span class="comment">// Variables privadas</span>
+    <span class="keyword">let</span> historial = [];
+    
+    <span class="comment">// Funciones privadas</span>
+    <span class="keyword">function</span> <span class="function">guardarEnHistorial</span>(operacion, resultado) {
+        historial.<span class="function">push</span>({ operacion, resultado, fecha: <span class="keyword">new</span> <span class="function">Date</span>() });
+    }
+    
+    <span class="comment">// API pública</span>
+    <span class="keyword">return</span> {
+        <span class="function">sumar</span>(a, b) {
+            <span class="keyword">const</span> resultado = a + b;
+            <span class="function">guardarEnHistorial</span>(<span class="string">`${a} + ${b}`</span>, resultado);
+            <span class="keyword">return</span> resultado;
+        },
+        <span class="function">restar</span>(a, b) {
+            <span class="keyword">const</span> resultado = a - b;
+            <span class="function">guardarEnHistorial</span>(<span class="string">`${a} - ${b}`</span>, resultado);
+            <span class="keyword">return</span> resultado;
+        },
+        <span class="function">verHistorial</span>() {
+            <span class="keyword">return</span> [...historial];
+        },
+        <span class="function">limpiarHistorial</span>() {
+            historial = [];
+        }
+    };
+})();
+
+console.<span class="function">log</span>(Calculadora.<span class="function">sumar</span>(<span class="number">5</span>, <span class="number">3</span>)); <span class="comment">// 8</span>
+console.<span class="function">log</span>(Calculadora.<span class="function">restar</span>(<span class="number">10</span>, <span class="number">4</span>)); <span class="comment">// 6</span>
+console.<span class="function">log</span>(Calculadora.<span class="function">verHistorial</span>());
+
+<span class="comment">// Async IIFE</span>
+(<span class="keyword">async</span> () => {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/datos'</span>);
+    <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+    console.<span class="function">log</span>(data);
+})();</pre>
+            </div>
+        </section>
+
+        <!-- 11. Recursión -->
+        <section id="recursion" class="concept-card">
+            <h4><span class="badge bg-warning text-dark me-2">11</span>Recursión</h4>
+            <p>Una función que se llama a sí misma.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// RECURSIÓN</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Factorial: n! = n * (n-1)!</span>
+<span class="keyword">function</span> <span class="function">factorial</span>(n) {
+    <span class="comment">// Caso base (condición de salida)</span>
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;
+    
+    <span class="comment">// Caso recursivo</span>
+    <span class="keyword">return</span> n * <span class="function">factorial</span>(n - <span class="number">1</span>);
+}
+
+console.<span class="function">log</span>(<span class="function">factorial</span>(<span class="number">5</span>)); <span class="comment">// 120 (5*4*3*2*1)</span>
+
+<span class="comment">// Fibonacci: fib(n) = fib(n-1) + fib(n-2)</span>
+<span class="keyword">function</span> <span class="function">fibonacci</span>(n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="keyword">return</span> <span class="function">fibonacci</span>(n - <span class="number">1</span>) + <span class="function">fibonacci</span>(n - <span class="number">2</span>);
+}
+
+console.<span class="function">log</span>(<span class="function">fibonacci</span>(<span class="number">10</span>)); <span class="comment">// 55</span>
+
+<span class="comment">// Contar regresivamente</span>
+<span class="keyword">function</span> <span class="function">cuentaRegresiva</span>(n) {
+    <span class="keyword">if</span> (n < <span class="number">0</span>) <span class="keyword">return</span>;
+    console.<span class="function">log</span>(n);
+    <span class="function">cuentaRegresiva</span>(n - <span class="number">1</span>);
+}
+<span class="function">cuentaRegresiva</span>(<span class="number">5</span>); <span class="comment">// 5, 4, 3, 2, 1, 0</span>
+
+<span class="comment">// Sumar array recursivamente</span>
+<span class="keyword">function</span> <span class="function">sumarArray</span>(arr) {
+    <span class="keyword">if</span> (arr.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">return</span> arr[<span class="number">0</span>] + <span class="function">sumarArray</span>(arr.<span class="function">slice</span>(<span class="number">1</span>));
+}
+
+console.<span class="function">log</span>(<span class="function">sumarArray</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])); <span class="comment">// 10</span>
+
+<span class="comment">// Aplanar array anidado</span>
+<span class="keyword">function</span> <span class="function">aplanar</span>(arr) {
+    <span class="keyword">let</span> resultado = [];
+    
+    <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> arr) {
+        <span class="keyword">if</span> (Array.<span class="function">isArray</span>(item)) {
+            resultado = resultado.<span class="function">concat</span>(<span class="function">aplanar</span>(item));
+        } <span class="keyword">else</span> {
+            resultado.<span class="function">push</span>(item);
+        }
+    }
+    
+    <span class="keyword">return</span> resultado;
+}
+
+<span class="keyword">const</span> anidado = [<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>]], <span class="number">5</span>]];
+console.<span class="function">log</span>(<span class="function">aplanar</span>(anidado)); <span class="comment">// [1, 2, 3, 4, 5]</span>
+
+<span class="comment">// Recorrer objeto profundamente</span>
+<span class="keyword">function</span> <span class="function">recorrerObjeto</span>(obj, prefijo = <span class="string">''</span>) {
+    <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> Object.<span class="function">entries</span>(obj)) {
+        <span class="keyword">const</span> ruta = prefijo ? <span class="string">`${prefijo}.${key}`</span> : key;
+        
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">'object'</span> && value !== <span class="keyword">null</span>) {
+            <span class="function">recorrerObjeto</span>(value, ruta);
+        } <span class="keyword">else</span> {
+            console.<span class="function">log</span>(<span class="string">`${ruta}: ${value}`</span>);
+        }
+    }
+}
+
+<span class="keyword">const</span> persona = {
+    nombre: <span class="string">'Ana'</span>,
+    direccion: {
+        ciudad: <span class="string">'Madrid'</span>,
+        cp: <span class="string">'28001'</span>
+    }
+};
+<span class="function">recorrerObjeto</span>(persona);
+<span class="comment">// nombre: Ana</span>
+<span class="comment">// direccion.ciudad: Madrid</span>
+<span class="comment">// direccion.cp: 28001</span>
+
+<span class="comment">// Tail recursion (optimización)</span>
+<span class="keyword">function</span> <span class="function">factorialTail</span>(n, acumulador = <span class="number">1</span>) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> acumulador;
+    <span class="keyword">return</span> <span class="function">factorialTail</span>(n - <span class="number">1</span>, n * acumulador);
+}</pre>
+            </div>
+        </section>
+
+        <!-- 12. Técnicas Avanzadas -->
+        <section id="avanzado" class="concept-card">
+            <h4><span class="badge bg-danger me-2">12</span>Técnicas Avanzadas</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// TÉCNICAS AVANZADAS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// 1. Memoization (caché de resultados)</span>
+<span class="keyword">function</span> <span class="function">memoize</span>(fn) {
+    <span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="function">Map</span>();
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> key = JSON.<span class="function">stringify</span>(args);
+        
+        <span class="keyword">if</span> (cache.<span class="function">has</span>(key)) {
+            console.<span class="function">log</span>(<span class="string">'Desde caché'</span>);
+            <span class="keyword">return</span> cache.<span class="function">get</span>(key);
+        }
+        
+        <span class="keyword">const</span> resultado = fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        cache.<span class="function">set</span>(key, resultado);
+        <span class="keyword">return</span> resultado;
+    };
+}
+
+<span class="keyword">const</span> fibMemo = <span class="function">memoize</span>(<span class="keyword">function</span> <span class="function">fib</span>(n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="keyword">return</span> <span class="function">fibMemo</span>(n - <span class="number">1</span>) + <span class="function">fibMemo</span>(n - <span class="number">2</span>);
+});
+
+console.<span class="function">log</span>(<span class="function">fibMemo</span>(<span class="number">40</span>)); <span class="comment">// Muy rápido con memoization</span>
+
+<span class="comment">// 2. Debounce (espera antes de ejecutar)</span>
+<span class="keyword">function</span> <span class="function">debounce</span>(fn, delay) {
+    <span class="keyword">let</span> timeoutId;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="function">clearTimeout</span>(timeoutId);
+        timeoutId = <span class="function">setTimeout</span>(() => {
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }, delay);
+    };
+}
+
+<span class="comment">// Uso: búsqueda mientras escribes</span>
+<span class="keyword">const</span> buscar = <span class="function">debounce</span>((texto) => {
+    console.<span class="function">log</span>(<span class="string">'Buscando:'</span>, texto);
+}, <span class="number">300</span>);
+
+<span class="comment">// buscar('a'); buscar('ab'); buscar('abc');</span>
+<span class="comment">// Solo ejecuta con 'abc' (espera 300ms sin nuevas llamadas)</span>
+
+<span class="comment">// 3. Throttle (ejecuta máximo una vez por intervalo)</span>
+<span class="keyword">function</span> <span class="function">throttle</span>(fn, limit) {
+    <span class="keyword">let</span> inThrottle;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">if</span> (!inThrottle) {
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+            inThrottle = <span class="keyword">true</span>;
+            <span class="function">setTimeout</span>(() => inThrottle = <span class="keyword">false</span>, limit);
+        }
+    };
+}
+
+<span class="comment">// Uso: scroll, resize</span>
+<span class="keyword">const</span> handleScroll = <span class="function">throttle</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Scroll position:'</span>, window.scrollY);
+}, <span class="number">100</span>);
+
+<span class="comment">// 4. Once (ejecuta solo una vez)</span>
+<span class="keyword">function</span> <span class="function">once</span>(fn) {
+    <span class="keyword">let</span> executed = <span class="keyword">false</span>;
+    <span class="keyword">let</span> result;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">if</span> (!executed) {
+            executed = <span class="keyword">true</span>;
+            result = fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }
+        <span class="keyword">return</span> result;
+    };
+}
+
+<span class="keyword">const</span> inicializar = <span class="function">once</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Inicializando...'</span>);
+    <span class="keyword">return</span> { config: <span class="keyword">true</span> };
+});
+
+<span class="function">inicializar</span>(); <span class="comment">// 'Inicializando...'</span>
+<span class="function">inicializar</span>(); <span class="comment">// (nada, ya se ejecutó)</span>
+
+<span class="comment">// 5. bind(), call(), apply()</span>
+<span class="keyword">const</span> persona = {
+    nombre: <span class="string">'Ana'</span>,
+    <span class="function">saludar</span>(saludo, signo) {
+        console.<span class="function">log</span>(<span class="string">`${saludo}, soy ${this.nombre}${signo}`</span>);
+    }
+};
+
+<span class="keyword">const</span> otraPersona = { nombre: <span class="string">'Carlos'</span> };
+
+<span class="comment">// call: ejecuta con this diferente</span>
+persona.saludar.<span class="function">call</span>(otraPersona, <span class="string">'Hola'</span>, <span class="string">'!'</span>); <span class="comment">// 'Hola, soy Carlos!'</span>
+
+<span class="comment">// apply: igual pero args en array</span>
+persona.saludar.<span class="function">apply</span>(otraPersona, [<span class="string">'Hey'</span>, <span class="string">'?'</span>]); <span class="comment">// 'Hey, soy Carlos?'</span>
+
+<span class="comment">// bind: crea nueva función con this fijo</span>
+<span class="keyword">const</span> saludarCarlos = persona.saludar.<span class="function">bind</span>(otraPersona);
+<span class="function">saludarCarlos</span>(<span class="string">'Buenos días'</span>, <span class="string">'.'</span>); <span class="comment">// 'Buenos días, soy Carlos.'</span>
+
+<span class="comment">// Bind con argumentos parciales</span>
+<span class="keyword">const</span> saludarHola = persona.saludar.<span class="function">bind</span>(otraPersona, <span class="string">'Hola'</span>);
+<span class="function">saludarHola</span>(<span class="string">'!'</span>); <span class="comment">// 'Hola, soy Carlos!'</span>
+
+<span class="comment">// 6. Generator functions</span>
+<span class="keyword">function</span>* <span class="function">generadorNumeros</span>(max) {
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < max; i++) {
+        <span class="keyword">yield</span> i;
+    }
+}
+
+<span class="keyword">const</span> gen = <span class="function">generadorNumeros</span>(<span class="number">3</span>);
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: 0, done: false }</span>
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: 1, done: false }</span>
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: 2, done: false }</span>
+console.<span class="function">log</span>(gen.<span class="function">next</span>()); <span class="comment">// { value: undefined, done: true }</span></pre>
+            </div>
+        </section>
+
+        <!-- Tabla Comparativa -->
+        <section class="my-5">
+            <h3 class="mb-4">Tabla Comparativa: Tipos de Funciones</h3>
+            <div class="table-responsive comparison-table">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Function Declaration</th>
+                            <th>Function Expression</th>
+                            <th>Arrow Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hoisting</strong></td>
+                            <td>✅ Sí</td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>this propio</strong></td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>❌ No (hereda)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>arguments</strong></td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Usar como constructor</strong></td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sintaxis corta</strong></td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                            <td>✅ Sí</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mejor para callbacks</strong></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>✅ Sí</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="arrays-objetos.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Arrays/Objetos
+            </a>
+            <a href="async.html" class="btn btn-primary">
+                Async/Await<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Funciones en JavaScript | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

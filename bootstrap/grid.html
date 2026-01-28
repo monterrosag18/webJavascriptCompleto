@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Grid System - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .grid-demo .row > * {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            background-color: rgba(86, 61, 124, 0.15);
+            border: 1px solid rgba(86, 61, 124, 0.2);
+            text-align: center;
+            font-weight: 500;
+        }
+        .grid-demo .row {
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 400px;
+        }
+        .breakpoint-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" data-bs-toggle="dropdown">Bootstrap</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item active" href="grid.html">Sistema Grid</a></li>
+                            <li><a class="dropdown-item" href="componentes.html">Componentes</a></li>
+                            <li><a class="dropdown-item" href="formularios.html">Formularios</a></li>
+                            <li><a class="dropdown-item" href="utilidades.html">Utilidades</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-primary text-white py-5 mt-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-grid-3x3-gap me-3"></i>Sistema Grid de Bootstrap 5</h1>
+            <p class="lead">El sistema más potente para crear layouts responsivos</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        
+        <!-- INTRODUCCIÓN -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <i class="bi bi-info-circle me-2 text-primary"></i>¿Cómo Funciona el Grid?
+            </h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Conceptos Clave</h5>
+                        <ul class="mb-0">
+                            <li><strong>Container:</strong> Contenedor que centra y limita el ancho</li>
+                            <li><strong>Row:</strong> Fila que contiene las columnas</li>
+                            <li><strong>Col:</strong> Columna (12 columnas máximo por fila)</li>
+                            <li><strong>Breakpoints:</strong> Puntos de quiebre responsivos</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-grid-3x3 me-2"></i>Sistema de 12 Columnas</h5>
+                        <p class="mb-0">El grid se divide en <strong>12 columnas</strong>. Puedes combinar diferentes anchos que sumen 12, o usar columnas automáticas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Breakpoints -->
+            <h4 class="fw-bold mb-3">Breakpoints (Puntos de Quiebre)</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered breakpoint-table">
+                    <thead>
+                        <tr>
+                            <th>Breakpoint</th>
+                            <th>Prefijo</th>
+                            <th>Dimensiones</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Extra pequeño</td>
+                            <td><code>-</code> (ninguno)</td>
+                            <td>&lt;576px</td>
+                            <td><code>col-12</code></td>
+                        </tr>
+                        <tr>
+                            <td>Pequeño</td>
+                            <td><code>sm</code></td>
+                            <td>≥576px</td>
+                            <td><code>col-sm-6</code></td>
+                        </tr>
+                        <tr>
+                            <td>Mediano</td>
+                            <td><code>md</code></td>
+                            <td>≥768px</td>
+                            <td><code>col-md-4</code></td>
+                        </tr>
+                        <tr>
+                            <td>Grande</td>
+                            <td><code>lg</code></td>
+                            <td>≥992px</td>
+                            <td><code>col-lg-3</code></td>
+                        </tr>
+                        <tr>
+                            <td>Extra Grande</td>
+                            <td><code>xl</code></td>
+                            <td>≥1200px</td>
+                            <td><code>col-xl-2</code></td>
+                        </tr>
+                        <tr>
+                            <td>XXL</td>
+                            <td><code>xxl</code></td>
+                            <td>≥1400px</td>
+                            <td><code>col-xxl-1</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 1: COLUMNAS BÁSICAS
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-primary me-2">1</span>Columnas Básicas
+            </h2>
+            <p class="text-muted mb-4">Las columnas pueden tener anchos específicos que sumen 12</p>
+            
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col-12">col-12 (fila completa)</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">col-6</div>
+                    <div class="col-6">col-6</div>
+                </div>
+                <div class="row">
+                    <div class="col-4">col-4</div>
+                    <div class="col-4">col-4</div>
+                    <div class="col-4">col-4</div>
+                </div>
+                <div class="row">
+                    <div class="col-3">col-3</div>
+                    <div class="col-3">col-3</div>
+                    <div class="col-3">col-3</div>
+                    <div class="col-3">col-3</div>
+                </div>
+                <div class="row">
+                    <div class="col-2">col-2</div>
+                    <div class="col-2">col-2</div>
+                    <div class="col-2">col-2</div>
+                    <div class="col-2">col-2</div>
+                    <div class="col-2">col-2</div>
+                    <div class="col-2">col-2</div>
+                </div>
+                <div class="row">
+                    <div class="col-8">col-8</div>
+                    <div class="col-4">col-4</div>
+                </div>
+                <div class="row">
+                    <div class="col-3">col-3</div>
+                    <div class="col-6">col-6</div>
+                    <div class="col-3">col-3</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Columnas Básicas - Siempre suman 12 --&gt;</span>
+&lt;div class="container"&gt;
+    <span class="comment">&lt;!-- Una columna de ancho completo --&gt;</span>
+    &lt;div class="row"&gt;
+        &lt;div class="col-12"&gt;Fila completa&lt;/div&gt;
+    &lt;/div&gt;
+    
+    <span class="comment">&lt;!-- Dos columnas iguales --&gt;</span>
+    &lt;div class="row"&gt;
+        &lt;div class="col-6"&gt;Mitad&lt;/div&gt;
+        &lt;div class="col-6"&gt;Mitad&lt;/div&gt;
+    &lt;/div&gt;
+    
+    <span class="comment">&lt;!-- Tres columnas iguales --&gt;</span>
+    &lt;div class="row"&gt;
+        &lt;div class="col-4"&gt;Tercio&lt;/div&gt;
+        &lt;div class="col-4"&gt;Tercio&lt;/div&gt;
+        &lt;div class="col-4"&gt;Tercio&lt;/div&gt;
+    &lt;/div&gt;
+    
+    <span class="comment">&lt;!-- Cuatro columnas iguales --&gt;</span>
+    &lt;div class="row"&gt;
+        &lt;div class="col-3"&gt;Cuarto&lt;/div&gt;
+        &lt;div class="col-3"&gt;Cuarto&lt;/div&gt;
+        &lt;div class="col-3"&gt;Cuarto&lt;/div&gt;
+        &lt;div class="col-3"&gt;Cuarto&lt;/div&gt;
+    &lt;/div&gt;
+    
+    <span class="comment">&lt;!-- Combinaciones personalizadas --&gt;</span>
+    &lt;div class="row"&gt;
+        &lt;div class="col-8"&gt;Contenido principal (8/12)&lt;/div&gt;
+        &lt;div class="col-4"&gt;Sidebar (4/12)&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="row"&gt;
+        &lt;div class="col-3"&gt;Menú (3/12)&lt;/div&gt;
+        &lt;div class="col-6"&gt;Contenido (6/12)&lt;/div&gt;
+        &lt;div class="col-3"&gt;Info (3/12)&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 2: COLUMNAS RESPONSIVAS
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-success me-2">2</span>Columnas Responsivas
+            </h2>
+            <p class="text-muted mb-4">Diferentes anchos según el tamaño de pantalla</p>
+            
+            <div class="alert alert-success mb-4">
+                <i class="bi bi-phone me-2"></i>
+                <strong>Redimensiona la ventana</strong> para ver cómo cambian las columnas
+            </div>
+            
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-3" style="background: rgba(40, 167, 69, 0.2);">
+                        col-12 col-md-6 col-lg-3
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3" style="background: rgba(40, 167, 69, 0.2);">
+                        col-12 col-md-6 col-lg-3
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3" style="background: rgba(40, 167, 69, 0.2);">
+                        col-12 col-md-6 col-lg-3
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3" style="background: rgba(40, 167, 69, 0.2);">
+                        col-12 col-md-6 col-lg-3
+                    </div>
+                </div>
+            </div>
+            
+            <p class="mb-4"><strong>Este ejemplo muestra:</strong></p>
+            <ul>
+                <li><strong>Móvil (&lt;768px):</strong> 1 columna (col-12)</li>
+                <li><strong>Tablet (≥768px):</strong> 2 columnas (col-md-6)</li>
+                <li><strong>Desktop (≥992px):</strong> 4 columnas (col-lg-3)</li>
+            </ul>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Columnas Responsivas --&gt;</span>
+<span class="comment">&lt;!-- Móvil: 1 columna | Tablet: 2 columnas | Desktop: 4 columnas --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3"&gt;Item 1&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3"&gt;Item 2&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3"&gt;Item 3&lt;/div&gt;
+    &lt;div class="col-12 col-md-6 col-lg-3"&gt;Item 4&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Layout clásico con sidebar --&gt;</span>
+<span class="comment">&lt;!-- Móvil: sidebar arriba | Desktop: sidebar a la izquierda --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-12 col-lg-3 order-lg-1 order-2"&gt;
+        Sidebar
+    &lt;/div&gt;
+    &lt;div class="col-12 col-lg-9 order-lg-2 order-1"&gt;
+        Contenido Principal
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Tarjetas de productos --&gt;</span>
+<span class="comment">&lt;!-- Móvil: 2 | Tablet: 3 | Desktop: 4 | XL: 6 --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-6 col-md-4 col-lg-3 col-xl-2"&gt;Producto&lt;/div&gt;
+    &lt;div class="col-6 col-md-4 col-lg-3 col-xl-2"&gt;Producto&lt;/div&gt;
+    &lt;div class="col-6 col-md-4 col-lg-3 col-xl-2"&gt;Producto&lt;/div&gt;
+    &lt;div class="col-6 col-md-4 col-lg-3 col-xl-2"&gt;Producto&lt;/div&gt;
+    &lt;div class="col-6 col-md-4 col-lg-3 col-xl-2"&gt;Producto&lt;/div&gt;
+    &lt;div class="col-6 col-md-4 col-lg-3 col-xl-2"&gt;Producto&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 3: COLUMNAS AUTOMÁTICAS
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-info me-2">3</span>Columnas Automáticas
+            </h2>
+            <p class="text-muted mb-4">Bootstrap calcula el ancho automáticamente</p>
+            
+            <h5 class="fw-bold mb-3">col (ancho igual automático)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                </div>
+                <div class="row">
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                </div>
+                <div class="row">
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                </div>
+            </div>
+            
+            <h5 class="fw-bold mb-3">col-auto (ancho según contenido)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col-auto" style="background: rgba(255, 193, 7, 0.3);">col-auto corto</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col (resto del espacio)</div>
+                </div>
+                <div class="row">
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                    <div class="col-auto" style="background: rgba(255, 193, 7, 0.3);">col-auto con más contenido aquí</div>
+                    <div class="col" style="background: rgba(23, 162, 184, 0.2);">col</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Columnas con ancho igual automático --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col"&gt;Auto 1&lt;/div&gt;
+    &lt;div class="col"&gt;Auto 2&lt;/div&gt;
+    &lt;div class="col"&gt;Auto 3&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Una columna con ancho fijo, otra automática --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-4"&gt;Fijo 4/12&lt;/div&gt;
+    &lt;div class="col"&gt;Automático (resto)&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- col-auto: ancho según contenido --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-auto"&gt;
+        &lt;button class="btn btn-primary"&gt;Enviar&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="col"&gt;
+        &lt;input type="text" class="form-control" placeholder="Email"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- row-cols: define columnas por fila --&gt;</span>
+&lt;div class="row row-cols-2 row-cols-md-3 row-cols-lg-4"&gt;
+    &lt;div class="col"&gt;Item&lt;/div&gt;
+    &lt;div class="col"&gt;Item&lt;/div&gt;
+    &lt;div class="col"&gt;Item&lt;/div&gt;
+    &lt;div class="col"&gt;Item&lt;/div&gt;
+    &lt;div class="col"&gt;Item&lt;/div&gt;
+    &lt;div class="col"&gt;Item&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 4: ALINEACIÓN
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-warning text-dark me-2">4</span>Alineación de Columnas
+            </h2>
+            
+            <h5 class="fw-bold mb-3">Alineación Horizontal (justify-content)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row justify-content-start mb-3" style="background: rgba(108, 117, 125, 0.1);">
+                    <div class="col-3">justify-content-start</div>
+                    <div class="col-3">start</div>
+                </div>
+                <div class="row justify-content-center mb-3" style="background: rgba(108, 117, 125, 0.1);">
+                    <div class="col-3">justify-content-center</div>
+                    <div class="col-3">center</div>
+                </div>
+                <div class="row justify-content-end mb-3" style="background: rgba(108, 117, 125, 0.1);">
+                    <div class="col-3">justify-content-end</div>
+                    <div class="col-3">end</div>
+                </div>
+                <div class="row justify-content-between mb-3" style="background: rgba(108, 117, 125, 0.1);">
+                    <div class="col-3">between</div>
+                    <div class="col-3">between</div>
+                </div>
+                <div class="row justify-content-around" style="background: rgba(108, 117, 125, 0.1);">
+                    <div class="col-3">around</div>
+                    <div class="col-3">around</div>
+                </div>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Alineación Vertical (align-items)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row align-items-start mb-3" style="height: 100px; background: rgba(108, 117, 125, 0.1);">
+                    <div class="col">align-items-start</div>
+                    <div class="col">start</div>
+                </div>
+                <div class="row align-items-center mb-3" style="height: 100px; background: rgba(108, 117, 125, 0.1);">
+                    <div class="col">align-items-center</div>
+                    <div class="col">center</div>
+                </div>
+                <div class="row align-items-end" style="height: 100px; background: rgba(108, 117, 125, 0.1);">
+                    <div class="col">align-items-end</div>
+                    <div class="col">end</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Alineación Horizontal --&gt;</span>
+&lt;div class="row justify-content-start"&gt;...&lt;/div&gt;   <span class="comment">&lt;!-- Izquierda --&gt;</span>
+&lt;div class="row justify-content-center"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- Centro --&gt;</span>
+&lt;div class="row justify-content-end"&gt;...&lt;/div&gt;     <span class="comment">&lt;!-- Derecha --&gt;</span>
+&lt;div class="row justify-content-between"&gt;...&lt;/div&gt; <span class="comment">&lt;!-- Espacio entre --&gt;</span>
+&lt;div class="row justify-content-around"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- Espacio alrededor --&gt;</span>
+&lt;div class="row justify-content-evenly"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- Espacio igual --&gt;</span>
+
+<span class="comment">&lt;!-- Alineación Vertical --&gt;</span>
+&lt;div class="row align-items-start"&gt;...&lt;/div&gt;   <span class="comment">&lt;!-- Arriba --&gt;</span>
+&lt;div class="row align-items-center"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- Centro --&gt;</span>
+&lt;div class="row align-items-end"&gt;...&lt;/div&gt;     <span class="comment">&lt;!-- Abajo --&gt;</span>
+
+<span class="comment">&lt;!-- Alineación individual de columna --&gt;</span>
+&lt;div class="row" style="height: 150px;"&gt;
+    &lt;div class="col align-self-start"&gt;Arriba&lt;/div&gt;
+    &lt;div class="col align-self-center"&gt;Centro&lt;/div&gt;
+    &lt;div class="col align-self-end"&gt;Abajo&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Centrar perfectamente --&gt;</span>
+&lt;div class="row justify-content-center align-items-center" 
+     style="min-height: 400px;"&gt;
+    &lt;div class="col-auto"&gt;
+        &lt;h1&gt;Contenido Centrado&lt;/h1&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 5: ORDEN Y OFFSET
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-danger me-2">5</span>Orden y Offset
+            </h2>
+            
+            <h5 class="fw-bold mb-3">Cambiar Orden (order)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col order-3" style="background: rgba(220, 53, 69, 0.2);">Primero en HTML, order-3</div>
+                    <div class="col order-1" style="background: rgba(40, 167, 69, 0.2);">Segundo en HTML, order-1</div>
+                    <div class="col order-2" style="background: rgba(0, 123, 255, 0.2);">Tercero en HTML, order-2</div>
+                </div>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Desplazamiento (offset)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col-4" style="background: rgba(220, 53, 69, 0.2);">col-4</div>
+                    <div class="col-4 offset-4" style="background: rgba(40, 167, 69, 0.2);">col-4 offset-4</div>
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-3" style="background: rgba(0, 123, 255, 0.2);">col-6 offset-3 (centrado)</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 offset-md-2" style="background: rgba(255, 193, 7, 0.3);">offset-md-2</div>
+                    <div class="col-md-4" style="background: rgba(111, 66, 193, 0.2);">col-md-4</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Cambiar orden de columnas --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col order-3"&gt;Aparece tercero&lt;/div&gt;
+    &lt;div class="col order-1"&gt;Aparece primero&lt;/div&gt;
+    &lt;div class="col order-2"&gt;Aparece segundo&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Orden responsivo --&gt;</span>
+&lt;div class="row"&gt;
+    <span class="comment">&lt;!-- Sidebar: primero en móvil, segundo en desktop --&gt;</span>
+    &lt;div class="col-12 col-md-4 order-1 order-md-2"&gt;Sidebar&lt;/div&gt;
+    <span class="comment">&lt;!-- Contenido: segundo en móvil, primero en desktop --&gt;</span>
+    &lt;div class="col-12 col-md-8 order-2 order-md-1"&gt;Contenido&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Offset (desplazamiento) --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-4"&gt;Normal&lt;/div&gt;
+    &lt;div class="col-4 offset-4"&gt;Desplazado 4 columnas&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Centrar con offset --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-8 offset-2"&gt;Centrado&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Offset responsivo --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-md-6 offset-md-3"&gt;
+        Centrado solo en tablets+
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Usar margin auto para empujar --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-4"&gt;Izquierda&lt;/div&gt;
+    &lt;div class="col-4 ms-auto"&gt;Empujado a la derecha&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 6: GUTTERS
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-purple me-2" style="background: #6f42c1;">6</span>Gutters (Espaciado entre Columnas)
+            </h2>
+            
+            <h5 class="fw-bold mb-3">Sin gutters (g-0)</h5>
+            <div class="grid-demo mb-4">
+                <div class="row g-0">
+                    <div class="col-3">g-0</div>
+                    <div class="col-3">g-0</div>
+                    <div class="col-3">g-0</div>
+                    <div class="col-3">g-0</div>
+                </div>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Diferentes tamaños de gutters</h5>
+            <div class="grid-demo mb-4">
+                <div class="row g-1 mb-3">
+                    <div class="col-4">g-1</div>
+                    <div class="col-4">g-1</div>
+                    <div class="col-4">g-1</div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-4">g-3</div>
+                    <div class="col-4">g-3</div>
+                    <div class="col-4">g-3</div>
+                </div>
+                <div class="row g-5">
+                    <div class="col-4">g-5</div>
+                    <div class="col-4">g-5</div>
+                    <div class="col-4">g-5</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Gutters (g-*): espaciado horizontal y vertical --&gt;</span>
+&lt;div class="row g-0"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- Sin espacio --&gt;</span>
+&lt;div class="row g-1"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- 0.25rem --&gt;</span>
+&lt;div class="row g-2"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- 0.5rem --&gt;</span>
+&lt;div class="row g-3"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- 1rem --&gt;</span>
+&lt;div class="row g-4"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- 1.5rem --&gt;</span>
+&lt;div class="row g-5"&gt;...&lt;/div&gt;  <span class="comment">&lt;!-- 3rem --&gt;</span>
+
+<span class="comment">&lt;!-- Solo horizontal (gx-*) --&gt;</span>
+&lt;div class="row gx-5"&gt;
+    &lt;div class="col"&gt;Espacio horizontal grande&lt;/div&gt;
+    &lt;div class="col"&gt;Entre columnas&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Solo vertical (gy-*) --&gt;</span>
+&lt;div class="row gy-4"&gt;
+    &lt;div class="col-6"&gt;Espacio&lt;/div&gt;
+    &lt;div class="col-6"&gt;Vertical&lt;/div&gt;
+    &lt;div class="col-6"&gt;Entre&lt;/div&gt;
+    &lt;div class="col-6"&gt;Filas&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Grid de tarjetas con espaciado --&gt;</span>
+&lt;div class="row row-cols-1 row-cols-md-3 g-4"&gt;
+    &lt;div class="col"&gt;
+        &lt;div class="card h-100"&gt;
+            &lt;div class="card-body"&gt;Tarjeta 1&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col"&gt;
+        &lt;div class="card h-100"&gt;
+            &lt;div class="card-body"&gt;Tarjeta 2&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col"&gt;
+        &lt;div class="card h-100"&gt;
+            &lt;div class="card-body"&gt;Tarjeta 3&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             EJEMPLO 7: ANIDAMIENTO
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-dark me-2">7</span>Anidamiento de Columnas
+            </h2>
+            
+            <div class="grid-demo mb-4">
+                <div class="row">
+                    <div class="col-8" style="background: rgba(0, 123, 255, 0.3); padding: 20px;">
+                        <strong>col-8 (contenedor padre)</strong>
+                        <div class="row mt-3">
+                            <div class="col-6" style="background: rgba(40, 167, 69, 0.4);">Anidado col-6</div>
+                            <div class="col-6" style="background: rgba(255, 193, 7, 0.4);">Anidado col-6</div>
+                        </div>
+                    </div>
+                    <div class="col-4" style="background: rgba(220, 53, 69, 0.3);">col-4</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Anidamiento de columnas --&gt;</span>
+&lt;div class="row"&gt;
+    &lt;div class="col-8"&gt;
+        Columna principal
+        
+        <span class="comment">&lt;!-- Grid anidado --&gt;</span>
+        &lt;div class="row"&gt;
+            &lt;div class="col-6"&gt;Anidado 1&lt;/div&gt;
+            &lt;div class="col-6"&gt;Anidado 2&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col-4"&gt;Sidebar&lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">&lt;!-- Layout complejo con anidamiento --&gt;</span>
+&lt;div class="container"&gt;
+    &lt;div class="row"&gt;
+        <span class="comment">&lt;!-- Contenido principal --&gt;</span>
+        &lt;div class="col-lg-9"&gt;
+            <span class="comment">&lt;!-- Artículos en grid --&gt;</span>
+            &lt;div class="row row-cols-1 row-cols-md-2 g-4"&gt;
+                &lt;div class="col"&gt;
+                    &lt;article class="card"&gt;...&lt;/article&gt;
+                &lt;/div&gt;
+                &lt;div class="col"&gt;
+                    &lt;article class="card"&gt;...&lt;/article&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        <span class="comment">&lt;!-- Sidebar --&gt;</span>
+        &lt;div class="col-lg-3"&gt;
+            &lt;aside&gt;Sidebar content&lt;/aside&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- ================================================
+             LAYOUTS PRÁCTICOS
+             ================================================ -->
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4">
+                <i class="bi bi-layout-wtf me-2 text-primary"></i>Layouts Prácticos Completos
+            </h2>
+            
+            <div class="accordion" id="layoutsAccordion">
+                <!-- Layout 1: Dashboard -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#layout1">
+                            <i class="bi bi-speedometer2 me-2"></i>Layout Dashboard
+                        </button>
+                    </h2>
+                    <div id="layout1" class="accordion-collapse collapse show" data-bs-parent="#layoutsAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code>&lt;div class="container-fluid"&gt;
+    &lt;div class="row"&gt;
+        <span class="comment">&lt;!-- Sidebar fija --&gt;</span>
+        &lt;nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar"&gt;
+            &lt;!-- Menú lateral --&gt;
+        &lt;/nav&gt;
+        
+        <span class="comment">&lt;!-- Contenido principal --&gt;</span>
+        &lt;main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"&gt;
+            <span class="comment">&lt;!-- Header --&gt;</span>
+            &lt;div class="row mb-4"&gt;
+                &lt;div class="col-12"&gt;
+                    &lt;h1&gt;Dashboard&lt;/h1&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            <span class="comment">&lt;!-- Stats Cards --&gt;</span>
+            &lt;div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4"&gt;
+                &lt;div class="col"&gt;
+                    &lt;div class="card bg-primary text-white"&gt;
+                        &lt;div class="card-body"&gt;
+                            &lt;h5&gt;Usuarios&lt;/h5&gt;
+                            &lt;h2&gt;1,234&lt;/h2&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="col"&gt;&lt;!-- Más stats --&gt;&lt;/div&gt;
+                &lt;div class="col"&gt;&lt;!-- Más stats --&gt;&lt;/div&gt;
+                &lt;div class="col"&gt;&lt;!-- Más stats --&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            
+            <span class="comment">&lt;!-- Gráficos --&gt;</span>
+            &lt;div class="row g-4"&gt;
+                &lt;div class="col-lg-8"&gt;
+                    &lt;div class="card"&gt;
+                        &lt;div class="card-body"&gt;Gráfico principal&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="col-lg-4"&gt;
+                    &lt;div class="card"&gt;
+                        &lt;div class="card-body"&gt;Gráfico secundario&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/main&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layout 2: E-commerce -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#layout2">
+                            <i class="bi bi-shop me-2"></i>Layout E-commerce
+                        </button>
+                    </h2>
+                    <div id="layout2" class="accordion-collapse collapse" data-bs-parent="#layoutsAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code>&lt;div class="container"&gt;
+    <span class="comment">&lt;!-- Filtros + Productos --&gt;</span>
+    &lt;div class="row"&gt;
+        <span class="comment">&lt;!-- Sidebar Filtros (oculto en móvil) --&gt;</span>
+        &lt;aside class="col-lg-3 d-none d-lg-block"&gt;
+            &lt;div class="card"&gt;
+                &lt;div class="card-body"&gt;
+                    &lt;h5&gt;Filtros&lt;/h5&gt;
+                    &lt;!-- Filtros aquí --&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/aside&gt;
+        
+        <span class="comment">&lt;!-- Grid de Productos --&gt;</span>
+        &lt;main class="col-lg-9"&gt;
+            <span class="comment">&lt;!-- Toolbar --&gt;</span>
+            &lt;div class="row mb-4 align-items-center"&gt;
+                &lt;div class="col-auto"&gt;
+                    &lt;span&gt;120 productos&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class="col-auto ms-auto"&gt;
+                    &lt;select class="form-select"&gt;
+                        &lt;option&gt;Ordenar por&lt;/option&gt;
+                    &lt;/select&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            <span class="comment">&lt;!-- Productos: 2 en móvil, 3 en tablet, 4 en desktop --&gt;</span>
+            &lt;div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3"&gt;
+                &lt;div class="col"&gt;
+                    &lt;div class="card h-100"&gt;
+                        &lt;img src="producto.jpg" class="card-img-top"&gt;
+                        &lt;div class="card-body"&gt;
+                            &lt;h6&gt;Producto&lt;/h6&gt;
+                            &lt;p class="text-primary fw-bold"&gt;$99.99&lt;/p&gt;
+                            &lt;button class="btn btn-primary btn-sm w-100"&gt;
+                                Agregar
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;!-- Más productos... --&gt;
+            &lt;/div&gt;
+        &lt;/main&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layout 3: Blog -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#layout3">
+                            <i class="bi bi-newspaper me-2"></i>Layout Blog
+                        </button>
+                    </h2>
+                    <div id="layout3" class="accordion-collapse collapse" data-bs-parent="#layoutsAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code>&lt;div class="container"&gt;
+    <span class="comment">&lt;!-- Hero Post --&gt;</span>
+    &lt;div class="row mb-5"&gt;
+        &lt;div class="col-12"&gt;
+            &lt;article class="card bg-dark text-white"&gt;
+                &lt;img src="hero.jpg" class="card-img" style="opacity: 0.5;"&gt;
+                &lt;div class="card-img-overlay d-flex flex-column justify-content-end"&gt;
+                    &lt;span class="badge bg-primary mb-2" style="width: fit-content;"&gt;
+                        Destacado
+                    &lt;/span&gt;
+                    &lt;h2 class="card-title"&gt;Título del Post Principal&lt;/h2&gt;
+                    &lt;p&gt;Descripción breve...&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/article&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    <span class="comment">&lt;!-- Posts Grid + Sidebar --&gt;</span>
+    &lt;div class="row"&gt;
+        <span class="comment">&lt;!-- Posts --&gt;</span>
+        &lt;main class="col-lg-8"&gt;
+            &lt;div class="row row-cols-1 row-cols-md-2 g-4"&gt;
+                &lt;div class="col"&gt;
+                    &lt;article class="card h-100"&gt;
+                        &lt;img src="post.jpg" class="card-img-top"&gt;
+                        &lt;div class="card-body"&gt;
+                            &lt;span class="badge bg-secondary"&gt;Categoría&lt;/span&gt;
+                            &lt;h5 class="card-title mt-2"&gt;Título&lt;/h5&gt;
+                            &lt;p class="card-text text-muted"&gt;Resumen...&lt;/p&gt;
+                        &lt;/div&gt;
+                        &lt;div class="card-footer bg-transparent"&gt;
+                            &lt;small class="text-muted"&gt;Hace 3 días&lt;/small&gt;
+                        &lt;/div&gt;
+                    &lt;/article&gt;
+                &lt;/div&gt;
+                &lt;!-- Más posts... --&gt;
+            &lt;/div&gt;
+        &lt;/main&gt;
+        
+        <span class="comment">&lt;!-- Sidebar --&gt;</span>
+        &lt;aside class="col-lg-4"&gt;
+            &lt;div class="card mb-4"&gt;
+                &lt;div class="card-body"&gt;
+                    &lt;h5&gt;Buscar&lt;/h5&gt;
+                    &lt;input type="search" class="form-control"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="card mb-4"&gt;
+                &lt;div class="card-body"&gt;
+                    &lt;h5&gt;Categorías&lt;/h5&gt;
+                    &lt;!-- Lista de categorías --&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/aside&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between">
+            <a href="componentes.html" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Componentes
+            </a>
+            <a href="formularios.html" class="btn btn-primary">
+                Formularios <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">WebGuía Completa - Sistema Grid Bootstrap 5</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

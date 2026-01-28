@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6+ JavaScript Moderno - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .comment { color: #6272a4; font-style: italic; }
+        .code-block .operator { color: #ff79c6; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .btn-copy:hover { background: rgba(255,255,255,0.2); }
+        
+        .concept-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: #1a1a2e;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        
+        .version-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="dom.html">DOM</a></li>
+                    <li class="nav-item"><a class="nav-link" href="eventos.html">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="async.html">Async</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="es6-moderno.html">ES6+</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="section-header text-center mb-5 mx-3 mx-md-5 mt-4">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-lightning-charge me-3"></i>ES6+ JavaScript Moderno
+        </h1>
+        <p class="lead mb-0">Todas las características modernas de JavaScript desde ES6 (2015) hasta hoy</p>
+    </section>
+
+    <div class="container py-4">
+        <!-- Timeline de versiones -->
+        <div class="card mb-5">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-calendar-check me-2"></i>Evolución de JavaScript
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="version-badge">ES6 (2015)</span>
+                    <span class="version-badge">ES7 (2016)</span>
+                    <span class="version-badge">ES8 (2017)</span>
+                    <span class="version-badge">ES9 (2018)</span>
+                    <span class="version-badge">ES10 (2019)</span>
+                    <span class="version-badge">ES11 (2020)</span>
+                    <span class="version-badge">ES12 (2021)</span>
+                    <span class="version-badge">ES13 (2022)</span>
+                    <span class="version-badge">ES14 (2023)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. let y const -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                let y const
+            </h4>
+            <p>Nuevas formas de declarar variables con block scope.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// VAR vs LET vs CONST</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// var - Function scope, hoisting</span>
+<span class="keyword">var</span> x = <span class="number">1</span>;
+<span class="keyword">var</span> x = <span class="number">2</span>; <span class="comment">// ✓ Redeclaración permitida</span>
+x = <span class="number">3</span>;     <span class="comment">// ✓ Reasignación permitida</span>
+
+<span class="comment">// let - Block scope, sin hoisting</span>
+<span class="keyword">let</span> y = <span class="number">1</span>;
+<span class="comment">// let y = 2; // ✗ Error: ya declarada</span>
+y = <span class="number">3</span>;     <span class="comment">// ✓ Reasignación permitida</span>
+
+<span class="comment">// const - Block scope, sin reasignación</span>
+<span class="keyword">const</span> z = <span class="number">1</span>;
+<span class="comment">// z = 2;    // ✗ Error: no reasignable</span>
+
+<span class="comment">// const con objetos/arrays - el contenido SÍ puede cambiar</span>
+<span class="keyword">const</span> usuario = { nombre: <span class="string">'Ana'</span> };
+usuario.nombre = <span class="string">'María'</span>; <span class="comment">// ✓ Esto SÍ funciona</span>
+usuario.edad = <span class="number">25</span>;        <span class="comment">// ✓ Añadir propiedades</span>
+<span class="comment">// usuario = {}; // ✗ Error: no reasignable</span>
+
+<span class="keyword">const</span> numeros = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+numeros.<span class="function">push</span>(<span class="number">4</span>);  <span class="comment">// ✓ Modificar array</span>
+numeros[<span class="number">0</span>] = <span class="number">10</span>; <span class="comment">// ✓ Cambiar elementos</span>
+<span class="comment">// numeros = []; // ✗ Error</span>
+
+<span class="comment">// Block Scope</span>
+<span class="keyword">if</span> (<span class="keyword">true</span>) {
+    <span class="keyword">var</span> varVariable = <span class="string">'var'</span>;
+    <span class="keyword">let</span> letVariable = <span class="string">'let'</span>;
+    <span class="keyword">const</span> constVariable = <span class="string">'const'</span>;
+}
+console.<span class="function">log</span>(varVariable);   <span class="comment">// 'var' - accesible</span>
+<span class="comment">// console.log(letVariable);   // Error: not defined</span>
+<span class="comment">// console.log(constVariable); // Error: not defined</span>
+
+<span class="comment">// Temporal Dead Zone</span>
+console.<span class="function">log</span>(a); <span class="comment">// undefined (hoisting de var)</span>
+<span class="comment">// console.log(b); // Error: Cannot access before initialization</span>
+<span class="keyword">var</span> a = <span class="number">1</span>;
+<span class="keyword">let</span> b = <span class="number">2</span>;</pre>
+            </div>
+        </section>
+
+        <!-- 2. Template Literals -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Template Literals
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// TEMPLATE LITERALS (Backticks `)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> nombre = <span class="string">'Ana'</span>;
+<span class="keyword">const</span> edad = <span class="number">25</span>;
+
+<span class="comment">// Antes (ES5)</span>
+<span class="keyword">const</span> mensajeViejo = <span class="string">'Hola, me llamo '</span> + nombre + <span class="string">' y tengo '</span> + edad + <span class="string">' años.'</span>;
+
+<span class="comment">// Ahora (ES6+)</span>
+<span class="keyword">const</span> mensaje = <span class="string">`Hola, me llamo ${nombre} y tengo ${edad} años.`</span>;
+
+<span class="comment">// Expresiones en interpolación</span>
+<span class="keyword">const</span> precio = <span class="number">100</span>;
+<span class="keyword">const</span> descuento = <span class="number">0.2</span>;
+<span class="keyword">const</span> total = <span class="string">`Total: $${precio * (1 - descuento)}`</span>; <span class="comment">// Total: $80</span>
+
+<span class="comment">// Strings multilínea</span>
+<span class="keyword">const</span> html = <span class="string">`
+&lt;div class="card"&gt;
+    &lt;h2&gt;${nombre}&lt;/h2&gt;
+    &lt;p&gt;Edad: ${edad}&lt;/p&gt;
+&lt;/div&gt;
+`</span>;
+
+<span class="comment">// Llamar funciones</span>
+<span class="keyword">const</span> mayusculas = <span class="string">`Nombre: ${nombre.toUpperCase()}`</span>;
+
+<span class="comment">// Condicionales</span>
+<span class="keyword">const</span> estado = <span class="string">`Usuario ${edad >= 18 ? 'adulto' : 'menor'}`</span>;
+
+<span class="comment">// Tagged Templates (avanzado)</span>
+<span class="keyword">function</span> <span class="function">destacar</span>(strings, ...values) {
+    <span class="keyword">return</span> strings.<span class="function">reduce</span>((result, str, i) => {
+        <span class="keyword">const</span> value = values[i] ? <span class="string">`&lt;strong&gt;${values[i]}&lt;/strong&gt;`</span> : <span class="string">''</span>;
+        <span class="keyword">return</span> result + str + value;
+    }, <span class="string">''</span>);
+}
+
+<span class="keyword">const</span> resultado = <span class="function">destacar</span><span class="string">`Mi nombre es ${nombre} y tengo ${edad} años`</span>;
+<span class="comment">// "Mi nombre es &lt;strong&gt;Ana&lt;/strong&gt; y tengo &lt;strong&gt;25&lt;/strong&gt; años"</span></pre>
+            </div>
+        </section>
+
+        <!-- 3. Arrow Functions -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Arrow Functions
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// ARROW FUNCTIONS (=>)</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Sintaxis tradicional</span>
+<span class="keyword">function</span> <span class="function">sumar</span>(a, b) {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">// Arrow function</span>
+<span class="keyword">const</span> sumarArrow = (a, b) <span class="operator">=></span> {
+    <span class="keyword">return</span> a + b;
+};
+
+<span class="comment">// Return implícito (sin llaves)</span>
+<span class="keyword">const</span> sumarCorta = (a, b) <span class="operator">=></span> a + b;
+
+<span class="comment">// Un solo parámetro (sin paréntesis)</span>
+<span class="keyword">const</span> doble = x <span class="operator">=></span> x * <span class="number">2</span>;
+
+<span class="comment">// Sin parámetros</span>
+<span class="keyword">const</span> saludo = () <span class="operator">=></span> <span class="string">'Hola!'</span>;
+
+<span class="comment">// Retornar objeto (con paréntesis)</span>
+<span class="keyword">const</span> crearUsuario = (nombre, edad) <span class="operator">=></span> ({ nombre, edad });
+
+<span class="comment">// Con arrays</span>
+<span class="keyword">const</span> numeros = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">const</span> dobles = numeros.<span class="function">map</span>(n <span class="operator">=></span> n * <span class="number">2</span>);
+<span class="keyword">const</span> pares = numeros.<span class="function">filter</span>(n <span class="operator">=></span> n % <span class="number">2</span> === <span class="number">0</span>);
+<span class="keyword">const</span> suma = numeros.<span class="function">reduce</span>((acc, n) <span class="operator">=></span> acc + n, <span class="number">0</span>);
+
+<span class="comment">// this en Arrow Functions</span>
+<span class="comment">// Las arrow functions NO tienen su propio this</span>
+
+<span class="keyword">const</span> objeto = {
+    nombre: <span class="string">'Objeto'</span>,
+    
+    <span class="comment">// Función tradicional - this es el objeto</span>
+    <span class="function">metodoTradicional</span>() {
+        console.<span class="function">log</span>(<span class="keyword">this</span>.nombre); <span class="comment">// 'Objeto'</span>
+    },
+    
+    <span class="comment">// Arrow - this es el contexto donde se definió</span>
+    metodoArrow: () <span class="operator">=></span> {
+        console.<span class="function">log</span>(<span class="keyword">this</span>.nombre); <span class="comment">// undefined (window)</span>
+    },
+    
+    <span class="comment">// Útil en callbacks</span>
+    <span class="function">iniciarTimer</span>() {
+        <span class="comment">// Arrow mantiene el this del método</span>
+        <span class="function">setTimeout</span>(() <span class="operator">=></span> {
+            console.<span class="function">log</span>(<span class="keyword">this</span>.nombre); <span class="comment">// 'Objeto'</span>
+        }, <span class="number">1000</span>);
+    }
+};
+
+<span class="comment">// Cuándo NO usar arrow functions:</span>
+<span class="comment">// - Métodos de objeto que necesitan this</span>
+<span class="comment">// - Event handlers del DOM</span>
+<span class="comment">// - Constructores (no tienen prototype)</span></pre>
+            </div>
+        </section>
+
+        <!-- 4. Destructuring -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Destructuring
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// DESTRUCTURING - Extraer valores</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// DESTRUCTURING DE ARRAYS</span>
+<span class="keyword">const</span> colores = [<span class="string">'rojo'</span>, <span class="string">'verde'</span>, <span class="string">'azul'</span>];
+
+<span class="comment">// Extraer elementos</span>
+<span class="keyword">const</span> [primero, segundo, tercero] = colores;
+console.<span class="function">log</span>(primero); <span class="comment">// 'rojo'</span>
+
+<span class="comment">// Omitir elementos</span>
+<span class="keyword">const</span> [, , ultimo] = colores;
+console.<span class="function">log</span>(ultimo); <span class="comment">// 'azul'</span>
+
+<span class="comment">// Valores por defecto</span>
+<span class="keyword">const</span> [a, b, c, d = <span class="string">'blanco'</span>] = colores;
+console.<span class="function">log</span>(d); <span class="comment">// 'blanco'</span>
+
+<span class="comment">// Rest operator</span>
+<span class="keyword">const</span> [head, ...tail] = colores;
+console.<span class="function">log</span>(tail); <span class="comment">// ['verde', 'azul']</span>
+
+<span class="comment">// Intercambiar variables</span>
+<span class="keyword">let</span> x = <span class="number">1</span>, y = <span class="number">2</span>;
+[x, y] = [y, x];
+console.<span class="function">log</span>(x, y); <span class="comment">// 2, 1</span>
+
+<span class="comment">// DESTRUCTURING DE OBJETOS</span>
+<span class="keyword">const</span> usuario = {
+    nombre: <span class="string">'Ana'</span>,
+    edad: <span class="number">25</span>,
+    email: <span class="string">'ana@email.com'</span>,
+    direccion: {
+        ciudad: <span class="string">'Madrid'</span>,
+        pais: <span class="string">'España'</span>
+    }
+};
+
+<span class="comment">// Extraer propiedades</span>
+<span class="keyword">const</span> { nombre, edad } = usuario;
+console.<span class="function">log</span>(nombre, edad); <span class="comment">// 'Ana', 25</span>
+
+<span class="comment">// Renombrar variables</span>
+<span class="keyword">const</span> { nombre: nombreUsuario, edad: edadUsuario } = usuario;
+console.<span class="function">log</span>(nombreUsuario); <span class="comment">// 'Ana'</span>
+
+<span class="comment">// Valores por defecto</span>
+<span class="keyword">const</span> { telefono = <span class="string">'No disponible'</span> } = usuario;
+console.<span class="function">log</span>(telefono); <span class="comment">// 'No disponible'</span>
+
+<span class="comment">// Destructuring anidado</span>
+<span class="keyword">const</span> { direccion: { ciudad, pais } } = usuario;
+console.<span class="function">log</span>(ciudad, pais); <span class="comment">// 'Madrid', 'España'</span>
+
+<span class="comment">// En parámetros de función</span>
+<span class="keyword">function</span> <span class="function">saludar</span>({ nombre, edad = <span class="number">0</span> }) {
+    console.<span class="function">log</span>(<span class="string">`Hola ${nombre}, tienes ${edad} años`</span>);
+}
+<span class="function">saludar</span>(usuario);
+
+<span class="comment">// Rest en objetos</span>
+<span class="keyword">const</span> { email, ...resto } = usuario;
+console.<span class="function">log</span>(resto); <span class="comment">// { nombre: 'Ana', edad: 25, direccion: {...} }</span></pre>
+            </div>
+        </section>
+
+        <!-- 5. Spread Operator -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Spread Operator (...)
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// SPREAD OPERATOR (...) - Expandir</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// ARRAYS</span>
+<span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">const</span> arr2 = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];
+
+<span class="comment">// Concatenar arrays</span>
+<span class="keyword">const</span> combinado = [...arr1, ...arr2]; <span class="comment">// [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment">// Copiar array (shallow copy)</span>
+<span class="keyword">const</span> copia = [...arr1]; <span class="comment">// [1, 2, 3]</span>
+
+<span class="comment">// Insertar elementos</span>
+<span class="keyword">const</span> conCero = [<span class="number">0</span>, ...arr1]; <span class="comment">// [0, 1, 2, 3]</span>
+<span class="keyword">const</span> conMedio = [<span class="number">1</span>, <span class="number">2</span>, ...[<span class="number">2.5</span>], <span class="number">3</span>]; <span class="comment">// [1, 2, 2.5, 3]</span>
+
+<span class="comment">// En llamadas a funciones</span>
+<span class="keyword">const</span> numeros = [<span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">9</span>];
+<span class="keyword">const</span> maximo = Math.<span class="function">max</span>(...numeros); <span class="comment">// 9</span>
+
+<span class="comment">// OBJETOS (ES2018)</span>
+<span class="keyword">const</span> usuario = { nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span> };
+<span class="keyword">const</span> direccion = { ciudad: <span class="string">'Madrid'</span>, pais: <span class="string">'España'</span> };
+
+<span class="comment">// Combinar objetos</span>
+<span class="keyword">const</span> completo = { ...usuario, ...direccion };
+<span class="comment">// { nombre: 'Ana', edad: 25, ciudad: 'Madrid', pais: 'España' }</span>
+
+<span class="comment">// Copiar objeto (shallow copy)</span>
+<span class="keyword">const</span> copiaUsuario = { ...usuario };
+
+<span class="comment">// Sobrescribir propiedades</span>
+<span class="keyword">const</span> actualizado = { ...usuario, edad: <span class="number">26</span> };
+<span class="comment">// { nombre: 'Ana', edad: 26 }</span>
+
+<span class="comment">// Añadir propiedades</span>
+<span class="keyword">const</span> conEmail = { ...usuario, email: <span class="string">'ana@email.com'</span> };
+
+<span class="comment">// REST vs SPREAD</span>
+<span class="comment">// REST: Recoger en un array/objeto</span>
+<span class="keyword">const</span> [primero, ...resto] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]; <span class="comment">// resto = [2, 3]</span>
+<span class="keyword">const</span> { nombre: n, ...otrosDatos } = usuario;
+
+<span class="comment">// SPREAD: Expandir un array/objeto</span>
+<span class="keyword">const</span> nuevo = [...arr1]; <span class="comment">// Expandir</span></pre>
+            </div>
+        </section>
+
+        <!-- 6. Classes -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Classes
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CLASSES ES6+</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">Persona</span> {
+    <span class="comment">// Propiedades de clase (ES2022)</span>
+    tipo = <span class="string">'humano'</span>;
+    
+    <span class="comment">// Propiedades privadas (ES2022)</span>
+    #id;
+    
+    <span class="comment">// Constructor</span>
+    <span class="function">constructor</span>(nombre, edad) {
+        <span class="keyword">this</span>.nombre = nombre;
+        <span class="keyword">this</span>.edad = edad;
+        <span class="keyword">this</span>.#id = Math.<span class="function">random</span>().<span class="function">toString</span>(<span class="number">36</span>).<span class="function">substr</span>(<span class="number">2</span>);
+    }
+    
+    <span class="comment">// Métodos</span>
+    <span class="function">saludar</span>() {
+        console.<span class="function">log</span>(<span class="string">`Hola, soy ${this.nombre}`</span>);
+    }
+    
+    <span class="comment">// Getters y Setters</span>
+    <span class="keyword">get</span> <span class="function">info</span>() {
+        <span class="keyword">return</span> <span class="string">`${this.nombre} (${this.edad})`</span>;
+    }
+    
+    <span class="keyword">set</span> <span class="function">nuevaEdad</span>(valor) {
+        <span class="keyword">if</span> (valor > <span class="number">0</span>) <span class="keyword">this</span>.edad = valor;
+    }
+    
+    <span class="comment">// Método privado (ES2022)</span>
+    #<span class="function">generarToken</span>() {
+        <span class="keyword">return</span> <span class="string">`token_${this.#id}`</span>;
+    }
+    
+    <span class="function">getToken</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.#<span class="function">generarToken</span>();
+    }
+    
+    <span class="comment">// Métodos estáticos</span>
+    <span class="keyword">static</span> <span class="function">crear</span>(nombre, edad) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Persona</span>(nombre, edad);
+    }
+    
+    <span class="keyword">static</span> especie = <span class="string">'Homo Sapiens'</span>;
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> ana = <span class="keyword">new</span> <span class="function">Persona</span>(<span class="string">'Ana'</span>, <span class="number">25</span>);
+ana.<span class="function">saludar</span>();           <span class="comment">// 'Hola, soy Ana'</span>
+console.<span class="function">log</span>(ana.info);    <span class="comment">// 'Ana (25)'</span>
+ana.nuevaEdad = <span class="number">26</span>;
+console.<span class="function">log</span>(Persona.especie); <span class="comment">// 'Homo Sapiens'</span>
+
+<span class="comment">// HERENCIA</span>
+<span class="keyword">class</span> <span class="function">Empleado</span> <span class="keyword">extends</span> <span class="function">Persona</span> {
+    <span class="function">constructor</span>(nombre, edad, puesto) {
+        <span class="keyword">super</span>(nombre, edad); <span class="comment">// Llamar constructor padre</span>
+        <span class="keyword">this</span>.puesto = puesto;
+    }
+    
+    <span class="comment">// Override</span>
+    <span class="function">saludar</span>() {
+        <span class="keyword">super</span>.<span class="function">saludar</span>(); <span class="comment">// Llamar método padre</span>
+        console.<span class="function">log</span>(<span class="string">`Trabajo como ${this.puesto}`</span>);
+    }
+}
+
+<span class="keyword">const</span> emp = <span class="keyword">new</span> <span class="function">Empleado</span>(<span class="string">'Carlos'</span>, <span class="number">30</span>, <span class="string">'Developer'</span>);
+emp.<span class="function">saludar</span>();
+<span class="comment">// 'Hola, soy Carlos'</span>
+<span class="comment">// 'Trabajo como Developer'</span></pre>
+            </div>
+        </section>
+
+        <!-- 7. Modules -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Módulos (import/export)
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// ES MODULES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// --- utils.js ---</span>
+<span class="comment">// Named exports</span>
+<span class="keyword">export</span> <span class="keyword">const</span> PI = <span class="number">3.14159</span>;
+
+<span class="keyword">export</span> <span class="keyword">function</span> <span class="function">sumar</span>(a, b) {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="keyword">export</span> <span class="keyword">class</span> <span class="function">Calculadora</span> {
+    <span class="function">multiplicar</span>(a, b) { <span class="keyword">return</span> a * b; }
+}
+
+<span class="comment">// Export al final</span>
+<span class="keyword">const</span> restar = (a, b) <span class="operator">=></span> a - b;
+<span class="keyword">const</span> dividir = (a, b) <span class="operator">=></span> a / b;
+<span class="keyword">export</span> { restar, dividir };
+
+<span class="comment">// Default export (uno por archivo)</span>
+<span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="function">saludar</span>() {
+    console.<span class="function">log</span>(<span class="string">'Hola!'</span>);
+}
+
+<span class="comment">// --- main.js ---</span>
+<span class="comment">// Import default</span>
+<span class="keyword">import</span> saludar <span class="keyword">from</span> <span class="string">'./utils.js'</span>;
+
+<span class="comment">// Import named</span>
+<span class="keyword">import</span> { PI, sumar, Calculadora } <span class="keyword">from</span> <span class="string">'./utils.js'</span>;
+
+<span class="comment">// Renombrar imports</span>
+<span class="keyword">import</span> { sumar <span class="keyword">as</span> add } <span class="keyword">from</span> <span class="string">'./utils.js'</span>;
+
+<span class="comment">// Import todo</span>
+<span class="keyword">import</span> * <span class="keyword">as</span> utils <span class="keyword">from</span> <span class="string">'./utils.js'</span>;
+utils.<span class="function">sumar</span>(<span class="number">1</span>, <span class="number">2</span>);
+
+<span class="comment">// Import mixto</span>
+<span class="keyword">import</span> saludar, { PI, sumar } <span class="keyword">from</span> <span class="string">'./utils.js'</span>;
+
+<span class="comment">// Dynamic import (ES2020)</span>
+<span class="keyword">const</span> modulo = <span class="await">await</span> <span class="keyword">import</span>(<span class="string">'./utils.js'</span>);
+
+<span class="comment">// Dynamic import condicional</span>
+<span class="keyword">if</span> (condicion) {
+    <span class="keyword">const</span> { funcion } = <span class="await">await</span> <span class="keyword">import</span>(<span class="string">'./modulo.js'</span>);
+}
+
+<span class="comment">// En HTML</span>
+<span class="comment">// &lt;script type="module" src="main.js"&gt;&lt;/script&gt;</span></pre>
+            </div>
+        </section>
+
+        <!-- 8. Promises/Async -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                <span class="badge bg-warning text-dark me-2">ES2017</span>
+                Promises y Async/Await
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PROMISES (ES6)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> promesa = <span class="keyword">new</span> <span class="function">Promise</span>((resolve, reject) <span class="operator">=></span> {
+    <span class="function">setTimeout</span>(() <span class="operator">=></span> <span class="function">resolve</span>(<span class="string">'Éxito!'</span>), <span class="number">1000</span>);
+});
+
+promesa
+    .<span class="function">then</span>(result <span class="operator">=></span> console.<span class="function">log</span>(result))
+    .<span class="function">catch</span>(error <span class="operator">=></span> console.<span class="function">error</span>(error));
+
+<span class="comment">// ========================================</span>
+<span class="comment">// ASYNC/AWAIT (ES2017)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">fetchData</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'/api/data'</span>);
+        <span class="keyword">const</span> data = <span class="await">await</span> response.<span class="function">json</span>();
+        <span class="keyword">return</span> data;
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(error);
+    }
+}
+
+<span class="comment">// Promise.allSettled (ES2020)</span>
+<span class="keyword">const</span> resultados = <span class="await">await</span> Promise.<span class="function">allSettled</span>([p1, p2, p3]);
+
+<span class="comment">// Promise.any (ES2021)</span>
+<span class="keyword">const</span> primero = <span class="await">await</span> Promise.<span class="function">any</span>([p1, p2, p3]);
+
+<span class="comment">// Top-level await (ES2022 en modules)</span>
+<span class="keyword">const</span> data = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'/api'</span>).<span class="function">then</span>(r <span class="operator">=></span> r.<span class="function">json</span>());</pre>
+            </div>
+        </section>
+
+        <!-- 9. Optional Chaining & Nullish Coalescing -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-success me-2">ES2020</span>
+                Optional Chaining & Nullish Coalescing
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// OPTIONAL CHAINING (?.) - ES2020</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> usuario = {
+    nombre: <span class="string">'Ana'</span>,
+    direccion: {
+        ciudad: <span class="string">'Madrid'</span>
+    }
+};
+
+<span class="comment">// Sin optional chaining (antes)</span>
+<span class="keyword">const</span> calle = usuario && usuario.direccion && usuario.direccion.calle;
+
+<span class="comment">// Con optional chaining</span>
+<span class="keyword">const</span> calleSegura = usuario?.direccion?.calle; <span class="comment">// undefined (no error)</span>
+<span class="keyword">const</span> ciudad = usuario?.direccion?.ciudad; <span class="comment">// 'Madrid'</span>
+
+<span class="comment">// Con arrays</span>
+<span class="keyword">const</span> items = usuario?.pedidos?.[<span class="number">0</span>]; <span class="comment">// undefined</span>
+
+<span class="comment">// Con funciones</span>
+<span class="keyword">const</span> resultado = usuario?.metodoOpcional?.(); <span class="comment">// undefined</span>
+
+<span class="comment">// ========================================</span>
+<span class="comment">// NULLISH COALESCING (??) - ES2020</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// ?? solo considera null/undefined</span>
+<span class="comment">// || considera todos los falsy (0, '', false, null, undefined)</span>
+
+<span class="keyword">const</span> valor1 = <span class="keyword">null</span> ?? <span class="string">'default'</span>;  <span class="comment">// 'default'</span>
+<span class="keyword">const</span> valor2 = <span class="keyword">undefined</span> ?? <span class="string">'default'</span>; <span class="comment">// 'default'</span>
+<span class="keyword">const</span> valor3 = <span class="number">0</span> ?? <span class="string">'default'</span>;     <span class="comment">// 0 (0 es válido)</span>
+<span class="keyword">const</span> valor4 = <span class="string">''</span> ?? <span class="string">'default'</span>;    <span class="comment">// '' (string vacío es válido)</span>
+<span class="keyword">const</span> valor5 = <span class="keyword">false</span> ?? <span class="string">'default'</span>; <span class="comment">// false (false es válido)</span>
+
+<span class="comment">// Comparar con ||</span>
+<span class="keyword">const</span> a = <span class="number">0</span> || <span class="string">'default'</span>;  <span class="comment">// 'default' (0 es falsy)</span>
+<span class="keyword">const</span> b = <span class="number">0</span> ?? <span class="string">'default'</span>;  <span class="comment">// 0</span>
+
+<span class="comment">// Combinando ambos</span>
+<span class="keyword">const</span> config = {
+    timeout: <span class="number">0</span>,
+    retries: <span class="keyword">null</span>
+};
+
+<span class="keyword">const</span> timeout = config?.timeout ?? <span class="number">5000</span>; <span class="comment">// 0 (el valor)</span>
+<span class="keyword">const</span> retries = config?.retries ?? <span class="number">3</span>;    <span class="comment">// 3 (default)</span>
+
+<span class="comment">// Nullish assignment (ES2021)</span>
+<span class="keyword">let</span> x = <span class="keyword">null</span>;
+x ??= <span class="string">'default'</span>; <span class="comment">// x = 'default'</span>
+
+<span class="keyword">let</span> y = <span class="number">0</span>;
+y ??= <span class="number">10</span>; <span class="comment">// y = 0 (no cambia porque 0 no es null/undefined)</span></pre>
+            </div>
+        </section>
+
+        <!-- 10. Nuevos métodos de Array -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-primary me-2">ES2022+</span>
+                Nuevos Métodos de Array
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// NUEVOS MÉTODOS DE ARRAY</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// at() - ES2022 - Índices negativos</span>
+arr.<span class="function">at</span>(<span class="number">0</span>);   <span class="comment">// 1</span>
+arr.<span class="function">at</span>(-<span class="number">1</span>);  <span class="comment">// 5 (último)</span>
+arr.<span class="function">at</span>(-<span class="number">2</span>);  <span class="comment">// 4 (penúltimo)</span>
+
+<span class="comment">// findLast() / findLastIndex() - ES2023</span>
+<span class="keyword">const</span> numeros = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>];
+numeros.<span class="function">findLast</span>(n <span class="operator">=></span> n > <span class="number">3</span>);        <span class="comment">// 4 (el último mayor a 3)</span>
+numeros.<span class="function">findLastIndex</span>(n <span class="operator">=></span> n > <span class="number">3</span>);   <span class="comment">// 5 (índice)</span>
+
+<span class="comment">// toReversed() - ES2023 - Inmutable</span>
+<span class="keyword">const</span> original = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">const</span> reversed = original.<span class="function">toReversed</span>(); <span class="comment">// [3, 2, 1]</span>
+console.<span class="function">log</span>(original); <span class="comment">// [1, 2, 3] (no cambia)</span>
+
+<span class="comment">// toSorted() - ES2023 - Inmutable</span>
+<span class="keyword">const</span> nums = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">5</span>];
+<span class="keyword">const</span> sorted = nums.<span class="function">toSorted</span>((a, b) <span class="operator">=></span> a - b); <span class="comment">// [1, 1, 3, 4, 5]</span>
+console.<span class="function">log</span>(nums); <span class="comment">// [3, 1, 4, 1, 5] (no cambia)</span>
+
+<span class="comment">// toSpliced() - ES2023 - Inmutable</span>
+<span class="keyword">const</span> items = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>];
+<span class="keyword">const</span> spliced = items.<span class="function">toSpliced</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="string">'x'</span>, <span class="string">'y'</span>); <span class="comment">// ['a', 'x', 'y', 'd']</span>
+console.<span class="function">log</span>(items); <span class="comment">// ['a', 'b', 'c', 'd'] (no cambia)</span>
+
+<span class="comment">// with() - ES2023 - Inmutable</span>
+<span class="keyword">const</span> colores = [<span class="string">'rojo'</span>, <span class="string">'verde'</span>, <span class="string">'azul'</span>];
+<span class="keyword">const</span> nuevo = colores.<span class="function">with</span>(<span class="number">1</span>, <span class="string">'amarillo'</span>); <span class="comment">// ['rojo', 'amarillo', 'azul']</span>
+console.<span class="function">log</span>(colores); <span class="comment">// ['rojo', 'verde', 'azul'] (no cambia)</span>
+
+<span class="comment">// flat() / flatMap() - ES2019</span>
+<span class="keyword">const</span> anidado = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>]]];
+anidado.<span class="function">flat</span>();      <span class="comment">// [1, 2, 3, [4, 5]]</span>
+anidado.<span class="function">flat</span>(<span class="number">2</span>);     <span class="comment">// [1, 2, 3, 4, 5]</span>
+anidado.<span class="function">flat</span>(Infinity); <span class="comment">// [1, 2, 3, 4, 5]</span>
+
+[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="function">flatMap</span>(n <span class="operator">=></span> [n, n * <span class="number">2</span>]); <span class="comment">// [1, 2, 2, 4, 3, 6]</span>
+
+<span class="comment">// includes() - ES2016</span>
+[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="function">includes</span>(<span class="number">2</span>); <span class="comment">// true</span>
+[<span class="number">1</span>, <span class="number">2</span>, NaN].<span class="function">includes</span>(NaN); <span class="comment">// true (indexOf falla con NaN)</span></pre>
+            </div>
+        </section>
+
+        <!-- 11. Nuevos métodos de Object -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-warning text-dark me-2">ES2017+</span>
+                Métodos de Object
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS DE OBJECT</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> usuario = { nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span>, ciudad: <span class="string">'Madrid'</span> };
+
+<span class="comment">// Object.keys() - ES5</span>
+Object.<span class="function">keys</span>(usuario); <span class="comment">// ['nombre', 'edad', 'ciudad']</span>
+
+<span class="comment">// Object.values() - ES2017</span>
+Object.<span class="function">values</span>(usuario); <span class="comment">// ['Ana', 25, 'Madrid']</span>
+
+<span class="comment">// Object.entries() - ES2017</span>
+Object.<span class="function">entries</span>(usuario); 
+<span class="comment">// [['nombre', 'Ana'], ['edad', 25], ['ciudad', 'Madrid']]</span>
+
+<span class="comment">// Object.fromEntries() - ES2019</span>
+<span class="keyword">const</span> entries = [[<span class="string">'a'</span>, <span class="number">1</span>], [<span class="string">'b'</span>, <span class="number">2</span>]];
+Object.<span class="function">fromEntries</span>(entries); <span class="comment">// { a: 1, b: 2 }</span>
+
+<span class="comment">// Convertir Map a Object</span>
+<span class="keyword">const</span> map = <span class="keyword">new</span> <span class="function">Map</span>([[<span class="string">'x'</span>, <span class="number">1</span>], [<span class="string">'y'</span>, <span class="number">2</span>]]);
+Object.<span class="function">fromEntries</span>(map); <span class="comment">// { x: 1, y: 2 }</span>
+
+<span class="comment">// Transformar objeto</span>
+<span class="keyword">const</span> precios = { manzana: <span class="number">1</span>, naranja: <span class="number">2</span>, pera: <span class="number">3</span> };
+<span class="keyword">const</span> preciosDobles = Object.<span class="function">fromEntries</span>(
+    Object.<span class="function">entries</span>(precios).<span class="function">map</span>(([k, v]) <span class="operator">=></span> [k, v * <span class="number">2</span>])
+);
+<span class="comment">// { manzana: 2, naranja: 4, pera: 6 }</span>
+
+<span class="comment">// Object.assign() - ES6</span>
+<span class="keyword">const</span> target = { a: <span class="number">1</span> };
+<span class="keyword">const</span> source = { b: <span class="number">2</span> };
+Object.<span class="function">assign</span>(target, source); <span class="comment">// target = { a: 1, b: 2 }</span>
+
+<span class="comment">// Object.hasOwn() - ES2022 (reemplaza hasOwnProperty)</span>
+Object.<span class="function">hasOwn</span>(usuario, <span class="string">'nombre'</span>); <span class="comment">// true</span>
+Object.<span class="function">hasOwn</span>(usuario, <span class="string">'toString'</span>); <span class="comment">// false</span>
+
+<span class="comment">// Object.groupBy() - ES2024</span>
+<span class="keyword">const</span> personas = [
+    { nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span> },
+    { nombre: <span class="string">'Juan'</span>, edad: <span class="number">30</span> },
+    { nombre: <span class="string">'María'</span>, edad: <span class="number">25</span> }
+];
+
+<span class="keyword">const</span> porEdad = Object.<span class="function">groupBy</span>(personas, p <span class="operator">=></span> p.edad);
+<span class="comment">// { 25: [{...}, {...}], 30: [{...}] }</span></pre>
+            </div>
+        </section>
+
+        <!-- 12. String Methods -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-info me-2">ES2017+</span>
+                Métodos de String
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS DE STRING</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> str = <span class="string">'  Hola Mundo  '</span>;
+
+<span class="comment">// padStart() / padEnd() - ES2017</span>
+<span class="string">'5'</span>.<span class="function">padStart</span>(<span class="number">3</span>, <span class="string">'0'</span>);   <span class="comment">// '005'</span>
+<span class="string">'5'</span>.<span class="function">padEnd</span>(<span class="number">3</span>, <span class="string">'0'</span>);     <span class="comment">// '500'</span>
+<span class="string">'abc'</span>.<span class="function">padStart</span>(<span class="number">6</span>);      <span class="comment">// '   abc'</span>
+
+<span class="comment">// trimStart() / trimEnd() - ES2019</span>
+str.<span class="function">trimStart</span>(); <span class="comment">// 'Hola Mundo  '</span>
+str.<span class="function">trimEnd</span>();   <span class="comment">// '  Hola Mundo'</span>
+str.<span class="function">trim</span>();      <span class="comment">// 'Hola Mundo'</span>
+
+<span class="comment">// replaceAll() - ES2021</span>
+<span class="string">'foo bar foo'</span>.<span class="function">replaceAll</span>(<span class="string">'foo'</span>, <span class="string">'baz'</span>); <span class="comment">// 'baz bar baz'</span>
+
+<span class="comment">// at() - ES2022</span>
+<span class="string">'Hola'</span>.<span class="function">at</span>(<span class="number">0</span>);  <span class="comment">// 'H'</span>
+<span class="string">'Hola'</span>.<span class="function">at</span>(-<span class="number">1</span>); <span class="comment">// 'a'</span>
+
+<span class="comment">// includes() / startsWith() / endsWith() - ES6</span>
+<span class="string">'Hola Mundo'</span>.<span class="function">includes</span>(<span class="string">'Mun'</span>);    <span class="comment">// true</span>
+<span class="string">'Hola Mundo'</span>.<span class="function">startsWith</span>(<span class="string">'Hola'</span>); <span class="comment">// true</span>
+<span class="string">'Hola Mundo'</span>.<span class="function">endsWith</span>(<span class="string">'do'</span>);     <span class="comment">// true</span>
+
+<span class="comment">// repeat() - ES6</span>
+<span class="string">'ab'</span>.<span class="function">repeat</span>(<span class="number">3</span>); <span class="comment">// 'ababab'</span>
+
+<span class="comment">// matchAll() - ES2020</span>
+<span class="keyword">const</span> texto = <span class="string">'test1test2test3'</span>;
+<span class="keyword">const</span> matches = [...texto.<span class="function">matchAll</span>(<span class="string">/test(\d)/g</span>)];
+<span class="comment">// [ ['test1', '1'], ['test2', '2'], ['test3', '3'] ]</span></pre>
+            </div>
+        </section>
+
+        <!-- 13. Map y Set -->
+        <section class="concept-card">
+            <h4>
+                <span class="badge bg-danger me-2">ES6</span>
+                Map y Set
+            </h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MAP - Pares clave-valor (cualquier tipo de clave)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> map = <span class="keyword">new</span> <span class="function">Map</span>();
+
+<span class="comment">// Añadir</span>
+map.<span class="function">set</span>(<span class="string">'nombre'</span>, <span class="string">'Ana'</span>);
+map.<span class="function">set</span>(<span class="number">1</span>, <span class="string">'uno'</span>);
+map.<span class="function">set</span>({ id: <span class="number">1</span> }, <span class="string">'objeto como clave'</span>);
+
+<span class="comment">// Obtener</span>
+map.<span class="function">get</span>(<span class="string">'nombre'</span>); <span class="comment">// 'Ana'</span>
+map.<span class="function">get</span>(<span class="number">1</span>);        <span class="comment">// 'uno'</span>
+
+<span class="comment">// Verificar</span>
+map.<span class="function">has</span>(<span class="string">'nombre'</span>); <span class="comment">// true</span>
+map.size;          <span class="comment">// 3</span>
+
+<span class="comment">// Eliminar</span>
+map.<span class="function">delete</span>(<span class="string">'nombre'</span>);
+map.<span class="function">clear</span>(); <span class="comment">// Eliminar todo</span>
+
+<span class="comment">// Inicializar con valores</span>
+<span class="keyword">const</span> usuarios = <span class="keyword">new</span> <span class="function">Map</span>([
+    [<span class="string">'u1'</span>, { nombre: <span class="string">'Ana'</span> }],
+    [<span class="string">'u2'</span>, { nombre: <span class="string">'Juan'</span> }]
+]);
+
+<span class="comment">// Iterar</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> [clave, valor] <span class="keyword">of</span> map) {
+    console.<span class="function">log</span>(clave, valor);
+}
+
+map.<span class="function">forEach</span>((valor, clave) <span class="operator">=></span> console.<span class="function">log</span>(clave, valor));
+
+<span class="comment">// ========================================</span>
+<span class="comment">// SET - Valores únicos</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> set = <span class="keyword">new</span> <span class="function">Set</span>();
+
+<span class="comment">// Añadir (ignora duplicados)</span>
+set.<span class="function">add</span>(<span class="number">1</span>);
+set.<span class="function">add</span>(<span class="number">2</span>);
+set.<span class="function">add</span>(<span class="number">1</span>); <span class="comment">// Ignorado</span>
+
+<span class="comment">// Verificar</span>
+set.<span class="function">has</span>(<span class="number">1</span>);  <span class="comment">// true</span>
+set.size;    <span class="comment">// 2</span>
+
+<span class="comment">// Eliminar duplicados de array</span>
+<span class="keyword">const</span> arrDuplicados = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>];
+<span class="keyword">const</span> unicos = [...<span class="keyword">new</span> <span class="function">Set</span>(arrDuplicados)]; <span class="comment">// [1, 2, 3]</span>
+
+<span class="comment">// Operaciones de conjuntos</span>
+<span class="keyword">const</span> a = <span class="keyword">new</span> <span class="function">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);
+<span class="keyword">const</span> b = <span class="keyword">new</span> <span class="function">Set</span>([<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]);
+
+<span class="comment">// Unión</span>
+<span class="keyword">const</span> union = <span class="keyword">new</span> <span class="function">Set</span>([...a, ...b]); <span class="comment">// {1, 2, 3, 4}</span>
+
+<span class="comment">// Intersección</span>
+<span class="keyword">const</span> interseccion = <span class="keyword">new</span> <span class="function">Set</span>([...a].<span class="function">filter</span>(x <span class="operator">=></span> b.<span class="function">has</span>(x))); <span class="comment">// {2, 3}</span>
+
+<span class="comment">// Diferencia</span>
+<span class="keyword">const</span> diferencia = <span class="keyword">new</span> <span class="function">Set</span>([...a].<span class="function">filter</span>(x <span class="operator">=></span> !b.<span class="function">has</span>(x))); <span class="comment">// {1}</span></pre>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="async.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Async/Await
+            </a>
+            <a href="../apis/fetch.html" class="btn btn-primary">
+                Fetch API<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">ES6+ JavaScript Moderno | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

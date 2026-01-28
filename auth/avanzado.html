@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticación Avanzada - JWT, OAuth y Seguridad</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #1a1a2e; color: #eee; }
+        .hero-auth {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .code-block {
+            background: #16213e;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid #1f4068;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .function { color: #82aaff; }
+        .code-block .number { color: #f78c6c; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .example-card {
+            background: #16213e;
+            border-radius: 16px;
+            border: 1px solid #1f4068;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .example-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+        }
+        .example-body { padding: 25px; }
+        .badge-advanced {
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+        a { color: #667eea; }
+        .security-tip {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-auth">
+        <div class="container">
+            <a href="../index.html" class="btn btn-outline-light btn-sm mb-4">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la Guía
+            </a>
+            <span class="badge-advanced mb-3 d-inline-block">NIVEL AVANZADO</span>
+            <h1 class="display-4 fw-bold">Autenticación Avanzada</h1>
+            <p class="lead">JWT, Refresh Tokens, OAuth, Roles y Seguridad</p>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        <!-- ================================================
+             1. JWT AUTH MANAGER
+             ================================================ -->
+        <section id="jwt" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-key me-2"></i>1. JWT Authentication Manager</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Sistema completo de autenticación con JWT y refresh tokens.</p>
+                    
+                    <div class="security-tip">
+                        <strong><i class="bi bi-shield-exclamation me-2"></i>Nota de Seguridad:</strong>
+                        En producción, los tokens deben manejarse en el servidor. Este código es para entender el concepto.
+                    </div>
+                    
+                    <div class="code-block" style="max-height: 600px;">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * JWT AUTHENTICATION MANAGER
+ * Manejo completo de tokens JWT con refresh
+ */</span>
+
+<span class="keyword">class</span> JWTAuthManager {
+    <span class="function">constructor</span>(options = {}) {
+        <span class="keyword">this</span>.apiUrl = options.apiUrl || <span class="string">'/api/auth'</span>;
+        <span class="keyword">this</span>.tokenKey = options.tokenKey || <span class="string">'access_token'</span>;
+        <span class="keyword">this</span>.refreshKey = options.refreshKey || <span class="string">'refresh_token'</span>;
+        <span class="keyword">this</span>.userKey = options.userKey || <span class="string">'auth_user'</span>;
+        <span class="keyword">this</span>.listeners = [];
+        <span class="keyword">this</span>.refreshPromise = <span class="keyword">null</span>;
+    }
+    
+    <span class="comment">// ====== DECODIFICAR JWT (sin verificar firma) ======</span>
+    <span class="function">decodeToken</span>(token) {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> payload = token.<span class="function">split</span>(<span class="string">'.'</span>)[<span class="number">1</span>];
+            <span class="keyword">return</span> JSON.<span class="function">parse</span>(<span class="function">atob</span>(payload));
+        } <span class="keyword">catch</span> (e) {
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+    }
+    
+    <span class="comment">// Verificar si el token está expirado</span>
+    <span class="function">isTokenExpired</span>(token) {
+        <span class="keyword">const</span> decoded = <span class="keyword">this</span>.<span class="function">decodeToken</span>(token);
+        <span class="keyword">if</span> (!decoded || !decoded.exp) <span class="keyword">return</span> <span class="keyword">true</span>;
+        
+        <span class="comment">// Expirado si faltan menos de 30 segundos</span>
+        <span class="keyword">return</span> decoded.exp * <span class="number">1000</span> < Date.<span class="function">now</span>() + <span class="number">30000</span>;
+    }
+    
+    <span class="comment">// ====== STORAGE ======</span>
+    <span class="function">setTokens</span>(accessToken, refreshToken) {
+        localStorage.<span class="function">setItem</span>(<span class="keyword">this</span>.tokenKey, accessToken);
+        <span class="keyword">if</span> (refreshToken) {
+            localStorage.<span class="function">setItem</span>(<span class="keyword">this</span>.refreshKey, refreshToken);
+        }
+    }
+    
+    <span class="function">getAccessToken</span>() {
+        <span class="keyword">return</span> localStorage.<span class="function">getItem</span>(<span class="keyword">this</span>.tokenKey);
+    }
+    
+    <span class="function">getRefreshToken</span>() {
+        <span class="keyword">return</span> localStorage.<span class="function">getItem</span>(<span class="keyword">this</span>.refreshKey);
+    }
+    
+    <span class="function">clearTokens</span>() {
+        localStorage.<span class="function">removeItem</span>(<span class="keyword">this</span>.tokenKey);
+        localStorage.<span class="function">removeItem</span>(<span class="keyword">this</span>.refreshKey);
+        localStorage.<span class="function">removeItem</span>(<span class="keyword">this</span>.userKey);
+    }
+    
+    <span class="comment">// ====== LOGIN ======</span>
+    <span class="keyword">async</span> <span class="function">login</span>(email, password) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${this.apiUrl}/login`</span>, {
+            method: <span class="string">'POST'</span>,
+            headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+            body: JSON.<span class="function">stringify</span>({ email, password })
+        });
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">const</span> error = <span class="keyword">await</span> response.<span class="function">json</span>();
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(error.message || <span class="string">'Error de autenticación'</span>);
+        }
+        
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        
+        <span class="keyword">this</span>.<span class="function">setTokens</span>(data.accessToken, data.refreshToken);
+        localStorage.<span class="function">setItem</span>(<span class="keyword">this</span>.userKey, JSON.<span class="function">stringify</span>(data.user));
+        
+        <span class="keyword">this</span>.<span class="function">_notifyListeners</span>(<span class="string">'login'</span>, data.user);
+        
+        <span class="keyword">return</span> data;
+    }
+    
+    <span class="comment">// ====== REFRESH TOKEN ======</span>
+    <span class="keyword">async</span> <span class="function">refreshAccessToken</span>() {
+        <span class="comment">// Evitar múltiples refresh simultáneos</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.refreshPromise) {
+            <span class="keyword">return</span> <span class="keyword">this</span>.refreshPromise;
+        }
+        
+        <span class="keyword">const</span> refreshToken = <span class="keyword">this</span>.<span class="function">getRefreshToken</span>();
+        
+        <span class="keyword">if</span> (!refreshToken) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'No refresh token available'</span>);
+        }
+        
+        <span class="keyword">this</span>.refreshPromise = (<span class="keyword">async</span> () => {
+            <span class="keyword">try</span> {
+                <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${this.apiUrl}/refresh`</span>, {
+                    method: <span class="string">'POST'</span>,
+                    headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+                    body: JSON.<span class="function">stringify</span>({ refreshToken })
+                });
+                
+                <span class="keyword">if</span> (!response.ok) {
+                    <span class="keyword">this</span>.<span class="function">logout</span>();
+                    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Session expired'</span>);
+                }
+                
+                <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+                <span class="keyword">this</span>.<span class="function">setTokens</span>(data.accessToken, data.refreshToken);
+                
+                <span class="keyword">return</span> data.accessToken;
+            } <span class="keyword">finally</span> {
+                <span class="keyword">this</span>.refreshPromise = <span class="keyword">null</span>;
+            }
+        })();
+        
+        <span class="keyword">return</span> <span class="keyword">this</span>.refreshPromise;
+    }
+    
+    <span class="comment">// ====== OBTENER TOKEN VÁLIDO ======</span>
+    <span class="keyword">async</span> <span class="function">getValidToken</span>() {
+        <span class="keyword">let</span> token = <span class="keyword">this</span>.<span class="function">getAccessToken</span>();
+        
+        <span class="keyword">if</span> (!token || <span class="keyword">this</span>.<span class="function">isTokenExpired</span>(token)) {
+            token = <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">refreshAccessToken</span>();
+        }
+        
+        <span class="keyword">return</span> token;
+    }
+    
+    <span class="comment">// ====== LOGOUT ======</span>
+    <span class="function">logout</span>() {
+        <span class="keyword">this</span>.<span class="function">clearTokens</span>();
+        <span class="keyword">this</span>.<span class="function">_notifyListeners</span>(<span class="string">'logout'</span>);
+    }
+    
+    <span class="comment">// ====== ESTADO ======</span>
+    <span class="function">isAuthenticated</span>() {
+        <span class="keyword">const</span> token = <span class="keyword">this</span>.<span class="function">getAccessToken</span>();
+        <span class="keyword">return</span> token && !<span class="keyword">this</span>.<span class="function">isTokenExpired</span>(token);
+    }
+    
+    <span class="function">getCurrentUser</span>() {
+        <span class="keyword">try</span> {
+            <span class="keyword">return</span> JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="keyword">this</span>.userKey));
+        } <span class="keyword">catch</span> {
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+    }
+    
+    <span class="comment">// ====== LISTENERS ======</span>
+    <span class="function">onAuthChange</span>(callback) {
+        <span class="keyword">this</span>.listeners.<span class="function">push</span>(callback);
+        <span class="keyword">return</span> () => {
+            <span class="keyword">this</span>.listeners = <span class="keyword">this</span>.listeners.<span class="function">filter</span>(cb => cb !== callback);
+        };
+    }
+    
+    <span class="function">_notifyListeners</span>(event, data) {
+        <span class="keyword">this</span>.listeners.<span class="function">forEach</span>(cb => <span class="function">cb</span>(event, data));
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> auth = <span class="keyword">new</span> JWTAuthManager({ apiUrl: <span class="string">'https://api.ejemplo.com/auth'</span> });
+
+<span class="comment">// Escuchar cambios de autenticación</span>
+auth.<span class="function">onAuthChange</span>((event, data) => {
+    <span class="keyword">if</span> (event === <span class="string">'login'</span>) {
+        console.<span class="function">log</span>(<span class="string">'Usuario logueado:'</span>, data);
+    } <span class="keyword">else</span> <span class="keyword">if</span> (event === <span class="string">'logout'</span>) {
+        window.location.href = <span class="string">'/login'</span>;
+    }
+});
+
+<span class="comment">// Login</span>
+<span class="keyword">await</span> auth.<span class="function">login</span>(<span class="string">'user@email.com'</span>, <span class="string">'password123'</span>);</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             2. ROLES Y PERMISOS
+             ================================================ -->
+        <section id="rbac" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-person-badge me-2"></i>2. Sistema de Roles y Permisos (RBAC)</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Control de acceso basado en roles y permisos.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * ROLE-BASED ACCESS CONTROL (RBAC)
+ */</span>
+
+<span class="keyword">class</span> RBACManager {
+    <span class="function">constructor</span>() {
+        <span class="comment">// Definir permisos por rol</span>
+        <span class="keyword">this</span>.roles = {
+            <span class="string">'admin'</span>: {
+                permissions: [<span class="string">'*'</span>], <span class="comment">// Todo</span>
+                inherits: []
+            },
+            <span class="string">'manager'</span>: {
+                permissions: [
+                    <span class="string">'users:read'</span>, <span class="string">'users:create'</span>, <span class="string">'users:update'</span>,
+                    <span class="string">'products:*'</span>,
+                    <span class="string">'orders:*'</span>,
+                    <span class="string">'reports:read'</span>
+                ],
+                inherits: [<span class="string">'user'</span>]
+            },
+            <span class="string">'editor'</span>: {
+                permissions: [
+                    <span class="string">'products:read'</span>, <span class="string">'products:create'</span>, <span class="string">'products:update'</span>,
+                    <span class="string">'content:*'</span>
+                ],
+                inherits: [<span class="string">'user'</span>]
+            },
+            <span class="string">'user'</span>: {
+                permissions: [
+                    <span class="string">'profile:read'</span>, <span class="string">'profile:update'</span>,
+                    <span class="string">'orders:read'</span>, <span class="string">'orders:create'</span>
+                ],
+                inherits: []
+            }
+        };
+    }
+    
+    <span class="comment">// Obtener todos los permisos de un rol (incluyendo heredados)</span>
+    <span class="function">getRolePermissions</span>(roleName) {
+        <span class="keyword">const</span> role = <span class="keyword">this</span>.roles[roleName];
+        <span class="keyword">if</span> (!role) <span class="keyword">return</span> [];
+        
+        <span class="keyword">let</span> permissions = [...role.permissions];
+        
+        <span class="comment">// Agregar permisos heredados</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> inheritedRole <span class="keyword">of</span> role.inherits) {
+            permissions = [...permissions, ...<span class="keyword">this</span>.<span class="function">getRolePermissions</span>(inheritedRole)];
+        }
+        
+        <span class="keyword">return</span> [...<span class="keyword">new</span> Set(permissions)]; <span class="comment">// Eliminar duplicados</span>
+    }
+    
+    <span class="comment">// Verificar si un permiso coincide con un patrón</span>
+    <span class="function">_matchPermission</span>(required, userPermission) {
+        <span class="comment">// Permiso wildcard total</span>
+        <span class="keyword">if</span> (userPermission === <span class="string">'*'</span>) <span class="keyword">return</span> <span class="keyword">true</span>;
+        
+        <span class="comment">// Permiso exacto</span>
+        <span class="keyword">if</span> (required === userPermission) <span class="keyword">return</span> <span class="keyword">true</span>;
+        
+        <span class="comment">// Wildcard por recurso (products:* coincide con products:read)</span>
+        <span class="keyword">const</span> [resource, action] = required.<span class="function">split</span>(<span class="string">':'</span>);
+        <span class="keyword">const</span> [permResource, permAction] = userPermission.<span class="function">split</span>(<span class="string">':'</span>);
+        
+        <span class="keyword">if</span> (resource === permResource && permAction === <span class="string">'*'</span>) {
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+        
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+    
+    <span class="comment">// Verificar si el usuario tiene un permiso</span>
+    <span class="function">hasPermission</span>(user, permission) {
+        <span class="keyword">if</span> (!user || !user.role) <span class="keyword">return</span> <span class="keyword">false</span>;
+        
+        <span class="keyword">const</span> userPermissions = <span class="keyword">this</span>.<span class="function">getRolePermissions</span>(user.role);
+        
+        <span class="keyword">return</span> userPermissions.<span class="function">some</span>(p => <span class="keyword">this</span>.<span class="function">_matchPermission</span>(permission, p));
+    }
+    
+    <span class="comment">// Verificar múltiples permisos (ANY)</span>
+    <span class="function">hasAnyPermission</span>(user, permissions) {
+        <span class="keyword">return</span> permissions.<span class="function">some</span>(p => <span class="keyword">this</span>.<span class="function">hasPermission</span>(user, p));
+    }
+    
+    <span class="comment">// Verificar múltiples permisos (ALL)</span>
+    <span class="function">hasAllPermissions</span>(user, permissions) {
+        <span class="keyword">return</span> permissions.<span class="function">every</span>(p => <span class="keyword">this</span>.<span class="function">hasPermission</span>(user, p));
+    }
+    
+    <span class="comment">// Crear middleware de autorización</span>
+    <span class="function">requirePermission</span>(permission) {
+        <span class="keyword">return</span> (user) => {
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.<span class="function">hasPermission</span>(user, permission)) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">`Permiso denegado: ${permission}`</span>);
+            }
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        };
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> rbac = <span class="keyword">new</span> RBACManager();
+
+<span class="keyword">const</span> user = { id: <span class="number">1</span>, name: <span class="string">'Juan'</span>, role: <span class="string">'manager'</span> };
+
+<span class="comment">// Verificar permisos</span>
+console.<span class="function">log</span>(rbac.<span class="function">hasPermission</span>(user, <span class="string">'products:create'</span>)); <span class="comment">// true</span>
+console.<span class="function">log</span>(rbac.<span class="function">hasPermission</span>(user, <span class="string">'users:delete'</span>));   <span class="comment">// false</span>
+
+<span class="comment">// Proteger acciones</span>
+<span class="keyword">function</span> <span class="function">deleteProduct</span>(productId) {
+    rbac.<span class="function">requirePermission</span>(<span class="string">'products:delete'</span>)(currentUser);
+    <span class="comment">// ... eliminar producto</span>
+}
+
+<span class="comment">// En componentes/vistas</span>
+<span class="keyword">if</span> (rbac.<span class="function">hasPermission</span>(user, <span class="string">'admin:access'</span>)) {
+    <span class="function">showAdminPanel</span>();
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             3. PROTECCIÓN DE RUTAS
+             ================================================ -->
+        <section id="protected-routes" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-shield-lock me-2"></i>3. Protección de Rutas</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Sistema de rutas protegidas con redirección.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * ROUTER CON PROTECCIÓN DE RUTAS
+ */</span>
+
+<span class="keyword">class</span> ProtectedRouter {
+    <span class="function">constructor</span>(authManager, rbacManager) {
+        <span class="keyword">this</span>.auth = authManager;
+        <span class="keyword">this</span>.rbac = rbacManager;
+        <span class="keyword">this</span>.routes = [];
+        <span class="keyword">this</span>.loginPath = <span class="string">'/login'</span>;
+        <span class="keyword">this</span>.unauthorizedPath = <span class="string">'/403'</span>;
+    }
+    
+    <span class="comment">// Definir ruta</span>
+    <span class="function">addRoute</span>(path, config) {
+        <span class="keyword">this</span>.routes.<span class="function">push</span>({ path, ...config });
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Verificar acceso a ruta</span>
+    <span class="function">canAccess</span>(path) {
+        <span class="keyword">const</span> route = <span class="keyword">this</span>.<span class="function">findRoute</span>(path);
+        <span class="keyword">if</span> (!route) <span class="keyword">return</span> { allowed: <span class="keyword">true</span> };
+        
+        <span class="comment">// Ruta pública</span>
+        <span class="keyword">if</span> (route.public) {
+            <span class="keyword">return</span> { allowed: <span class="keyword">true</span> };
+        }
+        
+        <span class="comment">// Verificar autenticación</span>
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.auth.<span class="function">isAuthenticated</span>()) {
+            <span class="keyword">return</span> { 
+                allowed: <span class="keyword">false</span>, 
+                redirect: <span class="keyword">this</span>.loginPath,
+                reason: <span class="string">'not_authenticated'</span>
+            };
+        }
+        
+        <span class="comment">// Verificar permisos</span>
+        <span class="keyword">if</span> (route.permission) {
+            <span class="keyword">const</span> user = <span class="keyword">this</span>.auth.<span class="function">getCurrentUser</span>();
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.rbac.<span class="function">hasPermission</span>(user, route.permission)) {
+                <span class="keyword">return</span> { 
+                    allowed: <span class="keyword">false</span>, 
+                    redirect: <span class="keyword">this</span>.unauthorizedPath,
+                    reason: <span class="string">'no_permission'</span>
+                };
+            }
+        }
+        
+        <span class="comment">// Verificar roles</span>
+        <span class="keyword">if</span> (route.roles) {
+            <span class="keyword">const</span> user = <span class="keyword">this</span>.auth.<span class="function">getCurrentUser</span>();
+            <span class="keyword">if</span> (!route.roles.<span class="function">includes</span>(user?.role)) {
+                <span class="keyword">return</span> { 
+                    allowed: <span class="keyword">false</span>, 
+                    redirect: <span class="keyword">this</span>.unauthorizedPath,
+                    reason: <span class="string">'invalid_role'</span>
+                };
+            }
+        }
+        
+        <span class="keyword">return</span> { allowed: <span class="keyword">true</span> };
+    }
+    
+    <span class="comment">// Navegar a ruta</span>
+    <span class="function">navigate</span>(path) {
+        <span class="keyword">const</span> access = <span class="keyword">this</span>.<span class="function">canAccess</span>(path);
+        
+        <span class="keyword">if</span> (!access.allowed) {
+            <span class="comment">// Guardar URL original para redirigir después del login</span>
+            <span class="keyword">if</span> (access.reason === <span class="string">'not_authenticated'</span>) {
+                sessionStorage.<span class="function">setItem</span>(<span class="string">'redirectAfterLogin'</span>, path);
+            }
+            
+            console.<span class="function">log</span>(<span class="string">`🚫 Acceso denegado: ${access.reason}`</span>);
+            window.location.href = access.redirect;
+            <span class="keyword">return</span> <span class="keyword">false</span>;
+        }
+        
+        window.location.href = path;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+    
+    <span class="function">findRoute</span>(path) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.routes.<span class="function">find</span>(r => {
+            <span class="keyword">if</span> (r.path <span class="keyword">instanceof</span> RegExp) {
+                <span class="keyword">return</span> r.path.<span class="function">test</span>(path);
+            }
+            <span class="keyword">return</span> r.path === path || path.<span class="function">startsWith</span>(r.path + <span class="string">'/'</span>);
+        });
+    }
+    
+    <span class="comment">// Verificar ruta actual al cargar página</span>
+    <span class="function">checkCurrentRoute</span>() {
+        <span class="keyword">const</span> currentPath = window.location.pathname;
+        <span class="keyword">const</span> access = <span class="keyword">this</span>.<span class="function">canAccess</span>(currentPath);
+        
+        <span class="keyword">if</span> (!access.allowed) {
+            window.location.href = access.redirect;
+        }
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> router = <span class="keyword">new</span> ProtectedRouter(auth, rbac);
+
+<span class="comment">// Definir rutas</span>
+router
+    .<span class="function">addRoute</span>(<span class="string">'/login'</span>, { public: <span class="keyword">true</span> })
+    .<span class="function">addRoute</span>(<span class="string">'/register'</span>, { public: <span class="keyword">true</span> })
+    .<span class="function">addRoute</span>(<span class="string">'/dashboard'</span>, { }) <span class="comment">// Solo requiere autenticación</span>
+    .<span class="function">addRoute</span>(<span class="string">'/admin'</span>, { roles: [<span class="string">'admin'</span>] })
+    .<span class="function">addRoute</span>(<span class="string">'/products/create'</span>, { permission: <span class="string">'products:create'</span> })
+    .<span class="function">addRoute</span>(<span class="string">'/users'</span>, { permission: <span class="string">'users:read'</span> });
+
+<span class="comment">// Verificar al cargar página</span>
+document.<span class="function">addEventListener</span>(<span class="string">'DOMContentLoaded'</span>, () => {
+    router.<span class="function">checkCurrentRoute</span>();
+});
+
+<span class="comment">// Usar en links</span>
+<span class="keyword">function</span> <span class="function">handleNavigation</span>(e, path) {
+    e.<span class="function">preventDefault</span>();
+    router.<span class="function">navigate</span>(path);
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             4. SESSION MANAGER
+             ================================================ -->
+        <section id="session" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-clock-history me-2"></i>4. Gestión de Sesión</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Control de tiempo de sesión, inactividad y sincronización entre pestañas.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * SESSION MANAGER
+ * Control de sesión con timeout y sincronización
+ */</span>
+
+<span class="keyword">class</span> SessionManager {
+    <span class="function">constructor</span>(authManager, options = {}) {
+        <span class="keyword">this</span>.auth = authManager;
+        <span class="keyword">this</span>.inactivityTimeout = options.inactivityTimeout || <span class="number">30</span> * <span class="number">60</span> * <span class="number">1000</span>; <span class="comment">// 30 min</span>
+        <span class="keyword">this</span>.warningTime = options.warningTime || <span class="number">5</span> * <span class="number">60</span> * <span class="number">1000</span>; <span class="comment">// 5 min antes</span>
+        <span class="keyword">this</span>.lastActivity = Date.<span class="function">now</span>();
+        <span class="keyword">this</span>.timeoutId = <span class="keyword">null</span>;
+        <span class="keyword">this</span>.warningShown = <span class="keyword">false</span>;
+        <span class="keyword">this</span>.onWarning = options.onWarning || <span class="keyword">null</span>;
+        <span class="keyword">this</span>.onTimeout = options.onTimeout || <span class="keyword">null</span>;
+        
+        <span class="keyword">this</span>.<span class="function">_initActivityTracking</span>();
+        <span class="keyword">this</span>.<span class="function">_initTabSync</span>();
+    }
+    
+    <span class="comment">// Rastrear actividad del usuario</span>
+    <span class="function">_initActivityTracking</span>() {
+        <span class="keyword">const</span> events = [<span class="string">'mousedown'</span>, <span class="string">'keydown'</span>, <span class="string">'scroll'</span>, <span class="string">'touchstart'</span>];
+        
+        events.<span class="function">forEach</span>(event => {
+            document.<span class="function">addEventListener</span>(event, () => <span class="keyword">this</span>.<span class="function">_updateActivity</span>(), { passive: <span class="keyword">true</span> });
+        });
+        
+        <span class="keyword">this</span>.<span class="function">_startTimer</span>();
+    }
+    
+    <span class="function">_updateActivity</span>() {
+        <span class="keyword">this</span>.lastActivity = Date.<span class="function">now</span>();
+        <span class="keyword">this</span>.warningShown = <span class="keyword">false</span>;
+        
+        <span class="comment">// Sincronizar con otras pestañas</span>
+        localStorage.<span class="function">setItem</span>(<span class="string">'lastActivity'</span>, <span class="keyword">this</span>.lastActivity.<span class="function">toString</span>());
+        
+        <span class="keyword">this</span>.<span class="function">_startTimer</span>();
+    }
+    
+    <span class="function">_startTimer</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.timeoutId) {
+            <span class="function">clearTimeout</span>(<span class="keyword">this</span>.timeoutId);
+        }
+        
+        <span class="keyword">this</span>.timeoutId = <span class="function">setTimeout</span>(() => {
+            <span class="keyword">this</span>.<span class="function">_checkInactivity</span>();
+        }, <span class="number">1000</span>); <span class="comment">// Verificar cada segundo</span>
+    }
+    
+    <span class="function">_checkInactivity</span>() {
+        <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+        <span class="keyword">const</span> elapsed = now - <span class="keyword">this</span>.lastActivity;
+        <span class="keyword">const</span> remaining = <span class="keyword">this</span>.inactivityTimeout - elapsed;
+        
+        <span class="keyword">if</span> (remaining <= <span class="number">0</span>) {
+            <span class="comment">// Timeout - cerrar sesión</span>
+            <span class="keyword">if</span> (<span class="keyword">this</span>.onTimeout) {
+                <span class="keyword">this</span>.<span class="function">onTimeout</span>();
+            }
+            <span class="keyword">this</span>.auth.<span class="function">logout</span>();
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="keyword">if</span> (remaining <= <span class="keyword">this</span>.warningTime && !<span class="keyword">this</span>.warningShown) {
+            <span class="comment">// Mostrar advertencia</span>
+            <span class="keyword">this</span>.warningShown = <span class="keyword">true</span>;
+            <span class="keyword">if</span> (<span class="keyword">this</span>.onWarning) {
+                <span class="keyword">this</span>.<span class="function">onWarning</span>(<span class="keyword">Math</span>.<span class="function">ceil</span>(remaining / <span class="number">1000</span>));
+            }
+        }
+        
+        <span class="keyword">this</span>.<span class="function">_startTimer</span>();
+    }
+    
+    <span class="comment">// Sincronizar entre pestañas</span>
+    <span class="function">_initTabSync</span>() {
+        window.<span class="function">addEventListener</span>(<span class="string">'storage'</span>, (e) => {
+            <span class="keyword">if</span> (e.key === <span class="string">'lastActivity'</span>) {
+                <span class="keyword">this</span>.lastActivity = <span class="function">parseInt</span>(e.newValue);
+                <span class="keyword">this</span>.warningShown = <span class="keyword">false</span>;
+            }
+            
+            <span class="keyword">if</span> (e.key === <span class="string">'logout'</span>) {
+                <span class="comment">// Otra pestaña cerró sesión</span>
+                window.location.href = <span class="string">'/login'</span>;
+            }
+        });
+    }
+    
+    <span class="comment">// Extender sesión manualmente</span>
+    <span class="function">extendSession</span>() {
+        <span class="keyword">this</span>.<span class="function">_updateActivity</span>();
+    }
+    
+    <span class="comment">// Obtener tiempo restante</span>
+    <span class="function">getRemainingTime</span>() {
+        <span class="keyword">const</span> elapsed = Date.<span class="function">now</span>() - <span class="keyword">this</span>.lastActivity;
+        <span class="keyword">return</span> <span class="keyword">Math</span>.<span class="function">max</span>(<span class="number">0</span>, <span class="keyword">this</span>.inactivityTimeout - elapsed);
+    }
+    
+    <span class="function">destroy</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.timeoutId) {
+            <span class="function">clearTimeout</span>(<span class="keyword">this</span>.timeoutId);
+        }
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> session = <span class="keyword">new</span> SessionManager(auth, {
+    inactivityTimeout: <span class="number">30</span> * <span class="number">60</span> * <span class="number">1000</span>, <span class="comment">// 30 minutos</span>
+    warningTime: <span class="number">2</span> * <span class="number">60</span> * <span class="number">1000</span>, <span class="comment">// Avisar 2 min antes</span>
+    
+    onWarning: (secondsLeft) => {
+        <span class="comment">// Mostrar modal de advertencia</span>
+        <span class="function">showSessionWarningModal</span>({
+            message: <span class="string">`Tu sesión expirará en ${secondsLeft} segundos`</span>,
+            onExtend: () => session.<span class="function">extendSession</span>()
+        });
+    },
+    
+    onTimeout: () => {
+        <span class="function">showNotification</span>(<span class="string">'Sesión cerrada por inactividad'</span>);
+    }
+});</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="login.html" class="btn btn-outline-info">
+                <i class="bi bi-arrow-left me-2"></i>Auth Básico
+            </a>
+            <a href="../index.html" class="btn btn-info">
+                Volver al Inicio <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerHTML = '<i class="bi bi-check2"></i> Copiado!';
+            setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard"></i>', 2000);
+        }
+    </script>
+</body>
+</html>

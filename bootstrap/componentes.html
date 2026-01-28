@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Componentes - Guía Completa con Ejemplos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .component-section { 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 40px; 
+            margin-bottom: 40px; 
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            max-height: 400px;
+        }
+        .preview-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="componentes.html">Componentes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="grid-system.html">Grid</a></li>
+                    <li class="nav-item"><a class="nav-link" href="formularios.html">Formularios</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-primary text-white py-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-bootstrap me-3"></i>Componentes Bootstrap 5</h1>
+            <p class="lead">Todos los componentes con 5+ ejemplos cada uno. ¡Copia el código que necesites!</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- SIDEBAR -->
+            <div class="col-lg-3">
+                <div class="sidebar">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-list me-2"></i>Componentes</h5>
+                    <nav class="nav flex-column sidebar-nav">
+                        <a class="nav-link" href="#navbars">🔗 Navbars (5 ejemplos)</a>
+                        <a class="nav-link" href="#cards">📦 Cards (5 ejemplos)</a>
+                        <a class="nav-link" href="#buttons">🔘 Botones (5 ejemplos)</a>
+                        <a class="nav-link" href="#modals">🪟 Modales (5 ejemplos)</a>
+                        <a class="nav-link" href="#alerts">⚠️ Alertas (5 ejemplos)</a>
+                        <a class="nav-link" href="#badges">🏷️ Badges (5 ejemplos)</a>
+                        <a class="nav-link" href="#carousel">🎠 Carousel (5 ejemplos)</a>
+                        <a class="nav-link" href="#accordion">📋 Accordion (5 ejemplos)</a>
+                        <a class="nav-link" href="#tabs">📑 Tabs (5 ejemplos)</a>
+                        <a class="nav-link" href="#offcanvas">📱 Offcanvas (5 ejemplos)</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="col-lg-9">
+                
+                <!-- ============================================
+                     SECCIÓN: NAVBARS - 5 EJEMPLOS
+                     ============================================ -->
+                <section id="navbars" class="component-section">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-list me-2 text-primary"></i>Navbars - 5 Ejemplos
+                    </h2>
+                    <p class="text-muted mb-4">
+                        La barra de navegación es esencial para cualquier sitio web. Aquí tienes 5 variantes diferentes.
+                    </p>
+
+                    <!-- NAVBAR EJEMPLO 1: Básico -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-primary me-2">1</span>Navbar Básico</h5>
+                        <p class="text-muted small">Navbar simple con enlaces y toggler para móviles</p>
+                        
+                        <div class="preview-box">
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand" href="#">MiLogo</a>
+                                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="navbarBasic">
+                                        <ul class="navbar-nav me-auto">
+                                            <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Servicios</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- NAVBAR BÁSICO --&gt;
+&lt;nav class="navbar navbar-expand-lg navbar-light bg-light"&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;!-- Logo/Marca --&gt;
+        &lt;a class="navbar-brand" href="#"&gt;MiLogo&lt;/a&gt;
+        
+        &lt;!-- Botón hamburguesa para móviles --&gt;
+        &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic"&gt;
+            &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        
+        &lt;!-- Enlaces que colapsan en móviles --&gt;
+        &lt;div class="collapse navbar-collapse" id="navbarBasic"&gt;
+            &lt;ul class="navbar-nav me-auto"&gt;
+                &lt;li class="nav-item"&gt;
+                    &lt;a class="nav-link active" href="#"&gt;Inicio&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class="nav-item"&gt;
+                    &lt;a class="nav-link" href="#"&gt;Servicios&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class="nav-item"&gt;
+                    &lt;a class="nav-link" href="#"&gt;Contacto&lt;/a&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- NAVBAR EJEMPLO 2: Con Dropdown -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-primary me-2">2</span>Navbar con Dropdown</h5>
+                        <p class="text-muted small">Navbar oscuro con menú desplegable</p>
+                        
+                        <div class="preview-box">
+                            <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand" href="#"><i class="bi bi-shop me-2"></i>TiendaWeb</a>
+                                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDropdown">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="navbarDropdown">
+                                        <ul class="navbar-nav me-auto">
+                                            <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Productos</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="#">Electrónica</a></li>
+                                                    <li><a class="dropdown-item" href="#">Ropa</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item" href="#">Ver todos</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        <form class="d-flex">
+                                            <input class="form-control me-2" type="search" placeholder="Buscar...">
+                                            <button class="btn btn-outline-light" type="submit">Buscar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- NAVBAR CON DROPDOWN Y BÚSQUEDA --&gt;
+&lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;!-- Logo con icono --&gt;
+        &lt;a class="navbar-brand" href="#"&gt;
+            &lt;i class="bi bi-shop me-2"&gt;&lt;/i&gt;TiendaWeb
+        &lt;/a&gt;
+        
+        &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDropdown"&gt;
+            &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        
+        &lt;div class="collapse navbar-collapse" id="navbarDropdown"&gt;
+            &lt;ul class="navbar-nav me-auto"&gt;
+                &lt;li class="nav-item"&gt;
+                    &lt;a class="nav-link active" href="#"&gt;Inicio&lt;/a&gt;
+                &lt;/li&gt;
+                
+                &lt;!-- Dropdown --&gt;
+                &lt;li class="nav-item dropdown"&gt;
+                    &lt;a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"&gt;
+                        Productos
+                    &lt;/a&gt;
+                    &lt;ul class="dropdown-menu"&gt;
+                        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Electrónica&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Ropa&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Ver todos&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+            
+            &lt;!-- Formulario de búsqueda --&gt;
+            &lt;form class="d-flex"&gt;
+                &lt;input class="form-control me-2" type="search" placeholder="Buscar..."&gt;
+                &lt;button class="btn btn-outline-light" type="submit"&gt;Buscar&lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- NAVBAR EJEMPLO 3: Con Login/Register -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-primary me-2">3</span>Navbar con Login/Register</h5>
+                        <p class="text-muted small">Navbar con botones de autenticación</p>
+                        
+                        <div class="preview-box">
+                            <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand fw-bold text-primary" href="#">
+                                        <i class="bi bi-globe me-2"></i>WebApp
+                                    </a>
+                                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAuth">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="navbarAuth">
+                                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                            <li class="nav-item"><a class="nav-link" href="#">Características</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Precios</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+                                        </ul>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-primary">Iniciar Sesión</button>
+                                            <button class="btn btn-primary">Registrarse</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- NAVBAR CON BOTONES LOGIN/REGISTER --&gt;
+&lt;nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm"&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;a class="navbar-brand fw-bold text-primary" href="#"&gt;
+            &lt;i class="bi bi-globe me-2"&gt;&lt;/i&gt;WebApp
+        &lt;/a&gt;
+        
+        &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAuth"&gt;
+            &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        
+        &lt;div class="collapse navbar-collapse" id="navbarAuth"&gt;
+            &lt;ul class="navbar-nav me-auto mb-2 mb-lg-0"&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Características&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Precios&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;FAQ&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            
+            &lt;!-- Botones de autenticación --&gt;
+            &lt;div class="d-flex gap-2"&gt;
+                &lt;button class="btn btn-outline-primary"&gt;Iniciar Sesión&lt;/button&gt;
+                &lt;button class="btn btn-primary"&gt;Registrarse&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- NAVBAR EJEMPLO 4: E-commerce con Carrito -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-primary me-2">4</span>Navbar E-commerce con Carrito</h5>
+                        <p class="text-muted small">Navbar completo para tienda online con carrito</p>
+                        
+                        <div class="preview-box">
+                            <nav class="navbar navbar-expand-lg navbar-dark rounded" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand fw-bold" href="#">
+                                        <i class="bi bi-bag-heart me-2"></i>FashionStore
+                                    </a>
+                                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEcom">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+                                    <div class="collapse navbar-collapse" id="navbarEcom">
+                                        <ul class="navbar-nav me-auto">
+                                            <li class="nav-item"><a class="nav-link" href="#">Hombre</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Mujer</a></li>
+                                            <li class="nav-item"><a class="nav-link" href="#">Niños</a></li>
+                                            <li class="nav-item"><a class="nav-link text-warning" href="#">Ofertas 🔥</a></li>
+                                        </ul>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <a href="#" class="text-white"><i class="bi bi-search fs-5"></i></a>
+                                            <a href="#" class="text-white"><i class="bi bi-person fs-5"></i></a>
+                                            <a href="#" class="text-white position-relative">
+                                                <i class="bi bi-cart3 fs-5"></i>
+                                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- NAVBAR E-COMMERCE CON CARRITO --&gt;
+&lt;nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea, #764ba2);"&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;a class="navbar-brand fw-bold" href="#"&gt;
+            &lt;i class="bi bi-bag-heart me-2"&gt;&lt;/i&gt;FashionStore
+        &lt;/a&gt;
+        
+        &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEcom"&gt;
+            &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+        &lt;/button&gt;
+        
+        &lt;div class="collapse navbar-collapse" id="navbarEcom"&gt;
+            &lt;ul class="navbar-nav me-auto"&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Hombre&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Mujer&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Niños&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="nav-item"&gt;&lt;a class="nav-link text-warning" href="#"&gt;Ofertas 🔥&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            
+            &lt;!-- Iconos de acción --&gt;
+            &lt;div class="d-flex align-items-center gap-3"&gt;
+                &lt;!-- Búsqueda --&gt;
+                &lt;a href="#" class="text-white"&gt;&lt;i class="bi bi-search fs-5"&gt;&lt;/i&gt;&lt;/a&gt;
+                
+                &lt;!-- Usuario --&gt;
+                &lt;a href="#" class="text-white"&gt;&lt;i class="bi bi-person fs-5"&gt;&lt;/i&gt;&lt;/a&gt;
+                
+                &lt;!-- Carrito con badge --&gt;
+                &lt;a href="#" class="text-white position-relative"&gt;
+                    &lt;i class="bi bi-cart3 fs-5"&gt;&lt;/i&gt;
+                    &lt;span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"&gt;
+                        3
+                    &lt;/span&gt;
+                &lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- NAVBAR EJEMPLO 5: Dashboard Admin -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-primary me-2">5</span>Navbar Dashboard Admin</h5>
+                        <p class="text-muted small">Navbar para panel de administración con notificaciones</p>
+                        
+                        <div class="preview-box">
+                            <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+                                <div class="container-fluid">
+                                    <button class="btn btn-outline-light me-2" type="button">
+                                        <i class="bi bi-list"></i>
+                                    </button>
+                                    <a class="navbar-brand" href="#">Admin Panel</a>
+                                    <div class="collapse navbar-collapse" id="navbarAdmin">
+                                        <ul class="navbar-nav ms-auto align-items-center">
+                                            <li class="nav-item">
+                                                <a class="nav-link position-relative" href="#">
+                                                    <i class="bi bi-bell fs-5"></i>
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">5</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link position-relative" href="#">
+                                                    <i class="bi bi-envelope fs-5"></i>
+                                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">2</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+                                                    <img src="https://via.placeholder.com/32" class="rounded-circle me-2" alt="Avatar">
+                                                    Admin
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Perfil</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- NAVBAR DASHBOARD ADMIN --&gt;
+&lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;!-- Botón para toggle sidebar --&gt;
+        &lt;button class="btn btn-outline-light me-2" type="button"&gt;
+            &lt;i class="bi bi-list"&gt;&lt;/i&gt;
+        &lt;/button&gt;
+        
+        &lt;a class="navbar-brand" href="#"&gt;Admin Panel&lt;/a&gt;
+        
+        &lt;div class="collapse navbar-collapse" id="navbarAdmin"&gt;
+            &lt;ul class="navbar-nav ms-auto align-items-center"&gt;
+                &lt;!-- Notificaciones --&gt;
+                &lt;li class="nav-item"&gt;
+                    &lt;a class="nav-link position-relative" href="#"&gt;
+                        &lt;i class="bi bi-bell fs-5"&gt;&lt;/i&gt;
+                        &lt;span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"&gt;5&lt;/span&gt;
+                    &lt;/a&gt;
+                &lt;/li&gt;
+                
+                &lt;!-- Mensajes --&gt;
+                &lt;li class="nav-item"&gt;
+                    &lt;a class="nav-link position-relative" href="#"&gt;
+                        &lt;i class="bi bi-envelope fs-5"&gt;&lt;/i&gt;
+                        &lt;span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"&gt;2&lt;/span&gt;
+                    &lt;/a&gt;
+                &lt;/li&gt;
+                
+                &lt;!-- Dropdown de usuario --&gt;
+                &lt;li class="nav-item dropdown"&gt;
+                    &lt;a class="nav-link dropdown-toggle d-flex align-items-center" href="#" data-bs-toggle="dropdown"&gt;
+                        &lt;img src="avatar.jpg" class="rounded-circle me-2" width="32" alt="Avatar"&gt;
+                        Admin
+                    &lt;/a&gt;
+                    &lt;ul class="dropdown-menu dropdown-menu-end"&gt;
+                        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;&lt;i class="bi bi-person me-2"&gt;&lt;/i&gt;Perfil&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;&lt;i class="bi bi-gear me-2"&gt;&lt;/i&gt;Configuración&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a class="dropdown-item text-danger" href="#"&gt;&lt;i class="bi bi-box-arrow-right me-2"&gt;&lt;/i&gt;Cerrar sesión&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ============================================
+                     SECCIÓN: CARDS - 5 EJEMPLOS
+                     ============================================ -->
+                <section id="cards" class="component-section">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-card-heading me-2 text-primary"></i>Cards - 5 Ejemplos
+                    </h2>
+                    <p class="text-muted mb-4">
+                        Las cards son contenedores flexibles para mostrar contenido. Aquí tienes diferentes estilos.
+                    </p>
+
+                    <!-- CARD EJEMPLO 1: Básica con imagen -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-success me-2">1</span>Card Básica con Imagen</h5>
+                        
+                        <div class="preview-box">
+                            <div class="card" style="width: 18rem;">
+                                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Imagen">
+                                <div class="card-body">
+                                    <h5 class="card-title">Título de la Card</h5>
+                                    <p class="card-text">Texto descriptivo breve que explica el contenido de esta card.</p>
+                                    <a href="#" class="btn btn-primary">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- CARD BÁSICA CON IMAGEN --&gt;
+&lt;div class="card" style="width: 18rem;"&gt;
+    &lt;!-- Imagen superior --&gt;
+    &lt;img src="imagen.jpg" class="card-img-top" alt="Descripción"&gt;
+    
+    &lt;!-- Cuerpo de la card --&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;Título de la Card&lt;/h5&gt;
+        &lt;p class="card-text"&gt;Texto descriptivo breve que explica el contenido de esta card.&lt;/p&gt;
+        &lt;a href="#" class="btn btn-primary"&gt;Ver más&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- CARD EJEMPLO 2: Producto E-commerce -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-success me-2">2</span>Card Producto E-commerce</h5>
+                        
+                        <div class="preview-box">
+                            <div class="card h-100 shadow-sm" style="width: 18rem;">
+                                <div class="position-relative">
+                                    <img src="https://via.placeholder.com/300x300" class="card-img-top" alt="Producto">
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">-20%</span>
+                                    <button class="btn btn-light btn-sm position-absolute top-0 start-0 m-2 rounded-circle">
+                                        <i class="bi bi-heart"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <small class="text-muted">Categoría</small>
+                                    <h6 class="card-title">Nombre del Producto</h6>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="text-warning me-2">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                        <small class="text-muted">(124)</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="h5 text-primary mb-0">$79.99</span>
+                                            <small class="text-muted text-decoration-line-through ms-2">$99.99</small>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- CARD PRODUCTO E-COMMERCE --&gt;
+&lt;div class="card h-100 shadow-sm" style="width: 18rem;"&gt;
+    &lt;!-- Imagen con badges y favorito --&gt;
+    &lt;div class="position-relative"&gt;
+        &lt;img src="producto.jpg" class="card-img-top" alt="Producto"&gt;
+        
+        &lt;!-- Badge de descuento --&gt;
+        &lt;span class="badge bg-danger position-absolute top-0 end-0 m-2"&gt;-20%&lt;/span&gt;
+        
+        &lt;!-- Botón favorito --&gt;
+        &lt;button class="btn btn-light btn-sm position-absolute top-0 start-0 m-2 rounded-circle"&gt;
+            &lt;i class="bi bi-heart"&gt;&lt;/i&gt;
+        &lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="card-body"&gt;
+        &lt;small class="text-muted"&gt;Categoría&lt;/small&gt;
+        &lt;h6 class="card-title"&gt;Nombre del Producto&lt;/h6&gt;
+        
+        &lt;!-- Estrellas de rating --&gt;
+        &lt;div class="d-flex align-items-center mb-2"&gt;
+            &lt;div class="text-warning me-2"&gt;
+                &lt;i class="bi bi-star-fill"&gt;&lt;/i&gt;
+                &lt;i class="bi bi-star-fill"&gt;&lt;/i&gt;
+                &lt;i class="bi bi-star-fill"&gt;&lt;/i&gt;
+                &lt;i class="bi bi-star-fill"&gt;&lt;/i&gt;
+                &lt;i class="bi bi-star-half"&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;small class="text-muted"&gt;(124)&lt;/small&gt;
+        &lt;/div&gt;
+        
+        &lt;!-- Precio y botón --&gt;
+        &lt;div class="d-flex justify-content-between align-items-center"&gt;
+            &lt;div&gt;
+                &lt;span class="h5 text-primary mb-0"&gt;$79.99&lt;/span&gt;
+                &lt;small class="text-muted text-decoration-line-through ms-2"&gt;$99.99&lt;/small&gt;
+            &lt;/div&gt;
+            &lt;button class="btn btn-primary btn-sm"&gt;
+                &lt;i class="bi bi-cart-plus"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- CARD EJEMPLO 3: Perfil de Usuario -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-success me-2">3</span>Card Perfil de Usuario</h5>
+                        
+                        <div class="preview-box">
+                            <div class="card text-center" style="width: 18rem;">
+                                <div class="card-body">
+                                    <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Avatar">
+                                    <h5 class="card-title mb-1">María García</h5>
+                                    <p class="text-muted small">Desarrolladora Full Stack</p>
+                                    <p class="card-text small">Apasionada por crear aplicaciones web modernas y funcionales.</p>
+                                    <div class="d-flex justify-content-center gap-3 mb-3">
+                                        <div class="text-center">
+                                            <h6 class="mb-0">124</h6>
+                                            <small class="text-muted">Posts</small>
+                                        </div>
+                                        <div class="text-center">
+                                            <h6 class="mb-0">1.5K</h6>
+                                            <small class="text-muted">Seguidores</small>
+                                        </div>
+                                        <div class="text-center">
+                                            <h6 class="mb-0">348</h6>
+                                            <small class="text-muted">Siguiendo</small>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm me-2">Seguir</button>
+                                    <button class="btn btn-outline-secondary btn-sm">Mensaje</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- CARD PERFIL DE USUARIO --&gt;
+&lt;div class="card text-center" style="width: 18rem;"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;!-- Avatar --&gt;
+        &lt;img src="avatar.jpg" class="rounded-circle mb-3" width="100" alt="Avatar"&gt;
+        
+        &lt;!-- Info del usuario --&gt;
+        &lt;h5 class="card-title mb-1"&gt;María García&lt;/h5&gt;
+        &lt;p class="text-muted small"&gt;Desarrolladora Full Stack&lt;/p&gt;
+        &lt;p class="card-text small"&gt;Apasionada por crear aplicaciones web modernas y funcionales.&lt;/p&gt;
+        
+        &lt;!-- Estadísticas --&gt;
+        &lt;div class="d-flex justify-content-center gap-3 mb-3"&gt;
+            &lt;div class="text-center"&gt;
+                &lt;h6 class="mb-0"&gt;124&lt;/h6&gt;
+                &lt;small class="text-muted"&gt;Posts&lt;/small&gt;
+            &lt;/div&gt;
+            &lt;div class="text-center"&gt;
+                &lt;h6 class="mb-0"&gt;1.5K&lt;/h6&gt;
+                &lt;small class="text-muted"&gt;Seguidores&lt;/small&gt;
+            &lt;/div&gt;
+            &lt;div class="text-center"&gt;
+                &lt;h6 class="mb-0"&gt;348&lt;/h6&gt;
+                &lt;small class="text-muted"&gt;Siguiendo&lt;/small&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;!-- Botones de acción --&gt;
+        &lt;button class="btn btn-primary btn-sm me-2"&gt;Seguir&lt;/button&gt;
+        &lt;button class="btn btn-outline-secondary btn-sm"&gt;Mensaje&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- CARD EJEMPLO 4: Pricing Card -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-success me-2">4</span>Card de Precios</h5>
+                        
+                        <div class="preview-box">
+                            <div class="card border-primary" style="width: 18rem;">
+                                <div class="card-header bg-primary text-white text-center py-3">
+                                    <h5 class="mb-0">Plan Profesional</h5>
+                                    <span class="badge bg-warning text-dark">Más Popular</span>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <span class="display-4 fw-bold">$29</span>
+                                        <span class="text-muted">/mes</span>
+                                    </div>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>10 Proyectos</li>
+                                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>50GB Almacenamiento</li>
+                                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Soporte 24/7</li>
+                                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>API Access</li>
+                                        <li class="mb-2 text-muted"><i class="bi bi-x-circle me-2"></i>White Label</li>
+                                    </ul>
+                                </div>
+                                <div class="card-footer bg-transparent border-0 text-center pb-4">
+                                    <button class="btn btn-primary btn-lg w-100">Comenzar Ahora</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- CARD DE PRECIOS (PRICING) --&gt;
+&lt;div class="card border-primary" style="width: 18rem;"&gt;
+    &lt;!-- Header con título --&gt;
+    &lt;div class="card-header bg-primary text-white text-center py-3"&gt;
+        &lt;h5 class="mb-0"&gt;Plan Profesional&lt;/h5&gt;
+        &lt;span class="badge bg-warning text-dark"&gt;Más Popular&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="card-body text-center"&gt;
+        &lt;!-- Precio --&gt;
+        &lt;div class="mb-3"&gt;
+            &lt;span class="display-4 fw-bold"&gt;$29&lt;/span&gt;
+            &lt;span class="text-muted"&gt;/mes&lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;!-- Lista de características --&gt;
+        &lt;ul class="list-unstyled"&gt;
+            &lt;li class="mb-2"&gt;&lt;i class="bi bi-check-circle text-success me-2"&gt;&lt;/i&gt;10 Proyectos&lt;/li&gt;
+            &lt;li class="mb-2"&gt;&lt;i class="bi bi-check-circle text-success me-2"&gt;&lt;/i&gt;50GB Almacenamiento&lt;/li&gt;
+            &lt;li class="mb-2"&gt;&lt;i class="bi bi-check-circle text-success me-2"&gt;&lt;/i&gt;Soporte 24/7&lt;/li&gt;
+            &lt;li class="mb-2"&gt;&lt;i class="bi bi-check-circle text-success me-2"&gt;&lt;/i&gt;API Access&lt;/li&gt;
+            &lt;li class="mb-2 text-muted"&gt;&lt;i class="bi bi-x-circle me-2"&gt;&lt;/i&gt;White Label&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Footer con botón --&gt;
+    &lt;div class="card-footer bg-transparent border-0 text-center pb-4"&gt;
+        &lt;button class="btn btn-primary btn-lg w-100"&gt;Comenzar Ahora&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- CARD EJEMPLO 5: Card Horizontal -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-success me-2">5</span>Card Horizontal (Blog Post)</h5>
+                        
+                        <div class="preview-box">
+                            <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img src="https://via.placeholder.com/200x200" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="Post">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <span class="badge bg-info mb-2">Tecnología</span>
+                                            <h5 class="card-title">Título del Artículo</h5>
+                                            <p class="card-text small">Este es un ejemplo de una card horizontal ideal para mostrar posts de blog o artículos.</p>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://via.placeholder.com/30" class="rounded-circle me-2" alt="Autor">
+                                                <small class="text-muted">Por Juan Pérez • 5 min lectura</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- CARD HORIZONTAL (BLOG POST) --&gt;
+&lt;div class="card mb-3" style="max-width: 540px;"&gt;
+    &lt;div class="row g-0"&gt;
+        &lt;!-- Imagen lateral --&gt;
+        &lt;div class="col-md-4"&gt;
+            &lt;img src="imagen.jpg" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="Post"&gt;
+        &lt;/div&gt;
+        
+        &lt;!-- Contenido --&gt;
+        &lt;div class="col-md-8"&gt;
+            &lt;div class="card-body"&gt;
+                &lt;span class="badge bg-info mb-2"&gt;Tecnología&lt;/span&gt;
+                &lt;h5 class="card-title"&gt;Título del Artículo&lt;/h5&gt;
+                &lt;p class="card-text small"&gt;Este es un ejemplo de una card horizontal ideal para mostrar posts de blog o artículos.&lt;/p&gt;
+                
+                &lt;!-- Info del autor --&gt;
+                &lt;div class="d-flex align-items-center"&gt;
+                    &lt;img src="avatar.jpg" class="rounded-circle me-2" width="30" alt="Autor"&gt;
+                    &lt;small class="text-muted"&gt;Por Juan Pérez • 5 min lectura&lt;/small&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ============================================
+                     SECCIÓN: BOTONES - 5 EJEMPLOS
+                     ============================================ -->
+                <section id="buttons" class="component-section">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-hand-index me-2 text-primary"></i>Botones - 5 Ejemplos
+                    </h2>
+
+                    <!-- BOTONES EJEMPLO 1: Variantes de color -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-warning text-dark me-2">1</span>Variantes de Color</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-primary me-2 mb-2">Primary</button>
+                            <button class="btn btn-secondary me-2 mb-2">Secondary</button>
+                            <button class="btn btn-success me-2 mb-2">Success</button>
+                            <button class="btn btn-danger me-2 mb-2">Danger</button>
+                            <button class="btn btn-warning me-2 mb-2">Warning</button>
+                            <button class="btn btn-info me-2 mb-2">Info</button>
+                            <button class="btn btn-light me-2 mb-2">Light</button>
+                            <button class="btn btn-dark me-2 mb-2">Dark</button>
+                            <button class="btn btn-link mb-2">Link</button>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- BOTONES - VARIANTES DE COLOR --&gt;
+&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn btn-warning"&gt;Warning&lt;/button&gt;
+&lt;button class="btn btn-info"&gt;Info&lt;/button&gt;
+&lt;button class="btn btn-light"&gt;Light&lt;/button&gt;
+&lt;button class="btn btn-dark"&gt;Dark&lt;/button&gt;
+&lt;button class="btn btn-link"&gt;Link&lt;/button&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- BOTONES EJEMPLO 2: Outline -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-warning text-dark me-2">2</span>Botones Outline</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-outline-primary me-2 mb-2">Primary</button>
+                            <button class="btn btn-outline-secondary me-2 mb-2">Secondary</button>
+                            <button class="btn btn-outline-success me-2 mb-2">Success</button>
+                            <button class="btn btn-outline-danger me-2 mb-2">Danger</button>
+                            <button class="btn btn-outline-warning me-2 mb-2">Warning</button>
+                            <button class="btn btn-outline-info me-2 mb-2">Info</button>
+                            <button class="btn btn-outline-dark me-2 mb-2">Dark</button>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- BOTONES OUTLINE (SOLO BORDE) --&gt;
+&lt;button class="btn btn-outline-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-outline-secondary"&gt;Secondary&lt;/button&gt;
+&lt;button class="btn btn-outline-success"&gt;Success&lt;/button&gt;
+&lt;button class="btn btn-outline-danger"&gt;Danger&lt;/button&gt;
+&lt;button class="btn btn-outline-warning"&gt;Warning&lt;/button&gt;
+&lt;button class="btn btn-outline-info"&gt;Info&lt;/button&gt;
+&lt;button class="btn btn-outline-dark"&gt;Dark&lt;/button&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- BOTONES EJEMPLO 3: Tamaños -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-warning text-dark me-2">3</span>Tamaños de Botones</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-primary btn-lg me-2 mb-2">Grande (lg)</button>
+                            <button class="btn btn-primary me-2 mb-2">Normal</button>
+                            <button class="btn btn-primary btn-sm me-2 mb-2">Pequeño (sm)</button>
+                            <br>
+                            <button class="btn btn-secondary w-100 mb-2">Botón Full Width</button>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- TAMAÑOS DE BOTONES --&gt;
+&lt;button class="btn btn-primary btn-lg"&gt;Grande (lg)&lt;/button&gt;
+&lt;button class="btn btn-primary"&gt;Normal&lt;/button&gt;
+&lt;button class="btn btn-primary btn-sm"&gt;Pequeño (sm)&lt;/button&gt;
+
+&lt;!-- Botón ancho completo --&gt;
+&lt;button class="btn btn-secondary w-100"&gt;Botón Full Width&lt;/button&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- BOTONES EJEMPLO 4: Con iconos -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-warning text-dark me-2">4</span>Botones con Iconos</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-primary me-2 mb-2">
+                                <i class="bi bi-download me-2"></i>Descargar
+                            </button>
+                            <button class="btn btn-success me-2 mb-2">
+                                <i class="bi bi-check-circle me-2"></i>Confirmar
+                            </button>
+                            <button class="btn btn-danger me-2 mb-2">
+                                <i class="bi bi-trash me-2"></i>Eliminar
+                            </button>
+                            <button class="btn btn-outline-primary me-2 mb-2">
+                                Siguiente<i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                            <button class="btn btn-dark me-2 mb-2">
+                                <i class="bi bi-github me-2"></i>GitHub
+                            </button>
+                            <br>
+                            <!-- Botones solo icono -->
+                            <button class="btn btn-primary me-2 mb-2"><i class="bi bi-heart"></i></button>
+                            <button class="btn btn-secondary me-2 mb-2"><i class="bi bi-share"></i></button>
+                            <button class="btn btn-success me-2 mb-2"><i class="bi bi-cart-plus"></i></button>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- BOTONES CON ICONOS --&gt;
+&lt;button class="btn btn-primary"&gt;
+    &lt;i class="bi bi-download me-2"&gt;&lt;/i&gt;Descargar
+&lt;/button&gt;
+
+&lt;button class="btn btn-success"&gt;
+    &lt;i class="bi bi-check-circle me-2"&gt;&lt;/i&gt;Confirmar
+&lt;/button&gt;
+
+&lt;button class="btn btn-danger"&gt;
+    &lt;i class="bi bi-trash me-2"&gt;&lt;/i&gt;Eliminar
+&lt;/button&gt;
+
+&lt;!-- Icono a la derecha --&gt;
+&lt;button class="btn btn-outline-primary"&gt;
+    Siguiente&lt;i class="bi bi-arrow-right ms-2"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+&lt;!-- Botones solo icono --&gt;
+&lt;button class="btn btn-primary"&gt;&lt;i class="bi bi-heart"&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;&lt;i class="bi bi-share"&gt;&lt;/i&gt;&lt;/button&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- BOTONES EJEMPLO 5: Grupos -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-warning text-dark me-2">5</span>Grupos de Botones</h5>
+                        
+                        <div class="preview-box">
+                            <div class="btn-group me-3 mb-2">
+                                <button class="btn btn-primary">Izquierda</button>
+                                <button class="btn btn-primary">Centro</button>
+                                <button class="btn btn-primary">Derecha</button>
+                            </div>
+                            <br>
+                            <div class="btn-group mb-2">
+                                <button class="btn btn-outline-primary active">Día</button>
+                                <button class="btn btn-outline-primary">Semana</button>
+                                <button class="btn btn-outline-primary">Mes</button>
+                                <button class="btn btn-outline-primary">Año</button>
+                            </div>
+                            <br>
+                            <!-- Botón con dropdown -->
+                            <div class="btn-group mb-2">
+                                <button class="btn btn-success">Guardar</button>
+                                <button class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Guardar como borrador</a></li>
+                                    <li><a class="dropdown-item" href="#">Guardar y publicar</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- GRUPO DE BOTONES --&gt;
+&lt;div class="btn-group"&gt;
+    &lt;button class="btn btn-primary"&gt;Izquierda&lt;/button&gt;
+    &lt;button class="btn btn-primary"&gt;Centro&lt;/button&gt;
+    &lt;button class="btn btn-primary"&gt;Derecha&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- TOGGLE BUTTONS (selector) --&gt;
+&lt;div class="btn-group"&gt;
+    &lt;button class="btn btn-outline-primary active"&gt;Día&lt;/button&gt;
+    &lt;button class="btn btn-outline-primary"&gt;Semana&lt;/button&gt;
+    &lt;button class="btn btn-outline-primary"&gt;Mes&lt;/button&gt;
+    &lt;button class="btn btn-outline-primary"&gt;Año&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- BOTÓN CON DROPDOWN --&gt;
+&lt;div class="btn-group"&gt;
+    &lt;button class="btn btn-success"&gt;Guardar&lt;/button&gt;
+    &lt;button class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"&gt;
+        &lt;span class="visually-hidden"&gt;Toggle Dropdown&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;ul class="dropdown-menu"&gt;
+        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Guardar como borrador&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Guardar y publicar&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ============================================
+                     SECCIÓN: MODALES - 5 EJEMPLOS
+                     ============================================ -->
+                <section id="modals" class="component-section">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-window-stack me-2 text-primary"></i>Modales - 5 Ejemplos
+                    </h2>
+
+                    <!-- MODAL EJEMPLO 1: Básico -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-info me-2">1</span>Modal Básico</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalBasico">
+                                Abrir Modal Básico
+                            </button>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalBasico" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Título del Modal</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Este es el contenido del modal. Puedes poner cualquier cosa aquí.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- BOTÓN QUE ABRE EL MODAL --&gt;
+&lt;button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalBasico"&gt;
+    Abrir Modal
+&lt;/button&gt;
+
+&lt;!-- MODAL BÁSICO --&gt;
+&lt;div class="modal fade" id="modalBasico" tabindex="-1"&gt;
+    &lt;div class="modal-dialog"&gt;
+        &lt;div class="modal-content"&gt;
+            &lt;!-- Header --&gt;
+            &lt;div class="modal-header"&gt;
+                &lt;h5 class="modal-title"&gt;Título del Modal&lt;/h5&gt;
+                &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- Body --&gt;
+            &lt;div class="modal-body"&gt;
+                &lt;p&gt;Este es el contenido del modal.&lt;/p&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- Footer --&gt;
+            &lt;div class="modal-footer"&gt;
+                &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cerrar&lt;/button&gt;
+                &lt;button type="button" class="btn btn-primary"&gt;Guardar&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- MODAL EJEMPLO 2: Confirmación -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-info me-2">2</span>Modal de Confirmación</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalConfirm">
+                                <i class="bi bi-trash me-2"></i>Eliminar Item
+                            </button>
+                        </div>
+
+                        <div class="modal fade" id="modalConfirm" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center py-4">
+                                        <i class="bi bi-exclamation-triangle text-warning display-3"></i>
+                                        <h4 class="mt-3">¿Estás seguro?</h4>
+                                        <p class="text-muted">Esta acción no se puede deshacer. El elemento será eliminado permanentemente.</p>
+                                        <div class="d-flex justify-content-center gap-2 mt-4">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-danger">Sí, eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- MODAL DE CONFIRMACIÓN --&gt;
+&lt;button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalConfirm"&gt;
+    &lt;i class="bi bi-trash me-2"&gt;&lt;/i&gt;Eliminar Item
+&lt;/button&gt;
+
+&lt;div class="modal fade" id="modalConfirm" tabindex="-1"&gt;
+    &lt;div class="modal-dialog modal-dialog-centered"&gt;
+        &lt;div class="modal-content"&gt;
+            &lt;div class="modal-body text-center py-4"&gt;
+                &lt;!-- Icono de advertencia --&gt;
+                &lt;i class="bi bi-exclamation-triangle text-warning display-3"&gt;&lt;/i&gt;
+                
+                &lt;h4 class="mt-3"&gt;¿Estás seguro?&lt;/h4&gt;
+                &lt;p class="text-muted"&gt;Esta acción no se puede deshacer.&lt;/p&gt;
+                
+                &lt;!-- Botones --&gt;
+                &lt;div class="d-flex justify-content-center gap-2 mt-4"&gt;
+                    &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cancelar&lt;/button&gt;
+                    &lt;button type="button" class="btn btn-danger"&gt;Sí, eliminar&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- MODAL EJEMPLO 3: Con Formulario -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-info me-2">3</span>Modal con Formulario</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalForm">
+                                <i class="bi bi-plus-circle me-2"></i>Nuevo Usuario
+                            </button>
+                        </div>
+
+                        <div class="modal fade" id="modalForm" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Nuevo Usuario</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre completo</label>
+                                                <input type="text" class="form-control" placeholder="Juan Pérez">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" placeholder="juan@ejemplo.com">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Rol</label>
+                                                <select class="form-select">
+                                                    <option>Seleccionar...</option>
+                                                    <option>Admin</option>
+                                                    <option>Editor</option>
+                                                    <option>Usuario</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-success">Crear Usuario</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- MODAL CON FORMULARIO --&gt;
+&lt;div class="modal fade" id="modalForm" tabindex="-1"&gt;
+    &lt;div class="modal-dialog"&gt;
+        &lt;div class="modal-content"&gt;
+            &lt;div class="modal-header"&gt;
+                &lt;h5 class="modal-title"&gt;&lt;i class="bi bi-person-plus me-2"&gt;&lt;/i&gt;Nuevo Usuario&lt;/h5&gt;
+                &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="modal-body"&gt;
+                &lt;form&gt;
+                    &lt;div class="mb-3"&gt;
+                        &lt;label class="form-label"&gt;Nombre completo&lt;/label&gt;
+                        &lt;input type="text" class="form-control" placeholder="Juan Pérez"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="mb-3"&gt;
+                        &lt;label class="form-label"&gt;Email&lt;/label&gt;
+                        &lt;input type="email" class="form-control" placeholder="juan@ejemplo.com"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="mb-3"&gt;
+                        &lt;label class="form-label"&gt;Rol&lt;/label&gt;
+                        &lt;select class="form-select"&gt;
+                            &lt;option&gt;Seleccionar...&lt;/option&gt;
+                            &lt;option&gt;Admin&lt;/option&gt;
+                            &lt;option&gt;Editor&lt;/option&gt;
+                            &lt;option&gt;Usuario&lt;/option&gt;
+                        &lt;/select&gt;
+                    &lt;/div&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="modal-footer"&gt;
+                &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Cancelar&lt;/button&gt;
+                &lt;button type="button" class="btn btn-success"&gt;Crear Usuario&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- MODAL EJEMPLO 4: Tamaños -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-info me-2">4</span>Modal Tamaños</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-outline-primary me-2 mb-2" data-bs-toggle="modal" data-bs-target="#modalSm">Small</button>
+                            <button class="btn btn-outline-primary me-2 mb-2" data-bs-toggle="modal" data-bs-target="#modalLg">Large</button>
+                            <button class="btn btn-outline-primary me-2 mb-2" data-bs-toggle="modal" data-bs-target="#modalXl">Extra Large</button>
+                            <button class="btn btn-outline-primary mb-2" data-bs-toggle="modal" data-bs-target="#modalFull">Fullscreen</button>
+                        </div>
+
+                        <!-- Modal Small -->
+                        <div class="modal fade" id="modalSm" tabindex="-1">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header"><h5>Modal Pequeño</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                                    <div class="modal-body">Contenido del modal pequeño.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Large -->
+                        <div class="modal fade" id="modalLg" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header"><h5>Modal Grande</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                                    <div class="modal-body">Contenido del modal grande.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal XL -->
+                        <div class="modal fade" id="modalXl" tabindex="-1">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header"><h5>Modal Extra Grande</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                                    <div class="modal-body">Contenido del modal extra grande.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Fullscreen -->
+                        <div class="modal fade" id="modalFull" tabindex="-1">
+                            <div class="modal-dialog modal-fullscreen">
+                                <div class="modal-content">
+                                    <div class="modal-header"><h5>Modal Fullscreen</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+                                    <div class="modal-body">Contenido del modal pantalla completa.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- TAMAÑOS DE MODAL --&gt;
+
+&lt;!-- Modal Pequeño --&gt;
+&lt;div class="modal-dialog modal-sm"&gt;...&lt;/div&gt;
+
+&lt;!-- Modal Normal (default) --&gt;
+&lt;div class="modal-dialog"&gt;...&lt;/div&gt;
+
+&lt;!-- Modal Grande --&gt;
+&lt;div class="modal-dialog modal-lg"&gt;...&lt;/div&gt;
+
+&lt;!-- Modal Extra Grande --&gt;
+&lt;div class="modal-dialog modal-xl"&gt;...&lt;/div&gt;
+
+&lt;!-- Modal Pantalla Completa --&gt;
+&lt;div class="modal-dialog modal-fullscreen"&gt;...&lt;/div&gt;
+
+&lt;!-- Fullscreen responsive (solo en ciertos breakpoints) --&gt;
+&lt;div class="modal-dialog modal-fullscreen-sm-down"&gt;...&lt;/div&gt;
+&lt;div class="modal-dialog modal-fullscreen-md-down"&gt;...&lt;/div&gt;
+&lt;div class="modal-dialog modal-fullscreen-lg-down"&gt;...&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- MODAL EJEMPLO 5: Login Modal -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-info me-2">5</span>Modal de Login</h5>
+                        
+                        <div class="preview-box">
+                            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                            </button>
+                        </div>
+
+                        <div class="modal fade" id="modalLogin" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body p-4">
+                                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
+                                        <div class="text-center mb-4">
+                                            <i class="bi bi-person-circle display-4 text-primary"></i>
+                                            <h4 class="mt-2">Bienvenido</h4>
+                                            <p class="text-muted">Inicia sesión para continuar</p>
+                                        </div>
+                                        <form>
+                                            <div class="mb-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                    <input type="email" class="form-control" placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                    <input type="password" class="form-control" placeholder="Contraseña">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="remember">
+                                                    <label class="form-check-label small" for="remember">Recordarme</label>
+                                                </div>
+                                                <a href="#" class="small">¿Olvidaste tu contraseña?</a>
+                                            </div>
+                                            <button class="btn btn-primary w-100 mb-3">Iniciar Sesión</button>
+                                            <div class="text-center">
+                                                <span class="text-muted small">¿No tienes cuenta?</span>
+                                                <a href="#" class="small">Regístrate</a>
+                                            </div>
+                                        </form>
+                                        <hr>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-dark"><i class="bi bi-google me-2"></i>Continuar con Google</button>
+                                            <button class="btn btn-outline-primary"><i class="bi bi-facebook me-2"></i>Continuar con Facebook</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- MODAL DE LOGIN COMPLETO --&gt;
+&lt;div class="modal fade" id="modalLogin" tabindex="-1"&gt;
+    &lt;div class="modal-dialog modal-dialog-centered"&gt;
+        &lt;div class="modal-content"&gt;
+            &lt;div class="modal-body p-4"&gt;
+                &lt;!-- Botón cerrar --&gt;
+                &lt;button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+                
+                &lt;!-- Header con icono --&gt;
+                &lt;div class="text-center mb-4"&gt;
+                    &lt;i class="bi bi-person-circle display-4 text-primary"&gt;&lt;/i&gt;
+                    &lt;h4 class="mt-2"&gt;Bienvenido&lt;/h4&gt;
+                    &lt;p class="text-muted"&gt;Inicia sesión para continuar&lt;/p&gt;
+                &lt;/div&gt;
+                
+                &lt;!-- Formulario --&gt;
+                &lt;form&gt;
+                    &lt;div class="mb-3"&gt;
+                        &lt;div class="input-group"&gt;
+                            &lt;span class="input-group-text"&gt;&lt;i class="bi bi-envelope"&gt;&lt;/i&gt;&lt;/span&gt;
+                            &lt;input type="email" class="form-control" placeholder="Email"&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="mb-3"&gt;
+                        &lt;div class="input-group"&gt;
+                            &lt;span class="input-group-text"&gt;&lt;i class="bi bi-lock"&gt;&lt;/i&gt;&lt;/span&gt;
+                            &lt;input type="password" class="form-control" placeholder="Contraseña"&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div class="d-flex justify-content-between mb-3"&gt;
+                        &lt;div class="form-check"&gt;
+                            &lt;input class="form-check-input" type="checkbox" id="remember"&gt;
+                            &lt;label class="form-check-label small"&gt;Recordarme&lt;/label&gt;
+                        &lt;/div&gt;
+                        &lt;a href="#" class="small"&gt;¿Olvidaste tu contraseña?&lt;/a&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;button class="btn btn-primary w-100 mb-3"&gt;Iniciar Sesión&lt;/button&gt;
+                    
+                    &lt;div class="text-center"&gt;
+                        &lt;span class="text-muted small"&gt;¿No tienes cuenta?&lt;/span&gt;
+                        &lt;a href="#"&gt;Regístrate&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/form&gt;
+                
+                &lt;hr&gt;
+                
+                &lt;!-- Login social --&gt;
+                &lt;div class="d-grid gap-2"&gt;
+                    &lt;button class="btn btn-outline-dark"&gt;
+                        &lt;i class="bi bi-google me-2"&gt;&lt;/i&gt;Continuar con Google
+                    &lt;/button&gt;
+                    &lt;button class="btn btn-outline-primary"&gt;
+                        &lt;i class="bi bi-facebook me-2"&gt;&lt;/i&gt;Continuar con Facebook
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ============================================
+                     SECCIÓN: ALERTAS - 5 EJEMPLOS
+                     ============================================ -->
+                <section id="alerts" class="component-section">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-exclamation-triangle me-2 text-primary"></i>Alertas - 5 Ejemplos
+                    </h2>
+
+                    <!-- ALERTAS EJEMPLO 1: Básicas -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-danger me-2">1</span>Alertas Básicas</h5>
+                        
+                        <div class="preview-box">
+                            <div class="alert alert-primary">Alerta Primary - Información general</div>
+                            <div class="alert alert-success">Alerta Success - Operación exitosa</div>
+                            <div class="alert alert-danger">Alerta Danger - Error crítico</div>
+                            <div class="alert alert-warning">Alerta Warning - Advertencia</div>
+                            <div class="alert alert-info">Alerta Info - Información útil</div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- ALERTAS BÁSICAS --&gt;
+&lt;div class="alert alert-primary"&gt;Alerta Primary - Información general&lt;/div&gt;
+&lt;div class="alert alert-secondary"&gt;Alerta Secondary&lt;/div&gt;
+&lt;div class="alert alert-success"&gt;Alerta Success - Operación exitosa&lt;/div&gt;
+&lt;div class="alert alert-danger"&gt;Alerta Danger - Error crítico&lt;/div&gt;
+&lt;div class="alert alert-warning"&gt;Alerta Warning - Advertencia&lt;/div&gt;
+&lt;div class="alert alert-info"&gt;Alerta Info - Información útil&lt;/div&gt;
+&lt;div class="alert alert-light"&gt;Alerta Light&lt;/div&gt;
+&lt;div class="alert alert-dark"&gt;Alerta Dark&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- ALERTAS EJEMPLO 2: Con iconos -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-danger me-2">2</span>Alertas con Iconos</h5>
+                        
+                        <div class="preview-box">
+                            <div class="alert alert-success d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                                <div>¡Éxito! Tu perfil ha sido actualizado correctamente.</div>
+                            </div>
+                            <div class="alert alert-danger d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                                <div>Error: No se pudo procesar tu solicitud. Intenta de nuevo.</div>
+                            </div>
+                            <div class="alert alert-warning d-flex align-items-center">
+                                <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                                <div>Advertencia: Tu sesión expirará en 5 minutos.</div>
+                            </div>
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                <div>Info: Hay actualizaciones disponibles para tu sistema.</div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- ALERTAS CON ICONOS --&gt;
+&lt;div class="alert alert-success d-flex align-items-center"&gt;
+    &lt;i class="bi bi-check-circle-fill me-2 fs-5"&gt;&lt;/i&gt;
+    &lt;div&gt;¡Éxito! Tu perfil ha sido actualizado correctamente.&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="alert alert-danger d-flex align-items-center"&gt;
+    &lt;i class="bi bi-exclamation-triangle-fill me-2 fs-5"&gt;&lt;/i&gt;
+    &lt;div&gt;Error: No se pudo procesar tu solicitud.&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="alert alert-warning d-flex align-items-center"&gt;
+    &lt;i class="bi bi-exclamation-circle-fill me-2 fs-5"&gt;&lt;/i&gt;
+    &lt;div&gt;Advertencia: Tu sesión expirará en 5 minutos.&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="alert alert-info d-flex align-items-center"&gt;
+    &lt;i class="bi bi-info-circle-fill me-2 fs-5"&gt;&lt;/i&gt;
+    &lt;div&gt;Info: Hay actualizaciones disponibles.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- ALERTAS EJEMPLO 3: Dismissible -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-danger me-2">3</span>Alertas Dismissible (Cerrables)</h5>
+                        
+                        <div class="preview-box">
+                            <div class="alert alert-warning alert-dismissible fade show">
+                                <strong>¡Atención!</strong> Este mensaje puede cerrarse haciendo clic en la X.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- ALERTA DISMISSIBLE (CERRABLE) --&gt;
+&lt;div class="alert alert-warning alert-dismissible fade show"&gt;
+    &lt;strong&gt;¡Atención!&lt;/strong&gt; Este mensaje puede cerrarse.
+    &lt;button type="button" class="btn-close" data-bs-dismiss="alert"&gt;&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Clases importantes:
+     - alert-dismissible: Agrega padding para el botón cerrar
+     - fade show: Animación al cerrar
+     - btn-close: Botón X estilizado
+     - data-bs-dismiss="alert": Cierra la alerta con JS
+--&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- ALERTAS EJEMPLO 4: Con contenido adicional -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-danger me-2">4</span>Alerta con Contenido Adicional</h5>
+                        
+                        <div class="preview-box">
+                            <div class="alert alert-success">
+                                <h4 class="alert-heading"><i class="bi bi-check-circle me-2"></i>¡Pago Completado!</h4>
+                                <p>Tu transacción se ha procesado correctamente. Recibirás un email de confirmación en los próximos minutos.</p>
+                                <hr>
+                                <p class="mb-0">
+                                    <strong>Número de orden:</strong> #ORD-2024-001234
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- ALERTA CON CONTENIDO ADICIONAL --&gt;
+&lt;div class="alert alert-success"&gt;
+    &lt;!-- Título --&gt;
+    &lt;h4 class="alert-heading"&gt;
+        &lt;i class="bi bi-check-circle me-2"&gt;&lt;/i&gt;¡Pago Completado!
+    &lt;/h4&gt;
+    
+    &lt;!-- Descripción --&gt;
+    &lt;p&gt;Tu transacción se ha procesado correctamente. Recibirás un email de confirmación.&lt;/p&gt;
+    
+    &lt;!-- Separador --&gt;
+    &lt;hr&gt;
+    
+    &lt;!-- Info adicional --&gt;
+    &lt;p class="mb-0"&gt;
+        &lt;strong&gt;Número de orden:&lt;/strong&gt; #ORD-2024-001234
+    &lt;/p&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+
+                    <!-- ALERTAS EJEMPLO 5: Con botones de acción -->
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-danger me-2">5</span>Alerta con Botones de Acción</h5>
+                        
+                        <div class="preview-box">
+                            <div class="alert alert-primary d-flex align-items-center justify-content-between">
+                                <div>
+                                    <i class="bi bi-gift me-2"></i>
+                                    <strong>¡Oferta especial!</strong> Usa el código DESCUENTO20 para 20% off.
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary btn-sm me-2">Aplicar</button>
+                                    <button class="btn btn-outline-primary btn-sm" data-bs-dismiss="alert">No gracias</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code>&lt;!-- ALERTA CON BOTONES DE ACCIÓN --&gt;
+&lt;div class="alert alert-primary d-flex align-items-center justify-content-between"&gt;
+    &lt;!-- Mensaje --&gt;
+    &lt;div&gt;
+        &lt;i class="bi bi-gift me-2"&gt;&lt;/i&gt;
+        &lt;strong&gt;¡Oferta especial!&lt;/strong&gt; Usa el código DESCUENTO20.
+    &lt;/div&gt;
+    
+    &lt;!-- Botones --&gt;
+    &lt;div&gt;
+        &lt;button class="btn btn-primary btn-sm me-2"&gt;Aplicar&lt;/button&gt;
+        &lt;button class="btn btn-outline-primary btn-sm" data-bs-dismiss="alert"&gt;No gracias&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Mensaje final -->
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-info-circle me-2"></i>¡Continúa explorando!</h5>
+                    <p class="mb-0">Hay más componentes disponibles en las otras secciones: Badges, Carousel, Accordion, Tabs, Offcanvas y más. ¡Navega por el menú lateral!</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">WebGuía Completa - Bootstrap 5 Components</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

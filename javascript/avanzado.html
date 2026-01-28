@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Avanzado - Patrones y Técnicas Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #0f0f23; color: #ccc; }
+        .hero-js {
+            background: linear-gradient(135deg, #f7df1e 0%, #d4a800 100%);
+            color: #000;
+            padding: 60px 0;
+        }
+        .code-block {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid #313244;
+        }
+        .code-block .comment { color: #6c7086; }
+        .code-block .keyword { color: #cba6f7; }
+        .code-block .string { color: #a6e3a1; }
+        .code-block .function { color: #89b4fa; }
+        .code-block .number { color: #fab387; }
+        .code-block .class { color: #f9e2af; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #cdd6f4;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .example-card {
+            background: #1e1e2e;
+            border-radius: 16px;
+            border: 1px solid #313244;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .example-header {
+            background: linear-gradient(135deg, #f7df1e, #d4a800);
+            color: #000;
+            padding: 20px;
+        }
+        .example-body { padding: 25px; }
+        .badge-advanced {
+            background: linear-gradient(135deg, #f38ba8, #eb6f92);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .nav-pills .nav-link {
+            color: #cdd6f4;
+            background: #313244;
+            margin-right: 5px;
+        }
+        .nav-pills .nav-link.active {
+            background: #f7df1e;
+            color: #000;
+        }
+        .output-box {
+            background: #11111b;
+            border: 1px solid #313244;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            color: #a6e3a1;
+        }
+        .run-btn {
+            background: #a6e3a1;
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .run-btn:hover { background: #94e2d5; color: #000; }
+        a { color: #89b4fa; }
+        a:hover { color: #b4befe; }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero-js">
+        <div class="container">
+            <a href="../index.html" class="btn btn-dark btn-sm mb-4">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la Guía
+            </a>
+            <span class="badge-advanced mb-3 d-inline-block">NIVEL AVANZADO</span>
+            <h1 class="display-4 fw-bold">JavaScript Avanzado</h1>
+            <p class="lead">Closures, Currying, Debounce/Throttle, Proxy, Web Workers y más</p>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        <!-- Índice -->
+        <div class="row mb-5 g-3">
+            <div class="col-lg-2 col-md-4 col-6">
+                <a href="#closures" class="btn btn-outline-warning w-100 py-2">Closures</a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <a href="#currying" class="btn btn-outline-warning w-100 py-2">Currying</a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <a href="#debounce" class="btn btn-outline-warning w-100 py-2">Debounce</a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <a href="#proxy" class="btn btn-outline-warning w-100 py-2">Proxy</a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <a href="#generators" class="btn btn-outline-warning w-100 py-2">Generators</a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <a href="#complete" class="btn btn-warning w-100 py-2">Completo</a>
+            </div>
+        </div>
+
+        <!-- ================================================
+             1. CLOSURES AVANZADOS
+             ================================================ -->
+        <section id="closures" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-box me-2"></i>1. Closures Avanzados</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Los closures permiten crear funciones con "memoria" privada. Muy útil para encapsulación.</p>
+                    
+                    <div class="code-block mb-4">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">// ====== CLOSURE BÁSICO: CONTADOR PRIVADO ======</span>
+<span class="keyword">function</span> <span class="function">createCounter</span>() {
+    <span class="keyword">let</span> count = <span class="number">0</span>; <span class="comment">// Variable privada</span>
+    
+    <span class="keyword">return</span> {
+        <span class="function">increment</span>() { <span class="keyword">return</span> ++count; },
+        <span class="function">decrement</span>() { <span class="keyword">return</span> --count; },
+        <span class="function">getCount</span>() { <span class="keyword">return</span> count; }
+    };
+}
+
+<span class="keyword">const</span> counter = <span class="function">createCounter</span>();
+counter.<span class="function">increment</span>(); <span class="comment">// 1</span>
+counter.<span class="function">increment</span>(); <span class="comment">// 2</span>
+counter.<span class="function">getCount</span>();  <span class="comment">// 2</span>
+<span class="comment">// count no es accesible directamente!</span>
+
+
+<span class="comment">// ====== CLOSURE AVANZADO: MEMOIZACIÓN ======</span>
+<span class="keyword">function</span> <span class="function">memoize</span>(fn) {
+    <span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="class">Map</span>(); <span class="comment">// Cache privado</span>
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> key = <span class="class">JSON</span>.<span class="function">stringify</span>(args);
+        
+        <span class="keyword">if</span> (cache.<span class="function">has</span>(key)) {
+            console.<span class="function">log</span>(<span class="string">'📦 Desde cache'</span>);
+            <span class="keyword">return</span> cache.<span class="function">get</span>(key);
+        }
+        
+        console.<span class="function">log</span>(<span class="string">'🔄 Calculando...'</span>);
+        <span class="keyword">const</span> result = fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        cache.<span class="function">set</span>(key, result);
+        <span class="keyword">return</span> result;
+    };
+}
+
+<span class="comment">// Uso: Función costosa con memoización</span>
+<span class="keyword">const</span> expensiveCalc = <span class="function">memoize</span>((n) => {
+    <span class="comment">// Simula cálculo pesado</span>
+    <span class="keyword">let</span> result = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < n * <span class="number">1000000</span>; i++) result += i;
+    <span class="keyword">return</span> result;
+});
+
+<span class="function">expensiveCalc</span>(<span class="number">10</span>); <span class="comment">// 🔄 Calculando... (lento)</span>
+<span class="function">expensiveCalc</span>(<span class="number">10</span>); <span class="comment">// 📦 Desde cache (instantáneo)</span>
+
+
+<span class="comment">// ====== CLOSURE: FUNCIÓN CON ESTADO ======</span>
+<span class="keyword">function</span> <span class="function">createRateLimiter</span>(limit, interval) {
+    <span class="keyword">let</span> calls = <span class="number">0</span>;
+    <span class="keyword">let</span> lastReset = <span class="class">Date</span>.<span class="function">now</span>();
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(fn) {
+        <span class="keyword">const</span> now = <span class="class">Date</span>.<span class="function">now</span>();
+        
+        <span class="comment">// Reset si pasó el intervalo</span>
+        <span class="keyword">if</span> (now - lastReset > interval) {
+            calls = <span class="number">0</span>;
+            lastReset = now;
+        }
+        
+        <span class="keyword">if</span> (calls < limit) {
+            calls++;
+            <span class="keyword">return</span> <span class="function">fn</span>();
+        } <span class="keyword">else</span> {
+            console.<span class="function">log</span>(<span class="string">'⚠️ Rate limit excedido'</span>);
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+    };
+}
+
+<span class="comment">// Permitir máximo 3 llamadas por segundo</span>
+<span class="keyword">const</span> limiter = <span class="function">createRateLimiter</span>(<span class="number">3</span>, <span class="number">1000</span>);
+<span class="function">limiter</span>(() => <span class="function">fetch</span>(<span class="string">'/api'</span>)); <span class="comment">// ✅</span>
+<span class="function">limiter</span>(() => <span class="function">fetch</span>(<span class="string">'/api'</span>)); <span class="comment">// ✅</span>
+<span class="function">limiter</span>(() => <span class="function">fetch</span>(<span class="string">'/api'</span>)); <span class="comment">// ✅</span>
+<span class="function">limiter</span>(() => <span class="function">fetch</span>(<span class="string">'/api'</span>)); <span class="comment">// ⚠️ Rate limit</span></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             2. CURRYING
+             ================================================ -->
+        <section id="currying" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-layers me-2"></i>2. Currying y Partial Application</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Transformar función de múltiples argumentos en secuencia de funciones de un argumento.</p>
+                    
+                    <div class="code-block mb-4">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">// ====== CURRYING BÁSICO ======</span>
+<span class="comment">// Sin currying</span>
+<span class="keyword">const</span> add = (a, b, c) => a + b + c;
+<span class="function">add</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// 6</span>
+
+<span class="comment">// Con currying</span>
+<span class="keyword">const</span> addCurried = a => b => c => a + b + c;
+<span class="function">addCurried</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>); <span class="comment">// 6</span>
+
+<span class="comment">// Ventaja: crear funciones especializadas</span>
+<span class="keyword">const</span> add5 = <span class="function">addCurried</span>(<span class="number">5</span>);
+<span class="keyword">const</span> add5and10 = <span class="function">add5</span>(<span class="number">10</span>);
+<span class="function">add5and10</span>(<span class="number">3</span>); <span class="comment">// 18</span>
+
+
+<span class="comment">// ====== CURRYING AUTOMÁTICO ======</span>
+<span class="keyword">function</span> <span class="function">curry</span>(fn) {
+    <span class="keyword">return</span> <span class="keyword">function</span> <span class="function">curried</span>(...args) {
+        <span class="keyword">if</span> (args.length >= fn.length) {
+            <span class="keyword">return</span> fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }
+        <span class="keyword">return</span> <span class="keyword">function</span>(...moreArgs) {
+            <span class="keyword">return</span> <span class="function">curried</span>.<span class="function">apply</span>(<span class="keyword">this</span>, args.<span class="function">concat</span>(moreArgs));
+        };
+    };
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> multiply = (a, b, c) => a * b * c;
+<span class="keyword">const</span> curriedMultiply = <span class="function">curry</span>(multiply);
+
+<span class="function">curriedMultiply</span>(<span class="number">2</span>)(<span class="number">3</span>)(<span class="number">4</span>);     <span class="comment">// 24</span>
+<span class="function">curriedMultiply</span>(<span class="number">2</span>, <span class="number">3</span>)(<span class="number">4</span>);    <span class="comment">// 24</span>
+<span class="function">curriedMultiply</span>(<span class="number">2</span>)(<span class="number">3</span>, <span class="number">4</span>);    <span class="comment">// 24</span>
+<span class="function">curriedMultiply</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);   <span class="comment">// 24</span>
+
+
+<span class="comment">// ====== EJEMPLO PRÁCTICO: API CALLS ======</span>
+<span class="keyword">const</span> api = <span class="function">curry</span>((baseUrl, endpoint, params) => {
+    <span class="keyword">const</span> url = <span class="string">`<span class="keyword">${</span>baseUrl<span class="keyword">}</span><span class="keyword">${</span>endpoint<span class="keyword">}</span>?<span class="keyword">${</span><span class="keyword">new</span> <span class="class">URLSearchParams</span>(params)<span class="keyword">}</span>`</span>;
+    <span class="keyword">return</span> <span class="function">fetch</span>(url).<span class="function">then</span>(r => r.<span class="function">json</span>());
+});
+
+<span class="comment">// Crear funciones especializadas</span>
+<span class="keyword">const</span> myApi = <span class="function">api</span>(<span class="string">'https://api.ejemplo.com'</span>);
+<span class="keyword">const</span> getUsers = <span class="function">myApi</span>(<span class="string">'/users'</span>);
+<span class="keyword">const</span> getProducts = <span class="function">myApi</span>(<span class="string">'/products'</span>);
+
+<span class="comment">// Uso final</span>
+<span class="function">getUsers</span>({ page: <span class="number">1</span>, limit: <span class="number">10</span> });
+<span class="function">getProducts</span>({ category: <span class="string">'electronics'</span> });
+
+
+<span class="comment">// ====== EJEMPLO: VALIDADORES ======</span>
+<span class="keyword">const</span> validate = <span class="function">curry</span>((regex, errorMsg, value) => {
+    <span class="keyword">return</span> regex.<span class="function">test</span>(value) 
+        ? { valid: <span class="keyword">true</span>, value } 
+        : { valid: <span class="keyword">false</span>, error: errorMsg };
+});
+
+<span class="comment">// Crear validadores específicos</span>
+<span class="keyword">const</span> isEmail = <span class="function">validate</span>(
+    <span class="string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>,
+    <span class="string">'Email inválido'</span>
+);
+
+<span class="keyword">const</span> isPhone = <span class="function">validate</span>(
+    <span class="string">/^\+?[0-9]{10,14}$/</span>,
+    <span class="string">'Teléfono inválido'</span>
+);
+
+<span class="function">isEmail</span>(<span class="string">'test@mail.com'</span>); <span class="comment">// { valid: true, value: 'test@mail.com' }</span>
+<span class="function">isPhone</span>(<span class="string">'123'</span>);           <span class="comment">// { valid: false, error: 'Teléfono inválido' }</span></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             3. DEBOUNCE Y THROTTLE
+             ================================================ -->
+        <section id="debounce" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-speedometer me-2"></i>3. Debounce y Throttle</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Controlar la frecuencia de ejecución de funciones. Esencial para optimizar rendimiento.</p>
+                    
+                    <div class="code-block mb-4">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">// ====== DEBOUNCE ======</span>
+<span class="comment">// Espera a que el usuario DEJE de hacer algo antes de ejecutar</span>
+<span class="comment">// Uso: búsqueda en tiempo real, resize, scroll</span>
+
+<span class="keyword">function</span> <span class="function">debounce</span>(func, delay) {
+    <span class="keyword">let</span> timeoutId;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="comment">// Cancelar timeout anterior</span>
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        <span class="comment">// Crear nuevo timeout</span>
+        timeoutId = <span class="function">setTimeout</span>(() => {
+            func.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }, delay);
+    };
+}
+
+<span class="comment">// Ejemplo: Búsqueda</span>
+<span class="keyword">const</span> searchInput = document.<span class="function">getElementById</span>(<span class="string">'search'</span>);
+<span class="keyword">const</span> debouncedSearch = <span class="function">debounce</span>((query) => {
+    console.<span class="function">log</span>(<span class="string">'🔍 Buscando:'</span>, query);
+    <span class="comment">// fetch(`/api/search?q=${query}`)</span>
+}, <span class="number">300</span>);
+
+searchInput.<span class="function">addEventListener</span>(<span class="string">'input'</span>, (e) => {
+    <span class="function">debouncedSearch</span>(e.target.value);
+});
+
+
+<span class="comment">// ====== DEBOUNCE AVANZADO (con opciones) ======</span>
+<span class="keyword">function</span> <span class="function">debounceAdvanced</span>(func, delay, { leading = <span class="keyword">false</span>, trailing = <span class="keyword">true</span> } = {}) {
+    <span class="keyword">let</span> timeoutId;
+    <span class="keyword">let</span> lastArgs;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> shouldCallNow = leading && !timeoutId;
+        lastArgs = args;
+        
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        timeoutId = <span class="function">setTimeout</span>(() => {
+            timeoutId = <span class="keyword">null</span>;
+            <span class="keyword">if</span> (trailing && lastArgs) {
+                func.<span class="function">apply</span>(<span class="keyword">this</span>, lastArgs);
+            }
+        }, delay);
+        
+        <span class="keyword">if</span> (shouldCallNow) {
+            func.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }
+    };
+}
+
+
+<span class="comment">// ====== THROTTLE ======</span>
+<span class="comment">// Ejecuta máximo una vez cada X tiempo</span>
+<span class="comment">// Uso: scroll, mousemove, resize</span>
+
+<span class="keyword">function</span> <span class="function">throttle</span>(func, limit) {
+    <span class="keyword">let</span> inThrottle;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">if</span> (!inThrottle) {
+            func.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+            inThrottle = <span class="keyword">true</span>;
+            
+            <span class="function">setTimeout</span>(() => {
+                inThrottle = <span class="keyword">false</span>;
+            }, limit);
+        }
+    };
+}
+
+<span class="comment">// Ejemplo: Scroll infinito</span>
+<span class="keyword">const</span> throttledScroll = <span class="function">throttle</span>(() => {
+    <span class="keyword">const</span> { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    
+    <span class="keyword">if</span> (scrollTop + clientHeight >= scrollHeight - <span class="number">100</span>) {
+        console.<span class="function">log</span>(<span class="string">'📄 Cargar más contenido...'</span>);
+        <span class="comment">// loadMoreContent();</span>
+    }
+}, <span class="number">200</span>);
+
+window.<span class="function">addEventListener</span>(<span class="string">'scroll'</span>, throttledScroll);
+
+
+<span class="comment">// ====== COMPARACIÓN VISUAL ======</span>
+<span class="comment">/*
+Usuario escribe: h-e-l-l-o (cada 100ms)
+
+DEBOUNCE (300ms):
+h [espera] e [espera] l [espera] l [espera] o [300ms] → EJECUTA "hello"
+
+THROTTLE (300ms):
+h → EJECUTA "h" [bloquea 300ms] l [bloquea] o → EJECUTA "hello"
+*/</span></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             4. PROXY
+             ================================================ -->
+        <section id="proxy" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-shield me-2"></i>4. Proxy y Reflect</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Interceptar operaciones en objetos. Muy poderoso para validación, logging, y reactividad.</p>
+                    
+                    <div class="code-block mb-4">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">// ====== PROXY BÁSICO ======</span>
+<span class="keyword">const</span> target = { name: <span class="string">'Juan'</span>, age: <span class="number">30</span> };
+
+<span class="keyword">const</span> handler = {
+    <span class="comment">// Interceptar lectura</span>
+    <span class="function">get</span>(obj, prop) {
+        console.<span class="function">log</span>(<span class="string">`📖 Leyendo ${prop}`</span>);
+        <span class="keyword">return</span> obj[prop];
+    },
+    
+    <span class="comment">// Interceptar escritura</span>
+    <span class="function">set</span>(obj, prop, value) {
+        console.<span class="function">log</span>(<span class="string">`✏️ Escribiendo ${prop} = ${value}`</span>);
+        obj[prop] = value;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+};
+
+<span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="class">Proxy</span>(target, handler);
+proxy.name;       <span class="comment">// 📖 Leyendo name → "Juan"</span>
+proxy.age = <span class="number">31</span>;   <span class="comment">// ✏️ Escribiendo age = 31</span>
+
+
+<span class="comment">// ====== PROXY: VALIDACIÓN AUTOMÁTICA ======</span>
+<span class="keyword">function</span> <span class="function">createValidatedObject</span>(schema) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">Proxy</span>({}, {
+        <span class="function">set</span>(obj, prop, value) {
+            <span class="keyword">const</span> validator = schema[prop];
+            
+            <span class="keyword">if</span> (!validator) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class">Error</span>(<span class="string">`❌ Propiedad '${prop}' no permitida`</span>);
+            }
+            
+            <span class="keyword">if</span> (!validator(value)) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class">Error</span>(<span class="string">`❌ Valor inválido para '${prop}'`</span>);
+            }
+            
+            obj[prop] = value;
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+    });
+}
+
+<span class="comment">// Schema de validación</span>
+<span class="keyword">const</span> userSchema = {
+    name: (v) => <span class="keyword">typeof</span> v === <span class="string">'string'</span> && v.length >= <span class="number">2</span>,
+    age: (v) => <span class="keyword">typeof</span> v === <span class="string">'number'</span> && v >= <span class="number">0</span> && v <= <span class="number">120</span>,
+    email: (v) => <span class="string">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.<span class="function">test</span>(v)
+};
+
+<span class="keyword">const</span> user = <span class="function">createValidatedObject</span>(userSchema);
+user.name = <span class="string">'Ana'</span>;           <span class="comment">// ✅ OK</span>
+user.age = <span class="number">25</span>;              <span class="comment">// ✅ OK</span>
+user.email = <span class="string">'ana@mail.com'</span>; <span class="comment">// ✅ OK</span>
+user.age = <span class="number">-5</span>;              <span class="comment">// ❌ Error: Valor inválido</span>
+user.phone = <span class="string">'123'</span>;         <span class="comment">// ❌ Error: Propiedad no permitida</span>
+
+
+<span class="comment">// ====== PROXY: SISTEMA REACTIVO (como Vue) ======</span>
+<span class="keyword">function</span> <span class="function">reactive</span>(obj, onChange) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">Proxy</span>(obj, {
+        <span class="function">set</span>(target, prop, value) {
+            <span class="keyword">const</span> oldValue = target[prop];
+            target[prop] = value;
+            
+            <span class="keyword">if</span> (oldValue !== value) {
+                <span class="function">onChange</span>(prop, value, oldValue);
+            }
+            
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+    });
+}
+
+<span class="comment">// Uso: Actualizar DOM automáticamente</span>
+<span class="keyword">const</span> state = <span class="function">reactive</span>(
+    { count: <span class="number">0</span>, name: <span class="string">'Producto'</span> },
+    (prop, newVal, oldVal) => {
+        console.<span class="function">log</span>(<span class="string">`🔄 ${prop}: ${oldVal} → ${newVal}`</span>);
+        <span class="comment">// Actualizar DOM</span>
+        document.<span class="function">querySelector</span>(<span class="string">`[data-bind="${prop}"]`</span>).textContent = newVal;
+    }
+);
+
+state.count++;    <span class="comment">// 🔄 count: 0 → 1 (DOM actualizado)</span>
+state.count++;    <span class="comment">// 🔄 count: 1 → 2 (DOM actualizado)</span>
+
+
+<span class="comment">// ====== PROXY: CACHÉ AUTOMÁTICO ======</span>
+<span class="keyword">function</span> <span class="function">createCachedObject</span>(fetchFn) {
+    <span class="keyword">const</span> cache = {};
+    
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">Proxy</span>({}, {
+        <span class="keyword">async</span> <span class="function">get</span>(_, prop) {
+            <span class="keyword">if</span> (!(prop <span class="keyword">in</span> cache)) {
+                cache[prop] = <span class="keyword">await</span> <span class="function">fetchFn</span>(prop);
+            }
+            <span class="keyword">return</span> cache[prop];
+        }
+    });
+}
+
+<span class="keyword">const</span> users = <span class="function">createCachedObject</span>(<span class="keyword">async</span> (id) => {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${id}`</span>);
+    <span class="keyword">return</span> res.<span class="function">json</span>();
+});
+
+<span class="keyword">await</span> users[<span class="number">1</span>]; <span class="comment">// Fetch /api/users/1</span>
+<span class="keyword">await</span> users[<span class="number">1</span>]; <span class="comment">// Desde cache (instantáneo)</span></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             5. GENERATORS
+             ================================================ -->
+        <section id="generators" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-arrow-repeat me-2"></i>5. Generators e Iteradores</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Funciones que pueden pausar y resumir su ejecución. Útil para secuencias infinitas y control de flujo.</p>
+                    
+                    <div class="code-block mb-4">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">// ====== GENERATOR BÁSICO ======</span>
+<span class="keyword">function</span>* <span class="function">numberGenerator</span>() {
+    <span class="keyword">yield</span> <span class="number">1</span>;
+    <span class="keyword">yield</span> <span class="number">2</span>;
+    <span class="keyword">yield</span> <span class="number">3</span>;
+}
+
+<span class="keyword">const</span> gen = <span class="function">numberGenerator</span>();
+gen.<span class="function">next</span>(); <span class="comment">// { value: 1, done: false }</span>
+gen.<span class="function">next</span>(); <span class="comment">// { value: 2, done: false }</span>
+gen.<span class="function">next</span>(); <span class="comment">// { value: 3, done: false }</span>
+gen.<span class="function">next</span>(); <span class="comment">// { value: undefined, done: true }</span>
+
+
+<span class="comment">// ====== GENERATOR: SECUENCIA INFINITA ======</span>
+<span class="keyword">function</span>* <span class="function">idGenerator</span>(prefix = <span class="string">'ID'</span>) {
+    <span class="keyword">let</span> id = <span class="number">1</span>;
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">yield</span> <span class="string">`${prefix}-${id++}`</span>;
+    }
+}
+
+<span class="keyword">const</span> userIdGen = <span class="function">idGenerator</span>(<span class="string">'USR'</span>);
+userIdGen.<span class="function">next</span>().value; <span class="comment">// "USR-1"</span>
+userIdGen.<span class="function">next</span>().value; <span class="comment">// "USR-2"</span>
+userIdGen.<span class="function">next</span>().value; <span class="comment">// "USR-3"</span>
+
+
+<span class="comment">// ====== GENERATOR: FIBONACCI ======</span>
+<span class="keyword">function</span>* <span class="function">fibonacci</span>() {
+    <span class="keyword">let</span> [prev, curr] = [<span class="number">0</span>, <span class="number">1</span>];
+    
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">yield</span> curr;
+        [prev, curr] = [curr, prev + curr];
+    }
+}
+
+<span class="keyword">const</span> fib = <span class="function">fibonacci</span>();
+<span class="comment">// Obtener primeros 10 números de Fibonacci</span>
+<span class="keyword">const</span> first10 = <span class="class">Array</span>.<span class="function">from</span>({ length: <span class="number">10</span> }, () => fib.<span class="function">next</span>().value);
+<span class="comment">// [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</span>
+
+
+<span class="comment">// ====== GENERATOR: PAGINACIÓN ======</span>
+<span class="keyword">async function</span>* <span class="function">fetchPages</span>(url, totalPages) {
+    <span class="keyword">for</span> (<span class="keyword">let</span> page = <span class="number">1</span>; page <= totalPages; page++) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${url}?page=${page}`</span>);
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">yield</span> data;
+    }
+}
+
+<span class="comment">// Uso con for-await-of</span>
+<span class="keyword">async function</span> <span class="function">getAllUsers</span>() {
+    <span class="keyword">const</span> allUsers = [];
+    
+    <span class="keyword">for await</span> (<span class="keyword">const</span> page <span class="keyword">of</span> <span class="function">fetchPages</span>(<span class="string">'/api/users'</span>, <span class="number">5</span>)) {
+        allUsers.<span class="function">push</span>(...page.users);
+        console.<span class="function">log</span>(<span class="string">`📄 Página cargada: ${page.currentPage}`</span>);
+    }
+    
+    <span class="keyword">return</span> allUsers;
+}
+
+
+<span class="comment">// ====== GENERATOR: CONTROL DE FLUJO ======</span>
+<span class="keyword">function</span>* <span class="function">taskRunner</span>(tasks) {
+    <span class="keyword">for</span> (<span class="keyword">const</span> task <span class="keyword">of</span> tasks) {
+        console.<span class="function">log</span>(<span class="string">`🚀 Ejecutando: ${task.name}`</span>);
+        <span class="keyword">const</span> result = <span class="keyword">yield</span> task.<span class="function">execute</span>();
+        console.<span class="function">log</span>(<span class="string">`✅ Completado: ${task.name}`</span>);
+    }
+}
+
+<span class="keyword">const</span> tasks = [
+    { name: <span class="string">'Tarea 1'</span>, execute: () => <span class="class">Promise</span>.<span class="function">resolve</span>(<span class="string">'Resultado 1'</span>) },
+    { name: <span class="string">'Tarea 2'</span>, execute: () => <span class="class">Promise</span>.<span class="function">resolve</span>(<span class="string">'Resultado 2'</span>) }
+];
+
+<span class="comment">// Ejecutar con control manual</span>
+<span class="keyword">async function</span> <span class="function">runTasks</span>() {
+    <span class="keyword">const</span> runner = <span class="function">taskRunner</span>(tasks);
+    <span class="keyword">let</span> result = runner.<span class="function">next</span>();
+    
+    <span class="keyword">while</span> (!result.done) {
+        <span class="keyword">const</span> taskResult = <span class="keyword">await</span> result.value;
+        result = runner.<span class="function">next</span>(taskResult);
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             6. EJEMPLO COMPLETO
+             ================================================ -->
+        <section id="complete" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-star-fill me-2"></i>6. Ejemplo Completo: Estado Reactivo con Todo</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Combinando Proxy, Closure, Debounce para crear un mini sistema de estado reactivo.</p>
+                    
+                    <div class="code-block" style="max-height: 600px;">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * MINI STORE REACTIVO
+ * Combina: Proxy, Closure, Debounce, Observer Pattern
+ */</span>
+
+<span class="keyword">class</span> <span class="class">MiniStore</span> {
+    <span class="function">constructor</span>(initialState = {}) {
+        <span class="keyword">this</span>._state = initialState;
+        <span class="keyword">this</span>._subscribers = <span class="keyword">new</span> <span class="class">Set</span>();
+        <span class="keyword">this</span>._history = [];
+        
+        <span class="comment">// Debounce para notificaciones</span>
+        <span class="keyword">this</span>._notifyDebounced = <span class="keyword">this</span>.<span class="function">_debounce</span>(
+            () => <span class="keyword">this</span>.<span class="function">_notifyAll</span>(),
+            <span class="number">10</span>
+        );
+        
+        <span class="comment">// Crear proxy reactivo</span>
+        <span class="keyword">this</span>.state = <span class="keyword">this</span>.<span class="function">_createProxy</span>(<span class="keyword">this</span>._state);
+    }
+    
+    <span class="comment">// Debounce interno</span>
+    <span class="function">_debounce</span>(fn, delay) {
+        <span class="keyword">let</span> timeout;
+        <span class="keyword">return</span> (...args) => {
+            <span class="function">clearTimeout</span>(timeout);
+            timeout = <span class="function">setTimeout</span>(() => fn(...args), delay);
+        };
+    }
+    
+    <span class="comment">// Crear Proxy recursivo</span>
+    <span class="function">_createProxy</span>(obj) {
+        <span class="keyword">const</span> self = <span class="keyword">this</span>;
+        
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="class">Proxy</span>(obj, {
+            <span class="function">get</span>(target, prop) {
+                <span class="keyword">const</span> value = target[prop];
+                <span class="comment">// Proxy recursivo para objetos anidados</span>
+                <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">'object'</span> && value !== <span class="keyword">null</span>) {
+                    <span class="keyword">return</span> self.<span class="function">_createProxy</span>(value);
+                }
+                <span class="keyword">return</span> value;
+            },
+            
+            <span class="function">set</span>(target, prop, value) {
+                <span class="keyword">const</span> oldValue = target[prop];
+                
+                <span class="keyword">if</span> (oldValue !== value) {
+                    <span class="comment">// Guardar en historial</span>
+                    self._history.<span class="function">push</span>({
+                        prop,
+                        oldValue,
+                        newValue: value,
+                        timestamp: <span class="class">Date</span>.<span class="function">now</span>()
+                    });
+                    
+                    target[prop] = value;
+                    self.<span class="function">_notifyDebounced</span>();
+                }
+                
+                <span class="keyword">return</span> <span class="keyword">true</span>;
+            }
+        });
+    }
+    
+    <span class="comment">// Suscribirse a cambios</span>
+    <span class="function">subscribe</span>(callback) {
+        <span class="keyword">this</span>._subscribers.<span class="function">add</span>(callback);
+        
+        <span class="comment">// Retornar función para desuscribirse (closure)</span>
+        <span class="keyword">return</span> () => {
+            <span class="keyword">this</span>._subscribers.<span class="function">delete</span>(callback);
+        };
+    }
+    
+    <span class="comment">// Notificar a todos los suscriptores</span>
+    <span class="function">_notifyAll</span>() {
+        <span class="keyword">this</span>._subscribers.<span class="function">forEach</span>(cb => <span class="function">cb</span>(<span class="keyword">this</span>._state));
+    }
+    
+    <span class="comment">// Obtener historial de cambios</span>
+    <span class="function">getHistory</span>() {
+        <span class="keyword">return</span> [...<span class="keyword">this</span>._history];
+    }
+    
+    <span class="comment">// Deshacer último cambio</span>
+    <span class="function">undo</span>() {
+        <span class="keyword">const</span> last = <span class="keyword">this</span>._history.<span class="function">pop</span>();
+        <span class="keyword">if</span> (last) {
+            <span class="keyword">this</span>._state[last.prop] = last.oldValue;
+            <span class="keyword">this</span>.<span class="function">_notifyAll</span>();
+        }
+    }
+}
+
+
+<span class="comment">// ====== USO DEL STORE ======</span>
+<span class="keyword">const</span> store = <span class="keyword">new</span> <span class="class">MiniStore</span>({
+    user: { name: <span class="string">'Juan'</span>, age: <span class="number">30</span> },
+    cart: [],
+    theme: <span class="string">'light'</span>
+});
+
+<span class="comment">// Suscribirse a cambios</span>
+<span class="keyword">const</span> unsubscribe = store.<span class="function">subscribe</span>((state) => {
+    console.<span class="function">log</span>(<span class="string">'🔄 Estado actualizado:'</span>, state);
+    <span class="comment">// Actualizar UI aquí</span>
+});
+
+<span class="comment">// Modificar estado (automáticamente reactivo)</span>
+store.state.user.name = <span class="string">'María'</span>;      <span class="comment">// 🔄 Notifica</span>
+store.state.theme = <span class="string">'dark'</span>;            <span class="comment">// 🔄 Notifica</span>
+store.state.cart.<span class="function">push</span>({ id: <span class="number">1</span> });      <span class="comment">// 🔄 Notifica</span>
+
+<span class="comment">// Ver historial</span>
+console.<span class="function">log</span>(store.<span class="function">getHistory</span>());
+
+<span class="comment">// Deshacer</span>
+store.<span class="function">undo</span>(); <span class="comment">// Vuelve theme a 'light'</span>
+
+<span class="comment">// Desuscribirse</span>
+<span class="function">unsubscribe</span>();</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="dom.html" class="btn btn-outline-warning">
+                <i class="bi bi-arrow-left me-2"></i>JavaScript Básico
+            </a>
+            <a href="../apis/avanzado.html" class="btn btn-warning text-dark">
+                APIs Avanzado <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerHTML = '<i class="bi bi-check2"></i> Copiado!';
+            setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard"></i>', 2000);
+        }
+    </script>
+</body>
+</html>

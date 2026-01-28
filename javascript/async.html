@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await y Promesas - JavaScript Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d9ff, #00ff88, #ff00ff);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .comment { color: #6272a4; font-style: italic; }
+        .code-block .await { color: #ffb86c; }
+        .code-block .promise { color: #ff5555; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .btn-copy:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .concept-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #00d9ff;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #00d9ff 0%, #00ff88 100%);
+            color: #1a1a2e;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #00d9ff, #00ff88);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 1rem 0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            width: 12px;
+            height: 12px;
+            background: #00d9ff;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(0,217,255,0.5);
+        }
+        
+        .output-demo {
+            background: #1a1a2e;
+            color: #50fa7b;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .comparison-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="dom.html">DOM</a></li>
+                    <li class="nav-item"><a class="nav-link" href="eventos.html">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="arrays-objetos.html">Arrays/Objetos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="funciones.html">Funciones</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="async.html">Async</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="section-header text-center mb-5 mx-3 mx-md-5 mt-4">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-hourglass-split me-3"></i>Async/Await y Promesas
+        </h1>
+        <p class="lead mb-0">
+            Domina la programación asíncrona en JavaScript
+        </p>
+    </section>
+
+    <div class="container py-4">
+        <!-- Índice -->
+        <div class="card mb-5">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-list-ol me-2"></i>Contenidos
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><a href="#sincrono-asincrono">1. Síncrono vs Asíncrono</a></li>
+                            <li><a href="#callbacks">2. Callbacks (Repaso)</a></li>
+                            <li><a href="#promesas-basico">3. Promesas - Básico</a></li>
+                            <li><a href="#promesas-metodos">4. Métodos de Promise</a></li>
+                            <li><a href="#encadenamiento">5. Encadenamiento</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><a href="#async-await">6. Async/Await</a></li>
+                            <li><a href="#manejo-errores">7. Manejo de Errores</a></li>
+                            <li><a href="#paralelo">8. Ejecución en Paralelo</a></li>
+                            <li><a href="#fetch-api">9. Fetch API</a></li>
+                            <li><a href="#ejemplos-reales">10. Ejemplos Reales</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Síncrono vs Asíncrono -->
+        <section id="sincrono-asincrono" class="concept-card">
+            <h4><span class="badge bg-info me-2">1</span>Síncrono vs Asíncrono</h4>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5 class="text-success"><i class="bi bi-arrow-down me-2"></i>Síncrono</h5>
+                    <p>Las operaciones se ejecutan una tras otra, bloqueando el hilo principal.</p>
+                    <div class="timeline">
+                        <div class="timeline-item">Tarea 1 (completa)</div>
+                        <div class="timeline-item">Tarea 2 (completa)</div>
+                        <div class="timeline-item">Tarea 3 (completa)</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="text-primary"><i class="bi bi-shuffle me-2"></i>Asíncrono</h5>
+                    <p>Las operaciones pueden ejecutarse sin bloquear. El código continúa.</p>
+                    <div class="timeline">
+                        <div class="timeline-item">Tarea 1 (inicia)</div>
+                        <div class="timeline-item">Tarea 2 (inicia mientras 1 espera)</div>
+                        <div class="timeline-item">Tarea 1 (completa)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CÓDIGO SÍNCRONO</span>
+<span class="comment">// ========================================</span>
+
+console.<span class="function">log</span>(<span class="string">'1. Inicio'</span>);
+console.<span class="function">log</span>(<span class="string">'2. Proceso'</span>);
+console.<span class="function">log</span>(<span class="string">'3. Fin'</span>);
+<span class="comment">// Salida: 1, 2, 3 (en orden)</span>
+
+<span class="comment">// ========================================</span>
+<span class="comment">// CÓDIGO ASÍNCRONO</span>
+<span class="comment">// ========================================</span>
+
+console.<span class="function">log</span>(<span class="string">'1. Inicio'</span>);
+
+<span class="function">setTimeout</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'2. Proceso (después de 2 segundos)'</span>);
+}, <span class="number">2000</span>);
+
+console.<span class="function">log</span>(<span class="string">'3. Fin'</span>);
+
+<span class="comment">// Salida: 1, 3, 2</span>
+<span class="comment">// El código NO espera al setTimeout</span>
+
+<span class="comment">// ========================================</span>
+<span class="comment">// OPERACIONES ASÍNCRONAS COMUNES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// - setTimeout, setInterval</span>
+<span class="comment">// - Peticiones HTTP (fetch, XMLHttpRequest)</span>
+<span class="comment">// - Lectura/escritura de archivos</span>
+<span class="comment">// - Acceso a bases de datos</span>
+<span class="comment">// - Eventos del DOM</span>
+<span class="comment">// - Geolocalización</span>
+
+<span class="comment">// El Event Loop maneja las operaciones asíncronas</span>
+console.<span class="function">log</span>(<span class="string">'Sync 1'</span>);
+
+<span class="function">setTimeout</span>(() => console.<span class="function">log</span>(<span class="string">'Timeout'</span>), <span class="number">0</span>); <span class="comment">// Aunque sea 0ms</span>
+
+Promise.<span class="function">resolve</span>().<span class="function">then</span>(() => console.<span class="function">log</span>(<span class="string">'Promise'</span>));
+
+console.<span class="function">log</span>(<span class="string">'Sync 2'</span>);
+
+<span class="comment">// Salida: Sync 1, Sync 2, Promise, Timeout</span>
+<span class="comment">// Las microtareas (Promises) tienen prioridad sobre macrotareas (setTimeout)</span></pre>
+            </div>
+        </section>
+
+        <!-- 2. Callbacks -->
+        <section id="callbacks" class="concept-card">
+            <h4><span class="badge bg-info me-2">2</span>Callbacks (El Problema)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CALLBACKS - LA FORMA ANTIGUA</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Simulamos operaciones asíncronas</span>
+<span class="keyword">function</span> <span class="function">obtenerUsuario</span>(id, callback) {
+    <span class="function">setTimeout</span>(() => {
+        <span class="keyword">const</span> usuario = { id, nombre: <span class="string">'Ana'</span>, email: <span class="string">'ana@email.com'</span> };
+        <span class="function">callback</span>(<span class="keyword">null</span>, usuario);
+    }, <span class="number">1000</span>);
+}
+
+<span class="keyword">function</span> <span class="function">obtenerPedidos</span>(usuarioId, callback) {
+    <span class="function">setTimeout</span>(() => {
+        <span class="keyword">const</span> pedidos = [{ id: <span class="number">1</span>, producto: <span class="string">'Laptop'</span> }, { id: <span class="number">2</span>, producto: <span class="string">'Mouse'</span> }];
+        <span class="function">callback</span>(<span class="keyword">null</span>, pedidos);
+    }, <span class="number">1000</span>);
+}
+
+<span class="keyword">function</span> <span class="function">obtenerDetalles</span>(pedidoId, callback) {
+    <span class="function">setTimeout</span>(() => {
+        <span class="keyword">const</span> detalles = { precio: <span class="number">1000</span>, enviado: <span class="keyword">true</span> };
+        <span class="function">callback</span>(<span class="keyword">null</span>, detalles);
+    }, <span class="number">1000</span>);
+}
+
+<span class="comment">// CALLBACK HELL (Pirámide de la perdición)</span>
+<span class="function">obtenerUsuario</span>(<span class="number">1</span>, (error, usuario) => {
+    <span class="keyword">if</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error obteniendo usuario'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    console.<span class="function">log</span>(<span class="string">'Usuario:'</span>, usuario.nombre);
+    
+    <span class="function">obtenerPedidos</span>(usuario.id, (error, pedidos) => {
+        <span class="keyword">if</span> (error) {
+            console.<span class="function">error</span>(<span class="string">'Error obteniendo pedidos'</span>);
+            <span class="keyword">return</span>;
+        }
+        
+        console.<span class="function">log</span>(<span class="string">'Pedidos:'</span>, pedidos.length);
+        
+        <span class="function">obtenerDetalles</span>(pedidos[<span class="number">0</span>].id, (error, detalles) => {
+            <span class="keyword">if</span> (error) {
+                console.<span class="function">error</span>(<span class="string">'Error obteniendo detalles'</span>);
+                <span class="keyword">return</span>;
+            }
+            
+            console.<span class="function">log</span>(<span class="string">'Detalles:'</span>, detalles);
+            
+            <span class="comment">// Y podría seguir...</span>
+            <span class="comment">// Esto se vuelve IMPOSIBLE de mantener</span>
+        });
+    });
+});
+
+<span class="comment">// Problemas del Callback Hell:</span>
+<span class="comment">// 1. Difícil de leer y entender</span>
+<span class="comment">// 2. Manejo de errores repetitivo</span>
+<span class="comment">// 3. Difícil de depurar</span>
+<span class="comment">// 4. No se puede usar try/catch</span></pre>
+            </div>
+        </section>
+
+        <!-- 3. Promesas Básico -->
+        <section id="promesas-basico" class="concept-card">
+            <h4><span class="badge bg-success me-2">3</span>Promesas - Conceptos Básicos</h4>
+            <p>Una Promise representa un valor que puede estar disponible ahora, en el futuro, o nunca.</p>
+            
+            <div class="alert alert-info">
+                <h6 class="mb-2"><i class="bi bi-info-circle me-2"></i>Estados de una Promise</h6>
+                <ul class="mb-0">
+                    <li><strong>Pending:</strong> Estado inicial, ni cumplida ni rechazada</li>
+                    <li><strong>Fulfilled:</strong> La operación se completó exitosamente</li>
+                    <li><strong>Rejected:</strong> La operación falló</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CREAR PROMESAS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Sintaxis básica</span>
+<span class="keyword">const</span> miPromesa = <span class="keyword">new</span> <span class="promise">Promise</span>((resolve, reject) => {
+    <span class="comment">// Código asíncrono aquí</span>
+    <span class="keyword">const</span> exito = <span class="keyword">true</span>;
+    
+    <span class="keyword">if</span> (exito) {
+        <span class="function">resolve</span>(<span class="string">'¡Operación exitosa!'</span>); <span class="comment">// Cumplida</span>
+    } <span class="keyword">else</span> {
+        <span class="function">reject</span>(<span class="string">'Algo salió mal'</span>); <span class="comment">// Rechazada</span>
+    }
+});
+
+<span class="comment">// Consumir la promesa</span>
+miPromesa
+    .<span class="function">then</span>(resultado => {
+        console.<span class="function">log</span>(<span class="string">'Éxito:'</span>, resultado);
+    })
+    .<span class="function">catch</span>(error => {
+        console.<span class="function">error</span>(<span class="string">'Error:'</span>, error);
+    })
+    .<span class="function">finally</span>(() => {
+        console.<span class="function">log</span>(<span class="string">'Siempre se ejecuta'</span>);
+    });
+
+<span class="comment">// Ejemplo práctico: Simular petición</span>
+<span class="keyword">function</span> <span class="function">obtenerUsuario</span>(id) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>((resolve, reject) => {
+        <span class="function">setTimeout</span>(() => {
+            <span class="keyword">if</span> (id > <span class="number">0</span>) {
+                <span class="function">resolve</span>({ id, nombre: <span class="string">'Ana'</span>, email: <span class="string">'ana@email.com'</span> });
+            } <span class="keyword">else</span> {
+                <span class="function">reject</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'ID inválido'</span>));
+            }
+        }, <span class="number">1000</span>);
+    });
+}
+
+<span class="comment">// Usar la función</span>
+<span class="function">obtenerUsuario</span>(<span class="number">1</span>)
+    .<span class="function">then</span>(usuario => console.<span class="function">log</span>(usuario))
+    .<span class="function">catch</span>(error => console.<span class="function">error</span>(error.message));
+
+<span class="comment">// Promesas ya resueltas/rechazadas</span>
+<span class="keyword">const</span> resuelta = <span class="promise">Promise</span>.<span class="function">resolve</span>(<span class="string">'Valor inmediato'</span>);
+<span class="keyword">const</span> rechazada = <span class="promise">Promise</span>.<span class="function">reject</span>(<span class="string">'Error inmediato'</span>);
+
+resuelta.<span class="function">then</span>(v => console.<span class="function">log</span>(v)); <span class="comment">// 'Valor inmediato'</span>
+rechazada.<span class="function">catch</span>(e => console.<span class="function">log</span>(e)); <span class="comment">// 'Error inmediato'</span>
+
+<span class="comment">// Convertir callback a promesa</span>
+<span class="keyword">function</span> <span class="function">esperar</span>(ms) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>(resolve => <span class="function">setTimeout</span>(resolve, ms));
+}
+
+<span class="function">esperar</span>(<span class="number">2000</span>).<span class="function">then</span>(() => console.<span class="function">log</span>(<span class="string">'2 segundos después'</span>));</pre>
+            </div>
+        </section>
+
+        <!-- 4. Métodos de Promise -->
+        <section id="promesas-metodos" class="concept-card">
+            <h4><span class="badge bg-success me-2">4</span>Métodos Estáticos de Promise</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS ESTÁTICOS DE PROMISE</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Simulamos peticiones con diferentes tiempos</span>
+<span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="promise">Promise</span>(r => <span class="function">setTimeout</span>(() => <span class="function">r</span>(<span class="string">'P1: 1s'</span>), <span class="number">1000</span>));
+<span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="promise">Promise</span>(r => <span class="function">setTimeout</span>(() => <span class="function">r</span>(<span class="string">'P2: 2s'</span>), <span class="number">2000</span>));
+<span class="keyword">const</span> p3 = <span class="keyword">new</span> <span class="promise">Promise</span>((_, rej) => <span class="function">setTimeout</span>(() => <span class="function">rej</span>(<span class="string">'P3: Error'</span>), <span class="number">1500</span>));
+
+<span class="comment">// ========================================</span>
+<span class="comment">// Promise.all() - Espera TODAS</span>
+<span class="comment">// ========================================</span>
+<span class="comment">// Resuelve cuando TODAS se resuelven</span>
+<span class="comment">// Rechaza al PRIMER error</span>
+
+<span class="promise">Promise</span>.<span class="function">all</span>([p1, p2])
+    .<span class="function">then</span>(resultados => {
+        console.<span class="function">log</span>(resultados); <span class="comment">// ['P1: 1s', 'P2: 2s']</span>
+    });
+
+<span class="comment">// Con error</span>
+<span class="promise">Promise</span>.<span class="function">all</span>([p1, p2, p3])
+    .<span class="function">catch</span>(error => {
+        console.<span class="function">log</span>(<span class="string">'Falló:'</span>, error); <span class="comment">// 'Falló: P3: Error'</span>
+    });
+
+<span class="comment">// ========================================</span>
+<span class="comment">// Promise.allSettled() - Espera todas sin importar resultado</span>
+<span class="comment">// ========================================</span>
+<span class="comment">// Siempre resuelve con array de resultados</span>
+
+<span class="promise">Promise</span>.<span class="function">allSettled</span>([p1, p2, p3])
+    .<span class="function">then</span>(resultados => {
+        console.<span class="function">log</span>(resultados);
+        <span class="comment">/*
+        [
+            { status: 'fulfilled', value: 'P1: 1s' },
+            { status: 'fulfilled', value: 'P2: 2s' },
+            { status: 'rejected', reason: 'P3: Error' }
+        ]
+        */</span>
+    });
+
+<span class="comment">// ========================================</span>
+<span class="comment">// Promise.race() - La primera que termine</span>
+<span class="comment">// ========================================</span>
+<span class="comment">// Resuelve/rechaza con la PRIMERA que termine</span>
+
+<span class="promise">Promise</span>.<span class="function">race</span>([p1, p2])
+    .<span class="function">then</span>(primero => {
+        console.<span class="function">log</span>(primero); <span class="comment">// 'P1: 1s' (terminó primero)</span>
+    });
+
+<span class="comment">// Ejemplo: Timeout para peticiones</span>
+<span class="keyword">function</span> <span class="function">fetchConTimeout</span>(url, timeout = <span class="number">5000</span>) {
+    <span class="keyword">const</span> fetchPromise = <span class="function">fetch</span>(url);
+    <span class="keyword">const</span> timeoutPromise = <span class="keyword">new</span> <span class="promise">Promise</span>((_, reject) => {
+        <span class="function">setTimeout</span>(() => <span class="function">reject</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Timeout!'</span>)), timeout);
+    });
+    
+    <span class="keyword">return</span> <span class="promise">Promise</span>.<span class="function">race</span>([fetchPromise, timeoutPromise]);
+}
+
+<span class="comment">// ========================================</span>
+<span class="comment">// Promise.any() - La primera exitosa</span>
+<span class="comment">// ========================================</span>
+<span class="comment">// Resuelve con la primera que SE RESUELVA (ignora rechazos)</span>
+<span class="comment">// Solo rechaza si TODAS fallan</span>
+
+<span class="promise">Promise</span>.<span class="function">any</span>([p3, p1, p2])
+    .<span class="function">then</span>(primeroExitoso => {
+        console.<span class="function">log</span>(primeroExitoso); <span class="comment">// 'P1: 1s' (primera exitosa)</span>
+    });
+
+<span class="comment">// ========================================</span>
+<span class="comment">// Promise.resolve() y Promise.reject()</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> inmediata = <span class="promise">Promise</span>.<span class="function">resolve</span>(<span class="number">42</span>);
+inmediata.<span class="function">then</span>(v => console.<span class="function">log</span>(v)); <span class="comment">// 42</span>
+
+<span class="keyword">const</span> error = <span class="promise">Promise</span>.<span class="function">reject</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Fallo'</span>));
+error.<span class="function">catch</span>(e => console.<span class="function">log</span>(e.message)); <span class="comment">// 'Fallo'</span></pre>
+            </div>
+        </section>
+
+        <!-- 5. Encadenamiento -->
+        <section id="encadenamiento" class="concept-card">
+            <h4><span class="badge bg-success me-2">5</span>Encadenamiento de Promesas</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// ENCADENAMIENTO DE PROMESAS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Cada .then() retorna una nueva promesa</span>
+
+<span class="keyword">function</span> <span class="function">obtenerUsuario</span>(id) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>(resolve => {
+        <span class="function">setTimeout</span>(() => <span class="function">resolve</span>({ id, nombre: <span class="string">'Ana'</span> }), <span class="number">500</span>);
+    });
+}
+
+<span class="keyword">function</span> <span class="function">obtenerPedidos</span>(usuarioId) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>(resolve => {
+        <span class="function">setTimeout</span>(() => <span class="function">resolve</span>([
+            { id: <span class="number">1</span>, producto: <span class="string">'Laptop'</span> },
+            { id: <span class="number">2</span>, producto: <span class="string">'Mouse'</span> }
+        ]), <span class="number">500</span>);
+    });
+}
+
+<span class="keyword">function</span> <span class="function">obtenerDetalles</span>(pedidoId) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>(resolve => {
+        <span class="function">setTimeout</span>(() => <span class="function">resolve</span>({ precio: <span class="number">1000</span>, enviado: <span class="keyword">true</span> }), <span class="number">500</span>);
+    });
+}
+
+<span class="comment">// Encadenamiento elegante (Adiós Callback Hell!)</span>
+<span class="function">obtenerUsuario</span>(<span class="number">1</span>)
+    .<span class="function">then</span>(usuario => {
+        console.<span class="function">log</span>(<span class="string">'Usuario:'</span>, usuario.nombre);
+        <span class="keyword">return</span> <span class="function">obtenerPedidos</span>(usuario.id);
+    })
+    .<span class="function">then</span>(pedidos => {
+        console.<span class="function">log</span>(<span class="string">'Pedidos:'</span>, pedidos.length);
+        <span class="keyword">return</span> <span class="function">obtenerDetalles</span>(pedidos[<span class="number">0</span>].id);
+    })
+    .<span class="function">then</span>(detalles => {
+        console.<span class="function">log</span>(<span class="string">'Detalles:'</span>, detalles);
+    })
+    .<span class="function">catch</span>(error => {
+        console.<span class="function">error</span>(<span class="string">'Error en algún paso:'</span>, error);
+    })
+    .<span class="function">finally</span>(() => {
+        console.<span class="function">log</span>(<span class="string">'Proceso completado'</span>);
+    });
+
+<span class="comment">// Retornar valores en .then()</span>
+<span class="promise">Promise</span>.<span class="function">resolve</span>(<span class="number">1</span>)
+    .<span class="function">then</span>(x => x + <span class="number">1</span>)     <span class="comment">// 2</span>
+    .<span class="function">then</span>(x => x * <span class="number">2</span>)     <span class="comment">// 4</span>
+    .<span class="function">then</span>(x => x + <span class="number">10</span>)    <span class="comment">// 14</span>
+    .<span class="function">then</span>(x => console.<span class="function">log</span>(x)); <span class="comment">// 14</span>
+
+<span class="comment">// Retornar promesa en .then()</span>
+<span class="promise">Promise</span>.<span class="function">resolve</span>(<span class="string">'Inicio'</span>)
+    .<span class="function">then</span>(msg => {
+        console.<span class="function">log</span>(msg);
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>(r => <span class="function">setTimeout</span>(() => <span class="function">r</span>(<span class="string">'Después de 1s'</span>), <span class="number">1000</span>));
+    })
+    .<span class="function">then</span>(msg => console.<span class="function">log</span>(msg));</pre>
+            </div>
+        </section>
+
+        <!-- 6. Async/Await -->
+        <section id="async-await" class="concept-card">
+            <h4><span class="badge bg-warning text-dark me-2">6</span>Async/Await (ES2017)</h4>
+            <p>Sintaxis más limpia para trabajar con promesas. Hace que el código asíncrono parezca síncrono.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// ASYNC/AWAIT - SINTAXIS MODERNA</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Función async - Siempre retorna una promesa</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">miFuncion</span>() {
+    <span class="keyword">return</span> <span class="string">'Hola'</span>;
+}
+
+<span class="function">miFuncion</span>().<span class="function">then</span>(v => console.<span class="function">log</span>(v)); <span class="comment">// 'Hola'</span>
+
+<span class="comment">// await - Espera a que la promesa se resuelva</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">obtenerDatos</span>() {
+    <span class="keyword">const</span> usuario = <span class="await">await</span> <span class="function">obtenerUsuario</span>(<span class="number">1</span>);
+    console.<span class="function">log</span>(usuario); <span class="comment">// Espera hasta que resuelva</span>
+    
+    <span class="keyword">const</span> pedidos = <span class="await">await</span> <span class="function">obtenerPedidos</span>(usuario.id);
+    console.<span class="function">log</span>(pedidos);
+    
+    <span class="keyword">const</span> detalles = <span class="await">await</span> <span class="function">obtenerDetalles</span>(pedidos[<span class="number">0</span>].id);
+    console.<span class="function">log</span>(detalles);
+    
+    <span class="keyword">return</span> { usuario, pedidos, detalles };
+}
+
+<span class="function">obtenerDatos</span>().<span class="function">then</span>(data => console.<span class="function">log</span>(<span class="string">'Todo:'</span>, data));
+
+<span class="comment">// Arrow function async</span>
+<span class="keyword">const</span> fetchData = <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'/api/data'</span>);
+    <span class="keyword">const</span> data = <span class="await">await</span> response.<span class="function">json</span>();
+    <span class="keyword">return</span> data;
+};
+
+<span class="comment">// Método async en objeto</span>
+<span class="keyword">const</span> api = {
+    <span class="keyword">async</span> <span class="function">getUser</span>(id) {
+        <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${id}`</span>);
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+};
+
+<span class="comment">// Método async en clase</span>
+<span class="keyword">class</span> <span class="function">ApiService</span> {
+    <span class="keyword">async</span> <span class="function">fetchUsers</span>() {
+        <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'/api/users'</span>);
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+}
+
+<span class="comment">// IIFE async</span>
+(<span class="keyword">async</span> () => {
+    <span class="keyword">const</span> resultado = <span class="await">await</span> <span class="promise">Promise</span>.<span class="function">resolve</span>(<span class="string">'Inmediato'</span>);
+    console.<span class="function">log</span>(resultado);
+})();
+
+<span class="comment">// await solo funciona dentro de async functions</span>
+<span class="comment">// En módulos ES, puedes usar top-level await</span>
+<span class="comment">// const data = await fetch('/api').then(r => r.json());</span></pre>
+            </div>
+        </section>
+
+        <!-- 7. Manejo de Errores -->
+        <section id="manejo-errores" class="concept-card">
+            <h4><span class="badge bg-danger me-2">7</span>Manejo de Errores</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MANEJO DE ERRORES CON ASYNC/AWAIT</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// 1. try/catch (Recomendado)</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">fetchData</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'/api/data'</span>);
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`HTTP error! status: ${response.status}`</span>);
+        }
+        
+        <span class="keyword">const</span> data = <span class="await">await</span> response.<span class="function">json</span>();
+        <span class="keyword">return</span> data;
+        
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error fetching data:'</span>, error.message);
+        <span class="comment">// Puedes relanzar, retornar default, o manejar</span>
+        <span class="keyword">throw</span> error; <span class="comment">// Relanzar</span>
+        <span class="comment">// return null; // Retornar default</span>
+    } <span class="keyword">finally</span> {
+        console.<span class="function">log</span>(<span class="string">'Petición completada'</span>);
+    }
+}
+
+<span class="comment">// 2. Múltiples try/catch</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">procesoComplejo</span>() {
+    <span class="keyword">let</span> usuario, pedidos;
+    
+    <span class="keyword">try</span> {
+        usuario = <span class="await">await</span> <span class="function">obtenerUsuario</span>(<span class="number">1</span>);
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error obteniendo usuario'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="keyword">try</span> {
+        pedidos = <span class="await">await</span> <span class="function">obtenerPedidos</span>(usuario.id);
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error obteniendo pedidos'</span>);
+        pedidos = []; <span class="comment">// Default</span>
+    }
+    
+    <span class="keyword">return</span> { usuario, pedidos };
+}
+
+<span class="comment">// 3. Wrapper para evitar try/catch repetitivo</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">safeAsync</span>(promesa) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> data = <span class="await">await</span> promesa;
+        <span class="keyword">return</span> [data, <span class="keyword">null</span>];
+    } <span class="keyword">catch</span> (error) {
+        <span class="keyword">return</span> [<span class="keyword">null</span>, error];
+    }
+}
+
+<span class="comment">// Uso del wrapper</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">usarWrapper</span>() {
+    <span class="keyword">const</span> [usuario, error] = <span class="await">await</span> <span class="function">safeAsync</span>(<span class="function">obtenerUsuario</span>(<span class="number">1</span>));
+    
+    <span class="keyword">if</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error:'</span>, error);
+        <span class="keyword">return</span>;
+    }
+    
+    console.<span class="function">log</span>(<span class="string">'Usuario:'</span>, usuario);
+}
+
+<span class="comment">// 4. Usar .catch() con async/await</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">conCatch</span>() {
+    <span class="keyword">const</span> usuario = <span class="await">await</span> <span class="function">obtenerUsuario</span>(<span class="number">1</span>).<span class="function">catch</span>(e => <span class="keyword">null</span>);
+    
+    <span class="keyword">if</span> (!usuario) {
+        console.<span class="function">log</span>(<span class="string">'No se pudo obtener usuario'</span>);
+        <span class="keyword">return</span>;
+    }
+}
+
+<span class="comment">// 5. Error handling con Promise.allSettled</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">fetchMultiple</span>() {
+    <span class="keyword">const</span> resultados = <span class="await">await</span> <span class="promise">Promise</span>.<span class="function">allSettled</span>([
+        <span class="function">fetch</span>(<span class="string">'/api/users'</span>),
+        <span class="function">fetch</span>(<span class="string">'/api/posts'</span>),
+        <span class="function">fetch</span>(<span class="string">'/api/comments'</span>)
+    ]);
+    
+    <span class="keyword">const</span> exitosos = resultados
+        .<span class="function">filter</span>(r => r.status === <span class="string">'fulfilled'</span>)
+        .<span class="function">map</span>(r => r.value);
+    
+    <span class="keyword">const</span> fallidos = resultados
+        .<span class="function">filter</span>(r => r.status === <span class="string">'rejected'</span>)
+        .<span class="function">map</span>(r => r.reason);
+    
+    console.<span class="function">log</span>(<span class="string">'Exitosos:'</span>, exitosos.length);
+    console.<span class="function">log</span>(<span class="string">'Fallidos:'</span>, fallidos.length);
+}</pre>
+            </div>
+        </section>
+
+        <!-- 8. Ejecución en Paralelo -->
+        <section id="paralelo" class="concept-card">
+            <h4><span class="badge bg-primary me-2">8</span>Ejecución en Paralelo</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EJECUCIÓN EN PARALELO VS SECUENCIAL</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">function</span> <span class="function">esperar</span>(ms, valor) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>(r => <span class="function">setTimeout</span>(() => <span class="function">r</span>(valor), ms));
+}
+
+<span class="comment">// ❌ SECUENCIAL (Lento) - 3 segundos total</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">secuencial</span>() {
+    console.<span class="function">time</span>(<span class="string">'secuencial'</span>);
+    
+    <span class="keyword">const</span> a = <span class="await">await</span> <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'A'</span>);
+    <span class="keyword">const</span> b = <span class="await">await</span> <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'B'</span>);
+    <span class="keyword">const</span> c = <span class="await">await</span> <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'C'</span>);
+    
+    console.<span class="function">timeEnd</span>(<span class="string">'secuencial'</span>); <span class="comment">// ~3000ms</span>
+    <span class="keyword">return</span> [a, b, c];
+}
+
+<span class="comment">// ✅ PARALELO (Rápido) - 1 segundo total</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">paralelo</span>() {
+    console.<span class="function">time</span>(<span class="string">'paralelo'</span>);
+    
+    <span class="keyword">const</span> [a, b, c] = <span class="await">await</span> <span class="promise">Promise</span>.<span class="function">all</span>([
+        <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'A'</span>),
+        <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'B'</span>),
+        <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'C'</span>)
+    ]);
+    
+    console.<span class="function">timeEnd</span>(<span class="string">'paralelo'</span>); <span class="comment">// ~1000ms</span>
+    <span class="keyword">return</span> [a, b, c];
+}
+
+<span class="comment">// ✅ Iniciar en paralelo, await después</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">paraleloAlternativo</span>() {
+    <span class="comment">// Inician TODAS inmediatamente</span>
+    <span class="keyword">const</span> promesaA = <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'A'</span>);
+    <span class="keyword">const</span> promesaB = <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'B'</span>);
+    <span class="keyword">const</span> promesaC = <span class="function">esperar</span>(<span class="number">1000</span>, <span class="string">'C'</span>);
+    
+    <span class="comment">// Esperar resultados</span>
+    <span class="keyword">const</span> a = <span class="await">await</span> promesaA;
+    <span class="keyword">const</span> b = <span class="await">await</span> promesaB;
+    <span class="keyword">const</span> c = <span class="await">await</span> promesaC;
+    
+    <span class="keyword">return</span> [a, b, c];
+}
+
+<span class="comment">// Procesar array en paralelo</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">procesarEnParalelo</span>(ids) {
+    <span class="keyword">const</span> promesas = ids.<span class="function">map</span>(id => <span class="function">fetchUsuario</span>(id));
+    <span class="keyword">const</span> usuarios = <span class="await">await</span> <span class="promise">Promise</span>.<span class="function">all</span>(promesas);
+    <span class="keyword">return</span> usuarios;
+}
+
+<span class="comment">// Procesar con límite de concurrencia</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">procesarConLimite</span>(items, limite, procesador) {
+    <span class="keyword">const</span> resultados = [];
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < items.length; i += limite) {
+        <span class="keyword">const</span> chunk = items.<span class="function">slice</span>(i, i + limite);
+        <span class="keyword">const</span> chunkResultados = <span class="await">await</span> <span class="promise">Promise</span>.<span class="function">all</span>(
+            chunk.<span class="function">map</span>(item => <span class="function">procesador</span>(item))
+        );
+        resultados.<span class="function">push</span>(...chunkResultados);
+    }
+    
+    <span class="keyword">return</span> resultados;
+}
+
+<span class="comment">// Uso: procesar 100 items, 10 a la vez</span>
+<span class="keyword">const</span> items = Array.<span class="function">from</span>({ length: <span class="number">100</span> }, (_, i) => i);
+<span class="keyword">const</span> resultados = <span class="await">await</span> <span class="function">procesarConLimite</span>(items, <span class="number">10</span>, <span class="keyword">async</span> (item) => {
+    <span class="await">await</span> <span class="function">esperar</span>(<span class="number">100</span>);
+    <span class="keyword">return</span> item * <span class="number">2</span>;
+});</pre>
+            </div>
+        </section>
+
+        <!-- 9. Fetch API -->
+        <section id="fetch-api" class="concept-card">
+            <h4><span class="badge bg-primary me-2">9</span>Fetch API</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// FETCH API CON ASYNC/AWAIT</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// GET básico</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">getUsers</span>() {
+    <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>);
+    <span class="keyword">const</span> users = <span class="await">await</span> response.<span class="function">json</span>();
+    <span class="keyword">return</span> users;
+}
+
+<span class="comment">// GET con parámetros</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">getUser</span>(id) {
+    <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">`https://jsonplaceholder.typicode.com/users/${id}`</span>);
+    
+    <span class="keyword">if</span> (!response.ok) {
+        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`HTTP error! status: ${response.status}`</span>);
+    }
+    
+    <span class="keyword">return</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// POST</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">createUser</span>(userData) {
+    <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: {
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+        },
+        body: JSON.<span class="function">stringify</span>(userData)
+    });
+    
+    <span class="keyword">return</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// PUT/PATCH</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">updateUser</span>(id, userData) {
+    <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">`https://api.example.com/users/${id}`</span>, {
+        method: <span class="string">'PUT'</span>, <span class="comment">// o 'PATCH' para parcial</span>
+        headers: {
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+            <span class="string">'Authorization'</span>: <span class="string">'Bearer tu-token-aqui'</span>
+        },
+        body: JSON.<span class="function">stringify</span>(userData)
+    });
+    
+    <span class="keyword">return</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// DELETE</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">deleteUser</span>(id) {
+    <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(<span class="string">`https://api.example.com/users/${id}`</span>, {
+        method: <span class="string">'DELETE'</span>
+    });
+    
+    <span class="keyword">return</span> response.ok;
+}
+
+<span class="comment">// Clase API completa</span>
+<span class="keyword">class</span> <span class="function">ApiClient</span> {
+    <span class="function">constructor</span>(baseUrl) {
+        <span class="keyword">this</span>.baseUrl = baseUrl;
+    }
+    
+    <span class="keyword">async</span> <span class="function">request</span>(endpoint, options = {}) {
+        <span class="keyword">const</span> url = <span class="string">`${this.baseUrl}${endpoint}`</span>;
+        
+        <span class="keyword">const</span> config = {
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+                ...options.headers
+            },
+            ...options
+        };
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(url, config);
+            
+            <span class="keyword">if</span> (!response.ok) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`HTTP error! status: ${response.status}`</span>);
+            }
+            
+            <span class="keyword">return</span> <span class="await">await</span> response.<span class="function">json</span>();
+            
+        } <span class="keyword">catch</span> (error) {
+            console.<span class="function">error</span>(<span class="string">'API Error:'</span>, error);
+            <span class="keyword">throw</span> error;
+        }
+    }
+    
+    <span class="function">get</span>(endpoint) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(endpoint);
+    }
+    
+    <span class="function">post</span>(endpoint, data) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(endpoint, {
+            method: <span class="string">'POST'</span>,
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+    }
+    
+    <span class="function">put</span>(endpoint, data) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(endpoint, {
+            method: <span class="string">'PUT'</span>,
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+    }
+    
+    <span class="function">delete</span>(endpoint) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">request</span>(endpoint, { method: <span class="string">'DELETE'</span> });
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> api = <span class="keyword">new</span> <span class="function">ApiClient</span>(<span class="string">'https://jsonplaceholder.typicode.com'</span>);
+<span class="keyword">const</span> users = <span class="await">await</span> api.<span class="function">get</span>(<span class="string">'/users'</span>);
+<span class="keyword">const</span> newUser = <span class="await">await</span> api.<span class="function">post</span>(<span class="string">'/users'</span>, { name: <span class="string">'Ana'</span> });</pre>
+            </div>
+        </section>
+
+        <!-- 10. Ejemplos Reales -->
+        <section id="ejemplos-reales" class="concept-card">
+            <h4><span class="badge bg-danger me-2">10</span>Ejemplos Prácticos del Mundo Real</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO 1: Búsqueda con Debounce</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">SearchComponent</span> {
+    <span class="function">constructor</span>(inputElement, resultsElement) {
+        <span class="keyword">this</span>.input = inputElement;
+        <span class="keyword">this</span>.results = resultsElement;
+        <span class="keyword">this</span>.abortController = <span class="keyword">null</span>;
+        
+        <span class="keyword">this</span>.input.<span class="function">addEventListener</span>(<span class="string">'input'</span>, 
+            <span class="keyword">this</span>.<span class="function">debounce</span>(<span class="keyword">this</span>.search.<span class="function">bind</span>(<span class="keyword">this</span>), <span class="number">300</span>)
+        );
+    }
+    
+    <span class="function">debounce</span>(fn, delay) {
+        <span class="keyword">let</span> timeoutId;
+        <span class="keyword">return</span> (...args) => {
+            <span class="function">clearTimeout</span>(timeoutId);
+            timeoutId = <span class="function">setTimeout</span>(() => <span class="function">fn</span>(...args), delay);
+        };
+    }
+    
+    <span class="keyword">async</span> <span class="function">search</span>(event) {
+        <span class="keyword">const</span> query = event.target.value.<span class="function">trim</span>();
+        
+        <span class="keyword">if</span> (query.length < <span class="number">2</span>) {
+            <span class="keyword">this</span>.results.innerHTML = <span class="string">''</span>;
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="comment">// Cancelar búsqueda anterior</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.abortController) {
+            <span class="keyword">this</span>.abortController.<span class="function">abort</span>();
+        }
+        <span class="keyword">this</span>.abortController = <span class="keyword">new</span> <span class="function">AbortController</span>();
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">this</span>.results.innerHTML = <span class="string">'&lt;p&gt;Buscando...&lt;/p&gt;'</span>;
+            
+            <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(
+                <span class="string">`/api/search?q=${encodeURIComponent(query)}`</span>,
+                { signal: <span class="keyword">this</span>.abortController.signal }
+            );
+            
+            <span class="keyword">const</span> data = <span class="await">await</span> response.<span class="function">json</span>();
+            <span class="keyword">this</span>.<span class="function">renderResults</span>(data);
+            
+        } <span class="keyword">catch</span> (error) {
+            <span class="keyword">if</span> (error.name !== <span class="string">'AbortError'</span>) {
+                <span class="keyword">this</span>.results.innerHTML = <span class="string">'&lt;p&gt;Error en la búsqueda&lt;/p&gt;'</span>;
+            }
+        }
+    }
+    
+    <span class="function">renderResults</span>(data) {
+        <span class="keyword">this</span>.results.innerHTML = data
+            .<span class="function">map</span>(item => <span class="string">`&lt;div class="result"&gt;${item.name}&lt;/div&gt;`</span>)
+            .<span class="function">join</span>(<span class="string">''</span>);
+    }
+}
+
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO 2: Carga de Datos con Caché</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">DataService</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.cache = <span class="keyword">new</span> <span class="function">Map</span>();
+        <span class="keyword">this</span>.pendingRequests = <span class="keyword">new</span> <span class="function">Map</span>();
+    }
+    
+    <span class="keyword">async</span> <span class="function">fetchWithCache</span>(url, maxAge = <span class="number">60000</span>) {
+        <span class="comment">// Verificar caché</span>
+        <span class="keyword">const</span> cached = <span class="keyword">this</span>.cache.<span class="function">get</span>(url);
+        <span class="keyword">if</span> (cached && Date.<span class="function">now</span>() - cached.timestamp < maxAge) {
+            <span class="keyword">return</span> cached.data;
+        }
+        
+        <span class="comment">// Evitar peticiones duplicadas</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.pendingRequests.<span class="function">has</span>(url)) {
+            <span class="keyword">return</span> <span class="keyword">this</span>.pendingRequests.<span class="function">get</span>(url);
+        }
+        
+        <span class="comment">// Realizar petición</span>
+        <span class="keyword">const</span> promise = <span class="keyword">this</span>.<span class="function">fetch</span>(url);
+        <span class="keyword">this</span>.pendingRequests.<span class="function">set</span>(url, promise);
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> data = <span class="await">await</span> promise;
+            <span class="keyword">this</span>.cache.<span class="function">set</span>(url, { data, timestamp: Date.<span class="function">now</span>() });
+            <span class="keyword">return</span> data;
+        } <span class="keyword">finally</span> {
+            <span class="keyword">this</span>.pendingRequests.<span class="function">delete</span>(url);
+        }
+    }
+    
+    <span class="keyword">async</span> <span class="function">fetch</span>(url) {
+        <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(url);
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+    
+    <span class="function">clearCache</span>(url) {
+        <span class="keyword">if</span> (url) {
+            <span class="keyword">this</span>.cache.<span class="function">delete</span>(url);
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.cache.<span class="function">clear</span>();
+        }
+    }
+}
+
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO 3: Retry con Backoff Exponencial</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">fetchWithRetry</span>(url, options = {}) {
+    <span class="keyword">const</span> {
+        maxRetries = <span class="number">3</span>,
+        baseDelay = <span class="number">1000</span>,
+        maxDelay = <span class="number">10000</span>
+    } = options;
+    
+    <span class="keyword">let</span> lastError;
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> attempt = <span class="number">0</span>; attempt <= maxRetries; attempt++) {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="await">await</span> <span class="function">fetch</span>(url, options);
+            
+            <span class="keyword">if</span> (!response.ok) {
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`HTTP ${response.status}`</span>);
+            }
+            
+            <span class="keyword">return</span> <span class="await">await</span> response.<span class="function">json</span>();
+            
+        } <span class="keyword">catch</span> (error) {
+            lastError = error;
+            
+            <span class="keyword">if</span> (attempt < maxRetries) {
+                <span class="comment">// Backoff exponencial: 1s, 2s, 4s...</span>
+                <span class="keyword">const</span> delay = Math.<span class="function">min</span>(
+                    baseDelay * Math.<span class="function">pow</span>(<span class="number">2</span>, attempt),
+                    maxDelay
+                );
+                
+                console.<span class="function">log</span>(<span class="string">`Retry ${attempt + 1}/${maxRetries} en ${delay}ms`</span>);
+                <span class="await">await</span> <span class="keyword">new</span> <span class="promise">Promise</span>(r => <span class="function">setTimeout</span>(r, delay));
+            }
+        }
+    }
+    
+    <span class="keyword">throw</span> lastError;
+}
+
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO 4: Carga de Imágenes</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">function</span> <span class="function">cargarImagen</span>(src) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="promise">Promise</span>((resolve, reject) => {
+        <span class="keyword">const</span> img = <span class="keyword">new</span> <span class="function">Image</span>();
+        img.onload = () => <span class="function">resolve</span>(img);
+        img.onerror = () => <span class="function">reject</span>(<span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`Error cargando: ${src}`</span>));
+        img.src = src;
+    });
+}
+
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">cargarGaleria</span>(imagenes) {
+    <span class="keyword">const</span> resultados = <span class="await">await</span> <span class="promise">Promise</span>.<span class="function">allSettled</span>(
+        imagenes.<span class="function">map</span>(src => <span class="function">cargarImagen</span>(src))
+    );
+    
+    <span class="keyword">const</span> cargadas = resultados
+        .<span class="function">filter</span>(r => r.status === <span class="string">'fulfilled'</span>)
+        .<span class="function">map</span>(r => r.value);
+    
+    <span class="keyword">const</span> fallidas = resultados
+        .<span class="function">filter</span>(r => r.status === <span class="string">'rejected'</span>)
+        .<span class="function">map</span>(r => r.reason.message);
+    
+    console.<span class="function">log</span>(<span class="string">`Cargadas: ${cargadas.length}, Fallidas: ${fallidas.length}`</span>);
+    
+    <span class="keyword">return</span> cargadas;
+}</pre>
+            </div>
+        </section>
+
+        <!-- Demo Interactiva -->
+        <section class="comparison-box my-5 p-4">
+            <h4 class="mb-4"><i class="bi bi-play-circle me-2"></i>Demo Interactiva</h4>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <button id="demoSecuencial" class="btn btn-outline-primary me-2 mb-2">
+                        Secuencial (3s)
+                    </button>
+                    <button id="demoParalelo" class="btn btn-primary mb-2">
+                        Paralelo (1s)
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <div id="demoOutput" class="output-demo">
+                        Haz clic en un botón para ver la diferencia
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="funciones.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Funciones
+            </a>
+            <a href="../apis/fetch.html" class="btn btn-primary">
+                Fetch API<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Async/Await y Promesas | JavaScript Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+        
+        // Demo
+        const output = document.getElementById('demoOutput');
+        
+        function esperar(ms, valor) {
+            return new Promise(resolve => setTimeout(() => resolve(valor), ms));
+        }
+        
+        document.getElementById('demoSecuencial').addEventListener('click', async () => {
+            output.innerHTML = 'Iniciando secuencial...\n';
+            const start = Date.now();
+            
+            output.innerHTML += await esperar(1000, '✓ Tarea 1 completada\n');
+            output.innerHTML += await esperar(1000, '✓ Tarea 2 completada\n');
+            output.innerHTML += await esperar(1000, '✓ Tarea 3 completada\n');
+            
+            output.innerHTML += `\nTiempo total: ${Date.now() - start}ms`;
+        });
+        
+        document.getElementById('demoParalelo').addEventListener('click', async () => {
+            output.innerHTML = 'Iniciando paralelo...\n';
+            const start = Date.now();
+            
+            const [a, b, c] = await Promise.all([
+                esperar(1000, '✓ Tarea 1'),
+                esperar(1000, '✓ Tarea 2'),
+                esperar(1000, '✓ Tarea 3')
+            ]);
+            
+            output.innerHTML += `${a}\n${b}\n${c}\n`;
+            output.innerHTML += `\nTiempo total: ${Date.now() - start}ms`;
+        });
+    </script>
+</body>
+</html>

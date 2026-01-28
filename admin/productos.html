@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos - Panel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-height: 60px;
+            --primary: #4e73df;
+            --success: #1cc88a;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --dark: #5a5c69;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f6f9; }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 10px;
+        }
+        
+        .sidebar-nav { padding: 20px 0; }
+        
+        .nav-section {
+            padding: 15px 20px 10px;
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--primary);
+        }
+        
+        .main-content { margin-left: var(--sidebar-width); min-height: 100vh; }
+        
+        .topbar {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .content { padding: 30px; }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+        
+        .product-body { padding: 20px; }
+        
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .product-stock {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .stock-high { background: rgba(28,200,138,0.15); color: #169b6b; }
+        .stock-low { background: rgba(246,194,62,0.15); color: #d39e00; }
+        .stock-out { background: rgba(231,74,59,0.15); color: #c82333; }
+        
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+        
+        .card-admin {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .category-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid #e3e6f0;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-shield-check"></i>
+            <span>Admin Panel</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="index.html" class="nav-link">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <div class="nav-section">Gestión</div>
+            <a href="usuarios.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Usuarios</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="bi bi-bag-check"></i>
+                <span>Pedidos</span>
+            </a>
+            <a href="productos.html" class="nav-link active">
+                <i class="bi bi-box-seam"></i>
+                <span>Productos</span>
+            </a>
+            
+            <div class="nav-section">Sistema</div>
+            <a href="../index.html" class="nav-link">
+                <i class="bi bi-house"></i>
+                <span>Volver al Sitio</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <h4 class="fw-semibold text-dark mb-0">Gestión de Productos</h4>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="bi bi-plus-lg me-2"></i>Agregar Producto
+            </button>
+        </header>
+
+        <div class="content">
+            <!-- Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card-admin text-center">
+                        <i class="bi bi-box-seam fs-2 text-primary mb-2"></i>
+                        <h3 id="totalProducts">0</h3>
+                        <small class="text-muted">Total Productos</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-admin text-center">
+                        <i class="bi bi-check-circle fs-2 text-success mb-2"></i>
+                        <h3 id="activeProducts">0</h3>
+                        <small class="text-muted">Activos</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-admin text-center">
+                        <i class="bi bi-exclamation-triangle fs-2 text-warning mb-2"></i>
+                        <h3 id="lowStock">0</h3>
+                        <small class="text-muted">Stock Bajo</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-admin text-center">
+                        <i class="bi bi-tags fs-2 text-info mb-2"></i>
+                        <h3 id="totalCategories">0</h3>
+                        <small class="text-muted">Categorías</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card-admin mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div class="category-filter" id="categoryFilter">
+                        <button class="category-btn active" data-category="all">Todos</button>
+                        <button class="category-btn" data-category="electronica">Electrónica</button>
+                        <button class="category-btn" data-category="ropa">Ropa</button>
+                        <button class="category-btn" data-category="hogar">Hogar</button>
+                        <button class="category-btn" data-category="accesorios">Accesorios</button>
+                    </div>
+                    <input type="text" class="form-control" id="searchProducts" placeholder="Buscar producto..." style="width: 250px;">
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="row g-4" id="productsGrid">
+                <!-- Se llena con JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Agregar/Editar Producto -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalTitle">Agregar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <input type="hidden" id="productId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre del Producto *</label>
+                                <input type="text" class="form-control" id="productName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Categoría *</label>
+                                <select class="form-select" id="productCategory" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="electronica">Electrónica</option>
+                                    <option value="ropa">Ropa</option>
+                                    <option value="hogar">Hogar</option>
+                                    <option value="accesorios">Accesorios</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Precio *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Stock *</label>
+                                <input type="number" class="form-control" id="productStock" min="0" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Color de Fondo</label>
+                                <select class="form-select" id="productColor">
+                                    <option value="linear-gradient(135deg, #667eea, #764ba2)">Púrpura</option>
+                                    <option value="linear-gradient(135deg, #4facfe, #00f2fe)">Azul</option>
+                                    <option value="linear-gradient(135deg, #43e97b, #38f9d7)">Verde</option>
+                                    <option value="linear-gradient(135deg, #fa709a, #fee140)">Rosa</option>
+                                    <option value="linear-gradient(135deg, #f093fb, #f5576c)">Magenta</option>
+                                    <option value="linear-gradient(135deg, #ff6b6b, #feca57)">Naranja</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Vista Previa</label>
+                                <div class="preview-image" id="previewImage" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="productForm" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-2"></i>Guardar Producto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================
+        // GESTIÓN DE PRODUCTOS - ADMIN
+        // ============================================
+        
+        // Productos de ejemplo iniciales
+        const defaultProducts = [
+            { id: 1, nombre: 'Smartphone Pro', categoria: 'electronica', precio: 899, stock: 25, color: 'linear-gradient(135deg, #667eea, #764ba2)', descripcion: 'Smartphone de última generación', activo: true },
+            { id: 2, nombre: 'Laptop Gaming', categoria: 'electronica', precio: 1299, stock: 12, color: 'linear-gradient(135deg, #4facfe, #00f2fe)', descripcion: 'Laptop para gaming', activo: true },
+            { id: 3, nombre: 'Auriculares BT', categoria: 'electronica', precio: 149, stock: 50, color: 'linear-gradient(135deg, #43e97b, #38f9d7)', descripcion: 'Auriculares Bluetooth', activo: true },
+            { id: 4, nombre: 'Camiseta Premium', categoria: 'ropa', precio: 49, stock: 100, color: 'linear-gradient(135deg, #fa709a, #fee140)', descripcion: 'Camiseta de algodón premium', activo: true },
+            { id: 5, nombre: 'Zapatillas Sport', categoria: 'ropa', precio: 129, stock: 35, color: 'linear-gradient(135deg, #f093fb, #f5576c)', descripcion: 'Zapatillas deportivas', activo: true },
+            { id: 6, nombre: 'Reloj Smart', categoria: 'accesorios', precio: 299, stock: 20, color: 'linear-gradient(135deg, #ff6b6b, #feca57)', descripcion: 'Reloj inteligente', activo: true },
+            { id: 7, nombre: 'Lámpara LED', categoria: 'hogar', precio: 79, stock: 45, color: 'linear-gradient(135deg, #667eea, #764ba2)', descripcion: 'Lámpara LED moderna', activo: true },
+            { id: 8, nombre: 'Mochila Travel', categoria: 'accesorios', precio: 89, stock: 30, color: 'linear-gradient(135deg, #4facfe, #00f2fe)', descripcion: 'Mochila para viajes', activo: true },
+        ];
+        
+        class ProductsManager {
+            constructor() {
+                this.products = this.getProducts();
+                this.init();
+            }
+            
+            getProducts() {
+                let products = JSON.parse(localStorage.getItem('adminProducts'));
+                if (!products || products.length === 0) {
+                    products = defaultProducts;
+                    localStorage.setItem('adminProducts', JSON.stringify(products));
+                }
+                return products;
+            }
+            
+            saveProducts() {
+                localStorage.setItem('adminProducts', JSON.stringify(this.products));
+            }
+            
+            init() {
+                this.updateStats();
+                this.renderProducts();
+                this.bindEvents();
+            }
+            
+            updateStats() {
+                document.getElementById('totalProducts').textContent = this.products.length;
+                document.getElementById('activeProducts').textContent = this.products.filter(p => p.activo !== false).length;
+                document.getElementById('lowStock').textContent = this.products.filter(p => p.stock < 10).length;
+                
+                const categories = [...new Set(this.products.map(p => p.categoria))];
+                document.getElementById('totalCategories').textContent = categories.length;
+            }
+            
+            renderProducts(filter = 'all', search = '') {
+                const grid = document.getElementById('productsGrid');
+                
+                let filtered = [...this.products];
+                
+                if (filter !== 'all') {
+                    filtered = filtered.filter(p => p.categoria === filter);
+                }
+                
+                if (search) {
+                    const searchLower = search.toLowerCase();
+                    filtered = filtered.filter(p => 
+                        p.nombre.toLowerCase().includes(searchLower) ||
+                        p.descripcion?.toLowerCase().includes(searchLower)
+                    );
+                }
+                
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="bi bi-box-seam fs-1 text-muted opacity-50"></i>
+                            <p class="text-muted mt-3">No hay productos que mostrar</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = filtered.map(product => {
+                    let stockClass = 'stock-high';
+                    let stockText = `${product.stock} en stock`;
+                    
+                    if (product.stock === 0) {
+                        stockClass = 'stock-out';
+                        stockText = 'Agotado';
+                    } else if (product.stock < 10) {
+                        stockClass = 'stock-low';
+                        stockText = `Solo ${product.stock}`;
+                    }
+                    
+                    return `
+                        <div class="col-xl-3 col-lg-4 col-md-6">
+                            <div class="product-card">
+                                <div class="product-img" style="background: ${product.color}">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                                <div class="product-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0">${product.nombre}</h6>
+                                        <span class="product-stock ${stockClass}">${stockText}</span>
+                                    </div>
+                                    <p class="text-muted small mb-2">${product.descripcion || 'Sin descripción'}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="product-price">$${product.precio.toLocaleString()}</span>
+                                        <div>
+                                            <button class="btn btn-action btn-outline-primary me-1" onclick="productsManager.editProduct(${product.id})" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-action btn-outline-danger" onclick="productsManager.deleteProduct(${product.id})" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            editProduct(id) {
+                const product = this.products.find(p => p.id === id);
+                if (!product) return;
+                
+                document.getElementById('productModalTitle').textContent = 'Editar Producto';
+                document.getElementById('productId').value = product.id;
+                document.getElementById('productName').value = product.nombre;
+                document.getElementById('productCategory').value = product.categoria;
+                document.getElementById('productPrice').value = product.precio;
+                document.getElementById('productStock').value = product.stock;
+                document.getElementById('productColor').value = product.color;
+                document.getElementById('productDescription').value = product.descripcion || '';
+                document.getElementById('previewImage').style.background = product.color;
+                
+                new bootstrap.Modal(document.getElementById('addProductModal')).show();
+            }
+            
+            deleteProduct(id) {
+                if (confirm('¿Estás seguro de eliminar este producto?')) {
+                    this.products = this.products.filter(p => p.id !== id);
+                    this.saveProducts();
+                    this.renderProducts();
+                    this.updateStats();
+                }
+            }
+            
+            saveProduct(data) {
+                if (data.id) {
+                    // Editar
+                    const index = this.products.findIndex(p => p.id === parseInt(data.id));
+                    if (index !== -1) {
+                        this.products[index] = { ...this.products[index], ...data, id: parseInt(data.id) };
+                    }
+                } else {
+                    // Nuevo
+                    const newId = Math.max(...this.products.map(p => p.id), 0) + 1;
+                    this.products.push({ ...data, id: newId, activo: true });
+                }
+                
+                this.saveProducts();
+                this.renderProducts();
+                this.updateStats();
+            }
+            
+            bindEvents() {
+                // Filtro por categoría
+                document.getElementById('categoryFilter').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('category-btn')) {
+                        document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                        e.target.classList.add('active');
+                        const search = document.getElementById('searchProducts').value;
+                        this.renderProducts(e.target.dataset.category, search);
+                    }
+                });
+                
+                // Búsqueda
+                document.getElementById('searchProducts').addEventListener('input', (e) => {
+                    const activeCategory = document.querySelector('.category-btn.active').dataset.category;
+                    this.renderProducts(activeCategory, e.target.value);
+                });
+                
+                // Preview de color
+                document.getElementById('productColor').addEventListener('change', (e) => {
+                    document.getElementById('previewImage').style.background = e.target.value;
+                });
+                
+                // Formulario
+                document.getElementById('productForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const data = {
+                        id: document.getElementById('productId').value || null,
+                        nombre: document.getElementById('productName').value,
+                        categoria: document.getElementById('productCategory').value,
+                        precio: parseFloat(document.getElementById('productPrice').value),
+                        stock: parseInt(document.getElementById('productStock').value),
+                        color: document.getElementById('productColor').value,
+                        descripcion: document.getElementById('productDescription').value
+                    };
+                    
+                    this.saveProduct(data);
+                    bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+                    e.target.reset();
+                    document.getElementById('productId').value = '';
+                    document.getElementById('productModalTitle').textContent = 'Agregar Producto';
+                });
+                
+                // Reset modal al cerrar
+                document.getElementById('addProductModal').addEventListener('hidden.bs.modal', () => {
+                    document.getElementById('productForm').reset();
+                    document.getElementById('productId').value = '';
+                    document.getElementById('productModalTitle').textContent = 'Agregar Producto';
+                    document.getElementById('previewImage').style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                });
+            }
+        }
+        
+        let productsManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            productsManager = new ProductsManager();
+        });
+    </script>
+</body>
+</html>

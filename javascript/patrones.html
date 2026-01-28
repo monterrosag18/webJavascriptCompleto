@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrones de Diseño JavaScript - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #a55eea, #8854d0);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .comment { color: #6272a4; font-style: italic; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .btn-copy:hover { background: rgba(255,255,255,0.2); }
+        
+        .pattern-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #a55eea;
+        }
+        
+        .pattern-badge {
+            background: linear-gradient(135deg, #a55eea, #8854d0);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="funciones.html">Funciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="es6-moderno.html">ES6+</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="patrones.html">Patrones</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="text-center py-5 mb-5" style="background: linear-gradient(135deg, #a55eea, #8854d0);">
+        <div class="container text-white">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-diagram-3 me-3"></i>Patrones de Diseño
+            </h1>
+            <p class="lead mb-0">Los patrones más usados en JavaScript moderno</p>
+        </div>
+    </section>
+
+    <div class="container py-4">
+        <!-- Índice -->
+        <div class="card mb-5">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-list-ol me-2"></i>Patrones Incluidos
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Creacionales</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#singleton">Singleton</a></li>
+                            <li><a href="#factory">Factory</a></li>
+                            <li><a href="#builder">Builder</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Estructurales</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#module">Module</a></li>
+                            <li><a href="#decorator">Decorator</a></li>
+                            <li><a href="#proxy">Proxy</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Comportamiento</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#observer">Observer/PubSub</a></li>
+                            <li><a href="#strategy">Strategy</a></li>
+                            <li><a href="#state">State</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Singleton -->
+        <section id="singleton" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-1-circle me-2"></i>Singleton</h4>
+                <span class="pattern-badge">Creacional</span>
+            </div>
+            <p>Garantiza que solo exista una instancia de una clase y proporciona un punto de acceso global.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN SINGLETON</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Implementación con Clase</span>
+<span class="keyword">class</span> <span class="function">Database</span> {
+    <span class="keyword">static</span> instance = <span class="keyword">null</span>;
+    
+    <span class="function">constructor</span>() {
+        <span class="keyword">if</span> (Database.instance) {
+            <span class="keyword">return</span> Database.instance;
+        }
+        
+        <span class="keyword">this</span>.connection = <span class="keyword">null</span>;
+        <span class="keyword">this</span>.config = {};
+        Database.instance = <span class="keyword">this</span>;
+    }
+    
+    <span class="function">connect</span>(config) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.connection) {
+            <span class="keyword">this</span>.config = config;
+            <span class="keyword">this</span>.connection = <span class="string">`Connected to ${config.host}`</span>;
+            console.<span class="function">log</span>(<span class="string">'Nueva conexión creada'</span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>.connection;
+    }
+    
+    <span class="function">query</span>(sql) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.connection) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'No hay conexión'</span>);
+        }
+        console.<span class="function">log</span>(<span class="string">`Ejecutando: ${sql}`</span>);
+    }
+    
+    <span class="keyword">static</span> <span class="function">getInstance</span>() {
+        <span class="keyword">if</span> (!Database.instance) {
+            Database.instance = <span class="keyword">new</span> <span class="function">Database</span>();
+        }
+        <span class="keyword">return</span> Database.instance;
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> db1 = <span class="keyword">new</span> <span class="function">Database</span>();
+<span class="keyword">const</span> db2 = <span class="keyword">new</span> <span class="function">Database</span>();
+console.<span class="function">log</span>(db1 === db2); <span class="comment">// true - Misma instancia</span>
+
+<span class="comment">// Singleton con Module Pattern</span>
+<span class="keyword">const</span> AppState = (() => {
+    <span class="keyword">let</span> instance;
+    
+    <span class="keyword">function</span> <span class="function">createInstance</span>() {
+        <span class="keyword">return</span> {
+            user: <span class="keyword">null</span>,
+            theme: <span class="string">'light'</span>,
+            <span class="function">setUser</span>(user) { <span class="keyword">this</span>.user = user; },
+            <span class="function">setTheme</span>(theme) { <span class="keyword">this</span>.theme = theme; }
+        };
+    }
+    
+    <span class="keyword">return</span> {
+        <span class="function">getInstance</span>() {
+            <span class="keyword">if</span> (!instance) {
+                instance = <span class="function">createInstance</span>();
+            }
+            <span class="keyword">return</span> instance;
+        }
+    };
+})();
+
+<span class="keyword">const</span> state1 = AppState.<span class="function">getInstance</span>();
+<span class="keyword">const</span> state2 = AppState.<span class="function">getInstance</span>();
+console.<span class="function">log</span>(state1 === state2); <span class="comment">// true</span></pre>
+            </div>
+        </section>
+
+        <!-- 2. Factory -->
+        <section id="factory" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-2-circle me-2"></i>Factory</h4>
+                <span class="pattern-badge">Creacional</span>
+            </div>
+            <p>Proporciona una interfaz para crear objetos sin especificar sus clases concretas.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN FACTORY</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Clases de Productos</span>
+<span class="keyword">class</span> <span class="function">Button</span> {
+    <span class="function">constructor</span>(text) {
+        <span class="keyword">this</span>.text = text;
+    }
+    <span class="function">render</span>() {
+        <span class="keyword">return</span> <span class="string">`&lt;button&gt;${this.text}&lt;/button&gt;`</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">Input</span> {
+    <span class="function">constructor</span>(type, placeholder) {
+        <span class="keyword">this</span>.type = type;
+        <span class="keyword">this</span>.placeholder = placeholder;
+    }
+    <span class="function">render</span>() {
+        <span class="keyword">return</span> <span class="string">`&lt;input type="${this.type}" placeholder="${this.placeholder}"&gt;`</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">Select</span> {
+    <span class="function">constructor</span>(options) {
+        <span class="keyword">this</span>.options = options;
+    }
+    <span class="function">render</span>() {
+        <span class="keyword">const</span> opts = <span class="keyword">this</span>.options.<span class="function">map</span>(o => <span class="string">`&lt;option&gt;${o}&lt;/option&gt;`</span>).<span class="function">join</span>(<span class="string">''</span>);
+        <span class="keyword">return</span> <span class="string">`&lt;select&gt;${opts}&lt;/select&gt;`</span>;
+    }
+}
+
+<span class="comment">// Factory</span>
+<span class="keyword">class</span> <span class="function">UIFactory</span> {
+    <span class="keyword">static</span> <span class="function">create</span>(type, config) {
+        <span class="keyword">switch</span> (type) {
+            <span class="keyword">case</span> <span class="string">'button'</span>:
+                <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Button</span>(config.text);
+            <span class="keyword">case</span> <span class="string">'input'</span>:
+                <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Input</span>(config.type, config.placeholder);
+            <span class="keyword">case</span> <span class="string">'select'</span>:
+                <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Select</span>(config.options);
+            <span class="keyword">default</span>:
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`Tipo ${type} no soportado`</span>);
+        }
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> btn = UIFactory.<span class="function">create</span>(<span class="string">'button'</span>, { text: <span class="string">'Click me'</span> });
+<span class="keyword">const</span> input = UIFactory.<span class="function">create</span>(<span class="string">'input'</span>, { type: <span class="string">'email'</span>, placeholder: <span class="string">'Email'</span> });
+<span class="keyword">const</span> select = UIFactory.<span class="function">create</span>(<span class="string">'select'</span>, { options: [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>] });
+
+console.<span class="function">log</span>(btn.<span class="function">render</span>());
+console.<span class="function">log</span>(input.<span class="function">render</span>());
+console.<span class="function">log</span>(select.<span class="function">render</span>());
+
+<span class="comment">// Factory con registro dinámico</span>
+<span class="keyword">class</span> <span class="function">ComponentFactory</span> {
+    <span class="keyword">static</span> components = <span class="keyword">new</span> <span class="function">Map</span>();
+    
+    <span class="keyword">static</span> <span class="function">register</span>(name, componentClass) {
+        <span class="keyword">this</span>.components.<span class="function">set</span>(name, componentClass);
+    }
+    
+    <span class="keyword">static</span> <span class="function">create</span>(name, ...args) {
+        <span class="keyword">const</span> Component = <span class="keyword">this</span>.components.<span class="function">get</span>(name);
+        <span class="keyword">if</span> (!Component) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`Componente ${name} no registrado`</span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Component</span>(...args);
+    }
+}
+
+ComponentFactory.<span class="function">register</span>(<span class="string">'button'</span>, Button);
+ComponentFactory.<span class="function">register</span>(<span class="string">'input'</span>, Input);</pre>
+            </div>
+        </section>
+
+        <!-- 3. Module -->
+        <section id="module" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-3-circle me-2"></i>Module Pattern</h4>
+                <span class="pattern-badge">Estructural</span>
+            </div>
+            <p>Encapsula código con variables y métodos privados, exponiendo solo una API pública.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN MODULE (IIFE)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> Calculator = (() => {
+    <span class="comment">// Variables privadas</span>
+    <span class="keyword">let</span> result = <span class="number">0</span>;
+    <span class="keyword">const</span> history = [];
+    
+    <span class="comment">// Funciones privadas</span>
+    <span class="keyword">function</span> <span class="function">saveToHistory</span>(operation) {
+        history.<span class="function">push</span>({
+            operation,
+            result,
+            timestamp: <span class="keyword">new</span> <span class="function">Date</span>()
+        });
+    }
+    
+    <span class="comment">// API Pública</span>
+    <span class="keyword">return</span> {
+        <span class="function">add</span>(n) {
+            result += n;
+            <span class="function">saveToHistory</span>(<span class="string">`+${n}`</span>);
+            <span class="keyword">return</span> <span class="keyword">this</span>;
+        },
+        
+        <span class="function">subtract</span>(n) {
+            result -= n;
+            <span class="function">saveToHistory</span>(<span class="string">`-${n}`</span>);
+            <span class="keyword">return</span> <span class="keyword">this</span>;
+        },
+        
+        <span class="function">multiply</span>(n) {
+            result *= n;
+            <span class="function">saveToHistory</span>(<span class="string">`*${n}`</span>);
+            <span class="keyword">return</span> <span class="keyword">this</span>;
+        },
+        
+        <span class="function">getResult</span>() {
+            <span class="keyword">return</span> result;
+        },
+        
+        <span class="function">getHistory</span>() {
+            <span class="keyword">return</span> [...history]; <span class="comment">// Copia para no exponer original</span>
+        },
+        
+        <span class="function">reset</span>() {
+            result = <span class="number">0</span>;
+            <span class="keyword">return</span> <span class="keyword">this</span>;
+        }
+    };
+})();
+
+<span class="comment">// Uso con chaining</span>
+Calculator.<span class="function">add</span>(<span class="number">10</span>).<span class="function">multiply</span>(<span class="number">2</span>).<span class="function">subtract</span>(<span class="number">5</span>);
+console.<span class="function">log</span>(Calculator.<span class="function">getResult</span>()); <span class="comment">// 15</span>
+console.<span class="function">log</span>(Calculator.<span class="function">getHistory</span>());
+
+<span class="comment">// Revealing Module Pattern</span>
+<span class="keyword">const</span> UserService = (() => {
+    <span class="keyword">let</span> users = [];
+    
+    <span class="keyword">function</span> <span class="function">fetchUsers</span>() {
+        <span class="keyword">return</span> <span class="function">fetch</span>(<span class="string">'/api/users'</span>).<span class="function">then</span>(r => r.<span class="function">json</span>());
+    }
+    
+    <span class="keyword">function</span> <span class="function">getById</span>(id) {
+        <span class="keyword">return</span> users.<span class="function">find</span>(u => u.id === id);
+    }
+    
+    <span class="keyword">function</span> <span class="function">add</span>(user) {
+        users.<span class="function">push</span>({ ...user, id: Date.<span class="function">now</span>() });
+    }
+    
+    <span class="keyword">function</span> <span class="function">remove</span>(id) {
+        users = users.<span class="function">filter</span>(u => u.id !== id);
+    }
+    
+    <span class="keyword">function</span> <span class="function">getAll</span>() {
+        <span class="keyword">return</span> [...users];
+    }
+    
+    <span class="comment">// Exponer solo lo necesario</span>
+    <span class="keyword">return</span> {
+        fetch: fetchUsers,
+        get: getById,
+        add,
+        remove,
+        list: getAll
+    };
+})();</pre>
+            </div>
+        </section>
+
+        <!-- 4. Observer/PubSub -->
+        <section id="observer" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-4-circle me-2"></i>Observer / Pub-Sub</h4>
+                <span class="pattern-badge">Comportamiento</span>
+            </div>
+            <p>Define una dependencia uno a muchos. Cuando un objeto cambia de estado, notifica a todos sus observadores.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN OBSERVER</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">EventEmitter</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.events = <span class="keyword">new</span> <span class="function">Map</span>();
+    }
+    
+    <span class="comment">// Suscribirse a un evento</span>
+    <span class="function">on</span>(event, callback) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.events.<span class="function">has</span>(event)) {
+            <span class="keyword">this</span>.events.<span class="function">set</span>(event, []);
+        }
+        <span class="keyword">this</span>.events.<span class="function">get</span>(event).<span class="function">push</span>(callback);
+        
+        <span class="comment">// Retornar función para desuscribirse</span>
+        <span class="keyword">return</span> () => <span class="keyword">this</span>.<span class="function">off</span>(event, callback);
+    }
+    
+    <span class="comment">// Suscripción que se ejecuta solo una vez</span>
+    <span class="function">once</span>(event, callback) {
+        <span class="keyword">const</span> wrapper = (...args) => {
+            <span class="function">callback</span>(...args);
+            <span class="keyword">this</span>.<span class="function">off</span>(event, wrapper);
+        };
+        <span class="keyword">this</span>.<span class="function">on</span>(event, wrapper);
+    }
+    
+    <span class="comment">// Desuscribirse</span>
+    <span class="function">off</span>(event, callback) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.events.<span class="function">has</span>(event)) {
+            <span class="keyword">const</span> callbacks = <span class="keyword">this</span>.events.<span class="function">get</span>(event);
+            <span class="keyword">const</span> index = callbacks.<span class="function">indexOf</span>(callback);
+            <span class="keyword">if</span> (index > -<span class="number">1</span>) callbacks.<span class="function">splice</span>(index, <span class="number">1</span>);
+        }
+    }
+    
+    <span class="comment">// Emitir evento</span>
+    <span class="function">emit</span>(event, ...args) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.events.<span class="function">has</span>(event)) {
+            <span class="keyword">this</span>.events.<span class="function">get</span>(event).<span class="function">forEach</span>(cb => <span class="function">cb</span>(...args));
+        }
+    }
+}
+
+<span class="comment">// Ejemplo: Sistema de notificaciones</span>
+<span class="keyword">class</span> <span class="function">Store</span> <span class="keyword">extends</span> <span class="function">EventEmitter</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">super</span>();
+        <span class="keyword">this</span>.cart = [];
+    }
+    
+    <span class="function">addToCart</span>(product) {
+        <span class="keyword">this</span>.cart.<span class="function">push</span>(product);
+        <span class="keyword">this</span>.<span class="function">emit</span>(<span class="string">'cart:updated'</span>, <span class="keyword">this</span>.cart);
+        <span class="keyword">this</span>.<span class="function">emit</span>(<span class="string">'product:added'</span>, product);
+    }
+    
+    <span class="function">removeFromCart</span>(id) {
+        <span class="keyword">this</span>.cart = <span class="keyword">this</span>.cart.<span class="function">filter</span>(p => p.id !== id);
+        <span class="keyword">this</span>.<span class="function">emit</span>(<span class="string">'cart:updated'</span>, <span class="keyword">this</span>.cart);
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> store = <span class="keyword">new</span> <span class="function">Store</span>();
+
+<span class="comment">// Suscribirse a cambios</span>
+store.<span class="function">on</span>(<span class="string">'cart:updated'</span>, (cart) => {
+    console.<span class="function">log</span>(<span class="string">'Carrito actualizado:'</span>, cart.length, <span class="string">'items'</span>);
+    <span class="function">updateCartUI</span>(cart);
+});
+
+store.<span class="function">on</span>(<span class="string">'product:added'</span>, (product) => {
+    console.<span class="function">log</span>(<span class="string">'Producto añadido:'</span>, product.name);
+    <span class="function">showNotification</span>(<span class="string">`${product.name} añadido al carrito`</span>);
+});
+
+store.<span class="function">addToCart</span>({ id: <span class="number">1</span>, name: <span class="string">'Laptop'</span>, price: <span class="number">999</span> });</pre>
+            </div>
+        </section>
+
+        <!-- 5. Strategy -->
+        <section id="strategy" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-5-circle me-2"></i>Strategy</h4>
+                <span class="pattern-badge">Comportamiento</span>
+            </div>
+            <p>Define una familia de algoritmos intercambiables en tiempo de ejecución.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN STRATEGY</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Estrategias de pago</span>
+<span class="keyword">const</span> paymentStrategies = {
+    creditCard: {
+        <span class="function">pay</span>(amount, details) {
+            console.<span class="function">log</span>(<span class="string">`Pagando $${amount} con tarjeta ${details.cardNumber}`</span>);
+            <span class="keyword">return</span> { success: <span class="keyword">true</span>, method: <span class="string">'credit_card'</span> };
+        },
+        <span class="function">validate</span>(details) {
+            <span class="keyword">return</span> details.cardNumber && details.cvv;
+        }
+    },
+    
+    paypal: {
+        <span class="function">pay</span>(amount, details) {
+            console.<span class="function">log</span>(<span class="string">`Pagando $${amount} con PayPal (${details.email})`</span>);
+            <span class="keyword">return</span> { success: <span class="keyword">true</span>, method: <span class="string">'paypal'</span> };
+        },
+        <span class="function">validate</span>(details) {
+            <span class="keyword">return</span> details.email && details.password;
+        }
+    },
+    
+    bankTransfer: {
+        <span class="function">pay</span>(amount, details) {
+            console.<span class="function">log</span>(<span class="string">`Transferencia de $${amount} a cuenta ${details.accountNumber}`</span>);
+            <span class="keyword">return</span> { success: <span class="keyword">true</span>, method: <span class="string">'bank_transfer'</span>, pending: <span class="keyword">true</span> };
+        },
+        <span class="function">validate</span>(details) {
+            <span class="keyword">return</span> details.accountNumber;
+        }
+    }
+};
+
+<span class="comment">// Contexto que usa las estrategias</span>
+<span class="keyword">class</span> <span class="function">PaymentProcessor</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.strategy = <span class="keyword">null</span>;
+    }
+    
+    <span class="function">setStrategy</span>(strategyName) {
+        <span class="keyword">this</span>.strategy = paymentStrategies[strategyName];
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.strategy) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">`Estrategia ${strategyName} no soportada`</span>);
+        }
+    }
+    
+    <span class="function">process</span>(amount, details) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.strategy) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Selecciona un método de pago'</span>);
+        }
+        
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.strategy.<span class="function">validate</span>(details)) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Datos de pago inválidos'</span>);
+        }
+        
+        <span class="keyword">return</span> <span class="keyword">this</span>.strategy.<span class="function">pay</span>(amount, details);
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> processor = <span class="keyword">new</span> <span class="function">PaymentProcessor</span>();
+
+processor.<span class="function">setStrategy</span>(<span class="string">'creditCard'</span>);
+processor.<span class="function">process</span>(<span class="number">100</span>, { cardNumber: <span class="string">'4111111111111111'</span>, cvv: <span class="string">'123'</span> });
+
+processor.<span class="function">setStrategy</span>(<span class="string">'paypal'</span>);
+processor.<span class="function">process</span>(<span class="number">50</span>, { email: <span class="string">'user@email.com'</span>, password: <span class="string">'***'</span> });
+
+<span class="comment">// Strategy con funciones</span>
+<span class="keyword">const</span> sortStrategies = {
+    price: (a, b) => a.price - b.price,
+    name: (a, b) => a.name.<span class="function">localeCompare</span>(b.name),
+    date: (a, b) => <span class="keyword">new</span> <span class="function">Date</span>(b.date) - <span class="keyword">new</span> <span class="function">Date</span>(a.date),
+    rating: (a, b) => b.rating - a.rating
+};
+
+<span class="keyword">function</span> <span class="function">sortProducts</span>(products, strategyName) {
+    <span class="keyword">return</span> [...products].<span class="function">sort</span>(sortStrategies[strategyName]);
+}</pre>
+            </div>
+        </section>
+
+        <!-- 6. Decorator -->
+        <section id="decorator" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-6-circle me-2"></i>Decorator</h4>
+                <span class="pattern-badge">Estructural</span>
+            </div>
+            <p>Añade funcionalidad a objetos de forma dinámica sin modificar su estructura.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN DECORATOR</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Clase base</span>
+<span class="keyword">class</span> <span class="function">Coffee</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.description = <span class="string">'Café simple'</span>;
+        <span class="keyword">this</span>.cost = <span class="number">2</span>;
+    }
+    
+    <span class="function">getDescription</span>() { <span class="keyword">return</span> <span class="keyword">this</span>.description; }
+    <span class="function">getCost</span>() { <span class="keyword">return</span> <span class="keyword">this</span>.cost; }
+}
+
+<span class="comment">// Decoradores</span>
+<span class="keyword">class</span> <span class="function">MilkDecorator</span> {
+    <span class="function">constructor</span>(coffee) {
+        <span class="keyword">this</span>.coffee = coffee;
+    }
+    
+    <span class="function">getDescription</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.coffee.<span class="function">getDescription</span>() + <span class="string">' + Leche'</span>;
+    }
+    
+    <span class="function">getCost</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.coffee.<span class="function">getCost</span>() + <span class="number">0.5</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="function">SugarDecorator</span> {
+    <span class="function">constructor</span>(coffee) {
+        <span class="keyword">this</span>.coffee = coffee;
+    }
+    
+    <span class="function">getDescription</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.coffee.<span class="function">getDescription</span>() + <span class="string">' + Azúcar'</span>;
+    }
+    
+    <span class="function">getCost</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.coffee.<span class="function">getCost</span>() + <span class="number">0.2</span>;
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">let</span> miCafe = <span class="keyword">new</span> <span class="function">Coffee</span>();
+console.<span class="function">log</span>(miCafe.<span class="function">getDescription</span>(), <span class="string">'$'</span> + miCafe.<span class="function">getCost</span>());
+<span class="comment">// Café simple $2</span>
+
+miCafe = <span class="keyword">new</span> <span class="function">MilkDecorator</span>(miCafe);
+console.<span class="function">log</span>(miCafe.<span class="function">getDescription</span>(), <span class="string">'$'</span> + miCafe.<span class="function">getCost</span>());
+<span class="comment">// Café simple + Leche $2.5</span>
+
+miCafe = <span class="keyword">new</span> <span class="function">SugarDecorator</span>(miCafe);
+console.<span class="function">log</span>(miCafe.<span class="function">getDescription</span>(), <span class="string">'$'</span> + miCafe.<span class="function">getCost</span>());
+<span class="comment">// Café simple + Leche + Azúcar $2.7</span>
+
+<span class="comment">// Decorator con funciones (más común en JS)</span>
+<span class="keyword">function</span> <span class="function">withLogging</span>(fn) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        console.<span class="function">log</span>(<span class="string">`Llamando ${fn.name} con:`</span>, args);
+        <span class="keyword">const</span> result = <span class="function">fn</span>(...args);
+        console.<span class="function">log</span>(<span class="string">`Resultado:`</span>, result);
+        <span class="keyword">return</span> result;
+    };
+}
+
+<span class="keyword">function</span> <span class="function">withTiming</span>(fn) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> start = performance.<span class="function">now</span>();
+        <span class="keyword">const</span> result = <span class="function">fn</span>(...args);
+        console.<span class="function">log</span>(<span class="string">`Tiempo: ${(performance.now() - start).toFixed(2)}ms`</span>);
+        <span class="keyword">return</span> result;
+    };
+}
+
+<span class="keyword">const</span> sumar = (a, b) => a + b;
+<span class="keyword">const</span> sumarConLogging = <span class="function">withLogging</span>(<span class="function">withTiming</span>(sumar));
+<span class="function">sumarConLogging</span>(<span class="number">5</span>, <span class="number">3</span>);</pre>
+            </div>
+        </section>
+
+        <!-- 7. Proxy -->
+        <section id="proxy" class="pattern-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="bi bi-7-circle me-2"></i>Proxy</h4>
+                <span class="pattern-badge">Estructural</span>
+            </div>
+            <p>Proporciona un intermediario para controlar el acceso a un objeto.</p>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// PATRÓN PROXY (JavaScript nativo)</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Proxy de validación</span>
+<span class="keyword">const</span> usuario = { nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span> };
+
+<span class="keyword">const</span> usuarioProxy = <span class="keyword">new</span> <span class="function">Proxy</span>(usuario, {
+    <span class="function">get</span>(target, prop) {
+        console.<span class="function">log</span>(<span class="string">`Accediendo a ${prop}`</span>);
+        <span class="keyword">return</span> target[prop];
+    },
+    
+    <span class="function">set</span>(target, prop, value) {
+        <span class="keyword">if</span> (prop === <span class="string">'edad'</span> && (<span class="keyword">typeof</span> value !== <span class="string">'number'</span> || value < <span class="number">0</span>)) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Edad debe ser número positivo'</span>);
+        }
+        console.<span class="function">log</span>(<span class="string">`Cambiando ${prop} a ${value}`</span>);
+        target[prop] = value;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+});
+
+usuarioProxy.nombre;      <span class="comment">// "Accediendo a nombre"</span>
+usuarioProxy.edad = <span class="number">26</span>;   <span class="comment">// "Cambiando edad a 26"</span>
+<span class="comment">// usuarioProxy.edad = -5; // Error!</span>
+
+<span class="comment">// Proxy reactivo (como Vue.js)</span>
+<span class="keyword">function</span> <span class="function">reactive</span>(obj, onChange) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Proxy</span>(obj, {
+        <span class="function">set</span>(target, prop, value) {
+            <span class="keyword">const</span> oldValue = target[prop];
+            target[prop] = value;
+            <span class="function">onChange</span>(prop, value, oldValue);
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+    });
+}
+
+<span class="keyword">const</span> state = <span class="function">reactive</span>({ count: <span class="number">0</span> }, (prop, newVal, oldVal) => {
+    console.<span class="function">log</span>(<span class="string">`${prop}: ${oldVal} → ${newVal}`</span>);
+    <span class="function">updateUI</span>();
+});
+
+state.count++; <span class="comment">// "count: 0 → 1", actualiza UI</span>
+
+<span class="comment">// Proxy con caché</span>
+<span class="keyword">function</span> <span class="function">createCachedAPI</span>(api) {
+    <span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="function">Map</span>();
+    
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Proxy</span>(api, {
+        <span class="keyword">async</span> <span class="function">get</span>(target, prop) {
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> target[prop] === <span class="string">'function'</span>) {
+                <span class="keyword">return</span> <span class="keyword">async</span> (...args) => {
+                    <span class="keyword">const</span> key = <span class="string">`${prop}:${JSON.stringify(args)}`</span>;
+                    
+                    <span class="keyword">if</span> (cache.<span class="function">has</span>(key)) {
+                        console.<span class="function">log</span>(<span class="string">'Retornando del caché'</span>);
+                        <span class="keyword">return</span> cache.<span class="function">get</span>(key);
+                    }
+                    
+                    <span class="keyword">const</span> result = <span class="keyword">await</span> target[prop](...args);
+                    cache.<span class="function">set</span>(key, result);
+                    <span class="keyword">return</span> result;
+                };
+            }
+            <span class="keyword">return</span> target[prop];
+        }
+    });
+}</pre>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="es6-moderno.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>ES6+ Moderno
+            </a>
+            <a href="../index.html" class="btn btn-primary">
+                Volver al Inicio<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Patrones de Diseño JavaScript | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Online - E-commerce Completo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #004e89;
+        }
+        
+        /* Header Tienda */
+        .store-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        /* Categorías */
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: white;
+            border: 2px solid #e9ecef;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .category-badge:hover, .category-badge.active {
+            border-color: var(--primary-color);
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary-color);
+        }
+        
+        /* Product Card */
+        .product-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .product-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        .product-img-wrapper img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .product-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s;
+        }
+        .product-card:hover .product-actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        .product-info {
+            padding: 20px;
+        }
+        .product-category {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #888;
+            letter-spacing: 1px;
+        }
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 8px 0;
+            color: #333;
+        }
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .current-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .old-price {
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+        }
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .product-rating i {
+            color: #ffc107;
+            font-size: 12px;
+        }
+        
+        /* Filtros Sidebar */
+        .filter-section {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .price-range input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .color-option:hover, .color-option.active {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+        
+        /* Quick View Modal */
+        .quick-view-img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .quantity-btn:hover {
+            background: #f8f9fa;
+        }
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+        }
+        
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+            z-index: 1050;
+            transition: right 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-sidebar.open {
+            right: 0;
+        }
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        
+        /* Cart Overlay */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        .cart-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark store-header sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-bag-heart me-2"></i>MiTienda
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#storeNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="storeNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categorías</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Electrónica</a></li>
+                            <li><a class="dropdown-item" href="#">Ropa</a></li>
+                            <li><a class="dropdown-item" href="#">Hogar</a></li>
+                            <li><a class="dropdown-item" href="#">Deportes</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#">Ofertas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <form class="d-none d-lg-flex">
+                        <div class="input-group">
+                            <input type="search" class="form-control" placeholder="Buscar productos..." style="border-radius: 50px 0 0 50px;">
+                            <button class="btn btn-light" style="border-radius: 0 50px 50px 0;">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <a href="#" class="text-white"><i class="bi bi-heart fs-5"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-person fs-5"></i></a>
+                    <button class="btn btn-outline-light position-relative" onclick="toggleCart()">
+                        <i class="bi bi-cart3 fs-5"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">
+                            0
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO BANNER -->
+    <section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-white">
+                    <span class="badge bg-warning text-dark mb-3">🔥 Ofertas de Temporada</span>
+                    <h1 class="display-4 fw-bold">Hasta 50% OFF</h1>
+                    <p class="lead">En todos los productos de electrónica. ¡No te lo pierdas!</p>
+                    <a href="#productos" class="btn btn-light btn-lg">
+                        Ver Ofertas <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+                <div class="col-lg-6 text-center d-none d-lg-block">
+                    <img src="https://via.placeholder.com/400x300/ffffff/667eea?text=Oferta+Especial" alt="Banner" class="img-fluid rounded-3 shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORÍAS -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                <span class="category-badge active" data-category="all">
+                    <i class="bi bi-grid"></i> Todos
+                </span>
+                <span class="category-badge" data-category="electronics">
+                    <i class="bi bi-laptop"></i> Electrónica
+                </span>
+                <span class="category-badge" data-category="clothing">
+                    <i class="bi bi-bag"></i> Ropa
+                </span>
+                <span class="category-badge" data-category="home">
+                    <i class="bi bi-house"></i> Hogar
+                </span>
+                <span class="category-badge" data-category="sports">
+                    <i class="bi bi-bicycle"></i> Deportes
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="py-5" id="productos">
+        <div class="container">
+            <div class="row">
+                <!-- SIDEBAR FILTROS -->
+                <aside class="col-lg-3 d-none d-lg-block">
+                    <!-- Filtro Precio -->
+                    <div class="filter-section">
+                        <h5 class="filter-title">
+                            Precio
+                            <i class="bi bi-chevron-down"></i>
+                        </h5>
+                        <div class="price-range mb-3">
+                            <input type="number" placeholder="Min" id="priceMin">
+                            <span>-</span>
+                            <input type="number" placeholder="Max" id="priceMax">
+                        </div>
+                        <input type="range" class="form-range" min="0" max="1000" id="priceRange">
+                        <div class="d-flex justify-content-between small text-muted">
+                            <span>$0</span>
+                            <span>$1000</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtro Marca -->
+                    <div class="filter-section">
+                        <h5 class="filter-title">
+                            Marca
+                            <i class="bi bi-chevron-down"></i>
+                        </h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="apple" id="brandApple">
+                            <label class="form-check-label" for="brandApple">Apple (24)</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="samsung" id="brandSamsung">
+                            <label class="form-check-label" for="brandSamsung">Samsung (18)</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="sony" id="brandSony">
+                            <label class="form-check-label" for="brandSony">Sony (12)</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="lg" id="brandLG">
+                            <label class="form-check-label" for="brandLG">LG (15)</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtro Color -->
+                    <div class="filter-section">
+                        <h5 class="filter-title">
+                            Color
+                            <i class="bi bi-chevron-down"></i>
+                        </h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            <div class="color-option active" style="background: #000;"></div>
+                            <div class="color-option" style="background: #fff; border: 1px solid #ddd;"></div>
+                            <div class="color-option" style="background: #ff6b35;"></div>
+                            <div class="color-option" style="background: #667eea;"></div>
+                            <div class="color-option" style="background: #28a745;"></div>
+                            <div class="color-option" style="background: #ffc107;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtro Rating -->
+                    <div class="filter-section">
+                        <h5 class="filter-title">
+                            Calificación
+                            <i class="bi bi-chevron-down"></i>
+                        </h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="rating" id="rating5">
+                            <label class="form-check-label" for="rating5">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="rating" id="rating4">
+                            <label class="form-check-label" for="rating4">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star text-warning"></i>
+                                y más
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rating" id="rating3">
+                            <label class="form-check-label" for="rating3">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star text-warning"></i>
+                                <i class="bi bi-star text-warning"></i>
+                                y más
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                        <i class="bi bi-funnel me-2"></i>Aplicar Filtros
+                    </button>
+                </aside>
+                
+                <!-- PRODUCTOS -->
+                <div class="col-lg-9">
+                    <!-- Toolbar -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                        <div>
+                            <span class="text-muted">Mostrando <strong id="productCount">12</strong> productos</span>
+                        </div>
+                        <div class="d-flex gap-3 align-items-center">
+                            <button class="btn btn-outline-secondary d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas">
+                                <i class="bi bi-funnel"></i> Filtros
+                            </button>
+                            <select class="form-select" style="width: auto;" id="sortSelect">
+                                <option value="featured">Destacados</option>
+                                <option value="price-low">Precio: Menor a Mayor</option>
+                                <option value="price-high">Precio: Mayor a Menor</option>
+                                <option value="newest">Más Nuevos</option>
+                                <option value="rating">Mejor Calificados</option>
+                            </select>
+                            <div class="btn-group d-none d-md-flex">
+                                <button class="btn btn-outline-secondary active" id="viewGrid">
+                                    <i class="bi bi-grid-3x3-gap"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" id="viewList">
+                                    <i class="bi bi-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Grid de Productos -->
+                    <div class="row row-cols-2 row-cols-md-3 g-4" id="productsGrid">
+                        <!-- Los productos se cargan dinámicamente -->
+                    </div>
+                    
+                    <!-- Paginación -->
+                    <nav class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">10</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h5 class="mb-0"><i class="bi bi-cart3 me-2"></i>Tu Carrito</h5>
+            <button class="btn btn-close" onclick="toggleCart()"></button>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <!-- Items del carrito -->
+            <div class="text-center py-5" id="emptyCart">
+                <i class="bi bi-cart-x display-1 text-muted"></i>
+                <p class="text-muted mt-3">Tu carrito está vacío</p>
+                <button class="btn btn-primary" onclick="toggleCart()">Comenzar a Comprar</button>
+            </div>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <strong id="cartSubtotal">$0.00</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-3 text-muted small">
+                <span>Envío:</span>
+                <span>Calculado en checkout</span>
+            </div>
+            <button class="btn btn-primary w-100 mb-2" onclick="goToCheckout()">
+                Proceder al Pago
+            </button>
+            <button class="btn btn-outline-secondary w-100" onclick="toggleCart()">
+                Seguir Comprando
+            </button>
+        </div>
+    </aside>
+
+    <!-- QUICK VIEW MODAL -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <img id="quickViewImg" src="" alt="Producto" class="quick-view-img">
+                        </div>
+                        <div class="col-md-6 p-4">
+                            <span class="badge bg-success mb-2">En Stock</span>
+                            <h4 id="quickViewTitle">Nombre del Producto</h4>
+                            <div class="product-rating mb-3">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                                <span class="text-muted ms-2">(128 reseñas)</span>
+                            </div>
+                            <p class="text-muted" id="quickViewDesc">Descripción del producto...</p>
+                            <div class="product-price mb-4">
+                                <span class="current-price" id="quickViewPrice">$299.99</span>
+                                <span class="old-price">$399.99</span>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Color</label>
+                                <div class="d-flex gap-2">
+                                    <div class="color-option active" style="background: #000;"></div>
+                                    <div class="color-option" style="background: #fff; border: 1px solid #ddd;"></div>
+                                    <div class="color-option" style="background: #667eea;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Cantidad</label>
+                                <div class="quantity-selector">
+                                    <button class="quantity-btn" onclick="updateQuickViewQty(-1)">-</button>
+                                    <input type="number" class="quantity-input" value="1" min="1" id="quickViewQty">
+                                    <button class="quantity-btn" onclick="updateQuickViewQty(1)">+</button>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-lg w-100 mb-2" onclick="addToCartFromQuickView()">
+                                <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
+                            </button>
+                            <button class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-heart me-2"></i>Agregar a Favoritos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE CÓDIGO -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="fw-bold mb-4 text-center">
+                <i class="bi bi-code-slash me-2 text-primary"></i>Código de la Tienda
+            </h2>
+            
+            <div class="accordion" id="codeAccordion">
+                <!-- Productos Data -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#code1">
+                            Datos de Productos (JavaScript)
+                        </button>
+                    </h2>
+                    <div id="code1" class="accordion-collapse collapse show" data-bs-parent="#codeAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// Base de datos de productos</span>
+<span class="keyword">const</span> products = [
+    {
+        id: 1,
+        name: <span class="string">"iPhone 15 Pro"</span>,
+        category: <span class="string">"electronics"</span>,
+        price: 999.99,
+        oldPrice: 1199.99,
+        image: <span class="string">"https://via.placeholder.com/300x200"</span>,
+        badge: <span class="string">"Nuevo"</span>,
+        badgeColor: <span class="string">"primary"</span>,
+        rating: 4.8,
+        reviews: 256,
+        inStock: true,
+        description: <span class="string">"El iPhone más potente jamás creado."</span>
+    },
+    {
+        id: 2,
+        name: <span class="string">"MacBook Pro M3"</span>,
+        category: <span class="string">"electronics"</span>,
+        price: 1999.99,
+        oldPrice: null,
+        image: <span class="string">"https://via.placeholder.com/300x200"</span>,
+        badge: <span class="string">"Destacado"</span>,
+        badgeColor: <span class="string">"warning"</span>,
+        rating: 4.9,
+        reviews: 189,
+        inStock: true,
+        description: <span class="string">"Rendimiento profesional para creativos."</span>
+    },
+    <span class="comment">// ... más productos</span>
+];
+
+<span class="comment">// Renderizar productos</span>
+<span class="keyword">function</span> <span class="function">renderProducts</span>(productsToRender) {
+    <span class="keyword">const</span> grid = document.<span class="function">getElementById</span>(<span class="string">'productsGrid'</span>);
+    
+    grid.innerHTML = productsToRender.<span class="function">map</span>(product => <span class="string">`
+        &lt;div class="col"&gt;
+            &lt;div class="card product-card h-100"&gt;
+                &lt;div class="product-img-wrapper"&gt;
+                    &lt;img src="${product.image}" alt="${product.name}"&gt;
+                    ${product.badge ? <span class="string">`
+                        &lt;span class="product-badge badge bg-${product.badgeColor}"&gt;
+                            ${product.badge}
+                        &lt;/span&gt;
+                    `</span> : <span class="string">''</span>}
+                    &lt;div class="product-actions"&gt;
+                        &lt;button class="action-btn" onclick="openQuickView(${product.id})"&gt;
+                            &lt;i class="bi bi-eye"&gt;&lt;/i&gt;
+                        &lt;/button&gt;
+                        &lt;button class="action-btn" onclick="addToWishlist(${product.id})"&gt;
+                            &lt;i class="bi bi-heart"&gt;&lt;/i&gt;
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="product-info"&gt;
+                    &lt;span class="product-category"&gt;${product.category}&lt;/span&gt;
+                    &lt;h5 class="product-title"&gt;${product.name}&lt;/h5&gt;
+                    &lt;div class="product-price"&gt;
+                        &lt;span class="current-price"&gt;$${product.price}&lt;/span&gt;
+                        ${product.oldPrice ? <span class="string">`
+                            &lt;span class="old-price"&gt;$${product.oldPrice}&lt;/span&gt;
+                        `</span> : <span class="string">''</span>}
+                    &lt;/div&gt;
+                    &lt;div class="product-rating"&gt;
+                        ${<span class="function">renderStars</span>(product.rating)}
+                        &lt;small class="text-muted"&gt;(${product.reviews})&lt;/small&gt;
+                    &lt;/div&gt;
+                    &lt;button class="btn btn-primary w-100 mt-3" 
+                            onclick="addToCart(${product.id})"&gt;
+                        &lt;i class="bi bi-cart-plus me-2"&gt;&lt;/i&gt;Agregar
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `</span>).<span class="function">join</span>(<span class="string">''</span>);
+    
+    document.<span class="function">getElementById</span>(<span class="string">'productCount'</span>).textContent = 
+        productsToRender.length;
+}</code></pre>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                                <i class="bi bi-clipboard me-1"></i>Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filtros -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#code2">
+                            Sistema de Filtros
+                        </button>
+                    </h2>
+                    <div id="code2" class="accordion-collapse collapse" data-bs-parent="#codeAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// Sistema de filtrado</span>
+<span class="keyword">let</span> filters = {
+    category: <span class="string">'all'</span>,
+    priceMin: 0,
+    priceMax: Infinity,
+    brands: [],
+    colors: [],
+    rating: 0
+};
+
+<span class="keyword">function</span> <span class="function">filterProducts</span>() {
+    <span class="keyword">let</span> filtered = [...products];
+    
+    <span class="comment">// Filtrar por categoría</span>
+    <span class="keyword">if</span> (filters.category !== <span class="string">'all'</span>) {
+        filtered = filtered.<span class="function">filter</span>(p => 
+            p.category === filters.category
+        );
+    }
+    
+    <span class="comment">// Filtrar por precio</span>
+    filtered = filtered.<span class="function">filter</span>(p => 
+        p.price >= filters.priceMin && 
+        p.price <= filters.priceMax
+    );
+    
+    <span class="comment">// Filtrar por marcas</span>
+    <span class="keyword">if</span> (filters.brands.length > 0) {
+        filtered = filtered.<span class="function">filter</span>(p => 
+            filters.brands.<span class="function">includes</span>(p.brand)
+        );
+    }
+    
+    <span class="comment">// Filtrar por rating</span>
+    <span class="keyword">if</span> (filters.rating > 0) {
+        filtered = filtered.<span class="function">filter</span>(p => 
+            p.rating >= filters.rating
+        );
+    }
+    
+    <span class="keyword">return</span> filtered;
+}
+
+<span class="comment">// Ordenar productos</span>
+<span class="keyword">function</span> <span class="function">sortProducts</span>(products, sortBy) {
+    <span class="keyword">const</span> sorted = [...products];
+    
+    <span class="keyword">switch</span>(sortBy) {
+        <span class="keyword">case</span> <span class="string">'price-low'</span>:
+            <span class="keyword">return</span> sorted.<span class="function">sort</span>((a, b) => a.price - b.price);
+        <span class="keyword">case</span> <span class="string">'price-high'</span>:
+            <span class="keyword">return</span> sorted.<span class="function">sort</span>((a, b) => b.price - a.price);
+        <span class="keyword">case</span> <span class="string">'newest'</span>:
+            <span class="keyword">return</span> sorted.<span class="function">sort</span>((a, b) => b.id - a.id);
+        <span class="keyword">case</span> <span class="string">'rating'</span>:
+            <span class="keyword">return</span> sorted.<span class="function">sort</span>((a, b) => b.rating - a.rating);
+        <span class="keyword">default</span>:
+            <span class="keyword">return</span> sorted;
+    }
+}
+
+<span class="comment">// Event listeners para filtros</span>
+document.<span class="function">querySelectorAll</span>(<span class="string">'.category-badge'</span>).<span class="function">forEach</span>(badge => {
+    badge.<span class="function">addEventListener</span>(<span class="string">'click'</span>, <span class="keyword">function</span>() {
+        <span class="comment">// Quitar active de todos</span>
+        document.<span class="function">querySelectorAll</span>(<span class="string">'.category-badge'</span>)
+            .<span class="function">forEach</span>(b => b.classList.<span class="function">remove</span>(<span class="string">'active'</span>));
+        
+        <span class="comment">// Agregar active al clickeado</span>
+        this.classList.<span class="function">add</span>(<span class="string">'active'</span>);
+        
+        <span class="comment">// Actualizar filtro</span>
+        filters.category = this.dataset.category;
+        
+        <span class="comment">// Re-renderizar</span>
+        <span class="function">renderProducts</span>(<span class="function">filterProducts</span>());
+    });
+});
+
+<span class="comment">// Ordenamiento</span>
+document.<span class="function">getElementById</span>(<span class="string">'sortSelect'</span>)
+    .<span class="function">addEventListener</span>(<span class="string">'change'</span>, <span class="keyword">function</span>() {
+        <span class="keyword">const</span> filtered = <span class="function">filterProducts</span>();
+        <span class="keyword">const</span> sorted = <span class="function">sortProducts</span>(filtered, this.value);
+        <span class="function">renderProducts</span>(sorted);
+    });</code></pre>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                                <i class="bi bi-clipboard me-1"></i>Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carrito -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#code3">
+                            Sistema de Carrito Completo
+                        </button>
+                    </h2>
+                    <div id="code3" class="accordion-collapse collapse" data-bs-parent="#codeAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// SISTEMA DE CARRITO E-COMMERCE</span>
+<span class="comment">// ============================================</span>
+
+<span class="keyword">class</span> <span class="function">ShoppingCart</span> {
+    <span class="keyword">constructor</span>() {
+        this.items = this.<span class="function">loadFromStorage</span>() || [];
+        this.<span class="function">updateUI</span>();
+    }
+    
+    <span class="comment">// Agregar producto</span>
+    <span class="function">addItem</span>(product, quantity = 1) {
+        <span class="keyword">const</span> existingItem = this.items.<span class="function">find</span>(
+            item => item.id === product.id
+        );
+        
+        <span class="keyword">if</span> (existingItem) {
+            existingItem.quantity += quantity;
+        } <span class="keyword">else</span> {
+            this.items.<span class="function">push</span>({
+                ...product,
+                quantity
+            });
+        }
+        
+        this.<span class="function">saveToStorage</span>();
+        this.<span class="function">updateUI</span>();
+        this.<span class="function">showNotification</span>(<span class="string">'Producto agregado'</span>);
+    }
+    
+    <span class="comment">// Remover producto</span>
+    <span class="function">removeItem</span>(productId) {
+        this.items = this.items.<span class="function">filter</span>(
+            item => item.id !== productId
+        );
+        this.<span class="function">saveToStorage</span>();
+        this.<span class="function">updateUI</span>();
+    }
+    
+    <span class="comment">// Actualizar cantidad</span>
+    <span class="function">updateQuantity</span>(productId, quantity) {
+        <span class="keyword">const</span> item = this.items.<span class="function">find</span>(
+            item => item.id === productId
+        );
+        
+        <span class="keyword">if</span> (item) {
+            <span class="keyword">if</span> (quantity <= 0) {
+                this.<span class="function">removeItem</span>(productId);
+            } <span class="keyword">else</span> {
+                item.quantity = quantity;
+                this.<span class="function">saveToStorage</span>();
+                this.<span class="function">updateUI</span>();
+            }
+        }
+    }
+    
+    <span class="comment">// Calcular totales</span>
+    <span class="function">getTotal</span>() {
+        <span class="keyword">return</span> this.items.<span class="function">reduce</span>((total, item) => 
+            total + (item.price * item.quantity), 0
+        );
+    }
+    
+    <span class="function">getItemCount</span>() {
+        <span class="keyword">return</span> this.items.<span class="function">reduce</span>((count, item) => 
+            count + item.quantity, 0
+        );
+    }
+    
+    <span class="comment">// Persistencia</span>
+    <span class="function">saveToStorage</span>() {
+        localStorage.<span class="function">setItem</span>(<span class="string">'cart'</span>, JSON.<span class="function">stringify</span>(this.items));
+    }
+    
+    <span class="function">loadFromStorage</span>() {
+        <span class="keyword">const</span> data = localStorage.<span class="function">getItem</span>(<span class="string">'cart'</span>);
+        <span class="keyword">return</span> data ? JSON.<span class="function">parse</span>(data) : null;
+    }
+    
+    <span class="comment">// Actualizar interfaz</span>
+    <span class="function">updateUI</span>() {
+        <span class="comment">// Contador del navbar</span>
+        document.<span class="function">getElementById</span>(<span class="string">'cartCount'</span>).textContent = 
+            this.<span class="function">getItemCount</span>();
+        
+        <span class="comment">// Subtotal</span>
+        document.<span class="function">getElementById</span>(<span class="string">'cartSubtotal'</span>).textContent = 
+            <span class="string">`$${this.<span class="function">getTotal</span>().<span class="function">toFixed</span>(2)}`</span>;
+        
+        <span class="comment">// Items del carrito</span>
+        <span class="keyword">const</span> cartItemsEl = document.<span class="function">getElementById</span>(<span class="string">'cartItems'</span>);
+        <span class="keyword">const</span> emptyCart = document.<span class="function">getElementById</span>(<span class="string">'emptyCart'</span>);
+        
+        <span class="keyword">if</span> (this.items.length === 0) {
+            emptyCart.style.display = <span class="string">'block'</span>;
+            <span class="keyword">return</span>;
+        }
+        
+        emptyCart.style.display = <span class="string">'none'</span>;
+        
+        cartItemsEl.innerHTML = this.items.<span class="function">map</span>(item => <span class="string">`
+            &lt;div class="cart-item"&gt;
+                &lt;img src="${item.image}" alt="${item.name}"&gt;
+                &lt;div class="cart-item-info"&gt;
+                    &lt;h6 class="mb-1"&gt;${item.name}&lt;/h6&gt;
+                    &lt;p class="text-muted small mb-2"&gt;$${item.price}&lt;/p&gt;
+                    &lt;div class="d-flex align-items-center gap-2"&gt;
+                        &lt;button class="btn btn-sm btn-outline-secondary" 
+                                onclick="cart.updateQuantity(${item.id}, ${item.quantity - 1})"&gt;
+                            -
+                        &lt;/button&gt;
+                        &lt;span&gt;${item.quantity}&lt;/span&gt;
+                        &lt;button class="btn btn-sm btn-outline-secondary"
+                                onclick="cart.updateQuantity(${item.id}, ${item.quantity + 1})"&gt;
+                            +
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="text-end"&gt;
+                    &lt;p class="fw-bold mb-1"&gt;$${(item.price * item.quantity).<span class="function">toFixed</span>(2)}&lt;/p&gt;
+                    &lt;button class="btn btn-sm text-danger"
+                            onclick="cart.removeItem(${item.id})"&gt;
+                        &lt;i class="bi bi-trash"&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `</span>).<span class="function">join</span>(<span class="string">''</span>);
+    }
+    
+    <span class="function">showNotification</span>(message) {
+        <span class="comment">// Implementar toast/notificación</span>
+        console.<span class="function">log</span>(message);
+    }
+}
+
+<span class="comment">// Instanciar carrito</span>
+<span class="keyword">const</span> cart = <span class="keyword">new</span> ShoppingCart();
+
+<span class="comment">// Funciones helper</span>
+<span class="keyword">function</span> <span class="function">addToCart</span>(productId) {
+    <span class="keyword">const</span> product = products.<span class="function">find</span>(p => p.id === productId);
+    <span class="keyword">if</span> (product) cart.<span class="function">addItem</span>(product);
+}
+
+<span class="keyword">function</span> <span class="function">toggleCart</span>() {
+    document.<span class="function">getElementById</span>(<span class="string">'cartSidebar'</span>)
+        .classList.<span class="function">toggle</span>(<span class="string">'open'</span>);
+    document.<span class="function">getElementById</span>(<span class="string">'cartOverlay'</span>)
+        .classList.<span class="function">toggle</span>(<span class="string">'open'</span>);
+}</code></pre>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                                <i class="bi bi-clipboard me-1"></i>Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="fw-bold"><i class="bi bi-bag-heart me-2"></i>MiTienda</h5>
+                    <p class="text-muted">Tu tienda online favorita con los mejores productos y precios.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-twitter fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="fw-bold">Tienda</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-muted">Nuevos</a></li>
+                        <li><a href="#" class="text-muted">Ofertas</a></li>
+                        <li><a href="#" class="text-muted">Más Vendidos</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="fw-bold">Ayuda</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-muted">Envíos</a></li>
+                        <li><a href="#" class="text-muted">Devoluciones</a></li>
+                        <li><a href="#" class="text-muted">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <h6 class="fw-bold">Newsletter</h6>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Tu email">
+                        <button class="btn btn-primary">Suscribir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Datos de productos
+        const products = [
+            { id: 1, name: "iPhone 15 Pro", category: "electronics", price: 999.99, oldPrice: 1199.99, image: "https://via.placeholder.com/300x200/667eea/fff?text=iPhone+15", badge: "Nuevo", badgeColor: "primary", rating: 4.8, reviews: 256 },
+            { id: 2, name: "MacBook Pro M3", category: "electronics", price: 1999.99, oldPrice: null, image: "https://via.placeholder.com/300x200/764ba2/fff?text=MacBook", badge: "Destacado", badgeColor: "warning", rating: 4.9, reviews: 189 },
+            { id: 3, name: "AirPods Pro", category: "electronics", price: 249.99, oldPrice: 299.99, image: "https://via.placeholder.com/300x200/28a745/fff?text=AirPods", badge: "-17%", badgeColor: "danger", rating: 4.7, reviews: 432 },
+            { id: 4, name: "Nike Air Max", category: "clothing", price: 179.99, oldPrice: null, image: "https://via.placeholder.com/300x200/ff6b35/fff?text=Nike+Air", badge: null, badgeColor: null, rating: 4.5, reviews: 87 },
+            { id: 5, name: "Samsung Galaxy S24", category: "electronics", price: 899.99, oldPrice: 999.99, image: "https://via.placeholder.com/300x200/004e89/fff?text=Galaxy+S24", badge: "-10%", badgeColor: "danger", rating: 4.6, reviews: 324 },
+            { id: 6, name: "Lámpara LED Smart", category: "home", price: 49.99, oldPrice: null, image: "https://via.placeholder.com/300x200/ffc107/333?text=Lámpara", badge: null, badgeColor: null, rating: 4.3, reviews: 156 },
+            { id: 7, name: "Bicicleta Mountain", category: "sports", price: 599.99, oldPrice: 749.99, image: "https://via.placeholder.com/300x200/20c997/fff?text=Bicicleta", badge: "-20%", badgeColor: "danger", rating: 4.8, reviews: 67 },
+            { id: 8, name: "Camiseta Premium", category: "clothing", price: 39.99, oldPrice: null, image: "https://via.placeholder.com/300x200/6c757d/fff?text=Camiseta", badge: null, badgeColor: null, rating: 4.2, reviews: 203 },
+            { id: 9, name: "Watch Ultra", category: "electronics", price: 799.99, oldPrice: null, image: "https://via.placeholder.com/300x200/dc3545/fff?text=Watch", badge: "Nuevo", badgeColor: "primary", rating: 4.9, reviews: 178 },
+            { id: 10, name: "Sofá Moderno", category: "home", price: 899.99, oldPrice: 1099.99, image: "https://via.placeholder.com/300x200/6f42c1/fff?text=Sofá", badge: "-18%", badgeColor: "danger", rating: 4.4, reviews: 45 },
+            { id: 11, name: "Pesa Ajustable", category: "sports", price: 199.99, oldPrice: null, image: "https://via.placeholder.com/300x200/fd7e14/fff?text=Pesas", badge: null, badgeColor: null, rating: 4.6, reviews: 89 },
+            { id: 12, name: "Sudadera Hoodie", category: "clothing", price: 59.99, oldPrice: 79.99, image: "https://via.placeholder.com/300x200/17a2b8/fff?text=Hoodie", badge: "-25%", badgeColor: "danger", rating: 4.5, reviews: 267 }
+        ];
+        
+        // Carrito
+        class ShoppingCart {
+            constructor() {
+                this.items = JSON.parse(localStorage.getItem('cart')) || [];
+                this.updateUI();
+            }
+            
+            addItem(product, quantity = 1) {
+                const existing = this.items.find(item => item.id === product.id);
+                if (existing) {
+                    existing.quantity += quantity;
+                } else {
+                    this.items.push({ ...product, quantity });
+                }
+                this.saveToStorage();
+                this.updateUI();
+                showToast('Producto agregado al carrito');
+            }
+            
+            removeItem(productId) {
+                this.items = this.items.filter(item => item.id !== productId);
+                this.saveToStorage();
+                this.updateUI();
+            }
+            
+            updateQuantity(productId, quantity) {
+                const item = this.items.find(item => item.id === productId);
+                if (item) {
+                    if (quantity <= 0) {
+                        this.removeItem(productId);
+                    } else {
+                        item.quantity = quantity;
+                        this.saveToStorage();
+                        this.updateUI();
+                    }
+                }
+            }
+            
+            getTotal() {
+                return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            }
+            
+            getItemCount() {
+                return this.items.reduce((count, item) => count + item.quantity, 0);
+            }
+            
+            saveToStorage() {
+                localStorage.setItem('cart', JSON.stringify(this.items));
+            }
+            
+            updateUI() {
+                document.getElementById('cartCount').textContent = this.getItemCount();
+                document.getElementById('cartSubtotal').textContent = `$${this.getTotal().toFixed(2)}`;
+                
+                const cartItemsEl = document.getElementById('cartItems');
+                const emptyCart = document.getElementById('emptyCart');
+                
+                if (this.items.length === 0) {
+                    emptyCart.style.display = 'block';
+                    return;
+                }
+                
+                emptyCart.style.display = 'none';
+                cartItemsEl.innerHTML = this.items.map(item => `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="cart-item-info">
+                            <h6 class="mb-1">${item.name}</h6>
+                            <p class="text-muted small mb-2">$${item.price}</p>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="cart.updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="cart.updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <p class="fw-bold mb-1">$${(item.price * item.quantity).toFixed(2)}</p>
+                            <button class="btn btn-sm text-danger" onclick="cart.removeItem(${item.id})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        const cart = new ShoppingCart();
+        
+        // Renderizar estrellas
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<i class="bi bi-star-fill"></i>';
+                } else if (i - rating < 1) {
+                    stars += '<i class="bi bi-star-half"></i>';
+                } else {
+                    stars += '<i class="bi bi-star"></i>';
+                }
+            }
+            return stars;
+        }
+        
+        // Renderizar productos
+        function renderProducts(productsToRender) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = productsToRender.map(product => `
+                <div class="col">
+                    <div class="card product-card h-100">
+                        <div class="product-img-wrapper">
+                            <img src="${product.image}" alt="${product.name}">
+                            ${product.badge ? `<span class="product-badge badge bg-${product.badgeColor}">${product.badge}</span>` : ''}
+                            <div class="product-actions">
+                                <button class="action-btn" onclick="openQuickView(${product.id})"><i class="bi bi-eye"></i></button>
+                                <button class="action-btn"><i class="bi bi-heart"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">${product.category}</span>
+                            <h5 class="product-title">${product.name}</h5>
+                            <div class="product-price">
+                                <span class="current-price">$${product.price}</span>
+                                ${product.oldPrice ? `<span class="old-price">$${product.oldPrice}</span>` : ''}
+                            </div>
+                            <div class="product-rating">
+                                ${renderStars(product.rating)}
+                                <small class="text-muted">(${product.reviews})</small>
+                            </div>
+                            <button class="btn btn-primary w-100 mt-3" onclick="addToCart(${product.id})">
+                                <i class="bi bi-cart-plus me-2"></i>Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('productCount').textContent = productsToRender.length;
+        }
+        
+        // Filtros
+        let filters = { category: 'all' };
+        
+        function filterProducts() {
+            let filtered = [...products];
+            if (filters.category !== 'all') {
+                filtered = filtered.filter(p => p.category === filters.category);
+            }
+            return filtered;
+        }
+        
+        // Categorías
+        document.querySelectorAll('.category-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                document.querySelectorAll('.category-badge').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filters.category = this.dataset.category;
+                renderProducts(filterProducts());
+            });
+        });
+        
+        // Ordenar
+        document.getElementById('sortSelect').addEventListener('change', function() {
+            let filtered = filterProducts();
+            switch(this.value) {
+                case 'price-low': filtered.sort((a, b) => a.price - b.price); break;
+                case 'price-high': filtered.sort((a, b) => b.price - a.price); break;
+                case 'newest': filtered.sort((a, b) => b.id - a.id); break;
+                case 'rating': filtered.sort((a, b) => b.rating - a.rating); break;
+            }
+            renderProducts(filtered);
+        });
+        
+        // Funciones
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) cart.addItem(product);
+        }
+        
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('open');
+        }
+        
+        let currentQuickViewProduct = null;
+        
+        function openQuickView(productId) {
+            currentQuickViewProduct = products.find(p => p.id === productId);
+            if (currentQuickViewProduct) {
+                document.getElementById('quickViewImg').src = currentQuickViewProduct.image;
+                document.getElementById('quickViewTitle').textContent = currentQuickViewProduct.name;
+                document.getElementById('quickViewPrice').textContent = `$${currentQuickViewProduct.price}`;
+                document.getElementById('quickViewQty').value = 1;
+                new bootstrap.Modal(document.getElementById('quickViewModal')).show();
+            }
+        }
+        
+        function updateQuickViewQty(change) {
+            const input = document.getElementById('quickViewQty');
+            let value = parseInt(input.value) + change;
+            if (value < 1) value = 1;
+            input.value = value;
+        }
+        
+        function addToCartFromQuickView() {
+            if (currentQuickViewProduct) {
+                const qty = parseInt(document.getElementById('quickViewQty').value);
+                cart.addItem(currentQuickViewProduct, qty);
+                bootstrap.Modal.getInstance(document.getElementById('quickViewModal')).hide();
+            }
+        }
+        
+        function showToast(message) {
+            // Simple toast
+            alert(message);
+        }
+        
+        // Inicializar
+        renderProducts(products);
+    </script>
+</body>
+</html>

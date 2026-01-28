@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - 5 Ejemplos Completos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 500px;
+        }
+        
+        /* Registro 1 - Steps/Wizard */
+        .register-steps {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 600px;
+            border-radius: 20px;
+            padding: 40px;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+        }
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .step-number.active {
+            background: #00d9ff;
+            color: #1a1a2e;
+        }
+        .step-number.completed {
+            background: #00ff88;
+            color: #1a1a2e;
+        }
+        .step-line {
+            width: 60px;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 10px;
+        }
+        .step-line.completed {
+            background: #00ff88;
+        }
+        .step-form {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .step-form .form-control {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+        .step-form .form-control:focus {
+            background: rgba(255,255,255,0.15);
+            border-color: #00d9ff;
+            color: white;
+            box-shadow: 0 0 0 3px rgba(0,217,255,0.2);
+        }
+        .step-form .form-control::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        /* Registro 2 - Social First */
+        .register-social {
+            background: #f0f2f5;
+            min-height: 600px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .social-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 420px;
+            width: 100%;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .social-btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-google {
+            background: white;
+            border: 2px solid #ddd;
+            color: #333;
+        }
+        .btn-google:hover {
+            background: #f8f9fa;
+            border-color: #ccc;
+        }
+        .btn-facebook {
+            background: #1877f2;
+            border: none;
+            color: white;
+        }
+        .btn-github {
+            background: #24292e;
+            border: none;
+            color: white;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+        .divider span {
+            padding: 0 15px;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        /* Registro 3 - Floating Labels */
+        .register-floating {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 600px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .floating-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        .form-floating > .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            height: 58px;
+        }
+        .form-floating > .form-control:focus {
+            border-color: #667eea;
+            box-shadow: none;
+        }
+        .form-floating > label {
+            padding: 1rem;
+        }
+        
+        /* Registro 4 - Con Avatar */
+        .register-avatar {
+            background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 600px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            position: relative;
+            margin-top: 60px;
+        }
+        .avatar-upload {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #e9ecef;
+            border: 4px solid white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-preview i {
+            font-size: 40px;
+            color: #adb5bd;
+        }
+        
+        /* Registro 5 - Términos expandidos */
+        .register-terms {
+            background: #1a1a1a;
+            min-height: 600px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .terms-card {
+            background: #242424;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            color: #e0e0e0;
+        }
+        .terms-card .form-control {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+        .terms-card .form-control:focus {
+            background: #1a1a1a;
+            border-color: #00d4ff;
+            color: #fff;
+            box-shadow: 0 0 0 2px rgba(0,212,255,0.2);
+        }
+        .password-strength {
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .password-strength-bar {
+            height: 100%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+        .strength-weak { width: 25%; background: #ff4444; }
+        .strength-fair { width: 50%; background: #ffaa00; }
+        .strength-good { width: 75%; background: #00cc44; }
+        .strength-strong { width: 100%; background: #00ff88; }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="registro.html">Registro</a></li>
+                    <li class="nav-item"><a class="nav-link" href="auth-completo.html">Sistema Completo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-success text-white py-5 mt-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-person-plus me-3"></i>Registro - 5 Ejemplos</h1>
+            <p class="lead">Formularios de registro modernos con validación completa</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        
+        <!-- ================================================
+             REGISTRO 1: MULTI-STEP WIZARD
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-primary me-2">1</span>Registro Multi-Step (Wizard)
+            </h2>
+            <p class="text-muted mb-4">Formulario dividido en pasos con indicador de progreso</p>
+            
+            <div class="row">
+                <div class="col-lg-7 mb-4">
+                    <div class="register-steps">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator">
+                            <div class="step">
+                                <div class="step-number active" id="step1-indicator">1</div>
+                            </div>
+                            <div class="step-line" id="line1"></div>
+                            <div class="step">
+                                <div class="step-number" id="step2-indicator">2</div>
+                            </div>
+                            <div class="step-line" id="line2"></div>
+                            <div class="step">
+                                <div class="step-number" id="step3-indicator">3</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 1: Datos personales -->
+                        <div class="step-form" id="step1">
+                            <h4 class="text-white text-center mb-4">Datos Personales</h4>
+                            <div class="mb-3">
+                                <input type="text" class="form-control form-control-lg" placeholder="Nombre completo">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control form-control-lg" placeholder="Email">
+                            </div>
+                            <div class="mb-4">
+                                <input type="tel" class="form-control form-control-lg" placeholder="Teléfono">
+                            </div>
+                            <button class="btn btn-info btn-lg w-100" onclick="nextStep(1)">
+                                Siguiente <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Step 2: Credenciales -->
+                        <div class="step-form d-none" id="step2">
+                            <h4 class="text-white text-center mb-4">Credenciales</h4>
+                            <div class="mb-3">
+                                <input type="text" class="form-control form-control-lg" placeholder="Nombre de usuario">
+                            </div>
+                            <div class="mb-3">
+                                <input type="password" class="form-control form-control-lg" placeholder="Contraseña">
+                            </div>
+                            <div class="mb-4">
+                                <input type="password" class="form-control form-control-lg" placeholder="Confirmar contraseña">
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-light btn-lg flex-fill" onclick="prevStep(2)">
+                                    <i class="bi bi-arrow-left me-2"></i>Atrás
+                                </button>
+                                <button class="btn btn-info btn-lg flex-fill" onclick="nextStep(2)">
+                                    Siguiente <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Preferencias -->
+                        <div class="step-form d-none" id="step3">
+                            <h4 class="text-white text-center mb-4">Preferencias</h4>
+                            <div class="mb-3">
+                                <select class="form-select form-select-lg">
+                                    <option>Selecciona tu país</option>
+                                    <option>México</option>
+                                    <option>España</option>
+                                    <option>Argentina</option>
+                                    <option>Colombia</option>
+                                </select>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input type="checkbox" class="form-check-input" id="newsletter">
+                                <label class="form-check-label text-white" for="newsletter">
+                                    Recibir newsletter
+                                </label>
+                            </div>
+                            <div class="form-check mb-4">
+                                <input type="checkbox" class="form-check-input" id="terms">
+                                <label class="form-check-label text-white" for="terms">
+                                    Acepto los términos y condiciones
+                                </label>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-light btn-lg flex-fill" onclick="prevStep(3)">
+                                    <i class="bi bi-arrow-left me-2"></i>Atrás
+                                </button>
+                                <button class="btn btn-success btn-lg flex-fill">
+                                    <i class="bi bi-check-lg me-2"></i>Crear Cuenta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="code-block">
+<pre><code><span class="comment">// JavaScript Multi-Step Form</span>
+<span class="keyword">let</span> currentStep = 1;
+<span class="keyword">const</span> totalSteps = 3;
+
+<span class="keyword">function</span> <span class="function">nextStep</span>(step) {
+    <span class="comment">// Validar paso actual</span>
+    <span class="keyword">if</span> (!<span class="function">validateStep</span>(step)) <span class="keyword">return</span>;
+    
+    <span class="comment">// Ocultar paso actual</span>
+    document.<span class="function">getElementById</span>(<span class="string">`step${step}`</span>)
+        .classList.<span class="function">add</span>(<span class="string">'d-none'</span>);
+    
+    <span class="comment">// Mostrar siguiente</span>
+    document.<span class="function">getElementById</span>(<span class="string">`step${step + 1}`</span>)
+        .classList.<span class="function">remove</span>(<span class="string">'d-none'</span>);
+    
+    <span class="comment">// Actualizar indicadores</span>
+    <span class="function">updateIndicators</span>(step + 1);
+    currentStep = step + 1;
+}
+
+<span class="keyword">function</span> <span class="function">prevStep</span>(step) {
+    document.<span class="function">getElementById</span>(<span class="string">`step${step}`</span>)
+        .classList.<span class="function">add</span>(<span class="string">'d-none'</span>);
+    document.<span class="function">getElementById</span>(<span class="string">`step${step - 1}`</span>)
+        .classList.<span class="function">remove</span>(<span class="string">'d-none'</span>);
+    <span class="function">updateIndicators</span>(step - 1);
+    currentStep = step - 1;
+}
+
+<span class="keyword">function</span> <span class="function">updateIndicators</span>(activeStep) {
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= totalSteps; i++) {
+        <span class="keyword">const</span> indicator = document
+            .<span class="function">getElementById</span>(<span class="string">`step${i}-indicator`</span>);
+        <span class="keyword">const</span> line = document
+            .<span class="function">getElementById</span>(<span class="string">`line${i - 1}`</span>);
+        
+        indicator.classList.<span class="function">remove</span>(
+            <span class="string">'active'</span>, <span class="string">'completed'</span>
+        );
+        
+        <span class="keyword">if</span> (i < activeStep) {
+            indicator.classList.<span class="function">add</span>(<span class="string">'completed'</span>);
+            indicator.innerHTML = <span class="string">'✓'</span>;
+            <span class="keyword">if</span> (line) line.classList.<span class="function">add</span>(<span class="string">'completed'</span>);
+        } <span class="keyword">else if</span> (i === activeStep) {
+            indicator.classList.<span class="function">add</span>(<span class="string">'active'</span>);
+            indicator.innerHTML = i;
+        } <span class="keyword">else</span> {
+            indicator.innerHTML = i;
+            <span class="keyword">if</span> (line) line.classList.<span class="function">remove</span>(<span class="string">'completed'</span>);
+        }
+    }
+}
+
+<span class="keyword">function</span> <span class="function">validateStep</span>(step) {
+    <span class="keyword">const</span> stepEl = document.<span class="function">getElementById</span>(<span class="string">`step${step}`</span>);
+    <span class="keyword">const</span> inputs = stepEl.<span class="function">querySelectorAll</span>(<span class="string">'input[required]'</span>);
+    <span class="keyword">let</span> valid = true;
+    
+    inputs.<span class="function">forEach</span>(input => {
+        <span class="keyword">if</span> (!input.value.trim()) {
+            input.classList.<span class="function">add</span>(<span class="string">'is-invalid'</span>);
+            valid = false;
+        } <span class="keyword">else</span> {
+            input.classList.<span class="function">remove</span>(<span class="string">'is-invalid'</span>);
+        }
+    });
+    
+    <span class="keyword">return</span> valid;
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             REGISTRO 2: SOCIAL FIRST
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-info me-2">2</span>Registro Social First
+            </h2>
+            <p class="text-muted mb-4">Prioriza registro con redes sociales</p>
+            
+            <div class="row">
+                <div class="col-lg-5 mb-4">
+                    <div class="register-social">
+                        <div class="social-card">
+                            <h3 class="text-center fw-bold mb-4">Crear Cuenta</h3>
+                            
+                            <button class="btn social-btn btn-google w-100 mb-3">
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                </svg>
+                                Continuar con Google
+                            </button>
+                            
+                            <button class="btn social-btn btn-facebook w-100 mb-3">
+                                <i class="bi bi-facebook"></i>
+                                Continuar con Facebook
+                            </button>
+                            
+                            <button class="btn social-btn btn-github w-100 mb-3">
+                                <i class="bi bi-github"></i>
+                                Continuar con GitHub
+                            </button>
+                            
+                            <div class="divider">
+                                <span>o regístrate con email</span>
+                            </div>
+                            
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Nombre completo">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Email">
+                                </div>
+                                <div class="mb-4">
+                                    <input type="password" class="form-control" placeholder="Contraseña">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Crear cuenta
+                                </button>
+                            </form>
+                            
+                            <p class="text-center text-muted mt-4 mb-0 small">
+                                ¿Ya tienes cuenta? <a href="#">Inicia sesión</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="code-block">
+<pre><code><span class="comment">&lt;!-- HTML Social Registration --&gt;</span>
+&lt;div class="social-buttons"&gt;
+    &lt;button onclick="registerWithGoogle()" class="btn-google"&gt;
+        &lt;i class="bi bi-google"&gt;&lt;/i&gt; Continuar con Google
+    &lt;/button&gt;
+    &lt;button onclick="registerWithFacebook()" class="btn-facebook"&gt;
+        &lt;i class="bi bi-facebook"&gt;&lt;/i&gt; Continuar con Facebook
+    &lt;/button&gt;
+    &lt;button onclick="registerWithGithub()" class="btn-github"&gt;
+        &lt;i class="bi bi-github"&gt;&lt;/i&gt; Continuar con GitHub
+    &lt;/button&gt;
+&lt;/div&gt;
+
+<span class="comment">// JavaScript - OAuth con Google</span>
+<span class="keyword">async function</span> <span class="function">registerWithGoogle</span>() {
+    <span class="comment">// Usando Google Identity Services</span>
+    google.accounts.id.<span class="function">initialize</span>({
+        client_id: <span class="string">'TU_CLIENT_ID.apps.googleusercontent.com'</span>,
+        callback: <span class="function">handleGoogleResponse</span>
+    });
+    
+    google.accounts.id.<span class="function">prompt</span>();
+}
+
+<span class="keyword">async function</span> <span class="function">handleGoogleResponse</span>(response) {
+    <span class="comment">// Enviar token al backend</span>
+    <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/auth/google'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+        body: JSON.<span class="function">stringify</span>({ 
+            token: response.credential 
+        })
+    });
+    
+    <span class="keyword">const</span> data = <span class="keyword">await</span> result.<span class="function">json</span>();
+    
+    <span class="keyword">if</span> (data.success) {
+        localStorage.<span class="function">setItem</span>(<span class="string">'authToken'</span>, data.token);
+        window.location.href = <span class="string">'/dashboard'</span>;
+    }
+}
+
+<span class="comment">// JavaScript - OAuth con Facebook</span>
+<span class="keyword">async function</span> <span class="function">registerWithFacebook</span>() {
+    FB.<span class="function">login</span>(<span class="keyword">function</span>(response) {
+        <span class="keyword">if</span> (response.authResponse) {
+            <span class="keyword">const</span> accessToken = response.authResponse.accessToken;
+            <span class="function">sendToBackend</span>(<span class="string">'facebook'</span>, accessToken);
+        }
+    }, { scope: <span class="string">'email,public_profile'</span> });
+}
+
+<span class="comment">// JavaScript - OAuth con GitHub</span>
+<span class="keyword">function</span> <span class="function">registerWithGithub</span>() {
+    <span class="keyword">const</span> clientId = <span class="string">'TU_GITHUB_CLIENT_ID'</span>;
+    <span class="keyword">const</span> redirectUri = <span class="string">'https://tuapp.com/auth/github/callback'</span>;
+    <span class="keyword">const</span> scope = <span class="string">'user:email'</span>;
+    
+    window.location.href = 
+        <span class="string">`https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`</span>;
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             REGISTRO 3: FLOATING LABELS
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-purple me-2" style="background: #667eea;">3</span>Registro con Floating Labels
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-5 mb-4">
+                    <div class="register-floating">
+                        <div class="floating-card">
+                            <h3 class="text-center fw-bold mb-2">Únete a nosotros</h3>
+                            <p class="text-center text-muted mb-4">Crea tu cuenta gratuita</p>
+                            
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="floatNombre" placeholder="Nombre">
+                                            <label for="floatNombre">Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="floatApellido" placeholder="Apellido">
+                                            <label for="floatApellido">Apellido</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-floating mt-3">
+                                    <input type="email" class="form-control" id="floatEmail" placeholder="Email">
+                                    <label for="floatEmail">Email</label>
+                                </div>
+                                
+                                <div class="form-floating mt-3">
+                                    <input type="password" class="form-control" id="floatPassword" placeholder="Contraseña">
+                                    <label for="floatPassword">Contraseña</label>
+                                </div>
+                                
+                                <div class="form-floating mt-3">
+                                    <input type="password" class="form-control" id="floatConfirm" placeholder="Confirmar">
+                                    <label for="floatConfirm">Confirmar contraseña</label>
+                                </div>
+                                
+                                <div class="form-check mt-4">
+                                    <input type="checkbox" class="form-check-input" id="floatTerms">
+                                    <label class="form-check-label small" for="floatTerms">
+                                        Acepto los <a href="#">términos de servicio</a> y la <a href="#">política de privacidad</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mt-4" style="background: linear-gradient(135deg, #667eea, #764ba2); border: none;">
+                                    Crear Cuenta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="code-block">
+<pre><code><span class="comment">&lt;!-- Bootstrap 5 Floating Labels --&gt;</span>
+&lt;form id="register-form"&gt;
+    &lt;div class="row g-3"&gt;
+        &lt;div class="col-6"&gt;
+            &lt;div class="form-floating"&gt;
+                &lt;input type="text" class="form-control" 
+                       id="nombre" placeholder="Nombre" required&gt;
+                &lt;label for="nombre"&gt;Nombre&lt;/label&gt;
+                &lt;div class="invalid-feedback"&gt;
+                    El nombre es requerido
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="col-6"&gt;
+            &lt;div class="form-floating"&gt;
+                &lt;input type="text" class="form-control" 
+                       id="apellido" placeholder="Apellido" required&gt;
+                &lt;label for="apellido"&gt;Apellido&lt;/label&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-floating mt-3"&gt;
+        &lt;input type="email" class="form-control" 
+               id="email" placeholder="Email" required&gt;
+        &lt;label for="email"&gt;Email&lt;/label&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-floating mt-3"&gt;
+        &lt;input type="password" class="form-control" 
+               id="password" placeholder="Contraseña" required&gt;
+        &lt;label for="password"&gt;Contraseña&lt;/label&gt;
+    &lt;/div&gt;
+    
+    &lt;button type="submit" class="btn btn-primary w-100 mt-4"&gt;
+        Crear Cuenta
+    &lt;/button&gt;
+&lt;/form&gt;
+
+<span class="comment">/* CSS para Floating Labels personalizados */</span>
+.form-floating > .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    height: 58px;
+    padding: 1rem 1rem;
+}
+
+.form-floating > .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.form-floating > label {
+    padding: 1rem;
+    color: #6c757d;
+}
+
+<span class="comment">// JavaScript Validación</span>
+document.<span class="function">getElementById</span>(<span class="string">'register-form'</span>)
+    .<span class="function">addEventListener</span>(<span class="string">'submit'</span>, <span class="keyword">function</span>(e) {
+    e.<span class="function">preventDefault</span>();
+    
+    <span class="comment">// Activar validación de Bootstrap</span>
+    <span class="keyword">if</span> (!this.<span class="function">checkValidity</span>()) {
+        e.<span class="function">stopPropagation</span>();
+        this.classList.<span class="function">add</span>(<span class="string">'was-validated'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Procesar formulario</span>
+    <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData(this);
+    <span class="function">submitRegistration</span>(Object.<span class="function">fromEntries</span>(formData));
+});</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             REGISTRO 4: CON AVATAR UPLOAD
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-info me-2">4</span>Registro con Avatar Upload
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-5 mb-4">
+                    <div class="register-avatar">
+                        <div class="avatar-card">
+                            <div class="avatar-upload">
+                                <div class="avatar-preview" id="avatarPreview" onclick="document.getElementById('avatarInput').click()">
+                                    <i class="bi bi-camera"></i>
+                                </div>
+                                <input type="file" id="avatarInput" accept="image/*" hidden>
+                            </div>
+                            
+                            <div class="text-center mb-4" style="margin-top: 40px;">
+                                <h4 class="fw-bold">Crear Perfil</h4>
+                                <p class="text-muted small">Haz clic en la imagen para subir tu avatar</p>
+                            </div>
+                            
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Nombre de usuario</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">@</span>
+                                        <input type="text" class="form-control" placeholder="username">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Email</label>
+                                    <input type="email" class="form-control" placeholder="tu@email.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Contraseña</label>
+                                    <input type="password" class="form-control" placeholder="••••••••">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label small fw-semibold">Bio</label>
+                                    <textarea class="form-control" rows="2" placeholder="Cuéntanos sobre ti..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-info btn-lg w-100 text-white">
+                                    <i class="bi bi-check2-circle me-2"></i>Crear Perfil
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="code-block">
+<pre><code><span class="comment">// JavaScript - Avatar Upload con Preview</span>
+
+<span class="keyword">const</span> avatarInput = document.<span class="function">getElementById</span>(<span class="string">'avatarInput'</span>);
+<span class="keyword">const</span> avatarPreview = document.<span class="function">getElementById</span>(<span class="string">'avatarPreview'</span>);
+
+avatarInput.<span class="function">addEventListener</span>(<span class="string">'change'</span>, <span class="keyword">function</span>(e) {
+    <span class="keyword">const</span> file = e.target.files[0];
+    
+    <span class="keyword">if</span> (!file) <span class="keyword">return</span>;
+    
+    <span class="comment">// Validar tipo de archivo</span>
+    <span class="keyword">if</span> (!file.type.<span class="function">startsWith</span>(<span class="string">'image/'</span>)) {
+        <span class="function">alert</span>(<span class="string">'Por favor selecciona una imagen'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Validar tamaño (max 5MB)</span>
+    <span class="keyword">if</span> (file.size > 5 * 1024 * 1024) {
+        <span class="function">alert</span>(<span class="string">'La imagen no debe superar 5MB'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Mostrar preview</span>
+    <span class="keyword">const</span> reader = <span class="keyword">new</span> FileReader();
+    
+    reader.<span class="function">onload</span> = <span class="keyword">function</span>(e) {
+        avatarPreview.innerHTML = <span class="string">`
+            &lt;img src="${e.target.result}" alt="Avatar"&gt;
+        `</span>;
+    };
+    
+    reader.<span class="function">readAsDataURL</span>(file);
+});
+
+<span class="comment">// Subir avatar al servidor</span>
+<span class="keyword">async function</span> <span class="function">uploadAvatar</span>(file) {
+    <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData();
+    formData.<span class="function">append</span>(<span class="string">'avatar'</span>, file);
+    
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/upload/avatar'</span>, {
+            method: <span class="string">'POST'</span>,
+            body: formData
+            <span class="comment">// NO poner Content-Type header con FormData</span>
+        });
+        
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">return</span> data.avatarUrl;
+        
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error subiendo avatar:'</span>, error);
+        <span class="keyword">throw</span> error;
+    }
+}
+
+<span class="comment">// Registro completo con avatar</span>
+<span class="keyword">async function</span> <span class="function">register</span>(formData) {
+    <span class="keyword">let</span> avatarUrl = null;
+    
+    <span class="comment">// Primero subir avatar si existe</span>
+    <span class="keyword">const</span> avatarFile = document.<span class="function">getElementById</span>(<span class="string">'avatarInput'</span>).files[0];
+    
+    <span class="keyword">if</span> (avatarFile) {
+        avatarUrl = <span class="keyword">await</span> <span class="function">uploadAvatar</span>(avatarFile);
+    }
+    
+    <span class="comment">// Luego crear usuario</span>
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/auth/register'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+        body: JSON.<span class="function">stringify</span>({
+            ...formData,
+            avatar: avatarUrl
+        })
+    });
+    
+    <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             REGISTRO 5: CON PASSWORD STRENGTH
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-dark me-2">5</span>Registro con Password Strength
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-5 mb-4">
+                    <div class="register-terms">
+                        <div class="terms-card">
+                            <h3 class="text-center fw-bold mb-4">
+                                <i class="bi bi-shield-lock me-2" style="color: #00d4ff;"></i>
+                                Cuenta Segura
+                            </h3>
+                            
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label small">Email</label>
+                                    <input type="email" class="form-control" placeholder="tu@email.com">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small">Contraseña</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="passwordStrength" placeholder="••••••••">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('passwordStrength')">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-strength mt-2">
+                                        <div class="password-strength-bar" id="strengthBar"></div>
+                                    </div>
+                                    <small id="strengthText" class="text-muted">Ingresa una contraseña</small>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label small">Confirmar contraseña</label>
+                                    <input type="password" class="form-control" placeholder="••••••••">
+                                </div>
+                                
+                                <div class="p-3 rounded mb-4" style="background: #1a1a1a;">
+                                    <p class="small mb-2" style="color: #888;">La contraseña debe tener:</p>
+                                    <div class="small" id="requirements">
+                                        <div class="req" id="req-length"><i class="bi bi-x text-danger"></i> Mínimo 8 caracteres</div>
+                                        <div class="req" id="req-upper"><i class="bi bi-x text-danger"></i> Una mayúscula</div>
+                                        <div class="req" id="req-lower"><i class="bi bi-x text-danger"></i> Una minúscula</div>
+                                        <div class="req" id="req-number"><i class="bi bi-x text-danger"></i> Un número</div>
+                                        <div class="req" id="req-special"><i class="bi bi-x text-danger"></i> Un carácter especial</div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn w-100 btn-lg" style="background: linear-gradient(135deg, #00d4ff, #00ff88); color: #1a1a1a; font-weight: 600;">
+                                    Crear Cuenta Segura
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="code-block">
+<pre><code><span class="comment">// JavaScript - Password Strength Meter</span>
+
+<span class="keyword">const</span> passwordInput = document.<span class="function">getElementById</span>(<span class="string">'passwordStrength'</span>);
+<span class="keyword">const</span> strengthBar = document.<span class="function">getElementById</span>(<span class="string">'strengthBar'</span>);
+<span class="keyword">const</span> strengthText = document.<span class="function">getElementById</span>(<span class="string">'strengthText'</span>);
+
+passwordInput.<span class="function">addEventListener</span>(<span class="string">'input'</span>, <span class="keyword">function</span>() {
+    <span class="keyword">const</span> password = this.value;
+    <span class="keyword">const</span> strength = <span class="function">calculateStrength</span>(password);
+    
+    <span class="function">updateStrengthUI</span>(strength);
+    <span class="function">updateRequirements</span>(password);
+});
+
+<span class="keyword">function</span> <span class="function">calculateStrength</span>(password) {
+    <span class="keyword">let</span> strength = 0;
+    
+    <span class="comment">// Longitud</span>
+    <span class="keyword">if</span> (password.length >= 8) strength += 1;
+    <span class="keyword">if</span> (password.length >= 12) strength += 1;
+    
+    <span class="comment">// Mayúsculas</span>
+    <span class="keyword">if</span> (/[A-Z]/.<span class="function">test</span>(password)) strength += 1;
+    
+    <span class="comment">// Minúsculas</span>
+    <span class="keyword">if</span> (/[a-z]/.<span class="function">test</span>(password)) strength += 1;
+    
+    <span class="comment">// Números</span>
+    <span class="keyword">if</span> (/[0-9]/.<span class="function">test</span>(password)) strength += 1;
+    
+    <span class="comment">// Caracteres especiales</span>
+    <span class="keyword">if</span> (/[!@#$%^&*(),.?":{}|<>]/.<span class="function">test</span>(password)) strength += 1;
+    
+    <span class="keyword">return</span> strength;
+}
+
+<span class="keyword">function</span> <span class="function">updateStrengthUI</span>(strength) {
+    <span class="keyword">const</span> levels = [
+        { class: <span class="string">''</span>, text: <span class="string">'Ingresa una contraseña'</span>, color: <span class="string">''</span> },
+        { class: <span class="string">'strength-weak'</span>, text: <span class="string">'Débil'</span>, color: <span class="string">'#ff4444'</span> },
+        { class: <span class="string">'strength-fair'</span>, text: <span class="string">'Regular'</span>, color: <span class="string">'#ffaa00'</span> },
+        { class: <span class="string">'strength-good'</span>, text: <span class="string">'Buena'</span>, color: <span class="string">'#00cc44'</span> },
+        { class: <span class="string">'strength-strong'</span>, text: <span class="string">'Muy fuerte'</span>, color: <span class="string">'#00ff88'</span> }
+    ];
+    
+    <span class="keyword">const</span> level = Math.<span class="function">min</span>(Math.<span class="function">floor</span>(strength / 1.5), 4);
+    
+    strengthBar.className = <span class="string">'password-strength-bar '</span> + levels[level].class;
+    strengthText.textContent = levels[level].text;
+    strengthText.style.color = levels[level].color;
+}
+
+<span class="keyword">function</span> <span class="function">updateRequirements</span>(password) {
+    <span class="keyword">const</span> requirements = {
+        <span class="string">'req-length'</span>: password.length >= 8,
+        <span class="string">'req-upper'</span>: /[A-Z]/.<span class="function">test</span>(password),
+        <span class="string">'req-lower'</span>: /[a-z]/.<span class="function">test</span>(password),
+        <span class="string">'req-number'</span>: /[0-9]/.<span class="function">test</span>(password),
+        <span class="string">'req-special'</span>: /[!@#$%^&*(),.?":{}|<>]/.<span class="function">test</span>(password)
+    };
+    
+    Object.<span class="function">entries</span>(requirements).<span class="function">forEach</span>(([id, met]) => {
+        <span class="keyword">const</span> el = document.<span class="function">getElementById</span>(id);
+        <span class="keyword">const</span> icon = el.<span class="function">querySelector</span>(<span class="string">'i'</span>);
+        
+        <span class="keyword">if</span> (met) {
+            icon.className = <span class="string">'bi bi-check-lg text-success'</span>;
+            el.style.color = <span class="string">'#00ff88'</span>;
+        } <span class="keyword">else</span> {
+            icon.className = <span class="string">'bi bi-x text-danger'</span>;
+            el.style.color = <span class="string">'#888'</span>;
+        }
+    });
+}
+
+<span class="comment">// Toggle password visibility</span>
+<span class="keyword">function</span> <span class="function">togglePassword</span>(inputId) {
+    <span class="keyword">const</span> input = document.<span class="function">getElementById</span>(inputId);
+    input.type = input.type === <span class="string">'password'</span> ? <span class="string">'text'</span> : <span class="string">'password'</span>;
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VALIDACIÓN COMPLETA -->
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4">
+                <i class="bi bi-check2-all me-2 text-success"></i>Sistema de Validación Completo
+            </h2>
+            
+            <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// VALIDACIÓN DE REGISTRO COMPLETA</span>
+<span class="comment">// ============================================</span>
+
+<span class="keyword">class</span> <span class="function">FormValidator</span> {
+    <span class="keyword">constructor</span>(form) {
+        this.form = form;
+        this.errors = {};
+        this.rules = {};
+    }
+    
+    <span class="comment">// Agregar reglas de validación</span>
+    <span class="function">addRule</span>(fieldName, rules) {
+        this.rules[fieldName] = rules;
+        <span class="keyword">return</span> this;
+    }
+    
+    <span class="comment">// Validar un campo</span>
+    <span class="function">validateField</span>(fieldName, value) {
+        <span class="keyword">const</span> rules = this.rules[fieldName];
+        <span class="keyword">const</span> errors = [];
+        
+        <span class="keyword">if</span> (!rules) <span class="keyword">return</span> [];
+        
+        rules.<span class="function">forEach</span>(rule => {
+            <span class="keyword">if</span> (rule.required && !value.trim()) {
+                errors.<span class="function">push</span>(rule.message || <span class="string">'Este campo es requerido'</span>);
+            }
+            
+            <span class="keyword">if</span> (rule.minLength && value.length < rule.minLength) {
+                errors.<span class="function">push</span>(rule.message || <span class="string">`Mínimo ${rule.minLength} caracteres`</span>);
+            }
+            
+            <span class="keyword">if</span> (rule.maxLength && value.length > rule.maxLength) {
+                errors.<span class="function">push</span>(rule.message || <span class="string">`Máximo ${rule.maxLength} caracteres`</span>);
+            }
+            
+            <span class="keyword">if</span> (rule.pattern && !rule.pattern.<span class="function">test</span>(value)) {
+                errors.<span class="function">push</span>(rule.message || <span class="string">'Formato inválido'</span>);
+            }
+            
+            <span class="keyword">if</span> (rule.match) {
+                <span class="keyword">const</span> matchValue = this.form.<span class="function">querySelector</span>(<span class="string">`[name="${rule.match}"]`</span>)?.value;
+                <span class="keyword">if</span> (value !== matchValue) {
+                    errors.<span class="function">push</span>(rule.message || <span class="string">'Los campos no coinciden'</span>);
+                }
+            }
+            
+            <span class="keyword">if</span> (rule.custom && !rule.<span class="function">custom</span>(value)) {
+                errors.<span class="function">push</span>(rule.message || <span class="string">'Valor inválido'</span>);
+            }
+        });
+        
+        <span class="keyword">return</span> errors;
+    }
+    
+    <span class="comment">// Validar todo el formulario</span>
+    <span class="function">validate</span>() {
+        this.errors = {};
+        <span class="keyword">let</span> isValid = true;
+        
+        Object.<span class="function">keys</span>(this.rules).<span class="function">forEach</span>(fieldName => {
+            <span class="keyword">const</span> input = this.form.<span class="function">querySelector</span>(<span class="string">`[name="${fieldName}"]`</span>);
+            <span class="keyword">if</span> (!input) <span class="keyword">return</span>;
+            
+            <span class="keyword">const</span> fieldErrors = this.<span class="function">validateField</span>(fieldName, input.value);
+            
+            <span class="keyword">if</span> (fieldErrors.length > 0) {
+                this.errors[fieldName] = fieldErrors;
+                isValid = false;
+                this.<span class="function">showError</span>(input, fieldErrors[0]);
+            } <span class="keyword">else</span> {
+                this.<span class="function">showSuccess</span>(input);
+            }
+        });
+        
+        <span class="keyword">return</span> isValid;
+    }
+    
+    <span class="function">showError</span>(input, message) {
+        input.classList.<span class="function">remove</span>(<span class="string">'is-valid'</span>);
+        input.classList.<span class="function">add</span>(<span class="string">'is-invalid'</span>);
+        
+        <span class="keyword">let</span> feedback = input.parentElement.<span class="function">querySelector</span>(<span class="string">'.invalid-feedback'</span>);
+        <span class="keyword">if</span> (!feedback) {
+            feedback = document.<span class="function">createElement</span>(<span class="string">'div'</span>);
+            feedback.className = <span class="string">'invalid-feedback'</span>;
+            input.parentElement.<span class="function">appendChild</span>(feedback);
+        }
+        feedback.textContent = message;
+    }
+    
+    <span class="function">showSuccess</span>(input) {
+        input.classList.<span class="function">remove</span>(<span class="string">'is-invalid'</span>);
+        input.classList.<span class="function">add</span>(<span class="string">'is-valid'</span>);
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> form = document.<span class="function">getElementById</span>(<span class="string">'registerForm'</span>);
+<span class="keyword">const</span> validator = <span class="keyword">new</span> FormValidator(form);
+
+validator
+    .<span class="function">addRule</span>(<span class="string">'nombre'</span>, [
+        { required: true, message: <span class="string">'El nombre es requerido'</span> },
+        { minLength: 2, message: <span class="string">'Mínimo 2 caracteres'</span> }
+    ])
+    .<span class="function">addRule</span>(<span class="string">'email'</span>, [
+        { required: true, message: <span class="string">'El email es requerido'</span> },
+        { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: <span class="string">'Email inválido'</span> }
+    ])
+    .<span class="function">addRule</span>(<span class="string">'password'</span>, [
+        { required: true },
+        { minLength: 8, message: <span class="string">'Mínimo 8 caracteres'</span> },
+        { pattern: /[A-Z]/, message: <span class="string">'Debe contener una mayúscula'</span> },
+        { pattern: /[0-9]/, message: <span class="string">'Debe contener un número'</span> }
+    ])
+    .<span class="function">addRule</span>(<span class="string">'confirmPassword'</span>, [
+        { required: true },
+        { match: <span class="string">'password'</span>, message: <span class="string">'Las contraseñas no coinciden'</span> }
+    ]);
+
+form.<span class="function">addEventListener</span>(<span class="string">'submit'</span>, <span class="keyword">async</span> (e) => {
+    e.<span class="function">preventDefault</span>();
+    
+    <span class="keyword">if</span> (validator.<span class="function">validate</span>()) {
+        <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData(form);
+        <span class="keyword">await</span> <span class="function">submitRegistration</span>(Object.<span class="function">fromEntries</span>(formData));
+    }
+});</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between">
+            <a href="login.html" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Ver Ejemplos de Login
+            </a>
+            <a href="auth-completo.html" class="btn btn-success">
+                Sistema Completo <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">WebGuía Completa - Registro</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    
+    <script>
+        // Multi-step form
+        function nextStep(step) {
+            document.getElementById(`step${step}`).classList.add('d-none');
+            document.getElementById(`step${step + 1}`).classList.remove('d-none');
+            
+            document.getElementById(`step${step}-indicator`).classList.remove('active');
+            document.getElementById(`step${step}-indicator`).classList.add('completed');
+            document.getElementById(`step${step}-indicator`).innerHTML = '✓';
+            document.getElementById(`step${step + 1}-indicator`).classList.add('active');
+            document.getElementById(`line${step}`).classList.add('completed');
+        }
+        
+        function prevStep(step) {
+            document.getElementById(`step${step}`).classList.add('d-none');
+            document.getElementById(`step${step - 1}`).classList.remove('d-none');
+            
+            document.getElementById(`step${step}-indicator`).classList.remove('active');
+            document.getElementById(`step${step - 1}-indicator`).classList.remove('completed');
+            document.getElementById(`step${step - 1}-indicator`).classList.add('active');
+            document.getElementById(`step${step - 1}-indicator`).innerHTML = step - 1;
+            document.getElementById(`line${step - 1}`).classList.remove('completed');
+        }
+        
+        // Avatar upload
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Password strength
+        const passwordInput = document.getElementById('passwordStrength');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                if (password.length >= 8) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[!@#$%^&*]/.test(password)) strength++;
+                
+                const bar = document.getElementById('strengthBar');
+                const text = document.getElementById('strengthText');
+                
+                bar.className = 'password-strength-bar';
+                
+                if (strength === 0) {
+                    text.textContent = 'Ingresa una contraseña';
+                    text.style.color = '#888';
+                } else if (strength <= 2) {
+                    bar.classList.add('strength-weak');
+                    text.textContent = 'Débil';
+                    text.style.color = '#ff4444';
+                } else if (strength <= 3) {
+                    bar.classList.add('strength-fair');
+                    text.textContent = 'Regular';
+                    text.style.color = '#ffaa00';
+                } else if (strength <= 4) {
+                    bar.classList.add('strength-good');
+                    text.textContent = 'Buena';
+                    text.style.color = '#00cc44';
+                } else {
+                    bar.classList.add('strength-strong');
+                    text.textContent = 'Muy fuerte';
+                    text.style.color = '#00ff88';
+                }
+                
+                // Update requirements
+                document.getElementById('req-length').querySelector('i').className = 
+                    password.length >= 8 ? 'bi bi-check-lg text-success' : 'bi bi-x text-danger';
+                document.getElementById('req-upper').querySelector('i').className = 
+                    /[A-Z]/.test(password) ? 'bi bi-check-lg text-success' : 'bi bi-x text-danger';
+                document.getElementById('req-lower').querySelector('i').className = 
+                    /[a-z]/.test(password) ? 'bi bi-check-lg text-success' : 'bi bi-x text-danger';
+                document.getElementById('req-number').querySelector('i').className = 
+                    /[0-9]/.test(password) ? 'bi bi-check-lg text-success' : 'bi bi-x text-danger';
+                document.getElementById('req-special').querySelector('i').className = 
+                    /[!@#$%^&*]/.test(password) ? 'bi bi-check-lg text-success' : 'bi bi-x text-danger';
+            });
+        }
+        
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+</body>
+</html>

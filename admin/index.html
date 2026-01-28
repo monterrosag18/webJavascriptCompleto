@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Dashboard Funcional</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-height: 60px;
+            --primary: #4e73df;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --dark: #5a5c69;
+            --sidebar-bg: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f6f9; }
+        
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--sidebar-bg);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 10px;
+        }
+        
+        .sidebar-nav { padding: 20px 0; }
+        
+        .nav-section {
+            padding: 15px 20px 10px;
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--primary);
+        }
+        
+        .sidebar .nav-link i { width: 20px; text-align: center; }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+        
+        /* ===== TOPBAR ===== */
+        .topbar {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .topbar-title { font-weight: 600; color: var(--dark); }
+        
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        /* ===== CONTENT ===== */
+        .content { padding: 30px; }
+        
+        /* ===== STAT CARDS ===== */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid;
+            transition: all 0.3s;
+            height: 100%;
+        }
+        
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .stat-card.primary { border-color: var(--primary); }
+        .stat-card.success { border-color: var(--success); }
+        .stat-card.info { border-color: var(--info); }
+        .stat-card.warning { border-color: var(--warning); }
+        .stat-card.danger { border-color: var(--danger); }
+        
+        .stat-card .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stat-card.primary .stat-icon { background: rgba(78,115,223,0.1); color: var(--primary); }
+        .stat-card.success .stat-icon { background: rgba(28,200,138,0.1); color: var(--success); }
+        .stat-card.info .stat-icon { background: rgba(54,185,204,0.1); color: var(--info); }
+        .stat-card.warning .stat-icon { background: rgba(246,194,62,0.1); color: var(--warning); }
+        
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--dark); }
+        .stat-label { color: #858796; font-size: 0.85rem; }
+        
+        /* ===== CARDS ===== */
+        .card-admin {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .card-admin-header {
+            padding: 20px;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-admin-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .card-admin-body { padding: 20px; }
+        
+        /* ===== TABLE ===== */
+        .table-admin {
+            margin: 0;
+        }
+        
+        .table-admin th {
+            background: #f8f9fc;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+            border: none;
+            padding: 15px;
+        }
+        
+        .table-admin td {
+            padding: 15px;
+            vertical-align: middle;
+            border-color: #e3e6f0;
+        }
+        
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar-sm {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-active { background: rgba(28,200,138,0.1); color: var(--success); }
+        .status-pending { background: rgba(246,194,62,0.1); color: var(--warning); }
+        .status-completed { background: rgba(78,115,223,0.1); color: var(--primary); }
+        .status-cancelled { background: rgba(231,74,59,0.1); color: var(--danger); }
+        
+        /* ===== TABS ===== */
+        .admin-tabs .nav-link {
+            color: var(--dark);
+            border: none;
+            padding: 12px 20px;
+            font-weight: 500;
+        }
+        
+        .admin-tabs .nav-link.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background: none;
+        }
+        
+        /* ===== CHARTS ===== */
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #858796;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+        
+        /* ===== ACTION BUTTONS ===== */
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sidebar { width: 0; overflow: hidden; }
+            .sidebar.show { width: var(--sidebar-width); }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-shield-check"></i>
+            <span>Admin Panel</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="index.html" class="nav-link active">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <div class="nav-section">Gestión</div>
+            <a href="usuarios.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Usuarios</span>
+                <span class="badge bg-primary ms-auto" id="userCount">0</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="bi bi-bag-check"></i>
+                <span>Pedidos</span>
+                <span class="badge bg-warning ms-auto" id="orderCount">0</span>
+            </a>
+            <a href="productos.html" class="nav-link">
+                <i class="bi bi-box-seam"></i>
+                <span>Productos</span>
+            </a>
+            
+            <div class="nav-section">Reportes</div>
+            <a href="#" class="nav-link">
+                <i class="bi bi-graph-up"></i>
+                <span>Ventas</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="bi bi-pie-chart"></i>
+                <span>Estadísticas</span>
+            </a>
+            
+            <div class="nav-section">Sistema</div>
+            <a href="../index.html" class="nav-link">
+                <i class="bi bi-house"></i>
+                <span>Volver al Sitio</span>
+            </a>
+            <a href="#" class="nav-link text-danger" onclick="logout()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Cerrar Sesión</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <h4 class="topbar-title">Dashboard</h4>
+            <div class="topbar-right">
+                <span class="text-muted" id="currentDate"></span>
+                <div class="admin-info">
+                    <div>
+                        <div class="fw-semibold" id="adminName">Admin</div>
+                        <small class="text-muted">Administrador</small>
+                    </div>
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Stats Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card primary">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-value" id="totalUsers">0</div>
+                                <div class="stat-label">Usuarios Registrados</div>
+                            </div>
+                            <div class="stat-icon"><i class="bi bi-people"></i></div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> <span id="newUsersToday">0</span> hoy</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card success">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-value">$<span id="totalRevenue">0</span></div>
+                                <div class="stat-label">Ingresos Totales</div>
+                            </div>
+                            <div class="stat-icon"><i class="bi bi-currency-dollar"></i></div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success"><i class="bi bi-arrow-up"></i> +12% este mes</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card info">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-value" id="totalOrders">0</div>
+                                <div class="stat-label">Pedidos Totales</div>
+                            </div>
+                            <div class="stat-icon"><i class="bi bi-bag-check"></i></div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-warning"><i class="bi bi-clock"></i> <span id="pendingOrders">0</span> pendientes</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card warning">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-value" id="totalProducts">24</div>
+                                <div class="stat-label">Productos Activos</div>
+                            </div>
+                            <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-info"><i class="bi bi-eye"></i> 1,234 vistas hoy</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-8">
+                    <div class="card-admin">
+                        <div class="card-admin-header">
+                            <h5><i class="bi bi-graph-up me-2"></i>Ventas del Mes</h5>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option>Últimos 7 días</option>
+                                <option selected>Este mes</option>
+                                <option>Este año</option>
+                            </select>
+                        </div>
+                        <div class="card-admin-body">
+                            <div class="chart-container">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card-admin">
+                        <div class="card-admin-header">
+                            <h5><i class="bi bi-pie-chart me-2"></i>Estado de Pedidos</h5>
+                        </div>
+                        <div class="card-admin-body">
+                            <div class="chart-container">
+                                <canvas id="ordersChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Data Row -->
+            <div class="row g-4">
+                <!-- Recent Users -->
+                <div class="col-lg-6">
+                    <div class="card-admin">
+                        <div class="card-admin-header">
+                            <h5><i class="bi bi-people me-2"></i>Usuarios Recientes</h5>
+                            <a href="usuarios.html" class="btn btn-sm btn-outline-primary">Ver todos</a>
+                        </div>
+                        <div class="card-admin-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-admin mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Email</th>
+                                            <th>Fecha</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentUsersTable">
+                                        <!-- Se llena con JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="empty-state d-none" id="emptyUsers">
+                                <i class="bi bi-people"></i>
+                                <p>No hay usuarios registrados aún</p>
+                                <small>Los usuarios aparecerán aquí cuando se registren</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="col-lg-6">
+                    <div class="card-admin">
+                        <div class="card-admin-header">
+                            <h5><i class="bi bi-bag-check me-2"></i>Pedidos Recientes</h5>
+                            <a href="pedidos.html" class="btn btn-sm btn-outline-primary">Ver todos</a>
+                        </div>
+                        <div class="card-admin-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-admin mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Pedido</th>
+                                            <th>Cliente</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentOrdersTable">
+                                        <!-- Se llena con JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="empty-state d-none" id="emptyOrders">
+                                <i class="bi bi-bag"></i>
+                                <p>No hay pedidos aún</p>
+                                <small>Los pedidos aparecerán aquí cuando los clientes compren</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================
+        // SISTEMA DE ADMINISTRACIÓN - DASHBOARD
+        // ============================================
+        
+        // ===== CLASE PARA MANEJAR DATOS DEL ADMIN =====
+        class AdminDashboard {
+            constructor() {
+                this.users = this.getUsers();
+                this.orders = this.getOrders();
+                this.init();
+            }
+            
+            // Obtener usuarios del localStorage
+            getUsers() {
+                return JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            }
+            
+            // Obtener pedidos del localStorage
+            getOrders() {
+                return JSON.parse(localStorage.getItem('allOrders')) || [];
+            }
+            
+            // Inicializar dashboard
+            init() {
+                this.updateStats();
+                this.renderRecentUsers();
+                this.renderRecentOrders();
+                this.initCharts();
+                this.updateDate();
+                this.checkAdminAuth();
+            }
+            
+            // Verificar si el admin está autenticado
+            checkAdminAuth() {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (currentUser) {
+                    document.getElementById('adminName').textContent = currentUser.nombre || currentUser.name || 'Admin';
+                    document.getElementById('adminAvatar').textContent = (currentUser.nombre || currentUser.name || 'A').charAt(0).toUpperCase();
+                }
+            }
+            
+            // Actualizar fecha actual
+            updateDate() {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('currentDate').textContent = now.toLocaleDateString('es-ES', options);
+            }
+            
+            // Actualizar estadísticas
+            updateStats() {
+                // Usuarios
+                document.getElementById('totalUsers').textContent = this.users.length;
+                document.getElementById('userCount').textContent = this.users.length;
+                
+                // Usuarios nuevos hoy
+                const today = new Date().toDateString();
+                const newToday = this.users.filter(u => new Date(u.fechaRegistro).toDateString() === today).length;
+                document.getElementById('newUsersToday').textContent = newToday;
+                
+                // Pedidos
+                document.getElementById('totalOrders').textContent = this.orders.length;
+                document.getElementById('orderCount').textContent = this.orders.length;
+                
+                // Pedidos pendientes
+                const pending = this.orders.filter(o => o.estado === 'pendiente' || o.estado === 'procesando').length;
+                document.getElementById('pendingOrders').textContent = pending;
+                
+                // Ingresos totales
+                const totalRevenue = this.orders.reduce((sum, order) => sum + (order.total || 0), 0);
+                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString();
+            }
+            
+            // Renderizar usuarios recientes
+            renderRecentUsers() {
+                const tbody = document.getElementById('recentUsersTable');
+                const emptyState = document.getElementById('emptyUsers');
+                
+                if (this.users.length === 0) {
+                    tbody.closest('.table-responsive').classList.add('d-none');
+                    emptyState.classList.remove('d-none');
+                    return;
+                }
+                
+                tbody.closest('.table-responsive').classList.remove('d-none');
+                emptyState.classList.add('d-none');
+                
+                // Mostrar los 5 usuarios más recientes
+                const recentUsers = [...this.users].reverse().slice(0, 5);
+                
+                tbody.innerHTML = recentUsers.map(user => {
+                    const initial = (user.nombre || user.name || user.email || 'U').charAt(0).toUpperCase();
+                    const name = user.nombre || user.name || 'Usuario';
+                    const date = user.fechaRegistro ? new Date(user.fechaRegistro).toLocaleDateString('es-ES') : 'N/A';
+                    
+                    return `
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar-sm">${initial}</div>
+                                    <span>${name}</span>
+                                </div>
+                            </td>
+                            <td>${user.email || 'N/A'}</td>
+                            <td>${date}</td>
+                            <td><span class="status-badge status-active">Activo</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            // Renderizar pedidos recientes
+            renderRecentOrders() {
+                const tbody = document.getElementById('recentOrdersTable');
+                const emptyState = document.getElementById('emptyOrders');
+                
+                if (this.orders.length === 0) {
+                    tbody.closest('.table-responsive').classList.add('d-none');
+                    emptyState.classList.remove('d-none');
+                    return;
+                }
+                
+                tbody.closest('.table-responsive').classList.remove('d-none');
+                emptyState.classList.add('d-none');
+                
+                // Mostrar los 5 pedidos más recientes
+                const recentOrders = [...this.orders].reverse().slice(0, 5);
+                
+                tbody.innerHTML = recentOrders.map(order => {
+                    const statusClass = {
+                        'pendiente': 'status-pending',
+                        'procesando': 'status-pending',
+                        'enviado': 'status-active',
+                        'entregado': 'status-completed',
+                        'cancelado': 'status-cancelled'
+                    }[order.estado] || 'status-pending';
+                    
+                    const statusText = {
+                        'pendiente': 'Pendiente',
+                        'procesando': 'Procesando',
+                        'enviado': 'Enviado',
+                        'entregado': 'Entregado',
+                        'cancelado': 'Cancelado'
+                    }[order.estado] || 'Pendiente';
+                    
+                    return `
+                        <tr>
+                            <td><strong>#${order.id || order.numero || '000'}</strong></td>
+                            <td>${order.cliente || order.email || 'Cliente'}</td>
+                            <td><strong>$${(order.total || 0).toLocaleString()}</strong></td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            // Inicializar gráficos
+            initCharts() {
+                this.initSalesChart();
+                this.initOrdersChart();
+            }
+            
+            // Gráfico de ventas
+            initSalesChart() {
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                
+                // Calcular ventas por día (últimos 7 días)
+                const salesData = this.calculateDailySales();
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: salesData.labels,
+                        datasets: [{
+                            label: 'Ventas ($)',
+                            data: salesData.values,
+                            borderColor: '#4e73df',
+                            backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Calcular ventas diarias
+            calculateDailySales() {
+                const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+                const labels = [];
+                const values = [];
+                
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    labels.push(days[date.getDay()]);
+                    
+                    // Sumar ventas del día
+                    const dayTotal = this.orders
+                        .filter(o => new Date(o.fecha).toDateString() === date.toDateString())
+                        .reduce((sum, o) => sum + (o.total || 0), 0);
+                    
+                    // Si no hay datos reales, usar datos de ejemplo
+                    values.push(dayTotal || Math.floor(Math.random() * 500) + 100);
+                }
+                
+                return { labels, values };
+            }
+            
+            // Gráfico de estado de pedidos
+            initOrdersChart() {
+                const ctx = document.getElementById('ordersChart').getContext('2d');
+                
+                // Contar pedidos por estado
+                const statusCounts = {
+                    'pendiente': 0,
+                    'procesando': 0,
+                    'enviado': 0,
+                    'entregado': 0
+                };
+                
+                this.orders.forEach(order => {
+                    if (statusCounts.hasOwnProperty(order.estado)) {
+                        statusCounts[order.estado]++;
+                    }
+                });
+                
+                // Si no hay pedidos, mostrar datos de ejemplo
+                const hasOrders = Object.values(statusCounts).some(v => v > 0);
+                const data = hasOrders 
+                    ? Object.values(statusCounts) 
+                    : [3, 2, 4, 8]; // Datos de ejemplo
+                
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pendiente', 'Procesando', 'Enviado', 'Entregado'],
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                '#f6c23e',
+                                '#36b9cc',
+                                '#4e73df',
+                                '#1cc88a'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { padding: 15 }
+                            }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            }
+        }
+        
+        // Función para cerrar sesión
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = '../index.html';
+        }
+        
+        // Inicializar cuando cargue la página
+        document.addEventListener('DOMContentLoaded', () => {
+            new AdminDashboard();
+        });
+    </script>
+</body>
+</html>

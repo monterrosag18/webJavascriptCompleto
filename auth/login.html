@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - 5 Ejemplos Completos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .login-container {
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 500px;
+        }
+        /* Login 1 - Glassmorphism */
+        .login-glass {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .login-glass::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -30px;
+            left: -30px;
+        }
+        .login-glass::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            bottom: -50px;
+            right: -50px;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+        }
+        .glass-card .form-control {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+        }
+        .glass-card .form-control::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        /* Login 2 - Split Screen */
+        .login-split {
+            display: flex;
+            min-height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        .split-left {
+            flex: 1;
+            background: linear-gradient(135deg, #0061f2 0%, #00d4ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 40px;
+        }
+        .split-right {
+            flex: 1;
+            background: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Login 3 - Minimal */
+        .login-minimal {
+            background: #f8f9fa;
+            min-height: 500px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .minimal-card {
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            max-width: 380px;
+            width: 100%;
+        }
+        .minimal-card .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+        .minimal-card .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: none;
+        }
+        
+        /* Login 4 - Dark Mode */
+        .login-dark {
+            background: #0d1117;
+            min-height: 500px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dark-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            color: #c9d1d9;
+            max-width: 400px;
+            width: 100%;
+        }
+        .dark-card .form-control {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+        }
+        .dark-card .form-control:focus {
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88,166,255,0.2);
+        }
+        .dark-card .btn-success {
+            background: #238636;
+            border: none;
+        }
+        
+        /* Login 5 - Animated */
+        .login-animated {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 500px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        .input-group-animated {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .input-group-animated input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .input-group-animated input:focus {
+            border-color: #e73c7e;
+            outline: none;
+        }
+        .input-group-animated i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        .input-group-animated input:focus + i {
+            color: #e73c7e;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="registro.html">Registro</a></li>
+                    <li class="nav-item"><a class="nav-link" href="auth-completo.html">Sistema Completo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-primary text-white py-5 mt-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-person-lock me-3"></i>Login - 5 Ejemplos</h1>
+            <p class="lead">Diseños modernos de formularios de login con código copiable</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <!-- ================================================
+             LOGIN 1: GLASSMORPHISM
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-primary me-2">1</span>Login Glassmorphism
+            </h2>
+            <p class="text-muted mb-4">Efecto de vidrio esmerilado moderno con degradados</p>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="login-glass login-container">
+                        <div class="glass-card" style="z-index: 1; position: relative; max-width: 350px; width: 100%;">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-person-circle display-3"></i>
+                                <h3 class="mt-2">Bienvenido</h3>
+                                <p class="opacity-75">Inicia sesión en tu cuenta</p>
+                            </div>
+                            <form id="form-glass">
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0 text-white">
+                                            <i class="bi bi-envelope"></i>
+                                        </span>
+                                        <input type="email" class="form-control" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-transparent border-0 text-white">
+                                            <i class="bi bi-lock"></i>
+                                        </span>
+                                        <input type="password" class="form-control" placeholder="Contraseña">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="remember-glass">
+                                        <label class="form-check-label small" for="remember-glass">Recordarme</label>
+                                    </div>
+                                    <a href="#" class="text-white small">¿Olvidaste tu contraseña?</a>
+                                </div>
+                                <button type="submit" class="btn btn-light w-100 fw-bold">Iniciar Sesión</button>
+                                <p class="text-center mt-3 mb-0 small">
+                                    ¿No tienes cuenta? <a href="#" class="text-white fw-bold">Regístrate</a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-block">
+<pre><code><span class="comment">&lt;!-- HTML - Login Glassmorphism --&gt;</span>
+&lt;div class="login-glass"&gt;
+    &lt;div class="glass-card"&gt;
+        &lt;div class="text-center mb-4"&gt;
+            &lt;i class="bi bi-person-circle display-3"&gt;&lt;/i&gt;
+            &lt;h3&gt;Bienvenido&lt;/h3&gt;
+            &lt;p&gt;Inicia sesión en tu cuenta&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;form id="login-form"&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;span class="input-group-text"&gt;
+                        &lt;i class="bi bi-envelope"&gt;&lt;/i&gt;
+                    &lt;/span&gt;
+                    &lt;input type="email" class="form-control" 
+                           placeholder="Email" required&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;span class="input-group-text"&gt;
+                        &lt;i class="bi bi-lock"&gt;&lt;/i&gt;
+                    &lt;/span&gt;
+                    &lt;input type="password" class="form-control" 
+                           placeholder="Contraseña" required&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-light w-100"&gt;
+                Iniciar Sesión
+            &lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">/* CSS - Glassmorphism */</span>
+.login-glass {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 40px;
+    color: white;
+    max-width: 400px;
+    width: 100%;
+}
+
+.glass-card .form-control {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+}
+
+.glass-card .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+<span class="comment">// JavaScript - Validación</span>
+document.getElementById('login-form')
+    .addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = e.target.querySelector('[type="email"]').value;
+    const password = e.target.querySelector('[type="password"]').value;
+    
+    // Validación básica
+    if (!email || !password) {
+        alert('Por favor completa todos los campos');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            localStorage.setItem('token', data.token);
+            window.location.href = '/dashboard';
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             LOGIN 2: SPLIT SCREEN
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-success me-2">2</span>Login Split Screen
+            </h2>
+            <p class="text-muted mb-4">Diseño dividido con área de branding</p>
+            
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="login-split">
+                        <div class="split-left text-center">
+                            <div>
+                                <i class="bi bi-shield-check display-1 mb-4"></i>
+                                <h2 class="fw-bold">Tu Portal Seguro</h2>
+                                <p class="opacity-75">Accede a todas tus herramientas desde un solo lugar</p>
+                            </div>
+                        </div>
+                        <div class="split-right">
+                            <h3 class="fw-bold mb-1">Iniciar Sesión</h3>
+                            <p class="text-muted mb-4">¿Nuevo aquí? <a href="#">Crea una cuenta</a></p>
+                            
+                            <form id="form-split">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control form-control-lg">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Contraseña</label>
+                                    <input type="password" class="form-control form-control-lg">
+                                </div>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="remember-split">
+                                        <label class="form-check-label" for="remember-split">Recordarme</label>
+                                    </div>
+                                    <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Iniciar Sesión</button>
+                                <div class="text-center">
+                                    <span class="text-muted">o continúa con</span>
+                                </div>
+                                <div class="d-flex gap-2 mt-3">
+                                    <button type="button" class="btn btn-outline-secondary flex-fill">
+                                        <i class="bi bi-google me-2"></i>Google
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary flex-fill">
+                                        <i class="bi bi-facebook me-2"></i>Facebook
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="code-block" style="max-height: 700px;">
+<pre><code><span class="comment">&lt;!-- HTML Split Screen --&gt;</span>
+&lt;div class="login-split"&gt;
+    &lt;!-- Lado izquierdo - Branding --&gt;
+    &lt;div class="split-left"&gt;
+        &lt;div class="text-center"&gt;
+            &lt;i class="bi bi-shield-check display-1"&gt;&lt;/i&gt;
+            &lt;h2&gt;Tu Portal Seguro&lt;/h2&gt;
+            &lt;p&gt;Accede a todas tus herramientas&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Lado derecho - Formulario --&gt;
+    &lt;div class="split-right"&gt;
+        &lt;h3&gt;Iniciar Sesión&lt;/h3&gt;
+        &lt;form id="login-form"&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label&gt;Email&lt;/label&gt;
+                &lt;input type="email" class="form-control"&gt;
+            &lt;/div&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label&gt;Contraseña&lt;/label&gt;
+                &lt;input type="password" class="form-control"&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-primary w-100"&gt;
+                Iniciar Sesión
+            &lt;/button&gt;
+            
+            &lt;!-- Social Login --&gt;
+            &lt;div class="d-flex gap-2 mt-3"&gt;
+                &lt;button type="button" class="btn btn-outline-secondary"&gt;
+                    &lt;i class="bi bi-google"&gt;&lt;/i&gt; Google
+                &lt;/button&gt;
+                &lt;button type="button" class="btn btn-outline-secondary"&gt;
+                    &lt;i class="bi bi-facebook"&gt;&lt;/i&gt; Facebook
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">/* CSS Split Screen */</span>
+.login-split {
+    display: flex;
+    min-height: 100vh;
+}
+
+.split-left {
+    flex: 1;
+    background: linear-gradient(135deg, #0061f2, #00d4ff);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.split-right {
+    flex: 1;
+    background: white;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .login-split {
+        flex-direction: column;
+    }
+    .split-left {
+        padding: 30px;
+    }
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             LOGIN 3: MINIMAL
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-warning text-dark me-2">3</span>Login Minimal
+            </h2>
+            <p class="text-muted mb-4">Diseño limpio y minimalista</p>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="login-minimal">
+                        <div class="minimal-card">
+                            <div class="text-center mb-4">
+                                <div class="bg-primary bg-gradient rounded-circle d-inline-flex p-3 mb-3">
+                                    <i class="bi bi-box-arrow-in-right text-white fs-3"></i>
+                                </div>
+                                <h4 class="fw-bold">Iniciar Sesión</h4>
+                                <p class="text-muted">Ingresa tus credenciales</p>
+                            </div>
+                            <form id="form-minimal">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold text-uppercase text-muted">Email</label>
+                                    <input type="email" class="form-control form-control-lg" placeholder="tu@email.com">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label small fw-semibold text-uppercase text-muted">Contraseña</label>
+                                    <input type="password" class="form-control form-control-lg" placeholder="••••••••">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill">
+                                    Continuar <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                                <div class="text-center mt-4">
+                                    <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-block">
+<pre><code><span class="comment">&lt;!-- HTML Login Minimal --&gt;</span>
+&lt;div class="login-minimal"&gt;
+    &lt;div class="minimal-card"&gt;
+        &lt;div class="text-center mb-4"&gt;
+            &lt;div class="icon-circle"&gt;
+                &lt;i class="bi bi-box-arrow-in-right"&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;h4&gt;Iniciar Sesión&lt;/h4&gt;
+        &lt;/div&gt;
+        
+        &lt;form&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label class="form-label small text-muted"&gt;EMAIL&lt;/label&gt;
+                &lt;input type="email" class="form-control form-control-lg"&gt;
+            &lt;/div&gt;
+            &lt;div class="mb-4"&gt;
+                &lt;label class="form-label small text-muted"&gt;CONTRASEÑA&lt;/label&gt;
+                &lt;input type="password" class="form-control form-control-lg"&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill"&gt;
+                Continuar &lt;i class="bi bi-arrow-right"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">/* CSS Minimal */</span>
+.login-minimal {
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minimal-card {
+    background: white;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    max-width: 400px;
+    width: 100%;
+}
+
+.minimal-card .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 14px 18px;
+    transition: all 0.3s ease;
+}
+
+.minimal-card .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             LOGIN 4: DARK MODE
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-dark me-2">4</span>Login Dark Mode (Estilo GitHub)
+            </h2>
+            <p class="text-muted mb-4">Tema oscuro inspirado en GitHub</p>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="login-dark">
+                        <div class="dark-card">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-github display-3"></i>
+                                <h4 class="mt-3">Sign in to DevPortal</h4>
+                            </div>
+                            <form id="form-dark">
+                                <div class="mb-3">
+                                    <label class="form-label">Username or email address</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-label">Password</label>
+                                        <a href="#" class="text-primary small">Forgot password?</a>
+                                    </div>
+                                    <input type="password" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 mb-3">Sign in</button>
+                            </form>
+                            <div class="text-center p-3 rounded" style="background: #0d1117; border: 1px solid #30363d;">
+                                New to DevPortal? <a href="#" class="text-primary">Create an account</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-block">
+<pre><code><span class="comment">&lt;!-- HTML Dark Mode Login --&gt;</span>
+&lt;div class="login-dark"&gt;
+    &lt;div class="dark-card"&gt;
+        &lt;div class="text-center mb-4"&gt;
+            &lt;i class="bi bi-github display-3"&gt;&lt;/i&gt;
+            &lt;h4 class="mt-3"&gt;Sign in to DevPortal&lt;/h4&gt;
+        &lt;/div&gt;
+        
+        &lt;form&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label&gt;Username or email address&lt;/label&gt;
+                &lt;input type="text" class="form-control"&gt;
+            &lt;/div&gt;
+            &lt;div class="mb-3"&gt;
+                &lt;label&gt;Password&lt;/label&gt;
+                &lt;input type="password" class="form-control"&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-success w-100"&gt;
+                Sign in
+            &lt;/button&gt;
+        &lt;/form&gt;
+        
+        &lt;div class="signup-box"&gt;
+            New to DevPortal? &lt;a href="#"&gt;Create an account&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">/* CSS Dark Mode */</span>
+.login-dark {
+    background: #0d1117;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 40px;
+    color: #c9d1d9;
+    max-width: 400px;
+}
+
+.dark-card .form-control {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+
+.dark-card .form-control:focus {
+    background: #0d1117;
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+    color: #c9d1d9;
+}
+
+.dark-card .btn-success {
+    background: #238636;
+    border: 1px solid #238636;
+}
+
+.dark-card .btn-success:hover {
+    background: #2ea043;
+}
+
+.signup-box {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    margin-top: 16px;
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             LOGIN 5: ANIMATED
+             ================================================ -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-danger me-2">5</span>Login Animated Background
+            </h2>
+            <p class="text-muted mb-4">Fondo animado con degradados</p>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="login-animated">
+                        <div class="animated-card">
+                            <h3 class="text-center fw-bold mb-4">Bienvenido de Nuevo</h3>
+                            <form id="form-animated">
+                                <div class="input-group-animated">
+                                    <input type="email" placeholder="Email">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                                <div class="input-group-animated">
+                                    <input type="password" placeholder="Contraseña">
+                                    <i class="bi bi-lock"></i>
+                                </div>
+                                <button type="submit" class="btn btn-dark btn-lg w-100 rounded-pill">
+                                    Iniciar Sesión
+                                </button>
+                                <div class="text-center mt-4">
+                                    <a href="#" class="text-muted">¿Olvidaste tu contraseña?</a>
+                                </div>
+                                <hr class="my-4">
+                                <div class="text-center">
+                                    <p class="text-muted mb-3">O inicia sesión con</p>
+                                    <button type="button" class="btn btn-outline-danger rounded-circle mx-1">
+                                        <i class="bi bi-google"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary rounded-circle mx-1">
+                                        <i class="bi bi-facebook"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info rounded-circle mx-1">
+                                        <i class="bi bi-twitter-x"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-block">
+<pre><code><span class="comment">&lt;!-- HTML Animated Login --&gt;</span>
+&lt;div class="login-animated"&gt;
+    &lt;div class="animated-card"&gt;
+        &lt;h3 class="text-center"&gt;Bienvenido&lt;/h3&gt;
+        
+        &lt;form&gt;
+            &lt;div class="input-group-animated"&gt;
+                &lt;input type="email" placeholder="Email"&gt;
+                &lt;i class="bi bi-envelope"&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;div class="input-group-animated"&gt;
+                &lt;input type="password" placeholder="Contraseña"&gt;
+                &lt;i class="bi bi-lock"&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;button type="submit" class="btn btn-dark w-100"&gt;
+                Iniciar Sesión
+            &lt;/button&gt;
+        &lt;/form&gt;
+        
+        &lt;!-- Social Login Buttons --&gt;
+        &lt;div class="social-login"&gt;
+            &lt;button class="btn btn-outline-danger rounded-circle"&gt;
+                &lt;i class="bi bi-google"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+            &lt;button class="btn btn-outline-primary rounded-circle"&gt;
+                &lt;i class="bi bi-facebook"&gt;&lt;/i&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+<span class="comment">/* CSS Animated Background */</span>
+.login-animated {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animated-card {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    max-width: 400px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.input-group-animated {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-group-animated input {
+    width: 100%;
+    padding: 15px 15px 15px 50px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+}
+
+.input-group-animated input:focus {
+    border-color: #e73c7e;
+    outline: none;
+}
+
+.input-group-animated i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    transition: color 0.3s ease;
+}
+
+.input-group-animated input:focus + i {
+    color: #e73c7e;
+}</code></pre>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                        <i class="bi bi-clipboard me-1"></i>Copiar Código
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- JAVASCRIPT COMPLETO PARA TODOS LOS FORMS -->
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4">
+                <i class="bi bi-code-slash me-2 text-primary"></i>JavaScript Completo para Login
+            </h2>
+            
+            <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// SISTEMA DE LOGIN COMPLETO CON JAVASCRIPT</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// Configuración</span>
+const API_URL = 'http://localhost:3000'; <span class="comment">// Tu API o JSON Server</span>
+
+<span class="comment">// ====== FUNCIÓN DE LOGIN ======</span>
+async function login(email, password) {
+    try {
+        <span class="comment">// Mostrar loading</span>
+        showLoading(true);
+        
+        <span class="comment">// Validación frontend</span>
+        if (!validateEmail(email)) {
+            throw new Error('Email inválido');
+        }
+        
+        if (password.length < 6) {
+            throw new Error('La contraseña debe tener al menos 6 caracteres');
+        }
+        
+        <span class="comment">// Petición al servidor</span>
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Error al iniciar sesión');
+        }
+        
+        <span class="comment">// Guardar token y datos del usuario</span>
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        <span class="comment">// Mostrar éxito</span>
+        showToast('¡Bienvenido!', 'success');
+        
+        <span class="comment">// Redireccionar</span>
+        setTimeout(() => {
+            window.location.href = '/dashboard.html';
+        }, 1000);
+        
+        return data;
+        
+    } catch (error) {
+        showToast(error.message, 'error');
+        console.error('Error de login:', error);
+        throw error;
+    } finally {
+        showLoading(false);
+    }
+}
+
+<span class="comment">// ====== PARA JSON SERVER (sin backend real) ======</span>
+async function loginConJSONServer(email, password) {
+    try {
+        <span class="comment">// Buscar usuario en JSON Server</span>
+        const response = await fetch(
+            `${API_URL}/users?email=${email}&password=${password}`
+        );
+        const users = await response.json();
+        
+        if (users.length === 0) {
+            throw new Error('Credenciales incorrectas');
+        }
+        
+        const user = users[0];
+        
+        <span class="comment">// Simular token</span>
+        const fakeToken = btoa(JSON.stringify({ 
+            id: user.id, 
+            email: user.email,
+            exp: Date.now() + 3600000 <span class="comment">// 1 hora</span>
+        }));
+        
+        localStorage.setItem('authToken', fakeToken);
+        localStorage.setItem('user', JSON.stringify({
+            id: user.id,
+            nombre: user.nombre,
+            email: user.email
+        }));
+        
+        return { success: true, user };
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
+<span class="comment">// ====== VALIDACIÓN DE EMAIL ======</span>
+function validateEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+<span class="comment">// ====== MOSTRAR/OCULTAR PASSWORD ======</span>
+function togglePassword(inputId, iconElement) {
+    const input = document.getElementById(inputId);
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        iconElement.classList.remove('bi-eye');
+        iconElement.classList.add('bi-eye-slash');
+    } else {
+        input.type = 'password';
+        iconElement.classList.remove('bi-eye-slash');
+        iconElement.classList.add('bi-eye');
+    }
+}
+
+<span class="comment">// ====== VERIFICAR SI YA ESTÁ LOGUEADO ======</span>
+function checkAuth() {
+    const token = localStorage.getItem('authToken');
+    
+    if (token) {
+        <span class="comment">// Verificar si el token no ha expirado</span>
+        try {
+            const decoded = JSON.parse(atob(token));
+            if (decoded.exp > Date.now()) {
+                return true;
+            } else {
+                <span class="comment">// Token expirado</span>
+                logout();
+                return false;
+            }
+        } catch {
+            return false;
+        }
+    }
+    return false;
+}
+
+<span class="comment">// ====== LOGOUT ======</span>
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    window.location.href = '/login.html';
+}
+
+<span class="comment">// ====== PROTEGER RUTAS ======</span>
+function protectRoute() {
+    if (!checkAuth()) {
+        window.location.href = '/login.html';
+    }
+}
+
+<span class="comment">// ====== OBTENER USUARIO ACTUAL ======</span>
+function getCurrentUser() {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+}
+
+<span class="comment">// ====== EVENT LISTENER DEL FORMULARIO ======</span>
+document.addEventListener('DOMContentLoaded', () => {
+    <span class="comment">// Si ya está logueado, redirigir</span>
+    if (checkAuth() && window.location.pathname.includes('login')) {
+        window.location.href = '/dashboard.html';
+        return;
+    }
+    
+    const loginForm = document.getElementById('login-form');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember')?.checked;
+            
+            <span class="comment">// Si marcó "recordarme", guardar email</span>
+            if (remember) {
+                localStorage.setItem('rememberedEmail', email);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+            }
+            
+            await login(email, password);
+        });
+        
+        <span class="comment">// Cargar email recordado</span>
+        const remembered = localStorage.getItem('rememberedEmail');
+        if (remembered) {
+            document.getElementById('email').value = remembered;
+            document.getElementById('remember').checked = true;
+        }
+    }
+});
+
+<span class="comment">// ====== UTILIDADES ======</span>
+function showLoading(show) {
+    const btn = document.querySelector('button[type="submit"]');
+    if (show) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cargando...';
+    } else {
+        btn.disabled = false;
+        btn.innerHTML = 'Iniciar Sesión';
+    }
+}
+
+function showToast(message, type = 'info') {
+    <span class="comment">// Implementa tu sistema de notificaciones</span>
+    alert(message); <span class="comment">// Reemplaza con tu toast personalizado</span>
+}</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between">
+            <a href="../index.html" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Volver al Inicio
+            </a>
+            <a href="registro.html" class="btn btn-primary">
+                Ver Ejemplos de Registro <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">WebGuía Completa - Login Examples</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

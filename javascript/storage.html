@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage API - LocalStorage y SessionStorage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #48dbfb, #0abde3);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .comment { color: #6272a4; font-style: italic; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .btn-copy:hover { background: rgba(255,255,255,0.2); }
+        
+        .concept-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #48dbfb;
+        }
+        
+        .demo-panel {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .storage-item {
+            background: white;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .storage-key { color: #48dbfb; font-weight: 600; }
+        .storage-value { color: #50fa7b; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="dom.html">DOM</a></li>
+                    <li class="nav-item"><a class="nav-link" href="eventos.html">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="storage.html">Storage</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="text-center py-5 bg-primary text-white mb-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-hdd me-3"></i>Web Storage API
+            </h1>
+            <p class="lead mb-0">LocalStorage y SessionStorage - Almacenamiento en el navegador</p>
+        </div>
+    </section>
+
+    <div class="container py-4">
+        <!-- Comparación -->
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="card h-100 border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <i class="bi bi-hdd-fill me-2"></i>LocalStorage
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Persiste después de cerrar el navegador</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>~5-10 MB de espacio</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Compartido entre pestañas</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Ideal para preferencias, carritos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="bi bi-window me-2"></i>SessionStorage
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-x-circle text-danger me-2"></i>Se borra al cerrar la pestaña</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>~5-10 MB de espacio</li>
+                            <li><i class="bi bi-x-circle text-danger me-2"></i>Solo en la pestaña actual</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Ideal para datos temporales</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Métodos Básicos -->
+        <section class="concept-card">
+            <h4><span class="badge bg-info me-2">1</span>Métodos Básicos</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS BÁSICOS DE STORAGE</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Misma API para localStorage y sessionStorage</span>
+
+<span class="comment">// GUARDAR - setItem(clave, valor)</span>
+localStorage.<span class="function">setItem</span>(<span class="string">'nombre'</span>, <span class="string">'Ana'</span>);
+localStorage.<span class="function">setItem</span>(<span class="string">'edad'</span>, <span class="string">'25'</span>); <span class="comment">// Siempre strings</span>
+
+<span class="comment">// También se puede con notación de objeto</span>
+localStorage.ciudad = <span class="string">'Madrid'</span>;
+localStorage[<span class="string">'pais'</span>] = <span class="string">'España'</span>;
+
+<span class="comment">// OBTENER - getItem(clave)</span>
+<span class="keyword">const</span> nombre = localStorage.<span class="function">getItem</span>(<span class="string">'nombre'</span>); <span class="comment">// 'Ana'</span>
+<span class="keyword">const</span> noExiste = localStorage.<span class="function">getItem</span>(<span class="string">'xyz'</span>); <span class="comment">// null</span>
+
+<span class="comment">// Notación de objeto</span>
+<span class="keyword">const</span> ciudad = localStorage.ciudad; <span class="comment">// 'Madrid'</span>
+
+<span class="comment">// ELIMINAR - removeItem(clave)</span>
+localStorage.<span class="function">removeItem</span>(<span class="string">'nombre'</span>);
+
+<span class="comment">// LIMPIAR TODO - clear()</span>
+localStorage.<span class="function">clear</span>();
+
+<span class="comment">// OBTENER CLAVE POR ÍNDICE - key(índice)</span>
+localStorage.<span class="function">setItem</span>(<span class="string">'a'</span>, <span class="string">'1'</span>);
+localStorage.<span class="function">setItem</span>(<span class="string">'b'</span>, <span class="string">'2'</span>);
+localStorage.<span class="function">key</span>(<span class="number">0</span>); <span class="comment">// 'a' (primera clave)</span>
+
+<span class="comment">// CONTAR ITEMS - length</span>
+console.<span class="function">log</span>(localStorage.length); <span class="comment">// 2</span>
+
+<span class="comment">// VERIFICAR SI EXISTE</span>
+<span class="keyword">if</span> (localStorage.<span class="function">getItem</span>(<span class="string">'nombre'</span>) !== <span class="keyword">null</span>) {
+    console.<span class="function">log</span>(<span class="string">'Existe'</span>);
+}
+
+<span class="comment">// Con operador nullish</span>
+<span class="keyword">const</span> valor = localStorage.<span class="function">getItem</span>(<span class="string">'tema'</span>) ?? <span class="string">'light'</span>;</pre>
+            </div>
+        </section>
+
+        <!-- 2. Trabajando con JSON -->
+        <section class="concept-card">
+            <h4><span class="badge bg-success me-2">2</span>Trabajando con JSON (Objetos y Arrays)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// GUARDAR Y RECUPERAR OBJETOS/ARRAYS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Storage solo guarda strings, hay que serializar</span>
+
+<span class="comment">// GUARDAR OBJETO</span>
+<span class="keyword">const</span> usuario = {
+    nombre: <span class="string">'Ana'</span>,
+    edad: <span class="number">25</span>,
+    email: <span class="string">'ana@email.com'</span>,
+    activo: <span class="keyword">true</span>
+};
+
+<span class="comment">// Convertir a JSON string</span>
+localStorage.<span class="function">setItem</span>(<span class="string">'usuario'</span>, JSON.<span class="function">stringify</span>(usuario));
+
+<span class="comment">// RECUPERAR OBJETO</span>
+<span class="keyword">const</span> usuarioGuardado = JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'usuario'</span>));
+console.<span class="function">log</span>(usuarioGuardado.nombre); <span class="comment">// 'Ana'</span>
+
+<span class="comment">// GUARDAR ARRAY</span>
+<span class="keyword">const</span> productos = [
+    { id: <span class="number">1</span>, nombre: <span class="string">'Laptop'</span>, precio: <span class="number">1000</span> },
+    { id: <span class="number">2</span>, nombre: <span class="string">'Mouse'</span>, precio: <span class="number">25</span> },
+    { id: <span class="number">3</span>, nombre: <span class="string">'Teclado'</span>, precio: <span class="number">75</span> }
+];
+
+localStorage.<span class="function">setItem</span>(<span class="string">'productos'</span>, JSON.<span class="function">stringify</span>(productos));
+
+<span class="comment">// RECUPERAR ARRAY</span>
+<span class="keyword">const</span> productosGuardados = JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'productos'</span>)) || [];
+
+<span class="comment">// Funciones helper recomendadas</span>
+<span class="keyword">const</span> Storage = {
+    <span class="function">set</span>(key, value) {
+        localStorage.<span class="function">setItem</span>(key, JSON.<span class="function">stringify</span>(value));
+    },
+    
+    <span class="function">get</span>(key, defaultValue = <span class="keyword">null</span>) {
+        <span class="keyword">const</span> item = localStorage.<span class="function">getItem</span>(key);
+        <span class="keyword">try</span> {
+            <span class="keyword">return</span> item ? JSON.<span class="function">parse</span>(item) : defaultValue;
+        } <span class="keyword">catch</span> {
+            <span class="keyword">return</span> item ?? defaultValue;
+        }
+    },
+    
+    <span class="function">remove</span>(key) {
+        localStorage.<span class="function">removeItem</span>(key);
+    },
+    
+    <span class="function">clear</span>() {
+        localStorage.<span class="function">clear</span>();
+    }
+};
+
+<span class="comment">// Uso simplificado</span>
+Storage.<span class="function">set</span>(<span class="string">'config'</span>, { tema: <span class="string">'dark'</span>, idioma: <span class="string">'es'</span> });
+<span class="keyword">const</span> config = Storage.<span class="function">get</span>(<span class="string">'config'</span>, { tema: <span class="string">'light'</span> });</pre>
+            </div>
+        </section>
+
+        <!-- 3. Ejemplo: Carrito de Compras -->
+        <section class="concept-card">
+            <h4><span class="badge bg-warning text-dark me-2">3</span>Ejemplo: Carrito de Compras Persistente</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CARRITO DE COMPRAS CON LOCALSTORAGE</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">Carrito</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.storageKey = <span class="string">'carrito'</span>;
+        <span class="keyword">this</span>.items = <span class="keyword">this</span>.<span class="function">cargar</span>();
+    }
+    
+    <span class="comment">// Cargar desde localStorage</span>
+    <span class="function">cargar</span>() {
+        <span class="keyword">const</span> data = localStorage.<span class="function">getItem</span>(<span class="keyword">this</span>.storageKey);
+        <span class="keyword">return</span> data ? JSON.<span class="function">parse</span>(data) : [];
+    }
+    
+    <span class="comment">// Guardar en localStorage</span>
+    <span class="function">guardar</span>() {
+        localStorage.<span class="function">setItem</span>(<span class="keyword">this</span>.storageKey, JSON.<span class="function">stringify</span>(<span class="keyword">this</span>.items));
+    }
+    
+    <span class="comment">// Agregar producto</span>
+    <span class="function">agregar</span>(producto) {
+        <span class="keyword">const</span> existe = <span class="keyword">this</span>.items.<span class="function">find</span>(item => item.id === producto.id);
+        
+        <span class="keyword">if</span> (existe) {
+            existe.cantidad++;
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.items.<span class="function">push</span>({ ...producto, cantidad: <span class="number">1</span> });
+        }
+        
+        <span class="keyword">this</span>.<span class="function">guardar</span>();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Eliminar producto</span>
+    <span class="function">eliminar</span>(productoId) {
+        <span class="keyword">this</span>.items = <span class="keyword">this</span>.items.<span class="function">filter</span>(item => item.id !== productoId);
+        <span class="keyword">this</span>.<span class="function">guardar</span>();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Actualizar cantidad</span>
+    <span class="function">actualizarCantidad</span>(productoId, cantidad) {
+        <span class="keyword">const</span> item = <span class="keyword">this</span>.items.<span class="function">find</span>(i => i.id === productoId);
+        <span class="keyword">if</span> (item) {
+            item.cantidad = Math.<span class="function">max</span>(<span class="number">0</span>, cantidad);
+            <span class="keyword">if</span> (item.cantidad === <span class="number">0</span>) <span class="keyword">this</span>.<span class="function">eliminar</span>(productoId);
+            <span class="keyword">else</span> <span class="keyword">this</span>.<span class="function">guardar</span>();
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Calcular total</span>
+    <span class="keyword">get</span> <span class="function">total</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.items.<span class="function">reduce</span>((sum, item) => 
+            sum + (item.precio * item.cantidad), <span class="number">0</span>);
+    }
+    
+    <span class="comment">// Contar items</span>
+    <span class="keyword">get</span> <span class="function">cantidadTotal</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.items.<span class="function">reduce</span>((sum, item) => sum + item.cantidad, <span class="number">0</span>);
+    }
+    
+    <span class="comment">// Vaciar carrito</span>
+    <span class="function">vaciar</span>() {
+        <span class="keyword">this</span>.items = [];
+        <span class="keyword">this</span>.<span class="function">guardar</span>();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> carrito = <span class="keyword">new</span> <span class="function">Carrito</span>();
+
+carrito.<span class="function">agregar</span>({ id: <span class="number">1</span>, nombre: <span class="string">'Laptop'</span>, precio: <span class="number">1000</span> });
+carrito.<span class="function">agregar</span>({ id: <span class="number">2</span>, nombre: <span class="string">'Mouse'</span>, precio: <span class="number">25</span> });
+carrito.<span class="function">agregar</span>({ id: <span class="number">1</span>, nombre: <span class="string">'Laptop'</span>, precio: <span class="number">1000</span> }); <span class="comment">// +1 cantidad</span>
+
+console.<span class="function">log</span>(carrito.items);
+console.<span class="function">log</span>(<span class="string">'Total: $'</span> + carrito.total);
+console.<span class="function">log</span>(<span class="string">'Items:'</span>, carrito.cantidadTotal);</pre>
+            </div>
+        </section>
+
+        <!-- 4. Ejemplo: Preferencias de Usuario -->
+        <section class="concept-card">
+            <h4><span class="badge bg-primary me-2">4</span>Ejemplo: Preferencias de Usuario</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// SISTEMA DE PREFERENCIAS</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> Preferencias = {
+    defaults: {
+        tema: <span class="string">'light'</span>,
+        idioma: <span class="string">'es'</span>,
+        fontSize: <span class="number">16</span>,
+        notificaciones: <span class="keyword">true</span>,
+        sidebar: <span class="string">'expanded'</span>
+    },
+    
+    <span class="function">getAll</span>() {
+        <span class="keyword">const</span> saved = localStorage.<span class="function">getItem</span>(<span class="string">'preferencias'</span>);
+        <span class="keyword">return</span> saved 
+            ? { ...<span class="keyword">this</span>.defaults, ...JSON.<span class="function">parse</span>(saved) }
+            : { ...<span class="keyword">this</span>.defaults };
+    },
+    
+    <span class="function">get</span>(key) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">getAll</span>()[key];
+    },
+    
+    <span class="function">set</span>(key, value) {
+        <span class="keyword">const</span> prefs = <span class="keyword">this</span>.<span class="function">getAll</span>();
+        prefs[key] = value;
+        localStorage.<span class="function">setItem</span>(<span class="string">'preferencias'</span>, JSON.<span class="function">stringify</span>(prefs));
+        <span class="keyword">this</span>.<span class="function">aplicar</span>(key, value);
+    },
+    
+    <span class="function">aplicar</span>(key, value) {
+        <span class="keyword">switch</span>(key) {
+            <span class="keyword">case</span> <span class="string">'tema'</span>:
+                document.body.className = <span class="string">`theme-${value}`</span>;
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'fontSize'</span>:
+                document.documentElement.style.fontSize = <span class="string">`${value}px`</span>;
+                <span class="keyword">break</span>;
+        }
+    },
+    
+    <span class="function">init</span>() {
+        <span class="keyword">const</span> prefs = <span class="keyword">this</span>.<span class="function">getAll</span>();
+        Object.<span class="function">entries</span>(prefs).<span class="function">forEach</span>(([k, v]) => <span class="keyword">this</span>.<span class="function">aplicar</span>(k, v));
+    },
+    
+    <span class="function">reset</span>() {
+        localStorage.<span class="function">removeItem</span>(<span class="string">'preferencias'</span>);
+        <span class="keyword">this</span>.<span class="function">init</span>();
+    }
+};
+
+<span class="comment">// Uso</span>
+Preferencias.<span class="function">init</span>(); <span class="comment">// Al cargar la página</span>
+
+<span class="comment">// Cambiar tema</span>
+Preferencias.<span class="function">set</span>(<span class="string">'tema'</span>, <span class="string">'dark'</span>);
+
+<span class="comment">// Obtener idioma</span>
+<span class="keyword">const</span> idioma = Preferencias.<span class="function">get</span>(<span class="string">'idioma'</span>);</pre>
+            </div>
+        </section>
+
+        <!-- 5. Eventos de Storage -->
+        <section class="concept-card">
+            <h4><span class="badge bg-danger me-2">5</span>Eventos de Storage (Sincronización entre pestañas)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EVENTO STORAGE - Sincronizar pestañas</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// El evento 'storage' se dispara cuando OTRA pestaña</span>
+<span class="comment">// modifica el localStorage</span>
+
+window.<span class="function">addEventListener</span>(<span class="string">'storage'</span>, (event) => {
+    console.<span class="function">log</span>(<span class="string">'Storage modificado!'</span>);
+    console.<span class="function">log</span>(<span class="string">'Clave:'</span>, event.key);
+    console.<span class="function">log</span>(<span class="string">'Valor anterior:'</span>, event.oldValue);
+    console.<span class="function">log</span>(<span class="string">'Nuevo valor:'</span>, event.newValue);
+    console.<span class="function">log</span>(<span class="string">'URL:'</span>, event.url);
+    
+    <span class="comment">// Actualizar UI basado en el cambio</span>
+    <span class="keyword">if</span> (event.key === <span class="string">'carrito'</span>) {
+        <span class="function">actualizarContadorCarrito</span>();
+    }
+    
+    <span class="keyword">if</span> (event.key === <span class="string">'tema'</span>) {
+        <span class="function">aplicarTema</span>(event.newValue);
+    }
+    
+    <span class="comment">// Cerrar sesión en todas las pestañas</span>
+    <span class="keyword">if</span> (event.key === <span class="string">'usuario'</span> && event.newValue === <span class="keyword">null</span>) {
+        window.location.href = <span class="string">'/login'</span>;
+    }
+});
+
+<span class="comment">// Ejemplo: Sincronizar estado de login</span>
+<span class="keyword">const</span> AuthSync = {
+    <span class="function">login</span>(userData) {
+        localStorage.<span class="function">setItem</span>(<span class="string">'usuario'</span>, JSON.<span class="function">stringify</span>(userData));
+        localStorage.<span class="function">setItem</span>(<span class="string">'loginTime'</span>, Date.<span class="function">now</span>().<span class="function">toString</span>());
+    },
+    
+    <span class="function">logout</span>() {
+        localStorage.<span class="function">removeItem</span>(<span class="string">'usuario'</span>);
+        localStorage.<span class="function">removeItem</span>(<span class="string">'loginTime'</span>);
+        <span class="comment">// Esto disparará el evento en otras pestañas</span>
+    },
+    
+    <span class="function">isLoggedIn</span>() {
+        <span class="keyword">return</span> localStorage.<span class="function">getItem</span>(<span class="string">'usuario'</span>) !== <span class="keyword">null</span>;
+    }
+};</pre>
+            </div>
+        </section>
+
+        <!-- 6. Storage con Expiración -->
+        <section class="concept-card">
+            <h4><span class="badge bg-secondary me-2">6</span>Storage con Expiración (TTL)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// STORAGE CON TIEMPO DE EXPIRACIÓN</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> StorageWithExpiry = {
+    <span class="function">set</span>(key, value, ttlMinutes) {
+        <span class="keyword">const</span> item = {
+            value,
+            expiry: ttlMinutes ? Date.<span class="function">now</span>() + (ttlMinutes * <span class="number">60</span> * <span class="number">1000</span>) : <span class="keyword">null</span>
+        };
+        localStorage.<span class="function">setItem</span>(key, JSON.<span class="function">stringify</span>(item));
+    },
+    
+    <span class="function">get</span>(key) {
+        <span class="keyword">const</span> itemStr = localStorage.<span class="function">getItem</span>(key);
+        
+        <span class="keyword">if</span> (!itemStr) <span class="keyword">return</span> <span class="keyword">null</span>;
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> item = JSON.<span class="function">parse</span>(itemStr);
+            
+            <span class="comment">// Si no tiene expiración o no ha expirado</span>
+            <span class="keyword">if</span> (!item.expiry || Date.<span class="function">now</span>() < item.expiry) {
+                <span class="keyword">return</span> item.value;
+            }
+            
+            <span class="comment">// Expirado - eliminar y retornar null</span>
+            localStorage.<span class="function">removeItem</span>(key);
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+            
+        } <span class="keyword">catch</span> {
+            <span class="keyword">return</span> <span class="keyword">null</span>;
+        }
+    },
+    
+    <span class="function">isExpired</span>(key) {
+        <span class="keyword">const</span> itemStr = localStorage.<span class="function">getItem</span>(key);
+        <span class="keyword">if</span> (!itemStr) <span class="keyword">return</span> <span class="keyword">true</span>;
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> { expiry } = JSON.<span class="function">parse</span>(itemStr);
+            <span class="keyword">return</span> expiry && Date.<span class="function">now</span>() >= expiry;
+        } <span class="keyword">catch</span> {
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+    },
+    
+    <span class="function">getTimeRemaining</span>(key) {
+        <span class="keyword">const</span> itemStr = localStorage.<span class="function">getItem</span>(key);
+        <span class="keyword">if</span> (!itemStr) <span class="keyword">return</span> <span class="number">0</span>;
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> { expiry } = JSON.<span class="function">parse</span>(itemStr);
+            <span class="keyword">if</span> (!expiry) <span class="keyword">return</span> Infinity;
+            <span class="keyword">return</span> Math.<span class="function">max</span>(<span class="number">0</span>, expiry - Date.<span class="function">now</span>());
+        } <span class="keyword">catch</span> {
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }
+    }
+};
+
+<span class="comment">// Uso</span>
+<span class="comment">// Guardar token que expira en 60 minutos</span>
+StorageWithExpiry.<span class="function">set</span>(<span class="string">'authToken'</span>, <span class="string">'abc123'</span>, <span class="number">60</span>);
+
+<span class="comment">// Cache de API que expira en 5 minutos</span>
+StorageWithExpiry.<span class="function">set</span>(<span class="string">'usersCache'</span>, usersData, <span class="number">5</span>);
+
+<span class="comment">// Obtener (retorna null si expiró)</span>
+<span class="keyword">const</span> token = StorageWithExpiry.<span class="function">get</span>(<span class="string">'authToken'</span>);
+
+<span class="keyword">if</span> (!token) {
+    console.<span class="function">log</span>(<span class="string">'Token expirado, iniciar sesión'</span>);
+}</pre>
+            </div>
+        </section>
+
+        <!-- Demo Interactiva -->
+        <section class="demo-panel my-5">
+            <h4 class="mb-4"><i class="bi bi-play-circle me-2"></i>Demo Interactiva</h4>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h5>Agregar Item</h5>
+                    <div class="input-group mb-2">
+                        <input type="text" id="demoKey" class="form-control" placeholder="Clave">
+                        <input type="text" id="demoValue" class="form-control" placeholder="Valor">
+                        <button class="btn btn-primary" onclick="agregarItem()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Acciones</h5>
+                    <button class="btn btn-outline-danger btn-sm" onclick="limpiarStorage()">
+                        <i class="bi bi-trash me-2"></i>Limpiar Todo
+                    </button>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <h5 class="mb-3">Contenido de localStorage</h5>
+            <div id="storageContent">
+                <!-- Items se mostrarán aquí -->
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="async.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Async/Await
+            </a>
+            <a href="validaciones.html" class="btn btn-primary">
+                Validaciones<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Web Storage API | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+        
+        // Demo functions
+        function mostrarStorage() {
+            const container = document.getElementById('storageContent');
+            container.innerHTML = '';
+            
+            if (localStorage.length === 0) {
+                container.innerHTML = '<p class="text-muted">localStorage está vacío</p>';
+                return;
+            }
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                
+                container.innerHTML += `
+                    <div class="storage-item">
+                        <div>
+                            <span class="storage-key">${key}</span>: 
+                            <span class="storage-value">${value.substring(0, 50)}${value.length > 50 ? '...' : ''}</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger" onclick="eliminarItem('${key}')">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        function agregarItem() {
+            const key = document.getElementById('demoKey').value.trim();
+            const value = document.getElementById('demoValue').value.trim();
+            
+            if (key && value) {
+                localStorage.setItem(key, value);
+                document.getElementById('demoKey').value = '';
+                document.getElementById('demoValue').value = '';
+                mostrarStorage();
+            }
+        }
+        
+        function eliminarItem(key) {
+            localStorage.removeItem(key);
+            mostrarStorage();
+        }
+        
+        function limpiarStorage() {
+            if (confirm('¿Seguro que quieres limpiar todo el localStorage?')) {
+                localStorage.clear();
+                mostrarStorage();
+            }
+        }
+        
+        // Inicializar
+        mostrarStorage();
+    </script>
+</body>
+</html>

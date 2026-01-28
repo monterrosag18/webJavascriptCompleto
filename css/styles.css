@@ -1,0 +1,589 @@
+/* ============================================
+   ESTILOS PRINCIPALES - WebGuía Completa
+   ============================================
+   Archivo: styles.css
+   Descripción: Estilos personalizados para toda la guía web
+   ============================================ */
+
+/* ====== VARIABLES CSS ====== */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --purple-color: #6f42c1;
+    --dark-color: #212529;
+    --light-color: #f8f9fa;
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    --shadow-sm: 0 .125rem .25rem rgba(0,0,0,.075);
+    --shadow-md: 0 .5rem 1rem rgba(0,0,0,.15);
+    --shadow-lg: 0 1rem 3rem rgba(0,0,0,.175);
+    --transition-fast: all 0.2s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+}
+
+/* ====== RESET Y BASE ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--dark-color);
+    overflow-x: hidden;
+}
+
+/* Para compensar el navbar fixed */
+body {
+    padding-top: 56px;
+}
+
+/* ====== TIPOGRAFÍA ====== */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+    font-weight: 700;
+}
+
+/* ====== HERO SECTION ====== */
+.hero-section {
+    background: var(--gradient-dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ====== CODE PREVIEW BOX ====== */
+.code-preview {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+}
+
+.code-preview::before {
+    content: '● ● ●';
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 8px;
+    letter-spacing: 4px;
+}
+
+.code-preview pre {
+    margin: 0;
+    margin-top: 10px;
+    background: transparent;
+}
+
+.code-preview code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85rem;
+}
+
+/* ====== CARDS ====== */
+.card {
+    border-radius: 12px;
+    transition: var(--transition-normal);
+}
+
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ====== ICON BOX ====== */
+.icon-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+/* ====== BOTONES PERSONALIZADOS ====== */
+.btn {
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.btn-lg {
+    padding: 12px 32px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Botón Purple personalizado */
+.bg-purple {
+    background-color: var(--purple-color) !important;
+}
+
+.btn-purple {
+    background-color: var(--purple-color);
+    border-color: var(--purple-color);
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #5a32a3;
+    border-color: #5a32a3;
+    color: white;
+}
+
+/* ====== NAVBAR ====== */
+.navbar {
+    box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+}
+
+.nav-link {
+    padding: 8px 16px !important;
+    border-radius: 6px;
+    transition: var(--transition-fast);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: var(--shadow-md);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.dropdown-item {
+    border-radius: 6px;
+    padding: 10px 16px;
+    transition: var(--transition-fast);
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* ====== CODE BLOCKS ====== */
+pre {
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+}
+
+pre code {
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    line-height: 1.5;
+}
+
+/* Syntax Highlighting básico */
+.code-keyword { color: #569cd6; }
+.code-string { color: #ce9178; }
+.code-comment { color: #6a9955; }
+.code-function { color: #dcdcaa; }
+.code-number { color: #b5cea8; }
+.code-tag { color: #569cd6; }
+.code-attribute { color: #9cdcfe; }
+
+/* ====== COPY BUTTON ====== */
+.copy-btn {
+    position: relative;
+}
+
+.copy-btn.copied::after {
+    content: '¡Copiado!';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--success-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+    0%, 70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ====== SECTIONS ====== */
+section {
+    padding: 60px 0;
+}
+
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* ====== EJEMPLO CONTAINERS ====== */
+.example-container {
+    background: var(--light-color);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid #e9ecef;
+}
+
+.example-preview {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 2px dashed #dee2e6;
+    margin-bottom: 20px;
+}
+
+.example-code {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* ====== TABS PERSONALIZADOS ====== */
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: var(--secondary-color);
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent;
+    border-bottom-color: var(--primary-color);
+    background: none;
+}
+
+.nav-tabs .nav-link.active {
+    border-color: transparent;
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+    background: none;
+}
+
+/* ====== BADGES ====== */
+.badge-new {
+    background: linear-gradient(135deg, #ff6b6b, #ffa500);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* ====== SIDEBAR (para páginas internas) ====== */
+.sidebar {
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.sidebar-nav .nav-link {
+    color: var(--secondary-color);
+    padding: 8px 16px;
+    border-left: 3px solid transparent;
+    border-radius: 0;
+}
+
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link.active {
+    color: var(--primary-color);
+    background: rgba(13, 110, 253, 0.1);
+    border-left-color: var(--primary-color);
+}
+
+/* ====== ACORDEÓN PERSONALIZADO ====== */
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+    color: white;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+/* ====== ALERTS PERSONALIZADOS ====== */
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.alert-tip {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+}
+
+.alert-warning-custom {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
+.alert-info-custom {
+    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    color: #0c5460;
+}
+
+/* ====== FORMULARIOS ====== */
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    transition: var(--transition-fast);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.form-floating > .form-control,
+.form-floating > .form-select {
+    height: calc(3.5rem + 4px);
+}
+
+/* ====== TABLAS ====== */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: var(--dark-color);
+    color: white;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* ====== LOADING SPINNER ====== */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner-grow-custom {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* ====== TOAST NOTIFICATIONS ====== */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    border-radius: 10px;
+    border: none;
+    box-shadow: var(--shadow-md);
+}
+
+/* ====== SCROLL TO TOP BUTTON ====== */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-normal);
+    z-index: 1000;
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-to-top:hover {
+    background: #0056b3;
+    transform: translateY(-5px);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 991.98px) {
+    .hero-section {
+        text-align: center;
+        padding: 80px 0;
+    }
+    
+    .hero-section .col-lg-6:last-child {
+        margin-top: 40px;
+    }
+    
+    .sidebar {
+        position: static;
+        height: auto;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .display-3 {
+        font-size: 2rem;
+    }
+    
+    section {
+        padding: 40px 0;
+    }
+    
+    .icon-box {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .icon-box i {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* ====== ANIMACIONES ====== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-fadeInLeft {
+    animation: fadeInLeft 0.6s ease forwards;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Delay classes para animaciones escalonadas */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* ====== DARK MODE (opcional) ====== */
+[data-theme="dark"] {
+    --light-color: #1a1a2e;
+    --dark-color: #f8f9fa;
+}
+
+[data-theme="dark"] body {
+    background: #0f0f1a;
+    color: #f8f9fa;
+}
+
+[data-theme="dark"] .card {
+    background: #1a1a2e;
+    color: #f8f9fa;
+}
+
+[data-theme="dark"] .example-container {
+    background: #1a1a2e;
+    border-color: #2d2d44;
+}
+
+[data-theme="dark"] .example-preview {
+    background: #252538;
+    border-color: #3d3d5c;
+}

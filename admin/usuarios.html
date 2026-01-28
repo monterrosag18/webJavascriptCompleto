@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Panel Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-height: 60px;
+            --primary: #4e73df;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --dark: #5a5c69;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f6f9; }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 10px;
+        }
+        
+        .sidebar-nav { padding: 20px 0; }
+        
+        .nav-section {
+            padding: 15px 20px 10px;
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--primary);
+        }
+        
+        .sidebar .nav-link i { width: 20px; text-align: center; }
+        
+        /* Main */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+        
+        .topbar {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .content { padding: 30px; }
+        
+        .card-admin {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .card-admin-header {
+            padding: 20px;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .card-admin-header h5 { margin: 0; font-weight: 600; color: var(--dark); }
+        .card-admin-body { padding: 20px; }
+        
+        .table-admin { margin: 0; }
+        .table-admin th {
+            background: #f8f9fc;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+            border: none;
+            padding: 15px;
+        }
+        .table-admin td {
+            padding: 15px;
+            vertical-align: middle;
+            border-color: #e3e6f0;
+        }
+        
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-active { background: rgba(28,200,138,0.1); color: var(--success); }
+        .status-inactive { background: rgba(231,74,59,0.1); color: var(--danger); }
+        
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #858796;
+        }
+        .empty-state i { font-size: 4rem; opacity: 0.3; margin-bottom: 20px; }
+        
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+        .search-box input {
+            padding-left: 40px;
+            border-radius: 8px;
+        }
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #858796;
+        }
+        
+        .user-detail-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .user-detail-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 auto 15px;
+        }
+        
+        .stat-mini {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .stat-mini-value { font-size: 1.5rem; font-weight: 700; }
+        .stat-mini-label { font-size: 0.8rem; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-shield-check"></i>
+            <span>Admin Panel</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="index.html" class="nav-link">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <div class="nav-section">Gestión</div>
+            <a href="usuarios.html" class="nav-link active">
+                <i class="bi bi-people"></i>
+                <span>Usuarios</span>
+            </a>
+            <a href="pedidos.html" class="nav-link">
+                <i class="bi bi-bag-check"></i>
+                <span>Pedidos</span>
+            </a>
+            <a href="productos.html" class="nav-link">
+                <i class="bi bi-box-seam"></i>
+                <span>Productos</span>
+            </a>
+            
+            <div class="nav-section">Sistema</div>
+            <a href="../index.html" class="nav-link">
+                <i class="bi bi-house"></i>
+                <span>Volver al Sitio</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <h4 class="fw-semibold text-dark mb-0">Gestión de Usuarios</h4>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                <i class="bi bi-plus-lg me-2"></i>Agregar Usuario
+            </button>
+        </header>
+
+        <div class="content">
+            <!-- Stats Row -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card-admin p-4 text-center">
+                        <div class="text-primary mb-2"><i class="bi bi-people fs-2"></i></div>
+                        <h3 class="mb-1" id="totalUsers">0</h3>
+                        <small class="text-muted">Total Usuarios</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-admin p-4 text-center">
+                        <div class="text-success mb-2"><i class="bi bi-person-check fs-2"></i></div>
+                        <h3 class="mb-1" id="activeUsers">0</h3>
+                        <small class="text-muted">Usuarios Activos</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-admin p-4 text-center">
+                        <div class="text-info mb-2"><i class="bi bi-calendar-check fs-2"></i></div>
+                        <h3 class="mb-1" id="newUsersMonth">0</h3>
+                        <small class="text-muted">Nuevos este Mes</small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-admin p-4 text-center">
+                        <div class="text-warning mb-2"><i class="bi bi-bag-check fs-2"></i></div>
+                        <h3 class="mb-1" id="usersWithOrders">0</h3>
+                        <small class="text-muted">Con Compras</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card-admin">
+                <div class="card-admin-header">
+                    <h5><i class="bi bi-people me-2"></i>Lista de Usuarios Registrados</h5>
+                    <div class="d-flex gap-2">
+                        <div class="search-box">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="form-control" id="searchUsers" placeholder="Buscar usuario...">
+                        </div>
+                        <select class="form-select" style="width: auto;" id="filterStatus">
+                            <option value="all">Todos</option>
+                            <option value="active">Activos</option>
+                            <option value="inactive">Inactivos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-admin-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-admin table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Pedidos</th>
+                                    <th>Total Gastado</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Se llena con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="empty-state d-none" id="emptyState">
+                        <i class="bi bi-people"></i>
+                        <h5>No hay usuarios registrados</h5>
+                        <p class="text-muted">Los usuarios aparecerán aquí cuando se registren en la tienda</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                            <i class="bi bi-plus-lg me-2"></i>Agregar Usuario Manualmente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Ver Detalles de Usuario -->
+    <div class="modal fade" id="userDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Detalles del Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="user-detail-card">
+                                <div class="user-detail-avatar" id="detailAvatar">U</div>
+                                <h5 id="detailName">Usuario</h5>
+                                <p class="mb-3 opacity-75" id="detailEmail">email@ejemplo.com</p>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="stat-mini">
+                                            <div class="stat-mini-value" id="detailOrders">0</div>
+                                            <div class="stat-mini-label">Pedidos</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="stat-mini">
+                                            <div class="stat-mini-value">$<span id="detailSpent">0</span></div>
+                                            <div class="stat-mini-label">Gastado</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h6 class="fw-bold mb-3">Información Personal</h6>
+                            <table class="table table-sm">
+                                <tr><td class="text-muted" width="150">Teléfono:</td><td id="detailPhone">-</td></tr>
+                                <tr><td class="text-muted">Dirección:</td><td id="detailAddress">-</td></tr>
+                                <tr><td class="text-muted">Fecha Registro:</td><td id="detailDate">-</td></tr>
+                                <tr><td class="text-muted">Último Acceso:</td><td id="detailLastAccess">-</td></tr>
+                            </table>
+                            
+                            <h6 class="fw-bold mb-3 mt-4">Historial de Pedidos</h6>
+                            <div id="detailOrdersList">
+                                <p class="text-muted">Este usuario no tiene pedidos aún</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Agregar Usuario -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Nuevo Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Completo *</label>
+                            <input type="text" class="form-control" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" name="telefono">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña *</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="addUserForm" class="btn btn-primary">
+                        <i class="bi bi-plus-lg me-2"></i>Agregar Usuario
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================
+        // GESTIÓN DE USUARIOS - ADMIN
+        // ============================================
+        
+        class UsersManager {
+            constructor() {
+                this.users = this.getUsers();
+                this.orders = this.getOrders();
+                this.init();
+            }
+            
+            getUsers() {
+                return JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            }
+            
+            getOrders() {
+                return JSON.parse(localStorage.getItem('allOrders')) || [];
+            }
+            
+            saveUsers() {
+                localStorage.setItem('registeredUsers', JSON.stringify(this.users));
+            }
+            
+            init() {
+                this.updateStats();
+                this.renderUsers();
+                this.bindEvents();
+            }
+            
+            // Colores aleatorios para avatares
+            getAvatarColor(index) {
+                const colors = [
+                    'linear-gradient(135deg, #667eea, #764ba2)',
+                    'linear-gradient(135deg, #f093fb, #f5576c)',
+                    'linear-gradient(135deg, #4facfe, #00f2fe)',
+                    'linear-gradient(135deg, #43e97b, #38f9d7)',
+                    'linear-gradient(135deg, #fa709a, #fee140)',
+                    'linear-gradient(135deg, #a18cd1, #fbc2eb)'
+                ];
+                return colors[index % colors.length];
+            }
+            
+            // Obtener pedidos de un usuario
+            getUserOrders(email) {
+                return this.orders.filter(o => o.email === email || o.cliente === email);
+            }
+            
+            // Calcular total gastado por usuario
+            getUserTotalSpent(email) {
+                const userOrders = this.getUserOrders(email);
+                return userOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+            }
+            
+            // Actualizar estadísticas
+            updateStats() {
+                document.getElementById('totalUsers').textContent = this.users.length;
+                document.getElementById('activeUsers').textContent = this.users.filter(u => u.activo !== false).length;
+                
+                // Nuevos este mes
+                const thisMonth = new Date().getMonth();
+                const newThisMonth = this.users.filter(u => {
+                    const regDate = new Date(u.fechaRegistro);
+                    return regDate.getMonth() === thisMonth;
+                }).length;
+                document.getElementById('newUsersMonth').textContent = newThisMonth;
+                
+                // Con compras
+                const withOrders = this.users.filter(u => this.getUserOrders(u.email).length > 0).length;
+                document.getElementById('usersWithOrders').textContent = withOrders;
+            }
+            
+            // Renderizar tabla de usuarios
+            renderUsers(filter = 'all', search = '') {
+                const tbody = document.getElementById('usersTableBody');
+                const emptyState = document.getElementById('emptyState');
+                
+                let filteredUsers = [...this.users];
+                
+                // Filtrar por estado
+                if (filter === 'active') {
+                    filteredUsers = filteredUsers.filter(u => u.activo !== false);
+                } else if (filter === 'inactive') {
+                    filteredUsers = filteredUsers.filter(u => u.activo === false);
+                }
+                
+                // Filtrar por búsqueda
+                if (search) {
+                    const searchLower = search.toLowerCase();
+                    filteredUsers = filteredUsers.filter(u => 
+                        (u.nombre || '').toLowerCase().includes(searchLower) ||
+                        (u.email || '').toLowerCase().includes(searchLower)
+                    );
+                }
+                
+                if (filteredUsers.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.classList.remove('d-none');
+                    return;
+                }
+                
+                emptyState.classList.add('d-none');
+                
+                tbody.innerHTML = filteredUsers.map((user, index) => {
+                    const initial = (user.nombre || user.email || 'U').charAt(0).toUpperCase();
+                    const name = user.nombre || 'Usuario';
+                    const email = user.email || 'N/A';
+                    const phone = user.telefono || '-';
+                    const date = user.fechaRegistro 
+                        ? new Date(user.fechaRegistro).toLocaleDateString('es-ES')
+                        : 'N/A';
+                    const orders = this.getUserOrders(email).length;
+                    const totalSpent = this.getUserTotalSpent(email);
+                    const isActive = user.activo !== false;
+                    
+                    return `
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar" style="background: ${this.getAvatarColor(index)}">${initial}</div>
+                                    <div>
+                                        <strong>${name}</strong>
+                                        ${user.role === 'admin' ? '<span class="badge bg-primary ms-2">Admin</span>' : ''}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${email}</td>
+                            <td>${phone}</td>
+                            <td>${date}</td>
+                            <td><span class="badge bg-info">${orders}</span></td>
+                            <td><strong>$${totalSpent.toLocaleString()}</strong></td>
+                            <td>
+                                <span class="status-badge ${isActive ? 'status-active' : 'status-inactive'}">
+                                    ${isActive ? 'Activo' : 'Inactivo'}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-action btn-outline-info me-1" onclick="usersManager.viewUser('${email}')" title="Ver detalles">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-action btn-outline-${isActive ? 'warning' : 'success'}" onclick="usersManager.toggleStatus('${email}')" title="${isActive ? 'Desactivar' : 'Activar'}">
+                                    <i class="bi bi-${isActive ? 'pause' : 'play'}"></i>
+                                </button>
+                                <button class="btn btn-action btn-outline-danger" onclick="usersManager.deleteUser('${email}')" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            // Ver detalles de usuario
+            viewUser(email) {
+                const user = this.users.find(u => u.email === email);
+                if (!user) return;
+                
+                const initial = (user.nombre || user.email || 'U').charAt(0).toUpperCase();
+                const userOrders = this.getUserOrders(email);
+                const totalSpent = this.getUserTotalSpent(email);
+                
+                document.getElementById('detailAvatar').textContent = initial;
+                document.getElementById('detailName').textContent = user.nombre || 'Usuario';
+                document.getElementById('detailEmail').textContent = user.email;
+                document.getElementById('detailPhone').textContent = user.telefono || '-';
+                document.getElementById('detailAddress').textContent = user.direccion || '-';
+                document.getElementById('detailDate').textContent = user.fechaRegistro 
+                    ? new Date(user.fechaRegistro).toLocaleDateString('es-ES', { dateStyle: 'long' })
+                    : '-';
+                document.getElementById('detailLastAccess').textContent = user.ultimoAcceso
+                    ? new Date(user.ultimoAcceso).toLocaleDateString('es-ES', { dateStyle: 'long' })
+                    : 'Nunca';
+                document.getElementById('detailOrders').textContent = userOrders.length;
+                document.getElementById('detailSpent').textContent = totalSpent.toLocaleString();
+                
+                // Historial de pedidos
+                const ordersList = document.getElementById('detailOrdersList');
+                if (userOrders.length === 0) {
+                    ordersList.innerHTML = '<p class="text-muted">Este usuario no tiene pedidos aún</p>';
+                } else {
+                    ordersList.innerHTML = `
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Pedido</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${userOrders.map(order => `
+                                        <tr>
+                                            <td>#${order.id || order.numero || '000'}</td>
+                                            <td>${order.fecha ? new Date(order.fecha).toLocaleDateString('es-ES') : 'N/A'}</td>
+                                            <td>$${(order.total || 0).toLocaleString()}</td>
+                                            <td><span class="badge bg-${order.estado === 'entregado' ? 'success' : 'warning'}">${order.estado || 'pendiente'}</span></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                
+                new bootstrap.Modal(document.getElementById('userDetailModal')).show();
+            }
+            
+            // Cambiar estado de usuario
+            toggleStatus(email) {
+                const user = this.users.find(u => u.email === email);
+                if (user) {
+                    user.activo = user.activo === false ? true : false;
+                    this.saveUsers();
+                    this.renderUsers();
+                    this.updateStats();
+                }
+            }
+            
+            // Eliminar usuario
+            deleteUser(email) {
+                if (confirm('¿Estás seguro de eliminar este usuario? Esta acción no se puede deshacer.')) {
+                    this.users = this.users.filter(u => u.email !== email);
+                    this.saveUsers();
+                    this.renderUsers();
+                    this.updateStats();
+                }
+            }
+            
+            // Agregar nuevo usuario
+            addUser(userData) {
+                const newUser = {
+                    ...userData,
+                    fechaRegistro: new Date().toISOString(),
+                    activo: true,
+                    role: 'user'
+                };
+                
+                // Verificar si ya existe
+                if (this.users.find(u => u.email === userData.email)) {
+                    alert('Ya existe un usuario con este email');
+                    return false;
+                }
+                
+                this.users.push(newUser);
+                this.saveUsers();
+                this.renderUsers();
+                this.updateStats();
+                return true;
+            }
+            
+            // Bind eventos
+            bindEvents() {
+                // Búsqueda
+                document.getElementById('searchUsers').addEventListener('input', (e) => {
+                    const filter = document.getElementById('filterStatus').value;
+                    this.renderUsers(filter, e.target.value);
+                });
+                
+                // Filtro
+                document.getElementById('filterStatus').addEventListener('change', (e) => {
+                    const search = document.getElementById('searchUsers').value;
+                    this.renderUsers(e.target.value, search);
+                });
+                
+                // Formulario agregar usuario
+                document.getElementById('addUserForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const userData = Object.fromEntries(formData.entries());
+                    
+                    if (this.addUser(userData)) {
+                        bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+                        e.target.reset();
+                    }
+                });
+            }
+        }
+        
+        // Inicializar
+        let usersManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            usersManager = new UsersManager();
+        });
+    </script>
+</body>
+</html>

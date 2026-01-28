@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIs y Fetch - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 600px;
+        }
+        .api-card {
+            transition: transform 0.3s;
+        }
+        .api-card:hover {
+            transform: translateY(-5px);
+        }
+        .response-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .method-badge {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="fetch.html">Fetch API</a></li>
+                    <li class="nav-item"><a class="nav-link" href="json-server.html">JSON Server</a></li>
+                    <li class="nav-item"><a class="nav-link" href="crud.html">CRUD Completo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-info text-white py-5 mt-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-cloud-arrow-down me-3"></i>Fetch API & APIs REST</h1>
+            <p class="lead">Todo sobre peticiones HTTP, consumo de APIs y async/await</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- SIDEBAR -->
+            <div class="col-lg-3">
+                <div class="sidebar">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-list me-2"></i>Contenido</h5>
+                    <nav class="nav flex-column sidebar-nav">
+                        <a class="nav-link" href="#fetch-basics">📡 Fetch Básico</a>
+                        <a class="nav-link" href="#get-requests">📥 GET Requests</a>
+                        <a class="nav-link" href="#post-requests">📤 POST Requests</a>
+                        <a class="nav-link" href="#put-patch-delete">✏️ PUT, PATCH, DELETE</a>
+                        <a class="nav-link" href="#error-handling">⚠️ Manejo de Errores</a>
+                        <a class="nav-link" href="#async-await">⚡ Async/Await</a>
+                        <a class="nav-link" href="#api-service">🏗️ API Service Class</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="col-lg-9">
+                
+                <!-- FETCH BÁSICO -->
+                <section id="fetch-basics" class="mb-5 pb-5 border-bottom">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-broadcast me-2 text-info"></i>Fetch API - Conceptos Básicos
+                    </h2>
+
+                    <div class="alert alert-info mb-4">
+                        <strong>¿Qué es Fetch?</strong><br>
+                        Fetch es la API moderna de JavaScript para hacer peticiones HTTP. Reemplaza a XMLHttpRequest y trabaja con Promises.
+                    </div>
+
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-info me-2">1</span>Sintaxis Básica de Fetch</h5>
+                        
+                        <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// FETCH API - SINTAXIS BÁSICA</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// La forma más simple de fetch (GET por defecto)</span>
+<span class="function">fetch</span>(<span class="string">'https://api.example.com/data'</span>)
+    .<span class="function">then</span>(response => response.<span class="function">json</span>())
+    .<span class="function">then</span>(data => console.<span class="function">log</span>(data))
+    .<span class="function">catch</span>(error => console.<span class="function">error</span>(<span class="string">'Error:'</span>, error));
+
+
+<span class="comment">// ====== ANATOMÍA DE FETCH ======</span>
+
+<span class="comment">// fetch() retorna una Promise que resuelve a un objeto Response</span>
+<span class="function">fetch</span>(url, options)
+    .<span class="function">then</span>(response => {
+        <span class="comment">// El objeto Response contiene:</span>
+        console.<span class="function">log</span>(response.ok);        <span class="comment">// true si status 200-299</span>
+        console.<span class="function">log</span>(response.status);    <span class="comment">// código de estado (200, 404, etc)</span>
+        console.<span class="function">log</span>(response.statusText); <span class="comment">// texto del estado ("OK", "Not Found")</span>
+        console.<span class="function">log</span>(response.headers);   <span class="comment">// headers de la respuesta</span>
+        console.<span class="function">log</span>(response.url);       <span class="comment">// URL final (después de redirects)</span>
+        
+        <span class="comment">// Métodos para leer el body (solo puedes usar UNO):</span>
+        <span class="keyword">return</span> response.<span class="function">json</span>();   <span class="comment">// Para JSON</span>
+        <span class="comment">// return response.text();   // Para texto plano</span>
+        <span class="comment">// return response.blob();   // Para archivos binarios</span>
+        <span class="comment">// return response.formData(); // Para FormData</span>
+    });
+
+
+<span class="comment">// ====== OPTIONS DE FETCH ======</span>
+
+<span class="keyword">const</span> options = {
+    method: <span class="string">'POST'</span>,  <span class="comment">// GET, POST, PUT, PATCH, DELETE</span>
+    
+    headers: {
+        <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,
+        <span class="string">'Authorization'</span>: <span class="string">'Bearer tu_token_aqui'</span>,
+        <span class="string">'Accept'</span>: <span class="string">'application/json'</span>
+    },
+    
+    body: JSON.<span class="function">stringify</span>({
+        nombre: <span class="string">'Juan'</span>,
+        email: <span class="string">'juan@email.com'</span>
+    }),
+    
+    <span class="comment">// Otras opciones:</span>
+    mode: <span class="string">'cors'</span>,              <span class="comment">// cors, no-cors, same-origin</span>
+    credentials: <span class="string">'include'</span>,    <span class="comment">// include, same-origin, omit (para cookies)</span>
+    cache: <span class="string">'no-cache'</span>,         <span class="comment">// default, no-cache, reload, force-cache</span>
+    redirect: <span class="string">'follow'</span>,        <span class="comment">// follow, error, manual</span>
+};
+
+<span class="function">fetch</span>(<span class="string">'https://api.example.com/users'</span>, options);</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- GET REQUESTS -->
+                <section id="get-requests" class="mb-5 pb-5 border-bottom">
+                    <h2 class="fw-bold mb-4">
+                        <span class="method-badge badge bg-success me-2">GET</span>Obtener Datos
+                    </h2>
+
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-success me-2">5 Ejemplos</span>GET Requests</h5>
+                        
+                        <!-- Demo interactivo -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="bi bi-play-circle me-2"></i>Demo en Vivo - Prueba estas APIs
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex gap-2 flex-wrap mb-3">
+                                    <button class="btn btn-outline-success" onclick="fetchUsers()">
+                                        <i class="bi bi-people me-1"></i>Usuarios
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="fetchPosts()">
+                                        <i class="bi bi-file-text me-1"></i>Posts
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="fetchPhotos()">
+                                        <i class="bi bi-image me-1"></i>Fotos
+                                    </button>
+                                </div>
+                                <div id="api-response" class="response-box">
+                                    <span class="text-muted">Haz clic en un botón para ver la respuesta...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// GET REQUESTS - 5 EJEMPLOS COMPLETOS</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// ====== EJEMPLO 1: GET Básico ======</span>
+<span class="keyword">async function</span> <span class="function">getUsers</span>() {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>);
+    <span class="keyword">const</span> users = <span class="keyword">await</span> response.<span class="function">json</span>();
+    console.<span class="function">log</span>(users);
+    <span class="keyword">return</span> users;
+}
+
+
+<span class="comment">// ====== EJEMPLO 2: GET con parámetros de URL ======</span>
+<span class="keyword">async function</span> <span class="function">getUserById</span>(id) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(
+        <span class="string">`https://jsonplaceholder.typicode.com/users/${id}`</span>
+    );
+    <span class="keyword">const</span> user = <span class="keyword">await</span> response.<span class="function">json</span>();
+    <span class="keyword">return</span> user;
+}
+
+<span class="comment">// Uso:</span>
+<span class="keyword">const</span> user = <span class="keyword">await</span> <span class="function">getUserById</span>(1);
+
+
+<span class="comment">// ====== EJEMPLO 3: GET con Query Parameters ======</span>
+<span class="keyword">async function</span> <span class="function">searchProducts</span>(query, page = 1, limit = 10) {
+    <span class="comment">// Construir URL con URLSearchParams</span>
+    <span class="keyword">const</span> params = <span class="keyword">new</span> URLSearchParams({
+        q: query,
+        _page: page,
+        _limit: limit,
+        _sort: <span class="string">'price'</span>,
+        _order: <span class="string">'asc'</span>
+    });
+    
+    <span class="keyword">const</span> url = <span class="string">`https://api.example.com/products?${params}`</span>;
+    <span class="comment">// Resultado: /products?q=laptop&_page=1&_limit=10&_sort=price&_order=asc</span>
+    
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url);
+    <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// Uso:</span>
+<span class="keyword">const</span> results = <span class="keyword">await</span> <span class="function">searchProducts</span>(<span class="string">'laptop'</span>, 1, 20);
+
+
+<span class="comment">// ====== EJEMPLO 4: GET con Headers de Autenticación ======</span>
+<span class="keyword">async function</span> <span class="function">getProtectedData</span>() {
+    <span class="keyword">const</span> token = localStorage.<span class="function">getItem</span>(<span class="string">'authToken'</span>);
+    
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://api.example.com/me'</span>, {
+        method: <span class="string">'GET'</span>,
+        headers: {
+            <span class="string">'Authorization'</span>: <span class="string">`Bearer ${token}`</span>,
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+        }
+    });
+    
+    <span class="keyword">if</span> (!response.ok) {
+        <span class="keyword">if</span> (response.status === 401) {
+            <span class="comment">// Token expirado - redirigir a login</span>
+            window.location.href = <span class="string">'/login'</span>;
+        }
+        <span class="keyword">throw new</span> Error(<span class="string">'Error de autenticación'</span>);
+    }
+    
+    <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+}
+
+
+<span class="comment">// ====== EJEMPLO 5: GET múltiples recursos en paralelo ======</span>
+<span class="keyword">async function</span> <span class="function">getDashboardData</span>() {
+    <span class="keyword">try</span> {
+        <span class="comment">// Ejecutar todas las peticiones en paralelo</span>
+        <span class="keyword">const</span> [users, posts, comments] = <span class="keyword">await</span> Promise.<span class="function">all</span>([
+            <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>)
+                .<span class="function">then</span>(r => r.<span class="function">json</span>()),
+            <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/posts'</span>)
+                .<span class="function">then</span>(r => r.<span class="function">json</span>()),
+            <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/comments'</span>)
+                .<span class="function">then</span>(r => r.<span class="function">json</span>())
+        ]);
+        
+        <span class="keyword">return</span> { users, posts, comments };
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'Error cargando dashboard:'</span>, error);
+        <span class="keyword">throw</span> error;
+    }
+}
+
+<span class="comment">// Uso:</span>
+<span class="keyword">const</span> dashboard = <span class="keyword">await</span> <span class="function">getDashboardData</span>();
+console.<span class="function">log</span>(<span class="string">`${dashboard.users.length} usuarios`</span>);
+console.<span class="function">log</span>(<span class="string">`${dashboard.posts.length} posts`</span>);</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- POST REQUESTS -->
+                <section id="post-requests" class="mb-5 pb-5 border-bottom">
+                    <h2 class="fw-bold mb-4">
+                        <span class="method-badge badge bg-primary me-2">POST</span>Enviar Datos
+                    </h2>
+
+                    <div class="example-container mb-4">
+                        <h5><span class="badge bg-primary me-2">5 Ejemplos</span>POST Requests</h5>
+                        
+                        <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// POST REQUESTS - 5 EJEMPLOS COMPLETOS</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// ====== EJEMPLO 1: POST JSON básico ======</span>
+<span class="keyword">async function</span> <span class="function">createUser</span>(userData) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: {
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+        },
+        body: JSON.<span class="function">stringify</span>(userData)
+    });
+    
+    <span class="keyword">const</span> newUser = <span class="keyword">await</span> response.<span class="function">json</span>();
+    console.<span class="function">log</span>(<span class="string">'Usuario creado:'</span>, newUser);
+    <span class="keyword">return</span> newUser;
+}
+
+<span class="comment">// Uso:</span>
+<span class="keyword">const</span> nuevoUsuario = <span class="keyword">await</span> <span class="function">createUser</span>({
+    nombre: <span class="string">'Juan Pérez'</span>,
+    email: <span class="string">'juan@email.com'</span>,
+    password: <span class="string">'secreto123'</span>
+});
+
+
+<span class="comment">// ====== EJEMPLO 2: POST con FormData (archivos) ======</span>
+<span class="keyword">async function</span> <span class="function">uploadFile</span>(file) {
+    <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData();
+    formData.<span class="function">append</span>(<span class="string">'file'</span>, file);
+    formData.<span class="function">append</span>(<span class="string">'description'</span>, <span class="string">'Mi archivo'</span>);
+    
+    <span class="comment">// ⚠️ NO pongas Content-Type header con FormData</span>
+    <span class="comment">// El navegador lo pone automáticamente con el boundary</span>
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/upload'</span>, {
+        method: <span class="string">'POST'</span>,
+        body: formData
+    });
+    
+    <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// Uso con input file:</span>
+<span class="keyword">const</span> fileInput = document.<span class="function">querySelector</span>(<span class="string">'input[type="file"]'</span>);
+fileInput.<span class="function">addEventListener</span>(<span class="string">'change'</span>, <span class="keyword">async</span> (e) => {
+    <span class="keyword">const</span> file = e.target.files[0];
+    <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">uploadFile</span>(file);
+    console.<span class="function">log</span>(<span class="string">'Archivo subido:'</span>, result);
+});
+
+
+<span class="comment">// ====== EJEMPLO 3: POST de formulario completo ======</span>
+<span class="keyword">async function</span> <span class="function">submitForm</span>(formElement) {
+    <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData(formElement);
+    <span class="keyword">const</span> data = Object.<span class="function">fromEntries</span>(formData);
+    
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/contact'</span>, {
+            method: <span class="string">'POST'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+            },
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw new</span> Error(<span class="string">'Error al enviar formulario'</span>);
+        }
+        
+        <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(error);
+        <span class="keyword">throw</span> error;
+    }
+}
+
+<span class="comment">// Uso:</span>
+document.<span class="function">getElementById</span>(<span class="string">'contactForm'</span>).<span class="function">addEventListener</span>(<span class="string">'submit'</span>, <span class="keyword">async</span> (e) => {
+    e.<span class="function">preventDefault</span>();
+    <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">submitForm</span>(e.target);
+    <span class="function">alert</span>(<span class="string">'¡Mensaje enviado!'</span>);
+});
+
+
+<span class="comment">// ====== EJEMPLO 4: POST Login con manejo de sesión ======</span>
+<span class="keyword">async function</span> <span class="function">login</span>(email, password) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/auth/login'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: {
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+        },
+        body: JSON.<span class="function">stringify</span>({ email, password }),
+        credentials: <span class="string">'include'</span> <span class="comment">// Para manejar cookies</span>
+    });
+    
+    <span class="keyword">if</span> (!response.ok) {
+        <span class="keyword">const</span> error = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">throw new</span> Error(error.message || <span class="string">'Error de login'</span>);
+    }
+    
+    <span class="keyword">const</span> { token, user } = <span class="keyword">await</span> response.<span class="function">json</span>();
+    
+    <span class="comment">// Guardar token</span>
+    localStorage.<span class="function">setItem</span>(<span class="string">'authToken'</span>, token);
+    localStorage.<span class="function">setItem</span>(<span class="string">'user'</span>, JSON.<span class="function">stringify</span>(user));
+    
+    <span class="keyword">return</span> user;
+}
+
+
+<span class="comment">// ====== EJEMPLO 5: POST con retry automático ======</span>
+<span class="keyword">async function</span> <span class="function">postWithRetry</span>(url, data, maxRetries = 3) {
+    <span class="keyword">let</span> lastError;
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> attempt = 1; attempt <= maxRetries; attempt++) {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, {
+                method: <span class="string">'POST'</span>,
+                headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+                body: JSON.<span class="function">stringify</span>(data)
+            });
+            
+            <span class="keyword">if</span> (response.ok) {
+                <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+            }
+            
+            <span class="comment">// Si es error del servidor (5xx), reintentar</span>
+            <span class="keyword">if</span> (response.status >= 500) {
+                <span class="keyword">throw new</span> Error(<span class="string">`Server error: ${response.status}`</span>);
+            }
+            
+            <span class="comment">// Si es error del cliente (4xx), no reintentar</span>
+            <span class="keyword">const</span> errorData = <span class="keyword">await</span> response.<span class="function">json</span>();
+            <span class="keyword">throw new</span> Error(errorData.message);
+            
+        } <span class="keyword">catch</span> (error) {
+            lastError = error;
+            console.<span class="function">log</span>(<span class="string">`Intento ${attempt} fallido: ${error.message}`</span>);
+            
+            <span class="keyword">if</span> (attempt < maxRetries) {
+                <span class="comment">// Esperar antes de reintentar (exponential backoff)</span>
+                <span class="keyword">await</span> <span class="keyword">new</span> Promise(r => <span class="function">setTimeout</span>(r, 1000 * attempt));
+            }
+        }
+    }
+    
+    <span class="keyword">throw</span> lastError;
+}</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- PUT, PATCH, DELETE -->
+                <section id="put-patch-delete" class="mb-5 pb-5 border-bottom">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-pencil-square me-2 text-info"></i>PUT, PATCH y DELETE
+                    </h2>
+
+                    <div class="example-container mb-4">
+                        <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// PUT, PATCH Y DELETE</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// ====== PUT - Reemplazar recurso completo ======</span>
+<span class="keyword">async function</span> <span class="function">updateUser</span>(id, userData) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${id}`</span>, {
+        method: <span class="string">'PUT'</span>,
+        headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+        body: JSON.<span class="function">stringify</span>(userData) <span class="comment">// Objeto completo</span>
+    });
+    <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// Uso: Envías TODO el objeto</span>
+<span class="keyword">await</span> <span class="function">updateUser</span>(1, {
+    nombre: <span class="string">'Juan Actualizado'</span>,
+    email: <span class="string">'nuevo@email.com'</span>,
+    edad: 30,
+    ciudad: <span class="string">'Madrid'</span>
+});
+
+
+<span class="comment">// ====== PATCH - Actualización parcial ======</span>
+<span class="keyword">async function</span> <span class="function">patchUser</span>(id, partialData) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${id}`</span>, {
+        method: <span class="string">'PATCH'</span>,
+        headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+        body: JSON.<span class="function">stringify</span>(partialData) <span class="comment">// Solo campos a actualizar</span>
+    });
+    <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+}
+
+<span class="comment">// Uso: Solo envías lo que quieres cambiar</span>
+<span class="keyword">await</span> <span class="function">patchUser</span>(1, { email: <span class="string">'nuevo@email.com'</span> });
+
+
+<span class="comment">// ====== DELETE - Eliminar recurso ======</span>
+<span class="keyword">async function</span> <span class="function">deleteUser</span>(id) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`/api/users/${id}`</span>, {
+        method: <span class="string">'DELETE'</span>
+    });
+    
+    <span class="keyword">if</span> (!response.ok) {
+        <span class="keyword">throw new</span> Error(<span class="string">'Error al eliminar'</span>);
+    }
+    
+    <span class="keyword">return</span> true; <span class="comment">// DELETE típicamente retorna 204 No Content</span>
+}
+
+<span class="comment">// Uso con confirmación:</span>
+<span class="keyword">async function</span> <span class="function">handleDelete</span>(id) {
+    <span class="keyword">if</span> (<span class="function">confirm</span>(<span class="string">'¿Seguro que deseas eliminar?'</span>)) {
+        <span class="keyword">await</span> <span class="function">deleteUser</span>(id);
+        <span class="function">alert</span>(<span class="string">'Usuario eliminado'</span>);
+        <span class="function">reloadUserList</span>();
+    }
+}
+
+
+<span class="comment">// ====== DIFERENCIA PUT vs PATCH ======</span>
+<span class="comment">// Usuario original: { id: 1, nombre: "Juan", email: "juan@mail.com", edad: 25 }</span>
+
+<span class="comment">// PUT: Reemplaza TODO (si no envías un campo, se borra)</span>
+<span class="function">fetch</span>(<span class="string">'/api/users/1'</span>, {
+    method: <span class="string">'PUT'</span>,
+    body: JSON.<span class="function">stringify</span>({ nombre: <span class="string">'Juan'</span>, email: <span class="string">'nuevo@mail.com'</span> })
+});
+<span class="comment">// Resultado: { id: 1, nombre: "Juan", email: "nuevo@mail.com" }</span>
+<span class="comment">// ⚠️ edad se perdió!</span>
+
+<span class="comment">// PATCH: Solo actualiza los campos enviados</span>
+<span class="function">fetch</span>(<span class="string">'/api/users/1'</span>, {
+    method: <span class="string">'PATCH'</span>,
+    body: JSON.<span class="function">stringify</span>({ email: <span class="string">'nuevo@mail.com'</span> })
+});
+<span class="comment">// Resultado: { id: 1, nombre: "Juan", email: "nuevo@mail.com", edad: 25 }</span>
+<span class="comment">// ✅ Solo email cambió, resto intacto</span></code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ERROR HANDLING -->
+                <section id="error-handling" class="mb-5 pb-5 border-bottom">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-exclamation-triangle me-2 text-warning"></i>Manejo de Errores
+                    </h2>
+
+                    <div class="example-container mb-4">
+                        <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// MANEJO DE ERRORES EN FETCH</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// ⚠️ IMPORTANTE: fetch() solo rechaza la Promise en errores de red</span>
+<span class="comment">// Los errores HTTP (404, 500, etc) NO causan throw</span>
+
+<span class="comment">// ====== FORMA CORRECTA DE MANEJAR ERRORES ======</span>
+<span class="keyword">async function</span> <span class="function">fetchWithErrorHandling</span>(url) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url);
+        
+        <span class="comment">// Verificar si la respuesta es exitosa</span>
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="comment">// Intentar obtener mensaje de error del servidor</span>
+            <span class="keyword">let</span> errorMessage = <span class="string">`Error HTTP: ${response.status}`</span>;
+            
+            <span class="keyword">try</span> {
+                <span class="keyword">const</span> errorData = <span class="keyword">await</span> response.<span class="function">json</span>();
+                errorMessage = errorData.message || errorMessage;
+            } <span class="keyword">catch</span> {
+                <span class="comment">// Si no hay JSON en la respuesta de error</span>
+            }
+            
+            <span class="keyword">throw new</span> Error(errorMessage);
+        }
+        
+        <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="function">json</span>();
+        
+    } <span class="keyword">catch</span> (error) {
+        <span class="comment">// Aquí llegan:</span>
+        <span class="comment">// - Errores de red (sin conexión, DNS, CORS)</span>
+        <span class="comment">// - Errores que lanzamos arriba</span>
+        
+        <span class="keyword">if</span> (error.name === <span class="string">'TypeError'</span>) {
+            <span class="comment">// Error de red</span>
+            console.<span class="function">error</span>(<span class="string">'Error de conexión:'</span>, error.message);
+        }
+        
+        <span class="keyword">throw</span> error;
+    }
+}
+
+
+<span class="comment">// ====== ERRORES HTTP COMUNES ======</span>
+<span class="keyword">async function</span> <span class="function">handleHttpErrors</span>(response) {
+    <span class="keyword">switch</span> (response.status) {
+        <span class="keyword">case</span> 400:
+            <span class="keyword">throw new</span> Error(<span class="string">'Datos inválidos'</span>);
+        <span class="keyword">case</span> 401:
+            <span class="comment">// No autorizado - token inválido/expirado</span>
+            localStorage.<span class="function">removeItem</span>(<span class="string">'authToken'</span>);
+            window.location.href = <span class="string">'/login'</span>;
+            <span class="keyword">break</span>;
+        <span class="keyword">case</span> 403:
+            <span class="keyword">throw new</span> Error(<span class="string">'No tienes permisos para esta acción'</span>);
+        <span class="keyword">case</span> 404:
+            <span class="keyword">throw new</span> Error(<span class="string">'Recurso no encontrado'</span>);
+        <span class="keyword">case</span> 422:
+            <span class="keyword">const</span> errors = <span class="keyword">await</span> response.<span class="function">json</span>();
+            <span class="keyword">throw new</span> ValidationError(errors);
+        <span class="keyword">case</span> 429:
+            <span class="keyword">throw new</span> Error(<span class="string">'Demasiadas peticiones. Intenta más tarde.'</span>);
+        <span class="keyword">case</span> 500:
+            <span class="keyword">throw new</span> Error(<span class="string">'Error del servidor. Intenta más tarde.'</span>);
+        <span class="keyword">default</span>:
+            <span class="keyword">throw new</span> Error(<span class="string">`Error: ${response.status}`</span>);
+    }
+}
+
+
+<span class="comment">// ====== TIMEOUT PARA FETCH ======</span>
+<span class="keyword">async function</span> <span class="function">fetchWithTimeout</span>(url, options = {}, timeout = 5000) {
+    <span class="keyword">const</span> controller = <span class="keyword">new</span> AbortController();
+    <span class="keyword">const</span> id = <span class="function">setTimeout</span>(() => controller.<span class="function">abort</span>(), timeout);
+    
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, {
+            ...options,
+            signal: controller.signal
+        });
+        <span class="function">clearTimeout</span>(id);
+        <span class="keyword">return</span> response;
+    } <span class="keyword">catch</span> (error) {
+        <span class="function">clearTimeout</span>(id);
+        <span class="keyword">if</span> (error.name === <span class="string">'AbortError'</span>) {
+            <span class="keyword">throw new</span> Error(<span class="string">'La petición tardó demasiado'</span>);
+        }
+        <span class="keyword">throw</span> error;
+    }
+}
+
+
+<span class="comment">// ====== USO EN COMPONENTES ======</span>
+<span class="keyword">async function</span> <span class="function">loadUsers</span>() {
+    <span class="keyword">const</span> container = document.<span class="function">getElementById</span>(<span class="string">'users'</span>);
+    container.innerHTML = <span class="string">'&lt;div class="loading"&gt;Cargando...&lt;/div&gt;'</span>;
+    
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> users = <span class="keyword">await</span> <span class="function">fetchWithErrorHandling</span>(<span class="string">'/api/users'</span>);
+        container.innerHTML = <span class="function">renderUsers</span>(users);
+    } <span class="keyword">catch</span> (error) {
+        container.innerHTML = <span class="string">`
+            &lt;div class="error-state"&gt;
+                &lt;p&gt;Error: ${error.message}&lt;/p&gt;
+                &lt;button onclick="loadUsers()"&gt;Reintentar&lt;/button&gt;
+            &lt;/div&gt;
+        `</span>;
+    }
+}</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- API SERVICE CLASS -->
+                <section id="api-service" class="mb-5">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-gear me-2 text-info"></i>Clase ApiService Reutilizable
+                    </h2>
+
+                    <div class="alert alert-success mb-4">
+                        <strong>Mejor Práctica:</strong> Crea una clase o módulo para centralizar todas tus llamadas a API.
+                    </div>
+
+                    <div class="example-container mb-4">
+                        <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// API SERVICE CLASS - CÓDIGO REUTILIZABLE</span>
+<span class="comment">// ============================================</span>
+
+<span class="keyword">class</span> <span class="function">ApiService</span> {
+    <span class="keyword">constructor</span>(baseURL) {
+        this.baseURL = baseURL;
+        this.defaultHeaders = {
+            <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+        };
+    }
+    
+    <span class="comment">// Obtener headers con token</span>
+    <span class="function">getHeaders</span>() {
+        <span class="keyword">const</span> headers = { ...this.defaultHeaders };
+        <span class="keyword">const</span> token = localStorage.<span class="function">getItem</span>(<span class="string">'authToken'</span>);
+        
+        <span class="keyword">if</span> (token) {
+            headers[<span class="string">'Authorization'</span>] = <span class="string">`Bearer ${token}`</span>;
+        }
+        
+        <span class="keyword">return</span> headers;
+    }
+    
+    <span class="comment">// Método principal para todas las peticiones</span>
+    <span class="keyword">async</span> <span class="function">request</span>(endpoint, options = {}) {
+        <span class="keyword">const</span> url = <span class="string">`${this.baseURL}${endpoint}`</span>;
+        
+        <span class="keyword">const</span> config = {
+            ...options,
+            headers: {
+                ...this.<span class="function">getHeaders</span>(),
+                ...options.headers
+            }
+        };
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url, config);
+            
+            <span class="comment">// Manejar respuestas sin contenido</span>
+            <span class="keyword">if</span> (response.status === 204) {
+                <span class="keyword">return</span> null;
+            }
+            
+            <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+            
+            <span class="keyword">if</span> (!response.ok) {
+                <span class="keyword">throw new</span> ApiError(data.message || <span class="string">'Error de API'</span>, response.status);
+            }
+            
+            <span class="keyword">return</span> data;
+            
+        } <span class="keyword">catch</span> (error) {
+            <span class="keyword">if</span> (error instanceof ApiError) {
+                <span class="keyword">throw</span> error;
+            }
+            <span class="keyword">throw new</span> ApiError(<span class="string">'Error de conexión'</span>, 0);
+        }
+    }
+    
+    <span class="comment">// Métodos de conveniencia</span>
+    <span class="keyword">async</span> <span class="function">get</span>(endpoint, params = {}) {
+        <span class="keyword">const</span> queryString = <span class="keyword">new</span> URLSearchParams(params).<span class="function">toString</span>();
+        <span class="keyword">const</span> url = queryString ? <span class="string">`${endpoint}?${queryString}`</span> : endpoint;
+        <span class="keyword">return</span> this.<span class="function">request</span>(url);
+    }
+    
+    <span class="keyword">async</span> <span class="function">post</span>(endpoint, data) {
+        <span class="keyword">return</span> this.<span class="function">request</span>(endpoint, {
+            method: <span class="string">'POST'</span>,
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+    }
+    
+    <span class="keyword">async</span> <span class="function">put</span>(endpoint, data) {
+        <span class="keyword">return</span> this.<span class="function">request</span>(endpoint, {
+            method: <span class="string">'PUT'</span>,
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+    }
+    
+    <span class="keyword">async</span> <span class="function">patch</span>(endpoint, data) {
+        <span class="keyword">return</span> this.<span class="function">request</span>(endpoint, {
+            method: <span class="string">'PATCH'</span>,
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+    }
+    
+    <span class="keyword">async</span> <span class="function">delete</span>(endpoint) {
+        <span class="keyword">return</span> this.<span class="function">request</span>(endpoint, { method: <span class="string">'DELETE'</span> });
+    }
+}
+
+<span class="comment">// Clase de error personalizada</span>
+<span class="keyword">class</span> <span class="function">ApiError</span> <span class="keyword">extends</span> Error {
+    <span class="keyword">constructor</span>(message, status) {
+        <span class="keyword">super</span>(message);
+        this.name = <span class="string">'ApiError'</span>;
+        this.status = status;
+    }
+}
+
+<span class="comment">// ====== INSTANCIAR Y USAR ======</span>
+<span class="keyword">const</span> api = <span class="keyword">new</span> ApiService(<span class="string">'http://localhost:3000'</span>);
+
+<span class="comment">// GET usuarios</span>
+<span class="keyword">const</span> users = <span class="keyword">await</span> api.<span class="function">get</span>(<span class="string">'/users'</span>);
+
+<span class="comment">// GET con parámetros</span>
+<span class="keyword">const</span> filteredUsers = <span class="keyword">await</span> api.<span class="function">get</span>(<span class="string">'/users'</span>, { 
+    role: <span class="string">'admin'</span>, 
+    active: true 
+});
+
+<span class="comment">// POST crear</span>
+<span class="keyword">const</span> newUser = <span class="keyword">await</span> api.<span class="function">post</span>(<span class="string">'/users'</span>, {
+    nombre: <span class="string">'Juan'</span>,
+    email: <span class="string">'juan@mail.com'</span>
+});
+
+<span class="comment">// PATCH actualizar</span>
+<span class="keyword">const</span> updated = <span class="keyword">await</span> api.<span class="function">patch</span>(<span class="string">'/users/1'</span>, { nombre: <span class="string">'Juan Actualizado'</span> });
+
+<span class="comment">// DELETE eliminar</span>
+<span class="keyword">await</span> api.<span class="function">delete</span>(<span class="string">'/users/1'</span>);</code></pre>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                            <i class="bi bi-clipboard me-1"></i>Copiar Código
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Link siguiente -->
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-arrow-right-circle me-2"></i>Continúa aprendiendo</h5>
+                    <p class="mb-0">
+                        <a href="json-server.html" class="alert-link">Siguiente: Configurar JSON Server →</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">WebGuía Completa - APIs y Fetch</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    
+    <script>
+        // Funciones de demo para probar APIs
+        async function fetchUsers() {
+            const responseBox = document.getElementById('api-response');
+            responseBox.innerHTML = '<span class="text-muted">Cargando...</span>';
+            
+            try {
+                const response = await fetch('https://jsonplaceholder.typicode.com/users?_limit=3');
+                const users = await response.json();
+                responseBox.innerHTML = '<pre>' + JSON.stringify(users, null, 2) + '</pre>';
+            } catch (error) {
+                responseBox.innerHTML = '<span class="text-danger">Error: ' + error.message + '</span>';
+            }
+        }
+        
+        async function fetchPosts() {
+            const responseBox = document.getElementById('api-response');
+            responseBox.innerHTML = '<span class="text-muted">Cargando...</span>';
+            
+            try {
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=3');
+                const posts = await response.json();
+                responseBox.innerHTML = '<pre>' + JSON.stringify(posts, null, 2) + '</pre>';
+            } catch (error) {
+                responseBox.innerHTML = '<span class="text-danger">Error: ' + error.message + '</span>';
+            }
+        }
+        
+        async function fetchPhotos() {
+            const responseBox = document.getElementById('api-response');
+            responseBox.innerHTML = '<span class="text-muted">Cargando...</span>';
+            
+            try {
+                const response = await fetch('https://jsonplaceholder.typicode.com/photos?_limit=3');
+                const photos = await response.json();
+                responseBox.innerHTML = '<pre>' + JSON.stringify(photos, null, 2) + '</pre>';
+            } catch (error) {
+                responseBox.innerHTML = '<span class="text-danger">Error: ' + error.message + '</span>';
+            }
+        }
+    </script>
+</body>
+</html>

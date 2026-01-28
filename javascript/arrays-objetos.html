@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrays y Objetos en JavaScript - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .number { color: #f78c6c; }
+        .code-block .function { color: #82aaff; }
+        .code-block .comment { color: #676e95; font-style: italic; }
+        .code-block .variable { color: #ffcb6b; }
+        .code-block .method { color: #89ddff; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .btn-copy:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        
+        .output-box {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .method-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s;
+        }
+        .method-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .method-card h5 {
+            color: #667eea;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .badge-mutate { background: #dc3545; }
+        .badge-new { background: #28a745; }
+        .badge-search { background: #007bff; }
+        .badge-iterate { background: #6f42c1; }
+        
+        .interactive-demo {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dom.html">DOM</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="eventos.html">Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="arrays-objetos.html">Arrays/Objetos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="funciones.html">Funciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="async.html">Async</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="section-header text-center mb-5 mx-3 mx-md-5 mt-4">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-braces me-3"></i>Arrays y Objetos
+        </h1>
+        <p class="lead mb-0">
+            Domina las estructuras de datos más importantes de JavaScript
+        </p>
+    </section>
+
+    <div class="container py-4">
+        <!-- Índice -->
+        <div class="card mb-5">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-list-ol me-2"></i>Índice de Contenidos
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">Arrays</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#crear-arrays">1. Crear Arrays</a></li>
+                            <li><a href="#acceder-modificar">2. Acceder y Modificar</a></li>
+                            <li><a href="#metodos-agregar">3. Métodos para Agregar/Eliminar</a></li>
+                            <li><a href="#metodos-busqueda">4. Métodos de Búsqueda</a></li>
+                            <li><a href="#metodos-iteracion">5. Métodos de Iteración</a></li>
+                            <li><a href="#metodos-transformacion">6. Métodos de Transformación</a></li>
+                            <li><a href="#spread-destructuring">7. Spread y Destructuring</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">Objetos</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#crear-objetos">8. Crear Objetos</a></li>
+                            <li><a href="#propiedades-metodos">9. Propiedades y Métodos</a></li>
+                            <li><a href="#object-methods">10. Object Methods</a></li>
+                            <li><a href="#clases">11. Clases ES6</a></li>
+                            <li><a href="#herencia">12. Herencia</a></li>
+                            <li><a href="#json">13. JSON</a></li>
+                            <li><a href="#ejemplos-practicos">14. Ejemplos Prácticos</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ARRAYS ==================== -->
+        <h2 class="text-center mb-5">
+            <span class="badge bg-primary fs-4 px-4 py-2">
+                <i class="bi bi-collection me-2"></i>ARRAYS
+            </span>
+        </h2>
+
+        <!-- 1. Crear Arrays -->
+        <section id="crear-arrays" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">1</span>Crear Arrays</h3>
+            
+            <div class="method-card">
+                <h5>🔹 Diferentes formas de crear arrays</h5>
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// 1. CREAR ARRAYS - Múltiples Formas</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Forma 1: Array literal (más común)</span>
+<span class="keyword">const</span> frutas = [<span class="string">'manzana'</span>, <span class="string">'banana'</span>, <span class="string">'naranja'</span>];
+
+<span class="comment">// Forma 2: Constructor Array</span>
+<span class="keyword">const</span> numeros = <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);
+
+<span class="comment">// Forma 3: Array vacío con tamaño</span>
+<span class="keyword">const</span> vacio = <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">5</span>); <span class="comment">// [empty × 5]</span>
+
+<span class="comment">// Forma 4: Array.of() - crea array con elementos</span>
+<span class="keyword">const</span> arrayOf = Array.<span class="function">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
+
+<span class="comment">// Forma 5: Array.from() - desde iterables</span>
+<span class="keyword">const</span> fromString = Array.<span class="function">from</span>(<span class="string">'Hola'</span>); <span class="comment">// ['H', 'o', 'l', 'a']</span>
+<span class="keyword">const</span> fromSet = Array.<span class="function">from</span>(<span class="keyword">new</span> <span class="function">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>])); <span class="comment">// [1, 2, 3]</span>
+
+<span class="comment">// Forma 6: Array.from() con función de mapeo</span>
+<span class="keyword">const</span> pares = Array.<span class="function">from</span>({ length: <span class="number">5</span> }, (_, i) => i * <span class="number">2</span>);
+console.<span class="function">log</span>(pares); <span class="comment">// [0, 2, 4, 6, 8]</span>
+
+<span class="comment">// Forma 7: fill() para llenar array</span>
+<span class="keyword">const</span> lleno = <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">3</span>).<span class="function">fill</span>(<span class="string">'x'</span>); <span class="comment">// ['x', 'x', 'x']</span>
+
+<span class="comment">// Arrays mixtos (cualquier tipo de dato)</span>
+<span class="keyword">const</span> mixto = [<span class="number">1</span>, <span class="string">'texto'</span>, <span class="keyword">true</span>, <span class="keyword">null</span>, { a: <span class="number">1</span> }, [<span class="number">1</span>, <span class="number">2</span>]];
+
+<span class="comment">// Arrays anidados (matrices)</span>
+<span class="keyword">const</span> matriz = [
+    [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+    [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],
+    [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+];
+console.<span class="function">log</span>(matriz[<span class="number">1</span>][<span class="number">2</span>]); <span class="comment">// 6</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Acceder y Modificar -->
+        <section id="acceder-modificar" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">2</span>Acceder y Modificar Elementos</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// 2. ACCEDER Y MODIFICAR ELEMENTOS</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> colores = [<span class="string">'rojo'</span>, <span class="string">'verde'</span>, <span class="string">'azul'</span>, <span class="string">'amarillo'</span>];
+
+<span class="comment">// Acceder por índice (0-based)</span>
+console.<span class="function">log</span>(colores[<span class="number">0</span>]); <span class="comment">// 'rojo' (primero)</span>
+console.<span class="function">log</span>(colores[<span class="number">2</span>]); <span class="comment">// 'azul' (tercero)</span>
+
+<span class="comment">// Acceder al último elemento</span>
+console.<span class="function">log</span>(colores[colores.length - <span class="number">1</span>]); <span class="comment">// 'amarillo'</span>
+
+<span class="comment">// at() - permite índices negativos (ES2022)</span>
+console.<span class="function">log</span>(colores.<span class="function">at</span>(-<span class="number">1</span>)); <span class="comment">// 'amarillo' (último)</span>
+console.<span class="function">log</span>(colores.<span class="function">at</span>(-<span class="number">2</span>)); <span class="comment">// 'azul' (penúltimo)</span>
+
+<span class="comment">// Modificar elemento</span>
+colores[<span class="number">1</span>] = <span class="string">'verde oscuro'</span>;
+console.<span class="function">log</span>(colores); <span class="comment">// ['rojo', 'verde oscuro', 'azul', 'amarillo']</span>
+
+<span class="comment">// Agregar elemento en posición específica</span>
+colores[<span class="number">10</span>] = <span class="string">'negro'</span>; <span class="comment">// Crea huecos vacíos</span>
+console.<span class="function">log</span>(colores.length); <span class="comment">// 11</span>
+
+<span class="comment">// Propiedad length</span>
+console.<span class="function">log</span>(colores.length); <span class="comment">// Número de elementos</span>
+
+<span class="comment">// Truncar array modificando length</span>
+<span class="keyword">const</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+nums.length = <span class="number">3</span>;
+console.<span class="function">log</span>(nums); <span class="comment">// [1, 2, 3]</span>
+
+<span class="comment">// Verificar si es un array</span>
+console.<span class="function">log</span>(Array.<span class="function">isArray</span>(colores)); <span class="comment">// true</span>
+console.<span class="function">log</span>(Array.<span class="function">isArray</span>(<span class="string">'texto'</span>)); <span class="comment">// false</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Métodos para Agregar/Eliminar -->
+        <section id="metodos-agregar" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">3</span>Métodos para Agregar/Eliminar</h3>
+            
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>¡Importante!</strong> Estos métodos <strong>modifican</strong> el array original (mutadores).
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="method-card">
+                        <h5>push() <span class="badge badge-mutate">Mutador</span></h5>
+                        <p class="text-muted">Agrega elementos al final</p>
+                        <div class="code-block">
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                            <pre>
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+
+<span class="comment">// Agregar un elemento</span>
+arr.<span class="function">push</span>(<span class="number">4</span>);
+console.<span class="function">log</span>(arr); <span class="comment">// [1, 2, 3, 4]</span>
+
+<span class="comment">// Agregar múltiples</span>
+arr.<span class="function">push</span>(<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>);
+console.<span class="function">log</span>(arr); <span class="comment">// [1, 2, 3, 4, 5, 6, 7]</span>
+
+<span class="comment">// Retorna la nueva longitud</span>
+<span class="keyword">const</span> len = arr.<span class="function">push</span>(<span class="number">8</span>);
+console.<span class="function">log</span>(len); <span class="comment">// 8</span></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="method-card">
+                        <h5>pop() <span class="badge badge-mutate">Mutador</span></h5>
+                        <p class="text-muted">Elimina el último elemento</p>
+                        <div class="code-block">
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                            <pre>
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];
+
+<span class="comment">// Eliminar último</span>
+<span class="keyword">const</span> ultimo = arr.<span class="function">pop</span>();
+console.<span class="function">log</span>(ultimo); <span class="comment">// 4</span>
+console.<span class="function">log</span>(arr); <span class="comment">// [1, 2, 3]</span>
+
+<span class="comment">// pop() en array vacío</span>
+<span class="keyword">const</span> vacio = [];
+console.<span class="function">log</span>(vacio.<span class="function">pop</span>()); <span class="comment">// undefined</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="method-card">
+                        <h5>unshift() <span class="badge badge-mutate">Mutador</span></h5>
+                        <p class="text-muted">Agrega elementos al inicio</p>
+                        <div class="code-block">
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                            <pre>
+<span class="keyword">const</span> arr = [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Agregar al inicio</span>
+arr.<span class="function">unshift</span>(<span class="number">1</span>, <span class="number">2</span>);
+console.<span class="function">log</span>(arr); <span class="comment">// [1, 2, 3, 4, 5]</span>
+
+<span class="comment">// Retorna nueva longitud</span>
+<span class="keyword">const</span> len = arr.<span class="function">unshift</span>(<span class="number">0</span>);
+console.<span class="function">log</span>(len); <span class="comment">// 6</span></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="method-card">
+                        <h5>shift() <span class="badge badge-mutate">Mutador</span></h5>
+                        <p class="text-muted">Elimina el primer elemento</p>
+                        <div class="code-block">
+                            <button class="btn-copy" onclick="copyCode(this)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                            <pre>
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];
+
+<span class="comment">// Eliminar primero</span>
+<span class="keyword">const</span> primero = arr.<span class="function">shift</span>();
+console.<span class="function">log</span>(primero); <span class="comment">// 1</span>
+console.<span class="function">log</span>(arr); <span class="comment">// [2, 3, 4]</span></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <h5>splice() <span class="badge badge-mutate">Mutador</span></h5>
+                <p class="text-muted">El método más versátil: agrega, elimina y reemplaza</p>
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// splice(inicio, cantidadEliminar, ...elementosAgregar)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">let</span> arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>];
+
+<span class="comment">// 1. ELIMINAR elementos</span>
+<span class="keyword">let</span> eliminados = arr.<span class="function">splice</span>(<span class="number">2</span>, <span class="number">2</span>); <span class="comment">// Desde índice 2, eliminar 2</span>
+console.<span class="function">log</span>(eliminados); <span class="comment">// ['c', 'd']</span>
+console.<span class="function">log</span>(arr); <span class="comment">// ['a', 'b', 'e']</span>
+
+<span class="comment">// 2. INSERTAR elementos (sin eliminar)</span>
+arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'e'</span>];
+arr.<span class="function">splice</span>(<span class="number">2</span>, <span class="number">0</span>, <span class="string">'c'</span>, <span class="string">'d'</span>); <span class="comment">// En índice 2, eliminar 0, insertar 'c','d'</span>
+console.<span class="function">log</span>(arr); <span class="comment">// ['a', 'b', 'c', 'd', 'e']</span>
+
+<span class="comment">// 3. REEMPLAZAR elementos</span>
+arr = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>];
+arr.<span class="function">splice</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="string">'X'</span>, <span class="string">'Y'</span>, <span class="string">'Z'</span>); <span class="comment">// Eliminar 2, insertar 3</span>
+console.<span class="function">log</span>(arr); <span class="comment">// ['a', 'X', 'Y', 'Z', 'd', 'e']</span>
+
+<span class="comment">// 4. Índices negativos (desde el final)</span>
+arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+arr.<span class="function">splice</span>(-<span class="number">2</span>, <span class="number">1</span>); <span class="comment">// Eliminar 1 elemento desde el penúltimo</span>
+console.<span class="function">log</span>(arr); <span class="comment">// [1, 2, 3, 5]</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Métodos de Búsqueda -->
+        <section id="metodos-busqueda" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">4</span>Métodos de Búsqueda</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS DE BÚSQUEDA</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> numeros = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">20</span>, <span class="number">50</span>];
+<span class="keyword">const</span> usuarios = [
+    { id: <span class="number">1</span>, nombre: <span class="string">'Ana'</span>, edad: <span class="number">25</span> },
+    { id: <span class="number">2</span>, nombre: <span class="string">'Carlos'</span>, edad: <span class="number">30</span> },
+    { id: <span class="number">3</span>, nombre: <span class="string">'Elena'</span>, edad: <span class="number">28</span> }
+];
+
+<span class="comment">// indexOf() - Busca valor, retorna índice o -1</span>
+console.<span class="function">log</span>(numeros.<span class="function">indexOf</span>(<span class="number">20</span>)); <span class="comment">// 1 (primera ocurrencia)</span>
+console.<span class="function">log</span>(numeros.<span class="function">indexOf</span>(<span class="number">100</span>)); <span class="comment">// -1 (no encontrado)</span>
+console.<span class="function">log</span>(numeros.<span class="function">indexOf</span>(<span class="number">20</span>, <span class="number">2</span>)); <span class="comment">// 4 (buscar desde índice 2)</span>
+
+<span class="comment">// lastIndexOf() - Busca desde el final</span>
+console.<span class="function">log</span>(numeros.<span class="function">lastIndexOf</span>(<span class="number">20</span>)); <span class="comment">// 4</span>
+
+<span class="comment">// includes() - Verifica si existe (boolean)</span>
+console.<span class="function">log</span>(numeros.<span class="function">includes</span>(<span class="number">30</span>)); <span class="comment">// true</span>
+console.<span class="function">log</span>(numeros.<span class="function">includes</span>(<span class="number">100</span>)); <span class="comment">// false</span>
+
+<span class="comment">// find() - Busca con función, retorna ELEMENTO</span>
+<span class="keyword">const</span> encontrado = usuarios.<span class="function">find</span>(u => u.edad > <span class="number">26</span>);
+console.<span class="function">log</span>(encontrado); <span class="comment">// { id: 2, nombre: 'Carlos', edad: 30 }</span>
+
+<span class="comment">// findIndex() - Busca con función, retorna ÍNDICE</span>
+<span class="keyword">const</span> indice = usuarios.<span class="function">findIndex</span>(u => u.nombre === <span class="string">'Elena'</span>);
+console.<span class="function">log</span>(indice); <span class="comment">// 2</span>
+
+<span class="comment">// findLast() - Busca desde el final (ES2023)</span>
+<span class="keyword">const</span> ultimoMayor = usuarios.<span class="function">findLast</span>(u => u.edad > <span class="number">26</span>);
+console.<span class="function">log</span>(ultimoMayor); <span class="comment">// { id: 3, nombre: 'Elena', edad: 28 }</span>
+
+<span class="comment">// findLastIndex() - Índice desde el final (ES2023)</span>
+<span class="keyword">const</span> ultimoIndice = usuarios.<span class="function">findLastIndex</span>(u => u.edad > <span class="number">26</span>);
+console.<span class="function">log</span>(ultimoIndice); <span class="comment">// 2</span>
+
+<span class="comment">// some() - ¿Alguno cumple la condición?</span>
+console.<span class="function">log</span>(usuarios.<span class="function">some</span>(u => u.edad >= <span class="number">30</span>)); <span class="comment">// true</span>
+
+<span class="comment">// every() - ¿Todos cumplen la condición?</span>
+console.<span class="function">log</span>(usuarios.<span class="function">every</span>(u => u.edad >= <span class="number">18</span>)); <span class="comment">// true</span>
+console.<span class="function">log</span>(usuarios.<span class="function">every</span>(u => u.edad >= <span class="number">30</span>)); <span class="comment">// false</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Métodos de Iteración -->
+        <section id="metodos-iteracion" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">5</span>Métodos de Iteración</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS DE ITERACIÓN</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> productos = [
+    { nombre: <span class="string">'Laptop'</span>, precio: <span class="number">1000</span>, stock: <span class="number">5</span> },
+    { nombre: <span class="string">'Mouse'</span>, precio: <span class="number">25</span>, stock: <span class="number">50</span> },
+    { nombre: <span class="string">'Teclado'</span>, precio: <span class="number">75</span>, stock: <span class="number">30</span> },
+    { nombre: <span class="string">'Monitor'</span>, precio: <span class="number">300</span>, stock: <span class="number">10</span> }
+];
+
+<span class="comment">// forEach() - Ejecuta función por cada elemento</span>
+productos.<span class="function">forEach</span>((producto, index) => {
+    console.<span class="function">log</span>(<span class="string">`${index + 1}. ${producto.nombre}: $${producto.precio}`</span>);
+});
+
+<span class="comment">// map() - Transforma cada elemento, retorna nuevo array</span>
+<span class="keyword">const</span> nombres = productos.<span class="function">map</span>(p => p.nombre);
+console.<span class="function">log</span>(nombres); <span class="comment">// ['Laptop', 'Mouse', 'Teclado', 'Monitor']</span>
+
+<span class="keyword">const</span> conIVA = productos.<span class="function">map</span>(p => ({
+    ...p,
+    precioConIVA: p.precio * <span class="number">1.21</span>
+}));
+
+<span class="comment">// filter() - Filtra elementos, retorna nuevo array</span>
+<span class="keyword">const</span> caros = productos.<span class="function">filter</span>(p => p.precio > <span class="number">100</span>);
+console.<span class="function">log</span>(caros); <span class="comment">// [Laptop, Monitor]</span>
+
+<span class="keyword">const</span> conStock = productos.<span class="function">filter</span>(p => p.stock > <span class="number">20</span>);
+
+<span class="comment">// reduce() - Reduce a un solo valor</span>
+<span class="keyword">const</span> total = productos.<span class="function">reduce</span>((suma, p) => suma + p.precio, <span class="number">0</span>);
+console.<span class="function">log</span>(total); <span class="comment">// 1400</span>
+
+<span class="keyword">const</span> stockTotal = productos.<span class="function">reduce</span>((acc, p) => acc + p.stock, <span class="number">0</span>);
+console.<span class="function">log</span>(stockTotal); <span class="comment">// 95</span>
+
+<span class="comment">// reduce() para crear objeto</span>
+<span class="keyword">const</span> porNombre = productos.<span class="function">reduce</span>((obj, p) => {
+    obj[p.nombre] = p.precio;
+    <span class="keyword">return</span> obj;
+}, {});
+console.<span class="function">log</span>(porNombre); <span class="comment">// { Laptop: 1000, Mouse: 25, ... }</span>
+
+<span class="comment">// reduceRight() - Reduce desde el final</span>
+<span class="keyword">const</span> concatenado = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>].<span class="function">reduceRight</span>((acc, v) => acc + v, <span class="string">''</span>);
+console.<span class="function">log</span>(concatenado); <span class="comment">// 'cba'</span>
+
+<span class="comment">// Encadenar métodos</span>
+<span class="keyword">const</span> resultado = productos
+    .<span class="function">filter</span>(p => p.precio > <span class="number">50</span>)
+    .<span class="function">map</span>(p => p.nombre)
+    .<span class="function">join</span>(<span class="string">', '</span>);
+console.<span class="function">log</span>(resultado); <span class="comment">// 'Laptop, Teclado, Monitor'</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Métodos de Transformación -->
+        <section id="metodos-transformacion" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">6</span>Métodos de Transformación</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS DE TRANSFORMACIÓN</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// slice() - Extrae porción (NO modifica original)</span>
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+console.<span class="function">log</span>(arr.<span class="function">slice</span>(<span class="number">1</span>, <span class="number">4</span>)); <span class="comment">// [2, 3, 4] (índice 1 a 3)</span>
+console.<span class="function">log</span>(arr.<span class="function">slice</span>(<span class="number">2</span>)); <span class="comment">// [3, 4, 5] (desde índice 2)</span>
+console.<span class="function">log</span>(arr.<span class="function">slice</span>(-<span class="number">2</span>)); <span class="comment">// [4, 5] (últimos 2)</span>
+console.<span class="function">log</span>(arr.<span class="function">slice</span>()); <span class="comment">// [1,2,3,4,5] (copia completa)</span>
+
+<span class="comment">// concat() - Combina arrays</span>
+<span class="keyword">const</span> a = [<span class="number">1</span>, <span class="number">2</span>];
+<span class="keyword">const</span> b = [<span class="number">3</span>, <span class="number">4</span>];
+<span class="keyword">const</span> c = [<span class="number">5</span>, <span class="number">6</span>];
+console.<span class="function">log</span>(a.<span class="function">concat</span>(b, c)); <span class="comment">// [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment">// join() - Convierte a string</span>
+<span class="keyword">const</span> letras = [<span class="string">'H'</span>, <span class="string">'o'</span>, <span class="string">'l'</span>, <span class="string">'a'</span>];
+console.<span class="function">log</span>(letras.<span class="function">join</span>(<span class="string">''</span>)); <span class="comment">// 'Hola'</span>
+console.<span class="function">log</span>(letras.<span class="function">join</span>(<span class="string">'-'</span>)); <span class="comment">// 'H-o-l-a'</span>
+console.<span class="function">log</span>(letras.<span class="function">join</span>()); <span class="comment">// 'H,o,l,a' (coma por defecto)</span>
+
+<span class="comment">// reverse() - Invierte (MODIFICA original)</span>
+<span class="keyword">const</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+nums.<span class="function">reverse</span>();
+console.<span class="function">log</span>(nums); <span class="comment">// [3, 2, 1]</span>
+
+<span class="comment">// toReversed() - Invierte sin modificar (ES2023)</span>
+<span class="keyword">const</span> original = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">const</span> invertido = original.<span class="function">toReversed</span>();
+console.<span class="function">log</span>(original); <span class="comment">// [1, 2, 3] (sin cambios)</span>
+console.<span class="function">log</span>(invertido); <span class="comment">// [3, 2, 1]</span>
+
+<span class="comment">// sort() - Ordena (MODIFICA original)</span>
+<span class="keyword">const</span> nombres = [<span class="string">'Carlos'</span>, <span class="string">'Ana'</span>, <span class="string">'Elena'</span>];
+nombres.<span class="function">sort</span>();
+console.<span class="function">log</span>(nombres); <span class="comment">// ['Ana', 'Carlos', 'Elena']</span>
+
+<span class="comment">// ¡Cuidado! sort() ordena como strings por defecto</span>
+<span class="keyword">const</span> numeros = [<span class="number">10</span>, <span class="number">2</span>, <span class="number">30</span>, <span class="number">1</span>];
+numeros.<span class="function">sort</span>();
+console.<span class="function">log</span>(numeros); <span class="comment">// [1, 10, 2, 30] ¡Incorrecto!</span>
+
+<span class="comment">// Ordenar números correctamente</span>
+numeros.<span class="function">sort</span>((a, b) => a - b); <span class="comment">// Ascendente</span>
+console.<span class="function">log</span>(numeros); <span class="comment">// [1, 2, 10, 30]</span>
+
+numeros.<span class="function">sort</span>((a, b) => b - a); <span class="comment">// Descendente</span>
+console.<span class="function">log</span>(numeros); <span class="comment">// [30, 10, 2, 1]</span>
+
+<span class="comment">// toSorted() - Ordena sin modificar (ES2023)</span>
+<span class="keyword">const</span> orig = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>];
+<span class="keyword">const</span> ordenado = orig.<span class="function">toSorted</span>((a, b) => a - b);
+
+<span class="comment">// flat() - Aplana arrays anidados</span>
+<span class="keyword">const</span> anidado = [<span class="number">1</span>, [<span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]]];
+console.<span class="function">log</span>(anidado.<span class="function">flat</span>()); <span class="comment">// [1, 2, 3, 4, [5, 6]]</span>
+console.<span class="function">log</span>(anidado.<span class="function">flat</span>(<span class="number">2</span>)); <span class="comment">// [1, 2, 3, 4, 5, 6]</span>
+console.<span class="function">log</span>(anidado.<span class="function">flat</span>(Infinity)); <span class="comment">// Aplana todo</span>
+
+<span class="comment">// flatMap() - map() + flat(1)</span>
+<span class="keyword">const</span> frases = [<span class="string">'Hola Mundo'</span>, <span class="string">'JavaScript ES6'</span>];
+<span class="keyword">const</span> palabras = frases.<span class="function">flatMap</span>(f => f.<span class="function">split</span>(<span class="string">' '</span>));
+console.<span class="function">log</span>(palabras); <span class="comment">// ['Hola', 'Mundo', 'JavaScript', 'ES6']</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Spread y Destructuring -->
+        <section id="spread-destructuring" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">7</span>Spread y Destructuring</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// SPREAD OPERATOR (...)</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Copiar array</span>
+<span class="keyword">const</span> original = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">const</span> copia = [...original];
+
+<span class="comment">// Combinar arrays</span>
+<span class="keyword">const</span> arr1 = [<span class="number">1</span>, <span class="number">2</span>];
+<span class="keyword">const</span> arr2 = [<span class="number">3</span>, <span class="number">4</span>];
+<span class="keyword">const</span> combinado = [...arr1, ...arr2]; <span class="comment">// [1, 2, 3, 4]</span>
+
+<span class="comment">// Agregar elementos</span>
+<span class="keyword">const</span> conMas = [<span class="number">0</span>, ...arr1, <span class="number">5</span>]; <span class="comment">// [0, 1, 2, 5]</span>
+
+<span class="comment">// Pasar como argumentos</span>
+<span class="keyword">const</span> nums = [<span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">1</span>];
+console.<span class="function">log</span>(Math.<span class="function">max</span>(...nums)); <span class="comment">// 8</span>
+
+<span class="comment">// ========================================</span>
+<span class="comment">// DESTRUCTURING DE ARRAYS</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> colores = [<span class="string">'rojo'</span>, <span class="string">'verde'</span>, <span class="string">'azul'</span>, <span class="string">'amarillo'</span>];
+
+<span class="comment">// Destructuring básico</span>
+<span class="keyword">const</span> [primero, segundo] = colores;
+console.<span class="function">log</span>(primero); <span class="comment">// 'rojo'</span>
+console.<span class="function">log</span>(segundo); <span class="comment">// 'verde'</span>
+
+<span class="comment">// Saltar elementos</span>
+<span class="keyword">const</span> [, , tercero] = colores;
+console.<span class="function">log</span>(tercero); <span class="comment">// 'azul'</span>
+
+<span class="comment">// Rest pattern (resto de elementos)</span>
+<span class="keyword">const</span> [head, ...tail] = colores;
+console.<span class="function">log</span>(head); <span class="comment">// 'rojo'</span>
+console.<span class="function">log</span>(tail); <span class="comment">// ['verde', 'azul', 'amarillo']</span>
+
+<span class="comment">// Valores por defecto</span>
+<span class="keyword">const</span> [a, b, c, d, e = <span class="string">'blanco'</span>] = colores;
+console.<span class="function">log</span>(e); <span class="comment">// 'blanco' (no existe índice 4)</span>
+
+<span class="comment">// Intercambiar variables</span>
+<span class="keyword">let</span> x = <span class="number">1</span>, y = <span class="number">2</span>;
+[x, y] = [y, x];
+console.<span class="function">log</span>(x, y); <span class="comment">// 2, 1</span>
+
+<span class="comment">// Destructuring en funciones</span>
+<span class="keyword">function</span> <span class="function">procesar</span>([primero, ...resto]) {
+    console.<span class="function">log</span>(<span class="string">'Primero:'</span>, primero);
+    console.<span class="function">log</span>(<span class="string">'Resto:'</span>, resto);
+}
+<span class="function">procesar</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]);
+
+<span class="comment">// Destructuring anidado</span>
+<span class="keyword">const</span> matriz = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]];
+<span class="keyword">const</span> [[a1, a2], [b1, b2]] = matriz;
+console.<span class="function">log</span>(a1, a2, b1, b2); <span class="comment">// 1 2 3 4</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== OBJETOS ==================== -->
+        <h2 class="text-center my-5">
+            <span class="badge bg-success fs-4 px-4 py-2">
+                <i class="bi bi-braces-asterisk me-2"></i>OBJETOS
+            </span>
+        </h2>
+
+        <!-- 8. Crear Objetos -->
+        <section id="crear-objetos" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">8</span>Crear Objetos</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CREAR OBJETOS - Múltiples Formas</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// 1. Object literal (más común)</span>
+<span class="keyword">const</span> persona = {
+    nombre: <span class="string">'Ana'</span>,
+    edad: <span class="number">25</span>,
+    ciudad: <span class="string">'Madrid'</span>
+};
+
+<span class="comment">// 2. Constructor Object</span>
+<span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="function">Object</span>();
+obj.propiedad = <span class="string">'valor'</span>;
+
+<span class="comment">// 3. Object.create() - con prototipo</span>
+<span class="keyword">const</span> animal = {
+    tipo: <span class="string">'mamífero'</span>,
+    <span class="function">hablar</span>() {
+        console.<span class="function">log</span>(<span class="string">'...'</span>);
+    }
+};
+<span class="keyword">const</span> perro = Object.<span class="function">create</span>(animal);
+perro.nombre = <span class="string">'Max'</span>;
+perro.raza = <span class="string">'Labrador'</span>;
+
+<span class="comment">// 4. Función constructora</span>
+<span class="keyword">function</span> <span class="function">Producto</span>(nombre, precio) {
+    <span class="keyword">this</span>.nombre = nombre;
+    <span class="keyword">this</span>.precio = precio;
+    <span class="keyword">this</span>.mostrar = <span class="keyword">function</span>() {
+        console.<span class="function">log</span>(<span class="string">`${this.nombre}: $${this.precio}`</span>);
+    };
+}
+<span class="keyword">const</span> laptop = <span class="keyword">new</span> <span class="function">Producto</span>(<span class="string">'Laptop'</span>, <span class="number">1000</span>);
+
+<span class="comment">// 5. Shorthand properties (ES6)</span>
+<span class="keyword">const</span> nombre = <span class="string">'Carlos'</span>;
+<span class="keyword">const</span> edad = <span class="number">30</span>;
+<span class="keyword">const</span> usuario = { nombre, edad }; <span class="comment">// Igual que { nombre: nombre, edad: edad }</span>
+
+<span class="comment">// 6. Computed property names</span>
+<span class="keyword">const</span> key = <span class="string">'dinamico'</span>;
+<span class="keyword">const</span> objDinamico = {
+    [key]: <span class="string">'valor'</span>,
+    [<span class="string">'prop_'</span> + <span class="number">1</span>]: <span class="string">'uno'</span>,
+    [<span class="string">'prop_'</span> + <span class="number">2</span>]: <span class="string">'dos'</span>
+};
+console.<span class="function">log</span>(objDinamico.dinamico); <span class="comment">// 'valor'</span>
+
+<span class="comment">// 7. Shorthand methods</span>
+<span class="keyword">const</span> calculadora = {
+    <span class="function">sumar</span>(a, b) { <span class="comment">// En vez de sumar: function(a, b)</span>
+        <span class="keyword">return</span> a + b;
+    },
+    <span class="function">restar</span>(a, b) {
+        <span class="keyword">return</span> a - b;
+    }
+};</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. Propiedades y Métodos -->
+        <section id="propiedades-metodos" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">9</span>Propiedades y Métodos</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// ACCEDER A PROPIEDADES</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> usuario = {
+    nombre: <span class="string">'Ana'</span>,
+    edad: <span class="number">25</span>,
+    <span class="string">'nombre completo'</span>: <span class="string">'Ana García'</span>,
+    direccion: {
+        ciudad: <span class="string">'Madrid'</span>,
+        cp: <span class="string">'28001'</span>
+    }
+};
+
+<span class="comment">// Notación de punto</span>
+console.<span class="function">log</span>(usuario.nombre); <span class="comment">// 'Ana'</span>
+
+<span class="comment">// Notación de corchetes (para espacios, variables)</span>
+console.<span class="function">log</span>(usuario[<span class="string">'nombre completo'</span>]); <span class="comment">// 'Ana García'</span>
+
+<span class="keyword">const</span> prop = <span class="string">'edad'</span>;
+console.<span class="function">log</span>(usuario[prop]); <span class="comment">// 25</span>
+
+<span class="comment">// Acceso anidado</span>
+console.<span class="function">log</span>(usuario.direccion.ciudad); <span class="comment">// 'Madrid'</span>
+
+<span class="comment">// Optional chaining (?.) - evita errores</span>
+console.<span class="function">log</span>(usuario.trabajo?.empresa); <span class="comment">// undefined (no error)</span>
+console.<span class="function">log</span>(usuario.direccion?.pais ?? <span class="string">'España'</span>); <span class="comment">// 'España'</span>
+
+<span class="comment">// ========================================</span>
+<span class="comment">// MODIFICAR PROPIEDADES</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Agregar propiedad</span>
+usuario.email = <span class="string">'ana@email.com'</span>;
+
+<span class="comment">// Modificar propiedad</span>
+usuario.edad = <span class="number">26</span>;
+
+<span class="comment">// Eliminar propiedad</span>
+<span class="keyword">delete</span> usuario.email;
+
+<span class="comment">// Verificar si existe propiedad</span>
+console.<span class="function">log</span>(<span class="string">'nombre'</span> <span class="keyword">in</span> usuario); <span class="comment">// true</span>
+console.<span class="function">log</span>(usuario.<span class="function">hasOwnProperty</span>(<span class="string">'edad'</span>)); <span class="comment">// true</span>
+
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS DEL OBJETO</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> cuenta = {
+    titular: <span class="string">'Juan'</span>,
+    saldo: <span class="number">1000</span>,
+    
+    <span class="comment">// Método usando this</span>
+    <span class="function">depositar</span>(cantidad) {
+        <span class="keyword">this</span>.saldo += cantidad;
+        console.<span class="function">log</span>(<span class="string">`Depositado: $${cantidad}. Nuevo saldo: $${this.saldo}`</span>);
+    },
+    
+    <span class="function">retirar</span>(cantidad) {
+        <span class="keyword">if</span> (cantidad <= <span class="keyword">this</span>.saldo) {
+            <span class="keyword">this</span>.saldo -= cantidad;
+            console.<span class="function">log</span>(<span class="string">`Retirado: $${cantidad}. Nuevo saldo: $${this.saldo}`</span>);
+        } <span class="keyword">else</span> {
+            console.<span class="function">log</span>(<span class="string">'Saldo insuficiente'</span>);
+        }
+    },
+    
+    <span class="comment">// Getter</span>
+    <span class="keyword">get</span> <span class="function">info</span>() {
+        <span class="keyword">return</span> <span class="string">`${this.titular}: $${this.saldo}`</span>;
+    },
+    
+    <span class="comment">// Setter</span>
+    <span class="keyword">set</span> <span class="function">nuevoSaldo</span>(valor) {
+        <span class="keyword">if</span> (valor >= <span class="number">0</span>) {
+            <span class="keyword">this</span>.saldo = valor;
+        }
+    }
+};
+
+cuenta.<span class="function">depositar</span>(<span class="number">500</span>);
+console.<span class="function">log</span>(cuenta.info); <span class="comment">// Getter: 'Juan: $1500'</span>
+cuenta.nuevoSaldo = <span class="number">2000</span>; <span class="comment">// Setter</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. Object Methods -->
+        <section id="object-methods" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">10</span>Object Methods (Métodos Estáticos)</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// MÉTODOS ESTÁTICOS DE OBJECT</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> persona = {
+    nombre: <span class="string">'Ana'</span>,
+    edad: <span class="number">25</span>,
+    ciudad: <span class="string">'Madrid'</span>
+};
+
+<span class="comment">// Object.keys() - Array de claves</span>
+console.<span class="function">log</span>(Object.<span class="function">keys</span>(persona)); 
+<span class="comment">// ['nombre', 'edad', 'ciudad']</span>
+
+<span class="comment">// Object.values() - Array de valores</span>
+console.<span class="function">log</span>(Object.<span class="function">values</span>(persona)); 
+<span class="comment">// ['Ana', 25, 'Madrid']</span>
+
+<span class="comment">// Object.entries() - Array de [clave, valor]</span>
+console.<span class="function">log</span>(Object.<span class="function">entries</span>(persona));
+<span class="comment">// [['nombre', 'Ana'], ['edad', 25], ['ciudad', 'Madrid']]</span>
+
+<span class="comment">// Iterar con entries</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> Object.<span class="function">entries</span>(persona)) {
+    console.<span class="function">log</span>(<span class="string">`${key}: ${value}`</span>);
+}
+
+<span class="comment">// Object.fromEntries() - De entries a objeto</span>
+<span class="keyword">const</span> entries = [[<span class="string">'a'</span>, <span class="number">1</span>], [<span class="string">'b'</span>, <span class="number">2</span>]];
+<span class="keyword">const</span> obj = Object.<span class="function">fromEntries</span>(entries);
+console.<span class="function">log</span>(obj); <span class="comment">// { a: 1, b: 2 }</span>
+
+<span class="comment">// Object.assign() - Copiar/Combinar objetos</span>
+<span class="keyword">const</span> target = { a: <span class="number">1</span>, b: <span class="number">2</span> };
+<span class="keyword">const</span> source = { b: <span class="number">3</span>, c: <span class="number">4</span> };
+<span class="keyword">const</span> resultado = Object.<span class="function">assign</span>(target, source);
+console.<span class="function">log</span>(resultado); <span class="comment">// { a: 1, b: 3, c: 4 }</span>
+
+<span class="comment">// Clonar objeto (shallow copy)</span>
+<span class="keyword">const</span> clon = Object.<span class="function">assign</span>({}, persona);
+
+<span class="comment">// Object.freeze() - Inmutable (no modifica)</span>
+<span class="keyword">const</span> config = Object.<span class="function">freeze</span>({
+    apiUrl: <span class="string">'https://api.example.com'</span>,
+    timeout: <span class="number">5000</span>
+});
+config.timeout = <span class="number">10000</span>; <span class="comment">// No tiene efecto</span>
+console.<span class="function">log</span>(Object.<span class="function">isFrozen</span>(config)); <span class="comment">// true</span>
+
+<span class="comment">// Object.seal() - No agregar/eliminar, pero sí modificar</span>
+<span class="keyword">const</span> sealed = Object.<span class="function">seal</span>({ x: <span class="number">1</span> });
+sealed.x = <span class="number">2</span>; <span class="comment">// OK</span>
+sealed.y = <span class="number">3</span>; <span class="comment">// No tiene efecto</span>
+console.<span class="function">log</span>(Object.<span class="function">isSealed</span>(sealed)); <span class="comment">// true</span>
+
+<span class="comment">// Object.getOwnPropertyNames()</span>
+console.<span class="function">log</span>(Object.<span class="function">getOwnPropertyNames</span>(persona));
+<span class="comment">// ['nombre', 'edad', 'ciudad']</span>
+
+<span class="comment">// Object.getOwnPropertyDescriptor()</span>
+console.<span class="function">log</span>(Object.<span class="function">getOwnPropertyDescriptor</span>(persona, <span class="string">'nombre'</span>));
+<span class="comment">// { value: 'Ana', writable: true, enumerable: true, configurable: true }</span>
+
+<span class="comment">// Object.defineProperty() - Definir con opciones</span>
+Object.<span class="function">defineProperty</span>(persona, <span class="string">'id'</span>, {
+    value: <span class="number">123</span>,
+    writable: <span class="keyword">false</span>,
+    enumerable: <span class="keyword">true</span>
+});</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. Clases ES6 -->
+        <section id="clases" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">11</span>Clases ES6</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CLASES EN JAVASCRIPT (ES6+)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">Usuario</span> {
+    <span class="comment">// Propiedades privadas (ES2022)</span>
+    #password;
+    
+    <span class="comment">// Propiedades públicas</span>
+    rol = <span class="string">'user'</span>;
+    
+    <span class="comment">// Propiedad estática</span>
+    <span class="keyword">static</span> contador = <span class="number">0</span>;
+    
+    <span class="comment">// Constructor</span>
+    <span class="function">constructor</span>(nombre, email, password) {
+        <span class="keyword">this</span>.nombre = nombre;
+        <span class="keyword">this</span>.email = email;
+        <span class="keyword">this</span>.#password = password;
+        <span class="keyword">this</span>.id = ++Usuario.contador;
+    }
+    
+    <span class="comment">// Método público</span>
+    <span class="function">saludar</span>() {
+        <span class="keyword">return</span> <span class="string">`Hola, soy ${this.nombre}`</span>;
+    }
+    
+    <span class="comment">// Método privado (ES2022)</span>
+    #<span class="function">encriptarPassword</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.#password.<span class="function">split</span>(<span class="string">''</span>).<span class="function">reverse</span>().<span class="function">join</span>(<span class="string">''</span>);
+    }
+    
+    <span class="comment">// Getter</span>
+    <span class="keyword">get</span> <span class="function">info</span>() {
+        <span class="keyword">return</span> <span class="string">`${this.nombre} (${this.email})`</span>;
+    }
+    
+    <span class="comment">// Setter</span>
+    <span class="keyword">set</span> <span class="function">nuevoEmail</span>(email) {
+        <span class="keyword">if</span> (email.<span class="function">includes</span>(<span class="string">'@'</span>)) {
+            <span class="keyword">this</span>.email = email;
+        }
+    }
+    
+    <span class="comment">// Método estático</span>
+    <span class="keyword">static</span> <span class="function">crearAnonimo</span>() {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Usuario</span>(<span class="string">'Anónimo'</span>, <span class="string">'anon@example.com'</span>, <span class="string">'12345'</span>);
+    }
+    
+    <span class="comment">// Verificar password</span>
+    <span class="function">verificarPassword</span>(password) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.#password === password;
+    }
+}
+
+<span class="comment">// Crear instancias</span>
+<span class="keyword">const</span> usuario1 = <span class="keyword">new</span> <span class="function">Usuario</span>(<span class="string">'Ana'</span>, <span class="string">'ana@email.com'</span>, <span class="string">'secret123'</span>);
+<span class="keyword">const</span> usuario2 = <span class="keyword">new</span> <span class="function">Usuario</span>(<span class="string">'Carlos'</span>, <span class="string">'carlos@email.com'</span>, <span class="string">'pass456'</span>);
+
+console.<span class="function">log</span>(usuario1.<span class="function">saludar</span>()); <span class="comment">// 'Hola, soy Ana'</span>
+console.<span class="function">log</span>(usuario1.info); <span class="comment">// Getter</span>
+console.<span class="function">log</span>(Usuario.contador); <span class="comment">// 2</span>
+
+<span class="comment">// Método estático</span>
+<span class="keyword">const</span> anonimo = Usuario.<span class="function">crearAnonimo</span>();
+
+<span class="comment">// Usar setter</span>
+usuario1.nuevoEmail = <span class="string">'nueva@email.com'</span>;
+
+<span class="comment">// Verificar tipo</span>
+console.<span class="function">log</span>(usuario1 <span class="keyword">instanceof</span> Usuario); <span class="comment">// true</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. Herencia -->
+        <section id="herencia" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">12</span>Herencia</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// HERENCIA CON EXTENDS</span>
+<span class="comment">// ========================================</span>
+
+<span class="comment">// Clase base (padre)</span>
+<span class="keyword">class</span> <span class="function">Animal</span> {
+    <span class="function">constructor</span>(nombre, edad) {
+        <span class="keyword">this</span>.nombre = nombre;
+        <span class="keyword">this</span>.edad = edad;
+    }
+    
+    <span class="function">hablar</span>() {
+        console.<span class="function">log</span>(<span class="string">'El animal hace un sonido'</span>);
+    }
+    
+    <span class="function">presentarse</span>() {
+        <span class="keyword">return</span> <span class="string">`Soy ${this.nombre}, tengo ${this.edad} años`</span>;
+    }
+}
+
+<span class="comment">// Clase hija (hereda de Animal)</span>
+<span class="keyword">class</span> <span class="function">Perro</span> <span class="keyword">extends</span> Animal {
+    <span class="function">constructor</span>(nombre, edad, raza) {
+        <span class="comment">// super() llama al constructor del padre</span>
+        <span class="keyword">super</span>(nombre, edad);
+        <span class="keyword">this</span>.raza = raza;
+    }
+    
+    <span class="comment">// Sobrescribir método (override)</span>
+    <span class="function">hablar</span>() {
+        console.<span class="function">log</span>(<span class="string">'¡Guau guau!'</span>);
+    }
+    
+    <span class="comment">// Llamar método del padre con super</span>
+    <span class="function">presentarseCompleto</span>() {
+        <span class="keyword">return</span> <span class="string">`${super.presentarse()} y soy un ${this.raza}`</span>;
+    }
+    
+    <span class="comment">// Nuevo método</span>
+    <span class="function">buscarPelota</span>() {
+        console.<span class="function">log</span>(<span class="string">`${this.nombre} va a buscar la pelota`</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="function">Gato</span> <span class="keyword">extends</span> Animal {
+    <span class="function">constructor</span>(nombre, edad, color) {
+        <span class="keyword">super</span>(nombre, edad);
+        <span class="keyword">this</span>.color = color;
+    }
+    
+    <span class="function">hablar</span>() {
+        console.<span class="function">log</span>(<span class="string">'¡Miau!'</span>);
+    }
+    
+    <span class="function">ronronear</span>() {
+        console.<span class="function">log</span>(<span class="string">`${this.nombre} está ronroneando`</span>);
+    }
+}
+
+<span class="comment">// Usar las clases</span>
+<span class="keyword">const</span> max = <span class="keyword">new</span> <span class="function">Perro</span>(<span class="string">'Max'</span>, <span class="number">3</span>, <span class="string">'Labrador'</span>);
+<span class="keyword">const</span> michi = <span class="keyword">new</span> <span class="function">Gato</span>(<span class="string">'Michi'</span>, <span class="number">2</span>, <span class="string">'naranja'</span>);
+
+max.<span class="function">hablar</span>(); <span class="comment">// '¡Guau guau!'</span>
+michi.<span class="function">hablar</span>(); <span class="comment">// '¡Miau!'</span>
+
+console.<span class="function">log</span>(max.<span class="function">presentarseCompleto</span>());
+<span class="comment">// 'Soy Max, tengo 3 años y soy un Labrador'</span>
+
+<span class="comment">// Verificar herencia</span>
+console.<span class="function">log</span>(max <span class="keyword">instanceof</span> Perro); <span class="comment">// true</span>
+console.<span class="function">log</span>(max <span class="keyword">instanceof</span> Animal); <span class="comment">// true</span>
+console.<span class="function">log</span>(max <span class="keyword">instanceof</span> Gato); <span class="comment">// false</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. JSON -->
+        <section id="json" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">13</span>JSON</h3>
+            
+            <div class="method-card">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// JSON (JavaScript Object Notation)</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> usuario = {
+    nombre: <span class="string">'Ana'</span>,
+    edad: <span class="number">25</span>,
+    activo: <span class="keyword">true</span>,
+    hobbies: [<span class="string">'leer'</span>, <span class="string">'viajar'</span>],
+    direccion: {
+        ciudad: <span class="string">'Madrid'</span>,
+        cp: <span class="string">'28001'</span>
+    }
+};
+
+<span class="comment">// JSON.stringify() - Objeto a JSON string</span>
+<span class="keyword">const</span> jsonString = JSON.<span class="function">stringify</span>(usuario);
+console.<span class="function">log</span>(jsonString);
+<span class="comment">// '{"nombre":"Ana","edad":25,"activo":true,...}'</span>
+
+<span class="comment">// Con formato (indentación)</span>
+<span class="keyword">const</span> jsonFormateado = JSON.<span class="function">stringify</span>(usuario, <span class="keyword">null</span>, <span class="number">2</span>);
+console.<span class="function">log</span>(jsonFormateado);
+<span class="comment">/*
+{
+  "nombre": "Ana",
+  "edad": 25,
+  ...
+}
+*/</span>
+
+<span class="comment">// Con replacer (filtrar propiedades)</span>
+<span class="keyword">const</span> parcial = JSON.<span class="function">stringify</span>(usuario, [<span class="string">'nombre'</span>, <span class="string">'email'</span>]);
+<span class="comment">// Solo incluye nombre</span>
+
+<span class="comment">// Replacer función</span>
+<span class="keyword">const</span> filtrado = JSON.<span class="function">stringify</span>(usuario, (key, value) => {
+    <span class="keyword">if</span> (key === <span class="string">'edad'</span>) <span class="keyword">return</span> <span class="keyword">undefined</span>; <span class="comment">// Omitir</span>
+    <span class="keyword">return</span> value;
+});
+
+<span class="comment">// JSON.parse() - JSON string a Objeto</span>
+<span class="keyword">const</span> jsonData = <span class="string">'{"nombre":"Carlos","edad":30}'</span>;
+<span class="keyword">const</span> objeto = JSON.<span class="function">parse</span>(jsonData);
+console.<span class="function">log</span>(objeto.nombre); <span class="comment">// 'Carlos'</span>
+
+<span class="comment">// Con reviver (transformar valores)</span>
+<span class="keyword">const</span> conFecha = <span class="string">'{"fecha":"2024-01-15T10:30:00.000Z"}'</span>;
+<span class="keyword">const</span> parseado = JSON.<span class="function">parse</span>(conFecha, (key, value) => {
+    <span class="keyword">if</span> (key === <span class="string">'fecha'</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Date</span>(value);
+    <span class="keyword">return</span> value;
+});
+console.<span class="function">log</span>(parseado.fecha <span class="keyword">instanceof</span> Date); <span class="comment">// true</span>
+
+<span class="comment">// Clonar objeto profundo (deep clone)</span>
+<span class="keyword">const</span> clonProfundo = JSON.<span class="function">parse</span>(JSON.<span class="function">stringify</span>(usuario));
+
+<span class="comment">// Limitaciones de JSON</span>
+<span class="keyword">const</span> objComplejo = {
+    fecha: <span class="keyword">new</span> <span class="function">Date</span>(),
+    funcion: () => <span class="string">'hola'</span>,
+    indefinido: <span class="keyword">undefined</span>,
+    simbolo: Symbol(<span class="string">'id'</span>),
+    regex: /test/gi
+};
+
+<span class="comment">// JSON NO soporta: Date, funciones, undefined, Symbol, RegExp</span>
+console.<span class="function">log</span>(JSON.<span class="function">stringify</span>(objComplejo));
+<span class="comment">// Solo convierte fecha a string, ignora el resto</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14. Ejemplos Prácticos -->
+        <section id="ejemplos-practicos" class="mb-5">
+            <h3 class="mb-4"><span class="badge bg-secondary me-2">14</span>Ejemplos Prácticos Completos</h3>
+            
+            <div class="method-card">
+                <h5 class="mb-3">🛒 Sistema de Carrito de Compras</h5>
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO: CARRITO DE COMPRAS COMPLETO</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">CarritoCompras</span> {
+    #items = [];
+    
+    <span class="comment">// Agregar producto</span>
+    <span class="function">agregar</span>(producto, cantidad = <span class="number">1</span>) {
+        <span class="keyword">const</span> existente = <span class="keyword">this</span>.#items.<span class="function">find</span>(item => item.id === producto.id);
+        
+        <span class="keyword">if</span> (existente) {
+            existente.cantidad += cantidad;
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.#items.<span class="function">push</span>({
+                ...producto,
+                cantidad
+            });
+        }
+    }
+    
+    <span class="comment">// Eliminar producto</span>
+    <span class="function">eliminar</span>(productoId) {
+        <span class="keyword">this</span>.#items = <span class="keyword">this</span>.#items.<span class="function">filter</span>(item => item.id !== productoId);
+    }
+    
+    <span class="comment">// Actualizar cantidad</span>
+    <span class="function">actualizarCantidad</span>(productoId, cantidad) {
+        <span class="keyword">const</span> item = <span class="keyword">this</span>.#items.<span class="function">find</span>(i => i.id === productoId);
+        <span class="keyword">if</span> (item) {
+            item.cantidad = Math.<span class="function">max</span>(<span class="number">0</span>, cantidad);
+            <span class="keyword">if</span> (item.cantidad === <span class="number">0</span>) <span class="keyword">this</span>.<span class="function">eliminar</span>(productoId);
+        }
+    }
+    
+    <span class="comment">// Calcular subtotal</span>
+    <span class="keyword">get</span> <span class="function">subtotal</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.#items.<span class="function">reduce</span>((sum, item) => 
+            sum + (item.precio * item.cantidad), <span class="number">0</span>
+        );
+    }
+    
+    <span class="comment">// Calcular IVA</span>
+    <span class="keyword">get</span> <span class="function">iva</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.subtotal * <span class="number">0.21</span>;
+    }
+    
+    <span class="comment">// Total con IVA</span>
+    <span class="keyword">get</span> <span class="function">total</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.subtotal + <span class="keyword">this</span>.iva;
+    }
+    
+    <span class="comment">// Cantidad de items</span>
+    <span class="keyword">get</span> <span class="function">cantidadItems</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.#items.<span class="function">reduce</span>((sum, item) => sum + item.cantidad, <span class="number">0</span>);
+    }
+    
+    <span class="comment">// Obtener items</span>
+    <span class="keyword">get</span> <span class="function">items</span>() {
+        <span class="keyword">return</span> [...<span class="keyword">this</span>.#items];
+    }
+    
+    <span class="comment">// Vaciar carrito</span>
+    <span class="function">vaciar</span>() {
+        <span class="keyword">this</span>.#items = [];
+    }
+    
+    <span class="comment">// Aplicar descuento</span>
+    <span class="function">aplicarDescuento</span>(porcentaje) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.total * (<span class="number">1</span> - porcentaje / <span class="number">100</span>);
+    }
+    
+    <span class="comment">// Resumen del carrito</span>
+    <span class="function">resumen</span>() {
+        console.<span class="function">log</span>(<span class="string">'=== CARRITO ==='</span>);
+        <span class="keyword">this</span>.#items.<span class="function">forEach</span>(item => {
+            console.<span class="function">log</span>(<span class="string">`${item.nombre} x${item.cantidad} = $${item.precio * item.cantidad}`</span>);
+        });
+        console.<span class="function">log</span>(<span class="string">`Subtotal: $${this.subtotal.toFixed(2)}`</span>);
+        console.<span class="function">log</span>(<span class="string">`IVA (21%): $${this.iva.toFixed(2)}`</span>);
+        console.<span class="function">log</span>(<span class="string">`TOTAL: $${this.total.toFixed(2)}`</span>);
+    }
+}
+
+<span class="comment">// Uso del carrito</span>
+<span class="keyword">const</span> carrito = <span class="keyword">new</span> <span class="function">CarritoCompras</span>();
+
+carrito.<span class="function">agregar</span>({ id: <span class="number">1</span>, nombre: <span class="string">'Laptop'</span>, precio: <span class="number">1000</span> });
+carrito.<span class="function">agregar</span>({ id: <span class="number">2</span>, nombre: <span class="string">'Mouse'</span>, precio: <span class="number">25</span> }, <span class="number">2</span>);
+carrito.<span class="function">agregar</span>({ id: <span class="number">1</span>, nombre: <span class="string">'Laptop'</span>, precio: <span class="number">1000</span> }); <span class="comment">// +1</span>
+
+carrito.<span class="function">resumen</span>();
+console.<span class="function">log</span>(<span class="string">'Con 10% descuento: $'</span> + carrito.<span class="function">aplicarDescuento</span>(<span class="number">10</span>).<span class="function">toFixed</span>(<span class="number">2</span>));</pre>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <h5 class="mb-3">👥 Gestión de Usuarios con LocalStorage</h5>
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO: GESTIÓN DE USUARIOS</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">GestorUsuarios</span> {
+    <span class="keyword">static</span> STORAGE_KEY = <span class="string">'usuarios_app'</span>;
+    
+    <span class="comment">// Cargar usuarios de localStorage</span>
+    <span class="keyword">static</span> <span class="function">cargar</span>() {
+        <span class="keyword">const</span> data = localStorage.<span class="function">getItem</span>(<span class="keyword">this</span>.STORAGE_KEY);
+        <span class="keyword">return</span> data ? JSON.<span class="function">parse</span>(data) : [];
+    }
+    
+    <span class="comment">// Guardar en localStorage</span>
+    <span class="keyword">static</span> <span class="function">guardar</span>(usuarios) {
+        localStorage.<span class="function">setItem</span>(<span class="keyword">this</span>.STORAGE_KEY, JSON.<span class="function">stringify</span>(usuarios));
+    }
+    
+    <span class="comment">// Crear usuario</span>
+    <span class="keyword">static</span> <span class="function">crear</span>(nombre, email) {
+        <span class="keyword">const</span> usuarios = <span class="keyword">this</span>.<span class="function">cargar</span>();
+        
+        <span class="comment">// Verificar email único</span>
+        <span class="keyword">if</span> (usuarios.<span class="function">some</span>(u => u.email === email)) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'El email ya existe'</span>);
+        }
+        
+        <span class="keyword">const</span> nuevoUsuario = {
+            id: Date.<span class="function">now</span>(),
+            nombre,
+            email,
+            creado: <span class="keyword">new</span> <span class="function">Date</span>().<span class="function">toISOString</span>(),
+            activo: <span class="keyword">true</span>
+        };
+        
+        usuarios.<span class="function">push</span>(nuevoUsuario);
+        <span class="keyword">this</span>.<span class="function">guardar</span>(usuarios);
+        <span class="keyword">return</span> nuevoUsuario;
+    }
+    
+    <span class="comment">// Obtener todos</span>
+    <span class="keyword">static</span> <span class="function">obtenerTodos</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">cargar</span>();
+    }
+    
+    <span class="comment">// Buscar por ID</span>
+    <span class="keyword">static</span> <span class="function">buscarPorId</span>(id) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">cargar</span>().<span class="function">find</span>(u => u.id === id);
+    }
+    
+    <span class="comment">// Buscar por email</span>
+    <span class="keyword">static</span> <span class="function">buscarPorEmail</span>(email) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">cargar</span>().<span class="function">find</span>(u => u.email === email);
+    }
+    
+    <span class="comment">// Actualizar</span>
+    <span class="keyword">static</span> <span class="function">actualizar</span>(id, datos) {
+        <span class="keyword">const</span> usuarios = <span class="keyword">this</span>.<span class="function">cargar</span>();
+        <span class="keyword">const</span> index = usuarios.<span class="function">findIndex</span>(u => u.id === id);
+        
+        <span class="keyword">if</span> (index === -<span class="number">1</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span>(<span class="string">'Usuario no encontrado'</span>);
+        }
+        
+        usuarios[index] = { ...usuarios[index], ...datos };
+        <span class="keyword">this</span>.<span class="function">guardar</span>(usuarios);
+        <span class="keyword">return</span> usuarios[index];
+    }
+    
+    <span class="comment">// Eliminar</span>
+    <span class="keyword">static</span> <span class="function">eliminar</span>(id) {
+        <span class="keyword">const</span> usuarios = <span class="keyword">this</span>.<span class="function">cargar</span>().<span class="function">filter</span>(u => u.id !== id);
+        <span class="keyword">this</span>.<span class="function">guardar</span>(usuarios);
+    }
+    
+    <span class="comment">// Filtrar activos</span>
+    <span class="keyword">static</span> <span class="function">obtenerActivos</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">cargar</span>().<span class="function">filter</span>(u => u.activo);
+    }
+    
+    <span class="comment">// Buscar por nombre (parcial)</span>
+    <span class="keyword">static</span> <span class="function">buscar</span>(termino) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">cargar</span>().<span class="function">filter</span>(u => 
+            u.nombre.<span class="function">toLowerCase</span>().<span class="function">includes</span>(termino.<span class="function">toLowerCase</span>())
+        );
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">try</span> {
+    GestorUsuarios.<span class="function">crear</span>(<span class="string">'Ana García'</span>, <span class="string">'ana@email.com'</span>);
+    GestorUsuarios.<span class="function">crear</span>(<span class="string">'Carlos López'</span>, <span class="string">'carlos@email.com'</span>);
+    
+    console.<span class="function">log</span>(GestorUsuarios.<span class="function">obtenerTodos</span>());
+    console.<span class="function">log</span>(GestorUsuarios.<span class="function">buscar</span>(<span class="string">'ana'</span>));
+} <span class="keyword">catch</span> (error) {
+    console.<span class="function">error</span>(error.message);
+}</pre>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <h5 class="mb-3">📊 Análisis de Datos de Ventas</h5>
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">
+                        <i class="bi bi-clipboard"></i> Copiar
+                    </button>
+                    <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EJEMPLO: ANÁLISIS DE VENTAS</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> ventas = [
+    { id: <span class="number">1</span>, producto: <span class="string">'Laptop'</span>, cantidad: <span class="number">5</span>, precio: <span class="number">1000</span>, categoria: <span class="string">'Electrónica'</span>, fecha: <span class="string">'2024-01-15'</span> },
+    { id: <span class="number">2</span>, producto: <span class="string">'Mouse'</span>, cantidad: <span class="number">20</span>, precio: <span class="number">25</span>, categoria: <span class="string">'Electrónica'</span>, fecha: <span class="string">'2024-01-16'</span> },
+    { id: <span class="number">3</span>, producto: <span class="string">'Silla'</span>, cantidad: <span class="number">3</span>, precio: <span class="number">200</span>, categoria: <span class="string">'Muebles'</span>, fecha: <span class="string">'2024-01-17'</span> },
+    { id: <span class="number">4</span>, producto: <span class="string">'Escritorio'</span>, cantidad: <span class="number">2</span>, precio: <span class="number">350</span>, categoria: <span class="string">'Muebles'</span>, fecha: <span class="string">'2024-01-18'</span> },
+    { id: <span class="number">5</span>, producto: <span class="string">'Teclado'</span>, cantidad: <span class="number">15</span>, precio: <span class="number">75</span>, categoria: <span class="string">'Electrónica'</span>, fecha: <span class="string">'2024-01-19'</span> }
+];
+
+<span class="comment">// 1. Total de ventas</span>
+<span class="keyword">const</span> totalVentas = ventas.<span class="function">reduce</span>((sum, v) => sum + (v.precio * v.cantidad), <span class="number">0</span>);
+console.<span class="function">log</span>(<span class="string">'Total ventas: $'</span> + totalVentas); <span class="comment">// $7825</span>
+
+<span class="comment">// 2. Ventas por categoría</span>
+<span class="keyword">const</span> ventasPorCategoria = ventas.<span class="function">reduce</span>((acc, v) => {
+    <span class="keyword">const</span> total = v.precio * v.cantidad;
+    acc[v.categoria] = (acc[v.categoria] || <span class="number">0</span>) + total;
+    <span class="keyword">return</span> acc;
+}, {});
+console.<span class="function">log</span>(ventasPorCategoria);
+<span class="comment">// { Electrónica: 6625, Muebles: 1200 }</span>
+
+<span class="comment">// 3. Producto más vendido (por cantidad)</span>
+<span class="keyword">const</span> masVendido = ventas.<span class="function">reduce</span>((max, v) => 
+    v.cantidad > max.cantidad ? v : max
+);
+console.<span class="function">log</span>(<span class="string">'Más vendido:'</span>, masVendido.producto);
+
+<span class="comment">// 4. Promedio de precio</span>
+<span class="keyword">const</span> promedioPrecio = ventas.<span class="function">reduce</span>((sum, v) => sum + v.precio, <span class="number">0</span>) / ventas.length;
+console.<span class="function">log</span>(<span class="string">'Precio promedio: $'</span> + promedioPrecio);
+
+<span class="comment">// 5. Productos con precio > promedio</span>
+<span class="keyword">const</span> sobrePromedio = ventas.<span class="function">filter</span>(v => v.precio > promedioPrecio);
+console.<span class="function">log</span>(<span class="string">'Sobre promedio:'</span>, sobrePromedio.<span class="function">map</span>(v => v.producto));
+
+<span class="comment">// 6. Ordenar por total de venta</span>
+<span class="keyword">const</span> ordenadoPorTotal = [...ventas]
+    .<span class="function">map</span>(v => ({ ...v, total: v.precio * v.cantidad }))
+    .<span class="function">sort</span>((a, b) => b.total - a.total);
+console.<span class="function">log</span>(ordenadoPorTotal);
+
+<span class="comment">// 7. Agrupar por fecha</span>
+<span class="keyword">const</span> porFecha = ventas.<span class="function">reduce</span>((acc, v) => {
+    <span class="keyword">if</span> (!acc[v.fecha]) acc[v.fecha] = [];
+    acc[v.fecha].<span class="function">push</span>(v);
+    <span class="keyword">return</span> acc;
+}, {});
+
+<span class="comment">// 8. Resumen completo</span>
+<span class="keyword">const</span> resumen = {
+    totalVentas,
+    cantidadProductos: ventas.length,
+    unidadesVendidas: ventas.<span class="function">reduce</span>((sum, v) => sum + v.cantidad, <span class="number">0</span>),
+    promedioPorVenta: totalVentas / ventas.length,
+    categorias: [...<span class="keyword">new</span> <span class="function">Set</span>(ventas.<span class="function">map</span>(v => v.categoria))],
+    productoMasCaro: ventas.<span class="function">reduce</span>((max, v) => v.precio > max.precio ? v : max).producto,
+    productoMasBarato: ventas.<span class="function">reduce</span>((min, v) => v.precio < min.precio ? v : min).producto
+};
+console.<span class="function">log</span>(resumen);</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Interactiva -->
+        <section class="interactive-demo">
+            <h3 class="mb-4"><i class="bi bi-play-circle me-2"></i>Demo Interactiva</h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Prueba Array Methods</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Array de números:</label>
+                        <input type="text" id="arrayInput" class="form-control" value="5, 2, 8, 1, 9, 3, 7">
+                    </div>
+                    <div class="btn-group flex-wrap gap-1">
+                        <button class="btn btn-primary" onclick="demoSort()">sort()</button>
+                        <button class="btn btn-primary" onclick="demoReverse()">reverse()</button>
+                        <button class="btn btn-success" onclick="demoFilter()">filter(>5)</button>
+                        <button class="btn btn-info" onclick="demoMap()">map(*2)</button>
+                        <button class="btn btn-warning" onclick="demoReduce()">reduce(+)</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Resultado:</h5>
+                    <div id="demoOutput" class="output-box">
+                        Selecciona un método para ver el resultado
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="eventos.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Eventos
+            </a>
+            <a href="funciones.html" class="btn btn-primary">
+                Funciones<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Arrays y Objetos - JavaScript | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para copiar código
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+        
+        // Demos interactivas
+        function getArray() {
+            return document.getElementById('arrayInput').value
+                .split(',')
+                .map(n => parseFloat(n.trim()))
+                .filter(n => !isNaN(n));
+        }
+        
+        function showOutput(text) {
+            document.getElementById('demoOutput').innerHTML = text;
+        }
+        
+        function demoSort() {
+            const arr = getArray();
+            const sorted = [...arr].sort((a, b) => a - b);
+            showOutput(`
+                <strong>Original:</strong> [${arr.join(', ')}]<br>
+                <strong>sort((a,b) => a-b):</strong> [${sorted.join(', ')}]
+            `);
+        }
+        
+        function demoReverse() {
+            const arr = getArray();
+            const reversed = [...arr].reverse();
+            showOutput(`
+                <strong>Original:</strong> [${arr.join(', ')}]<br>
+                <strong>reverse():</strong> [${reversed.join(', ')}]
+            `);
+        }
+        
+        function demoFilter() {
+            const arr = getArray();
+            const filtered = arr.filter(n => n > 5);
+            showOutput(`
+                <strong>Original:</strong> [${arr.join(', ')}]<br>
+                <strong>filter(n => n > 5):</strong> [${filtered.join(', ')}]
+            `);
+        }
+        
+        function demoMap() {
+            const arr = getArray();
+            const mapped = arr.map(n => n * 2);
+            showOutput(`
+                <strong>Original:</strong> [${arr.join(', ')}]<br>
+                <strong>map(n => n * 2):</strong> [${mapped.join(', ')}]
+            `);
+        }
+        
+        function demoReduce() {
+            const arr = getArray();
+            const sum = arr.reduce((acc, n) => acc + n, 0);
+            showOutput(`
+                <strong>Original:</strong> [${arr.join(', ')}]<br>
+                <strong>reduce((acc, n) => acc + n, 0):</strong> ${sum}
+            `);
+        }
+    </script>
+</body>
+</html>

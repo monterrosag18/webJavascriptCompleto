@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios Prácticos JavaScript - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f8f9fa; }
+        
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .comment { color: #6272a4; font-style: italic; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        
+        .exercise-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .difficulty {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .difficulty-easy { background: #d4edda; color: #155724; }
+        .difficulty-medium { background: #fff3cd; color: #856404; }
+        .difficulty-hard { background: #f8d7da; color: #721c24; }
+        
+        .solution-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .solution-content {
+            display: none;
+        }
+        .solution-content.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="funciones.html">Funciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="arrays-objetos.html">Arrays</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="ejercicios.html">Ejercicios</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="text-center py-5 mb-5" style="background: linear-gradient(135deg, #20bf6b, #26de81);">
+        <div class="container text-white">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-journal-code me-3"></i>Ejercicios Prácticos
+            </h1>
+            <p class="lead mb-0">20 ejercicios con solución para dominar JavaScript</p>
+        </div>
+    </section>
+
+    <div class="container py-4">
+        <!-- Ejercicio 1 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-1-circle me-2"></i>FizzBuzz</h5>
+                <span class="difficulty difficulty-easy">Fácil</span>
+            </div>
+            <p>Imprime números del 1 al 100. Para múltiplos de 3 imprime "Fizz", para múltiplos de 5 imprime "Buzz", para ambos "FizzBuzz".</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Solución 1: Tradicional</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i <= <span class="number">100</span>; i++) {
+    <span class="keyword">let</span> output = <span class="string">''</span>;
+    <span class="keyword">if</span> (i % <span class="number">3</span> === <span class="number">0</span>) output += <span class="string">'Fizz'</span>;
+    <span class="keyword">if</span> (i % <span class="number">5</span> === <span class="number">0</span>) output += <span class="string">'Buzz'</span>;
+    console.<span class="function">log</span>(output || i);
+}
+
+<span class="comment">// Solución 2: Funcional</span>
+<span class="keyword">const</span> fizzBuzz = n => 
+    (n % <span class="number">3</span> === <span class="number">0</span> ? <span class="string">'Fizz'</span> : <span class="string">''</span>) + 
+    (n % <span class="number">5</span> === <span class="number">0</span> ? <span class="string">'Buzz'</span> : <span class="string">''</span>) || n;
+
+Array.<span class="function">from</span>({length: <span class="number">100</span>}, (_, i) => <span class="function">fizzBuzz</span>(i + <span class="number">1</span>))
+    .<span class="function">forEach</span>(x => console.<span class="function">log</span>(x));</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 2 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-2-circle me-2"></i>Palíndromo</h5>
+                <span class="difficulty difficulty-easy">Fácil</span>
+            </div>
+            <p>Crea una función que determine si una cadena es un palíndromo (se lee igual de izquierda a derecha).</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">function</span> <span class="function">esPalindromo</span>(str) {
+    <span class="comment">// Limpiar: minúsculas, sin espacios ni acentos</span>
+    <span class="keyword">const</span> limpia = str
+        .<span class="function">toLowerCase</span>()
+        .<span class="function">normalize</span>(<span class="string">'NFD'</span>)
+        .<span class="function">replace</span>(<span class="string">/[\u0300-\u036f]/g</span>, <span class="string">''</span>)
+        .<span class="function">replace</span>(<span class="string">/[^a-z0-9]/g</span>, <span class="string">''</span>);
+    
+    <span class="keyword">return</span> limpia === limpia.<span class="function">split</span>(<span class="string">''</span>).<span class="function">reverse</span>().<span class="function">join</span>(<span class="string">''</span>);
+}
+
+<span class="comment">// Tests</span>
+console.<span class="function">log</span>(<span class="function">esPalindromo</span>(<span class="string">'Ana'</span>));           <span class="comment">// true</span>
+console.<span class="function">log</span>(<span class="function">esPalindromo</span>(<span class="string">'A man a plan a canal Panama'</span>)); <span class="comment">// true</span>
+console.<span class="function">log</span>(<span class="function">esPalindromo</span>(<span class="string">'Dábale arroz a la zorra el abad'</span>)); <span class="comment">// true</span>
+console.<span class="function">log</span>(<span class="function">esPalindromo</span>(<span class="string">'Hola'</span>));          <span class="comment">// false</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 3 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-3-circle me-2"></i>Contador de Vocales</h5>
+                <span class="difficulty difficulty-easy">Fácil</span>
+            </div>
+            <p>Cuenta cuántas vocales hay en una cadena de texto.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Solución 1: Con regex</span>
+<span class="keyword">function</span> <span class="function">contarVocales</span>(str) {
+    <span class="keyword">const</span> matches = str.<span class="function">match</span>(<span class="string">/[aeiouáéíóúü]/gi</span>);
+    <span class="keyword">return</span> matches ? matches.length : <span class="number">0</span>;
+}
+
+<span class="comment">// Solución 2: Con filter</span>
+<span class="keyword">function</span> <span class="function">contarVocales2</span>(str) {
+    <span class="keyword">const</span> vocales = <span class="string">'aeiouáéíóúüAEIOUÁÉÍÓÚÜ'</span>;
+    <span class="keyword">return</span> [...str].<span class="function">filter</span>(c => vocales.<span class="function">includes</span>(c)).length;
+}
+
+<span class="comment">// Solución 3: Con reduce (detallado)</span>
+<span class="keyword">function</span> <span class="function">contarVocalesDetallado</span>(str) {
+    <span class="keyword">const</span> vocales = <span class="string">'aeiouáéíóúü'</span>;
+    <span class="keyword">return</span> [...str.<span class="function">toLowerCase</span>()].<span class="function">reduce</span>((acc, char) => {
+        <span class="keyword">if</span> (vocales.<span class="function">includes</span>(char)) {
+            acc[char] = (acc[char] || <span class="number">0</span>) + <span class="number">1</span>;
+        }
+        <span class="keyword">return</span> acc;
+    }, {});
+}
+
+console.<span class="function">log</span>(<span class="function">contarVocales</span>(<span class="string">'Hola Mundo'</span>)); <span class="comment">// 4</span>
+console.<span class="function">log</span>(<span class="function">contarVocalesDetallado</span>(<span class="string">'Hola Mundo'</span>)); <span class="comment">// {o: 2, a: 1, u: 1}</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 4 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-4-circle me-2"></i>Array sin Duplicados</h5>
+                <span class="difficulty difficulty-easy">Fácil</span>
+            </div>
+            <p>Elimina los elementos duplicados de un array.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Solución 1: Set (más simple)</span>
+<span class="keyword">const</span> unicos1 = [...<span class="keyword">new</span> <span class="function">Set</span>(arr)];
+
+<span class="comment">// Solución 2: filter</span>
+<span class="keyword">const</span> unicos2 = arr.<span class="function">filter</span>((item, index) => 
+    arr.<span class="function">indexOf</span>(item) === index
+);
+
+<span class="comment">// Solución 3: reduce</span>
+<span class="keyword">const</span> unicos3 = arr.<span class="function">reduce</span>((acc, item) => {
+    <span class="keyword">if</span> (!acc.<span class="function">includes</span>(item)) acc.<span class="function">push</span>(item);
+    <span class="keyword">return</span> acc;
+}, []);
+
+<span class="comment">// Para objetos (por propiedad)</span>
+<span class="keyword">const</span> users = [
+    { id: <span class="number">1</span>, name: <span class="string">'Ana'</span> },
+    { id: <span class="number">2</span>, name: <span class="string">'Bob'</span> },
+    { id: <span class="number">1</span>, name: <span class="string">'Ana'</span> }
+];
+
+<span class="keyword">const</span> unicosPorId = users.<span class="function">filter</span>((user, index, self) =>
+    index === self.<span class="function">findIndex</span>(u => u.id === user.id)
+);
+
+console.<span class="function">log</span>(unicos1); <span class="comment">// [1, 2, 3, 4, 5]</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 5 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-5-circle me-2"></i>Factorial</h5>
+                <span class="difficulty difficulty-easy">Fácil</span>
+            </div>
+            <p>Calcula el factorial de un número (n! = n × (n-1) × ... × 1).</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Solución 1: Recursiva</span>
+<span class="keyword">function</span> <span class="function">factorial</span>(n) {
+    <span class="keyword">if</span> (n < <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">undefined</span>;
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;
+    <span class="keyword">return</span> n * <span class="function">factorial</span>(n - <span class="number">1</span>);
+}
+
+<span class="comment">// Solución 2: Iterativa</span>
+<span class="keyword">function</span> <span class="function">factorialIterativo</span>(n) {
+    <span class="keyword">let</span> result = <span class="number">1</span>;
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i <= n; i++) {
+        result *= i;
+    }
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Solución 3: Con reduce</span>
+<span class="keyword">const</span> factorialReduce = n => 
+    n <= <span class="number">1</span> ? <span class="number">1</span> : Array.<span class="function">from</span>({length: n}, (_, i) => i + <span class="number">1</span>)
+        .<span class="function">reduce</span>((a, b) => a * b, <span class="number">1</span>);
+
+console.<span class="function">log</span>(<span class="function">factorial</span>(<span class="number">5</span>));  <span class="comment">// 120</span>
+console.<span class="function">log</span>(<span class="function">factorial</span>(<span class="number">10</span>)); <span class="comment">// 3628800</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 6 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-6-circle me-2"></i>Fibonacci</h5>
+                <span class="difficulty difficulty-medium">Medio</span>
+            </div>
+            <p>Genera la secuencia de Fibonacci hasta n términos (0, 1, 1, 2, 3, 5, 8...).</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Solución 1: Iterativa (eficiente)</span>
+<span class="keyword">function</span> <span class="function">fibonacci</span>(n) {
+    <span class="keyword">const</span> sequence = [<span class="number">0</span>, <span class="number">1</span>];
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i < n; i++) {
+        sequence[i] = sequence[i - <span class="number">1</span>] + sequence[i - <span class="number">2</span>];
+    }
+    <span class="keyword">return</span> sequence.<span class="function">slice</span>(<span class="number">0</span>, n);
+}
+
+<span class="comment">// Solución 2: Recursiva con memoización</span>
+<span class="keyword">function</span> <span class="function">fibMemo</span>(n, memo = {}) {
+    <span class="keyword">if</span> (n in memo) <span class="keyword">return</span> memo[n];
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    memo[n] = <span class="function">fibMemo</span>(n - <span class="number">1</span>, memo) + <span class="function">fibMemo</span>(n - <span class="number">2</span>, memo);
+    <span class="keyword">return</span> memo[n];
+}
+
+<span class="comment">// Solución 3: Generador</span>
+<span class="keyword">function</span>* <span class="function">fibGenerator</span>() {
+    <span class="keyword">let</span> a = <span class="number">0</span>, b = <span class="number">1</span>;
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">yield</span> a;
+        [a, b] = [b, a + b];
+    }
+}
+
+<span class="keyword">const</span> gen = <span class="function">fibGenerator</span>();
+<span class="keyword">const</span> first10 = Array.<span class="function">from</span>({length: <span class="number">10</span>}, () => gen.<span class="function">next</span>().value);
+
+console.<span class="function">log</span>(<span class="function">fibonacci</span>(<span class="number">10</span>)); <span class="comment">// [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 7 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-7-circle me-2"></i>Aplanar Array Anidado</h5>
+                <span class="difficulty difficulty-medium">Medio</span>
+            </div>
+            <p>Aplana un array con múltiples niveles de anidación en un array plano.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">const</span> nested = [<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>]], <span class="number">5</span>]];
+
+<span class="comment">// Solución 1: flat() nativo (ES2019)</span>
+<span class="keyword">const</span> plano1 = nested.<span class="function">flat</span>(Infinity);
+
+<span class="comment">// Solución 2: Recursiva</span>
+<span class="keyword">function</span> <span class="function">flatten</span>(arr) {
+    <span class="keyword">let</span> result = [];
+    <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> arr) {
+        <span class="keyword">if</span> (Array.<span class="function">isArray</span>(item)) {
+            result = result.<span class="function">concat</span>(<span class="function">flatten</span>(item));
+        } <span class="keyword">else</span> {
+            result.<span class="function">push</span>(item);
+        }
+    }
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Solución 3: Con reduce</span>
+<span class="keyword">const</span> flattenReduce = arr => arr.<span class="function">reduce</span>((acc, val) => 
+    acc.<span class="function">concat</span>(Array.<span class="function">isArray</span>(val) ? <span class="function">flattenReduce</span>(val) : val), []
+);
+
+<span class="comment">// Solución 4: Con spread y some</span>
+<span class="keyword">function</span> <span class="function">flattenSpread</span>(arr) {
+    <span class="keyword">while</span> (arr.<span class="function">some</span>(Array.isArray)) {
+        arr = [].<span class="function">concat</span>(...arr);
+    }
+    <span class="keyword">return</span> arr;
+}
+
+console.<span class="function">log</span>(<span class="function">flatten</span>(nested)); <span class="comment">// [1, 2, 3, 4, 5]</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 8 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-8-circle me-2"></i>Anagramas</h5>
+                <span class="difficulty difficulty-medium">Medio</span>
+            </div>
+            <p>Determina si dos cadenas son anagramas (contienen las mismas letras).</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Solución 1: Ordenar y comparar</span>
+<span class="keyword">function</span> <span class="function">sonAnagramas</span>(str1, str2) {
+    <span class="keyword">const</span> limpiar = s => s.<span class="function">toLowerCase</span>()
+        .<span class="function">replace</span>(<span class="string">/[^a-z]/g</span>, <span class="string">''</span>)
+        .<span class="function">split</span>(<span class="string">''</span>)
+        .<span class="function">sort</span>()
+        .<span class="function">join</span>(<span class="string">''</span>);
+    
+    <span class="keyword">return</span> <span class="function">limpiar</span>(str1) === <span class="function">limpiar</span>(str2);
+}
+
+<span class="comment">// Solución 2: Contar caracteres</span>
+<span class="keyword">function</span> <span class="function">sonAnagramas2</span>(str1, str2) {
+    <span class="keyword">const</span> contarChars = s => {
+        <span class="keyword">const</span> counts = {};
+        <span class="keyword">for</span> (<span class="keyword">const</span> char <span class="keyword">of</span> s.<span class="function">toLowerCase</span>().<span class="function">replace</span>(<span class="string">/[^a-z]/g</span>, <span class="string">''</span>)) {
+            counts[char] = (counts[char] || <span class="number">0</span>) + <span class="number">1</span>;
+        }
+        <span class="keyword">return</span> counts;
+    };
+    
+    <span class="keyword">const</span> counts1 = <span class="function">contarChars</span>(str1);
+    <span class="keyword">const</span> counts2 = <span class="function">contarChars</span>(str2);
+    
+    <span class="keyword">return</span> JSON.<span class="function">stringify</span>(counts1) === JSON.<span class="function">stringify</span>(counts2);
+}
+
+console.<span class="function">log</span>(<span class="function">sonAnagramas</span>(<span class="string">'listen'</span>, <span class="string">'silent'</span>)); <span class="comment">// true</span>
+console.<span class="function">log</span>(<span class="function">sonAnagramas</span>(<span class="string">'Roma'</span>, <span class="string">'amor'</span>));       <span class="comment">// true</span>
+console.<span class="function">log</span>(<span class="function">sonAnagramas</span>(<span class="string">'Hola'</span>, <span class="string">'Mundo'</span>));     <span class="comment">// false</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 9 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-9-circle me-2"></i>Agrupar por Propiedad</h5>
+                <span class="difficulty difficulty-medium">Medio</span>
+            </div>
+            <p>Agrupa un array de objetos por una propiedad específica.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">const</span> products = [
+    { name: <span class="string">'Laptop'</span>, category: <span class="string">'electronics'</span> },
+    { name: <span class="string">'Shirt'</span>, category: <span class="string">'clothing'</span> },
+    { name: <span class="string">'Phone'</span>, category: <span class="string">'electronics'</span> },
+    { name: <span class="string">'Pants'</span>, category: <span class="string">'clothing'</span> }
+];
+
+<span class="comment">// Solución 1: Con reduce</span>
+<span class="keyword">function</span> <span class="function">groupBy</span>(arr, key) {
+    <span class="keyword">return</span> arr.<span class="function">reduce</span>((groups, item) => {
+        <span class="keyword">const</span> group = item[key];
+        groups[group] = groups[group] || [];
+        groups[group].<span class="function">push</span>(item);
+        <span class="keyword">return</span> groups;
+    }, {});
+}
+
+<span class="comment">// Solución 2: Object.groupBy (ES2024)</span>
+<span class="comment">// const grouped = Object.groupBy(products, p => p.category);</span>
+
+<span class="comment">// Solución 3: Con función callback</span>
+<span class="keyword">function</span> <span class="function">groupByFn</span>(arr, fn) {
+    <span class="keyword">return</span> arr.<span class="function">reduce</span>((groups, item) => {
+        <span class="keyword">const</span> key = <span class="function">fn</span>(item);
+        (groups[key] ||= []).<span class="function">push</span>(item);
+        <span class="keyword">return</span> groups;
+    }, {});
+}
+
+console.<span class="function">log</span>(<span class="function">groupBy</span>(products, <span class="string">'category'</span>));
+<span class="comment">// {</span>
+<span class="comment">//   electronics: [{name: 'Laptop'...}, {name: 'Phone'...}],</span>
+<span class="comment">//   clothing: [{name: 'Shirt'...}, {name: 'Pants'...}]</span>
+<span class="comment">// }</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 10 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-0-circle me-2"></i>Debounce</h5>
+                <span class="difficulty difficulty-medium">Medio</span>
+            </div>
+            <p>Implementa una función debounce que retrasa la ejecución hasta que dejen de llamarla.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">function</span> <span class="function">debounce</span>(fn, delay) {
+    <span class="keyword">let</span> timeoutId;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="comment">// Cancelar timeout anterior</span>
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        <span class="comment">// Programar nueva ejecución</span>
+        timeoutId = <span class="function">setTimeout</span>(() => {
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }, delay);
+    };
+}
+
+<span class="comment">// Versión con ejecución inmediata opcional</span>
+<span class="keyword">function</span> <span class="function">debounceAdvanced</span>(fn, delay, immediate = <span class="keyword">false</span>) {
+    <span class="keyword">let</span> timeoutId;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> callNow = immediate && !timeoutId;
+        
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        timeoutId = <span class="function">setTimeout</span>(() => {
+            timeoutId = <span class="keyword">null</span>;
+            <span class="keyword">if</span> (!immediate) fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }, delay);
+        
+        <span class="keyword">if</span> (callNow) fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+    };
+}
+
+<span class="comment">// Uso en búsqueda</span>
+<span class="keyword">const</span> searchInput = document.<span class="function">getElementById</span>(<span class="string">'search'</span>);
+<span class="keyword">const</span> debouncedSearch = <span class="function">debounce</span>((query) => {
+    console.<span class="function">log</span>(<span class="string">'Buscando:'</span>, query);
+    <span class="function">fetchResults</span>(query);
+}, <span class="number">300</span>);
+
+searchInput.<span class="function">addEventListener</span>(<span class="string">'input'</span>, e => <span class="function">debouncedSearch</span>(e.target.value));</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 11 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-hash me-2"></i>Throttle</h5>
+                <span class="difficulty difficulty-medium">Medio</span>
+            </div>
+            <p>Implementa una función throttle que limite la frecuencia de ejecución.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">function</span> <span class="function">throttle</span>(fn, limit) {
+    <span class="keyword">let</span> inThrottle = <span class="keyword">false</span>;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">if</span> (!inThrottle) {
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+            inThrottle = <span class="keyword">true</span>;
+            <span class="function">setTimeout</span>(() => inThrottle = <span class="keyword">false</span>, limit);
+        }
+    };
+}
+
+<span class="comment">// Versión con última llamada garantizada</span>
+<span class="keyword">function</span> <span class="function">throttleTrailing</span>(fn, limit) {
+    <span class="keyword">let</span> lastCall = <span class="number">0</span>;
+    <span class="keyword">let</span> timeoutId;
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+        <span class="keyword">const</span> remaining = limit - (now - lastCall);
+        
+        <span class="function">clearTimeout</span>(timeoutId);
+        
+        <span class="keyword">if</span> (remaining <= <span class="number">0</span>) {
+            lastCall = now;
+            fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        } <span class="keyword">else</span> {
+            timeoutId = <span class="function">setTimeout</span>(() => {
+                lastCall = Date.<span class="function">now</span>();
+                fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+            }, remaining);
+        }
+    };
+}
+
+<span class="comment">// Uso para scroll</span>
+window.<span class="function">addEventListener</span>(<span class="string">'scroll'</span>, <span class="function">throttle</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Scroll position:'</span>, window.scrollY);
+}, <span class="number">100</span>));</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 12 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-braces me-2"></i>Deep Clone</h5>
+                <span class="difficulty difficulty-hard">Difícil</span>
+            </div>
+            <p>Implementa una función para clonar objetos profundamente (nested objects).</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Solución 1: structuredClone (moderno)</span>
+<span class="keyword">const</span> cloned = <span class="function">structuredClone</span>(original);
+
+<span class="comment">// Solución 2: JSON (no funciona con funciones/undefined)</span>
+<span class="keyword">const</span> clonedJSON = JSON.<span class="function">parse</span>(JSON.<span class="function">stringify</span>(original));
+
+<span class="comment">// Solución 3: Recursiva completa</span>
+<span class="keyword">function</span> <span class="function">deepClone</span>(obj, hash = <span class="keyword">new</span> <span class="function">WeakMap</span>()) {
+    <span class="comment">// Primitivos</span>
+    <span class="keyword">if</span> (obj === <span class="keyword">null</span> || <span class="keyword">typeof</span> obj !== <span class="string">'object'</span>) {
+        <span class="keyword">return</span> obj;
+    }
+    
+    <span class="comment">// Detectar referencias circulares</span>
+    <span class="keyword">if</span> (hash.<span class="function">has</span>(obj)) {
+        <span class="keyword">return</span> hash.<span class="function">get</span>(obj);
+    }
+    
+    <span class="comment">// Date</span>
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Date) {
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Date</span>(obj);
+    }
+    
+    <span class="comment">// Array</span>
+    <span class="keyword">if</span> (Array.<span class="function">isArray</span>(obj)) {
+        <span class="keyword">const</span> arrCopy = [];
+        hash.<span class="function">set</span>(obj, arrCopy);
+        obj.<span class="function">forEach</span>((item, i) => {
+            arrCopy[i] = <span class="function">deepClone</span>(item, hash);
+        });
+        <span class="keyword">return</span> arrCopy;
+    }
+    
+    <span class="comment">// Map</span>
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Map) {
+        <span class="keyword">const</span> mapCopy = <span class="keyword">new</span> <span class="function">Map</span>();
+        hash.<span class="function">set</span>(obj, mapCopy);
+        obj.<span class="function">forEach</span>((val, key) => {
+            mapCopy.<span class="function">set</span>(<span class="function">deepClone</span>(key, hash), <span class="function">deepClone</span>(val, hash));
+        });
+        <span class="keyword">return</span> mapCopy;
+    }
+    
+    <span class="comment">// Set</span>
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Set) {
+        <span class="keyword">const</span> setCopy = <span class="keyword">new</span> <span class="function">Set</span>();
+        hash.<span class="function">set</span>(obj, setCopy);
+        obj.<span class="function">forEach</span>(val => {
+            setCopy.<span class="function">add</span>(<span class="function">deepClone</span>(val, hash));
+        });
+        <span class="keyword">return</span> setCopy;
+    }
+    
+    <span class="comment">// Objetos normales</span>
+    <span class="keyword">const</span> objCopy = Object.<span class="function">create</span>(Object.<span class="function">getPrototypeOf</span>(obj));
+    hash.<span class="function">set</span>(obj, objCopy);
+    
+    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">of</span> Reflect.<span class="function">ownKeys</span>(obj)) {
+        objCopy[key] = <span class="function">deepClone</span>(obj[key], hash);
+    }
+    
+    <span class="keyword">return</span> objCopy;
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 13 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-diagram-2 me-2"></i>Curry</h5>
+                <span class="difficulty difficulty-hard">Difícil</span>
+            </div>
+            <p>Implementa una función curry que transforme funciones de múltiples argumentos.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="comment">// Curry básico</span>
+<span class="keyword">function</span> <span class="function">curry</span>(fn) {
+    <span class="keyword">return</span> <span class="keyword">function</span> curried(...args) {
+        <span class="keyword">if</span> (args.length >= fn.length) {
+            <span class="keyword">return</span> fn.<span class="function">apply</span>(<span class="keyword">this</span>, args);
+        }
+        <span class="keyword">return</span> <span class="keyword">function</span>(...moreArgs) {
+            <span class="keyword">return</span> curried.<span class="function">apply</span>(<span class="keyword">this</span>, args.<span class="function">concat</span>(moreArgs));
+        };
+    };
+}
+
+<span class="comment">// Ejemplo</span>
+<span class="keyword">const</span> suma = (a, b, c) => a + b + c;
+<span class="keyword">const</span> sumaCurried = <span class="function">curry</span>(suma);
+
+console.<span class="function">log</span>(<span class="function">sumaCurried</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>));     <span class="comment">// 6</span>
+console.<span class="function">log</span>(<span class="function">sumaCurried</span>(<span class="number">1</span>, <span class="number">2</span>)(<span class="number">3</span>));    <span class="comment">// 6</span>
+console.<span class="function">log</span>(<span class="function">sumaCurried</span>(<span class="number">1</span>)(<span class="number">2</span>, <span class="number">3</span>));    <span class="comment">// 6</span>
+
+<span class="comment">// Aplicación práctica</span>
+<span class="keyword">const</span> filter = <span class="function">curry</span>((predicate, array) => array.<span class="function">filter</span>(predicate));
+<span class="keyword">const</span> map = <span class="function">curry</span>((transform, array) => array.<span class="function">map</span>(transform));
+
+<span class="keyword">const</span> filterAdults = <span class="function">filter</span>(p => p.age >= <span class="number">18</span>);
+<span class="keyword">const</span> getNames = <span class="function">map</span>(p => p.name);
+
+<span class="keyword">const</span> people = [
+    { name: <span class="string">'Ana'</span>, age: <span class="number">25</span> },
+    { name: <span class="string">'Bob'</span>, age: <span class="number">15</span> },
+    { name: <span class="string">'Carlos'</span>, age: <span class="number">30</span> }
+];
+
+<span class="keyword">const</span> adultNames = <span class="function">getNames</span>(<span class="function">filterAdults</span>(people));
+console.<span class="function">log</span>(adultNames); <span class="comment">// ['Ana', 'Carlos']</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 14 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-arrow-repeat me-2"></i>Promise.all desde cero</h5>
+                <span class="difficulty difficulty-hard">Difícil</span>
+            </div>
+            <p>Implementa tu propia versión de Promise.all.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">function</span> <span class="function">promiseAll</span>(promises) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Promise</span>((resolve, reject) => {
+        <span class="keyword">const</span> results = [];
+        <span class="keyword">let</span> completed = <span class="number">0</span>;
+        
+        <span class="keyword">if</span> (promises.length === <span class="number">0</span>) {
+            <span class="function">resolve</span>(results);
+            <span class="keyword">return</span>;
+        }
+        
+        promises.<span class="function">forEach</span>((promise, index) => {
+            Promise.<span class="function">resolve</span>(promise)
+                .<span class="function">then</span>(value => {
+                    results[index] = value;
+                    completed++;
+                    
+                    <span class="keyword">if</span> (completed === promises.length) {
+                        <span class="function">resolve</span>(results);
+                    }
+                })
+                .<span class="function">catch</span>(reject); <span class="comment">// Primera que falle, rechaza todo</span>
+        });
+    });
+}
+
+<span class="comment">// También Promise.allSettled</span>
+<span class="keyword">function</span> <span class="function">promiseAllSettled</span>(promises) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Promise</span>((resolve) => {
+        <span class="keyword">const</span> results = [];
+        <span class="keyword">let</span> completed = <span class="number">0</span>;
+        
+        <span class="keyword">if</span> (promises.length === <span class="number">0</span>) {
+            <span class="function">resolve</span>(results);
+            <span class="keyword">return</span>;
+        }
+        
+        promises.<span class="function">forEach</span>((promise, index) => {
+            Promise.<span class="function">resolve</span>(promise)
+                .<span class="function">then</span>(value => {
+                    results[index] = { status: <span class="string">'fulfilled'</span>, value };
+                })
+                .<span class="function">catch</span>(reason => {
+                    results[index] = { status: <span class="string">'rejected'</span>, reason };
+                })
+                .<span class="function">finally</span>(() => {
+                    completed++;
+                    <span class="keyword">if</span> (completed === promises.length) {
+                        <span class="function">resolve</span>(results);
+                    }
+                });
+        });
+    });
+}
+
+<span class="comment">// Test</span>
+<span class="keyword">const</span> p1 = Promise.<span class="function">resolve</span>(<span class="number">1</span>);
+<span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="function">Promise</span>(r => <span class="function">setTimeout</span>(() => <span class="function">r</span>(<span class="number">2</span>), <span class="number">100</span>));
+<span class="keyword">const</span> p3 = Promise.<span class="function">resolve</span>(<span class="number">3</span>);
+
+<span class="function">promiseAll</span>([p1, p2, p3]).<span class="function">then</span>(console.log); <span class="comment">// [1, 2, 3]</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 15 -->
+        <div class="exercise-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="bi bi-list-nested me-2"></i>EventEmitter</h5>
+                <span class="difficulty difficulty-hard">Difícil</span>
+            </div>
+            <p>Implementa un sistema de eventos pub/sub completo.</p>
+            
+            <div class="solution-toggle alert alert-info" onclick="toggleSolution(this)">
+                <i class="bi bi-lightbulb me-2"></i>Click para ver solución
+            </div>
+            <div class="solution-content">
+                <div class="code-block">
+                    <button class="btn-copy" onclick="copyCode(this)">Copiar</button>
+                    <pre>
+<span class="keyword">class</span> <span class="function">EventEmitter</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.events = <span class="keyword">new</span> <span class="function">Map</span>();
+    }
+    
+    <span class="comment">// Suscribirse</span>
+    <span class="function">on</span>(event, listener) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.events.<span class="function">has</span>(event)) {
+            <span class="keyword">this</span>.events.<span class="function">set</span>(event, []);
+        }
+        <span class="keyword">this</span>.events.<span class="function">get</span>(event).<span class="function">push</span>(listener);
+        
+        <span class="comment">// Retorna función para desuscribirse</span>
+        <span class="keyword">return</span> () => <span class="keyword">this</span>.<span class="function">off</span>(event, listener);
+    }
+    
+    <span class="comment">// Suscripción única</span>
+    <span class="function">once</span>(event, listener) {
+        <span class="keyword">const</span> wrapper = (...args) => {
+            <span class="function">listener</span>(...args);
+            <span class="keyword">this</span>.<span class="function">off</span>(event, wrapper);
+        };
+        wrapper.original = listener;
+        <span class="keyword">this</span>.<span class="function">on</span>(event, wrapper);
+    }
+    
+    <span class="comment">// Desuscribirse</span>
+    <span class="function">off</span>(event, listener) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.events.<span class="function">has</span>(event)) <span class="keyword">return</span>;
+        
+        <span class="keyword">const</span> listeners = <span class="keyword">this</span>.events.<span class="function">get</span>(event);
+        <span class="keyword">const</span> index = listeners.<span class="function">findIndex</span>(
+            l => l === listener || l.original === listener
+        );
+        
+        <span class="keyword">if</span> (index > -<span class="number">1</span>) listeners.<span class="function">splice</span>(index, <span class="number">1</span>);
+    }
+    
+    <span class="comment">// Emitir evento</span>
+    <span class="function">emit</span>(event, ...args) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.events.<span class="function">has</span>(event)) <span class="keyword">return</span> <span class="keyword">false</span>;
+        
+        <span class="keyword">this</span>.events.<span class="function">get</span>(event).<span class="function">forEach</span>(listener => {
+            <span class="function">listener</span>(...args);
+        });
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+    
+    <span class="comment">// Eliminar todos los listeners</span>
+    <span class="function">removeAllListeners</span>(event) {
+        <span class="keyword">if</span> (event) {
+            <span class="keyword">this</span>.events.<span class="function">delete</span>(event);
+        } <span class="keyword">else</span> {
+            <span class="keyword">this</span>.events.<span class="function">clear</span>();
+        }
+    }
+    
+    <span class="comment">// Contar listeners</span>
+    <span class="function">listenerCount</span>(event) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.events.<span class="function">has</span>(event) 
+            ? <span class="keyword">this</span>.events.<span class="function">get</span>(event).length 
+            : <span class="number">0</span>;
+    }
+}
+
+<span class="comment">// Uso</span>
+<span class="keyword">const</span> emitter = <span class="keyword">new</span> <span class="function">EventEmitter</span>();
+
+emitter.<span class="function">on</span>(<span class="string">'message'</span>, (msg) => console.<span class="function">log</span>(<span class="string">'Recibido:'</span>, msg));
+emitter.<span class="function">once</span>(<span class="string">'connect'</span>, () => console.<span class="function">log</span>(<span class="string">'Conectado!'</span>));
+
+emitter.<span class="function">emit</span>(<span class="string">'connect'</span>);  <span class="comment">// "Conectado!"</span>
+emitter.<span class="function">emit</span>(<span class="string">'connect'</span>);  <span class="comment">// (nada - solo una vez)</span>
+emitter.<span class="function">emit</span>(<span class="string">'message'</span>, <span class="string">'Hola!'</span>); <span class="comment">// "Recibido: Hola!"</span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Interactivo -->
+        <div class="card mt-5">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-play-fill me-2"></i>Prueba los Ejercicios
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Selecciona un ejercicio:</label>
+                    <select id="exerciseSelect" class="form-select">
+                        <option value="fizzbuzz">FizzBuzz (1-20)</option>
+                        <option value="palindromo">Palíndromo</option>
+                        <option value="vocales">Contar Vocales</option>
+                        <option value="duplicados">Eliminar Duplicados</option>
+                        <option value="factorial">Factorial</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Input:</label>
+                    <input type="text" id="exerciseInput" class="form-control" placeholder="Ingresa un valor...">
+                </div>
+                <button class="btn btn-success" onclick="runExercise()">
+                    <i class="bi bi-play me-2"></i>Ejecutar
+                </button>
+                <div id="exerciseOutput" class="mt-3 p-3 bg-dark text-light rounded" style="display:none;">
+                    <pre id="outputText"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="patrones.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Patrones de Diseño
+            </a>
+            <a href="../index.html" class="btn btn-primary">
+                Volver al Inicio<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Ejercicios Prácticos JavaScript | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSolution(element) {
+            const content = element.nextElementSibling;
+            content.classList.toggle('show');
+            if (content.classList.contains('show')) {
+                element.innerHTML = '<i class="bi bi-eye-slash me-2"></i>Click para ocultar solución';
+            } else {
+                element.innerHTML = '<i class="bi bi-lightbulb me-2"></i>Click para ver solución';
+            }
+        }
+        
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = '¡Copiado!';
+                setTimeout(() => btn.textContent = 'Copiar', 2000);
+            });
+        }
+        
+        // Funciones para el demo
+        function esPalindromo(str) {
+            const limpia = str.toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]/g, '');
+            return limpia === limpia.split('').reverse().join('');
+        }
+        
+        function contarVocales(str) {
+            const matches = str.match(/[aeiouáéíóúü]/gi);
+            return matches ? matches.length : 0;
+        }
+        
+        function eliminarDuplicados(arr) {
+            return [...new Set(arr)];
+        }
+        
+        function factorial(n) {
+            if (n < 0) return undefined;
+            if (n <= 1) return 1;
+            return n * factorial(n - 1);
+        }
+        
+        function runExercise() {
+            const exercise = document.getElementById('exerciseSelect').value;
+            const input = document.getElementById('exerciseInput').value;
+            const outputDiv = document.getElementById('exerciseOutput');
+            const outputText = document.getElementById('outputText');
+            
+            let result = '';
+            
+            switch(exercise) {
+                case 'fizzbuzz':
+                    for (let i = 1; i <= 20; i++) {
+                        let output = '';
+                        if (i % 3 === 0) output += 'Fizz';
+                        if (i % 5 === 0) output += 'Buzz';
+                        result += (output || i) + '\n';
+                    }
+                    break;
+                case 'palindromo':
+                    result = `"${input}" es palíndromo: ${esPalindromo(input)}`;
+                    break;
+                case 'vocales':
+                    result = `"${input}" tiene ${contarVocales(input)} vocales`;
+                    break;
+                case 'duplicados':
+                    const arr = input.split(',').map(x => x.trim());
+                    result = `Original: [${arr.join(', ')}]\nSin duplicados: [${eliminarDuplicados(arr).join(', ')}]`;
+                    break;
+                case 'factorial':
+                    const n = parseInt(input);
+                    result = `${n}! = ${factorial(n)}`;
+                    break;
+            }
+            
+            outputDiv.style.display = 'block';
+            outputText.textContent = result;
+        }
+    </script>
+</body>
+</html>

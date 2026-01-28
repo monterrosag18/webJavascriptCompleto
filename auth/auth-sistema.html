@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Autenticación - Funcional</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+        }
+        
+        .auth-sidebar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 50px 40px;
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .auth-sidebar h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .auth-sidebar p {
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .feature-list i {
+            color: #00ff88;
+            font-size: 1.2rem;
+        }
+        
+        .auth-form-container {
+            flex: 1;
+            padding: 50px 40px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 30px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 5px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            padding: 14px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+        }
+        
+        .input-group .form-control {
+            border-right: none;
+        }
+        
+        .input-group-text {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+        }
+        
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+            color: white;
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16,185,129,0.4);
+            color: white;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            color: #9ca3af;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-social {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-social:hover {
+            border-color: var(--primary);
+            background: #f9fafb;
+        }
+        
+        /* Alert */
+        .auth-alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .auth-alert.show {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .auth-alert.success { background: rgba(16,185,129,0.15); color: var(--success); }
+        .auth-alert.error { background: rgba(239,68,68,0.15); color: var(--danger); }
+        
+        /* Password strength */
+        .password-strength {
+            margin-top: 10px;
+        }
+        
+        .strength-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+        
+        .strength-text {
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        
+        /* Code explanation */
+        .code-panel {
+            background: #f8fafc;
+            border-top: 1px solid #e5e7eb;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 400px;
+        }
+        
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-card {
+                flex-direction: column;
+            }
+            .auth-sidebar {
+                padding: 30px;
+            }
+        }
+        
+        /* Back button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="btn btn-light back-btn">
+        <i class="bi bi-arrow-left me-2"></i>Volver
+    </a>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Sidebar -->
+            <div class="auth-sidebar">
+                <h2>🚀 Sistema de Auth</h2>
+                <p>Sistema completo de autenticación con localStorage. Los usuarios se guardan y pueden verse desde el panel admin.</p>
+                
+                <ul class="feature-list">
+                    <li><i class="bi bi-check-circle-fill"></i>Registro con validación</li>
+                    <li><i class="bi bi-check-circle-fill"></i>Login persistente</li>
+                    <li><i class="bi bi-check-circle-fill"></i>Datos guardados en localStorage</li>
+                    <li><i class="bi bi-check-circle-fill"></i>Integrado con panel Admin</li>
+                    <li><i class="bi bi-check-circle-fill"></i>Panel de usuario disponible</li>
+                </ul>
+                
+                <div class="mt-4">
+                    <a href="../admin/index.html" class="btn btn-outline-light btn-sm me-2">
+                        <i class="bi bi-speedometer2 me-1"></i>Panel Admin
+                    </a>
+                    <a href="../usuario/mi-cuenta.html" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-person me-1"></i>Mi Cuenta
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="auth-form-container">
+                <!-- Tab Buttons -->
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="showForm('login')">Iniciar Sesión</button>
+                    <button class="tab-btn" onclick="showForm('register')">Registrarse</button>
+                </div>
+                
+                <!-- Alert -->
+                <div id="authAlert" class="auth-alert">
+                    <i class="bi bi-info-circle"></i>
+                    <span id="alertMessage"></span>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="tu@email.com" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+                            <span class="input-group-text" onclick="togglePassword('loginPassword')">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Recordarme</label>
+                        </div>
+                        <a href="#" class="text-primary text-decoration-none small">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-auth btn-login mb-3">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                    </button>
+                    
+                    <p class="text-center text-muted small">
+                        Prueba con: <strong>admin@test.com / admin123</strong>
+                    </p>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="registerName" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="registerLastName" placeholder="Tu apellido">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="registerEmail" placeholder="tu@email.com" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="registerPassword" placeholder="Mínimo 6 caracteres" required minlength="6" oninput="checkPasswordStrength()">
+                            <span class="input-group-text" onclick="togglePassword('registerPassword')">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <small class="strength-text" id="strengthText">Ingresa una contraseña</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Repite tu contraseña" required>
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+                        <label class="form-check-label" for="acceptTerms">
+                            Acepto los <a href="#" class="text-primary">términos y condiciones</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-auth btn-register">
+                        <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+                    </button>
+                </form>
+                
+                <!-- Social Login -->
+                <div class="divider">o continúa con</div>
+                
+                <div class="social-buttons">
+                    <button class="btn-social" onclick="socialLogin('google')">
+                        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#EA4335" d="M5.26620003,9.76452941 C6.19878754,6.93863203 8.85444915,4.90909091 12,4.90909091 C13.6909091,4.90909091 15.2181818,5.50909091 16.4181818,6.49090909 L19.9090909,3 C17.7818182,1.14545455 15.0545455,0 12,0 C7.27006974,0 3.1977497,2.69829785 1.23999023,6.65002441 L5.26620003,9.76452941 Z"/><path fill="#34A853" d="M16.0407269,18.0125889 C14.9509167,18.7163016 13.5660892,19.0909091 12,19.0909091 C8.86648613,19.0909091 6.21911939,17.076871 5.27698177,14.2678769 L1.23746264,17.3349879 C3.19279051,21.2936293 7.26500293,24 12,24 C14.9328362,24 17.7353462,22.9573905 19.834192,20.9995801 L16.0407269,18.0125889 Z"/><path fill="#4A90E2" d="M19.834192,20.9995801 C22.0291676,18.9520994 23.4545455,15.903663 23.4545455,12 C23.4545455,11.2909091 23.3454545,10.5272727 23.1818182,9.81818182 L12,9.81818182 L12,14.4545455 L18.4363636,14.4545455 C18.1187732,16.013626 17.2662994,17.2212117 16.0407269,18.0125889 L19.834192,20.9995801 Z"/><path fill="#FBBC05" d="M5.27698177,14.2678769 C5.03832634,13.556323 4.90909091,12.7937589 4.90909091,12 C4.90909091,11.2182781 5.03443647,10.4668121 5.26620003,9.76452941 L1.23999023,6.65002441 C0.43658717,8.26043162 0,10.0753848 0,12 C0,13.9195484 0.444780743,15.7## L1.23746264,17.3349879 L5.27698177,14.2678769 Z"/></svg>
+                        Google
+                    </button>
+                    <button class="btn-social" onclick="socialLogin('github')">
+                        <i class="bi bi-github" style="font-size: 1.2rem;"></i>
+                        GitHub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Explanation Panel -->
+    <div class="container py-5">
+        <div class="bg-white rounded-4 shadow-sm p-4">
+            <h4 class="fw-bold mb-4">
+                <i class="bi bi-code-slash text-primary me-2"></i>
+                Código del Sistema de Autenticación
+            </h4>
+            
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#codeAuth">auth.js</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#codeValidation">validation.js</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#codeStorage">storage.js</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content mt-3">
+                <div class="tab-pane fade show active" id="codeAuth">
+                    <div class="code-block">
+<pre><span class="comment">/**
+ * SISTEMA DE AUTENTICACIÓN COMPLETO
+ * Guarda usuarios en localStorage para que el Admin los vea
+ */</span>
+
+<span class="comment">// ====== MANEJAR REGISTRO ======</span>
+<span class="keyword">async function</span> <span class="function">handleRegister</span>(event) {
+    event.<span class="function">preventDefault</span>();
+    
+    <span class="keyword">const</span> nombre = document.<span class="function">getElementById</span>(<span class="string">'registerName'</span>).value;
+    <span class="keyword">const</span> apellido = document.<span class="function">getElementById</span>(<span class="string">'registerLastName'</span>).value;
+    <span class="keyword">const</span> email = document.<span class="function">getElementById</span>(<span class="string">'registerEmail'</span>).value;
+    <span class="keyword">const</span> password = document.<span class="function">getElementById</span>(<span class="string">'registerPassword'</span>).value;
+    <span class="keyword">const</span> confirmPassword = document.<span class="function">getElementById</span>(<span class="string">'registerConfirmPassword'</span>).value;
+    
+    <span class="comment">// Validaciones</span>
+    <span class="keyword">if</span> (password !== confirmPassword) {
+        <span class="function">showAlert</span>(<span class="string">'Las contraseñas no coinciden'</span>, <span class="string">'error'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Obtener usuarios existentes</span>
+    <span class="keyword">const</span> users = JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'registeredUsers'</span>)) || [];
+    
+    <span class="comment">// Verificar si el email ya existe</span>
+    <span class="keyword">if</span> (users.<span class="function">find</span>(u => u.email === email)) {
+        <span class="function">showAlert</span>(<span class="string">'Este email ya está registrado'</span>, <span class="string">'error'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Crear nuevo usuario</span>
+    <span class="keyword">const</span> newUser = {
+        id: Date.<span class="function">now</span>(),
+        nombre: nombre + <span class="string">' '</span> + apellido,
+        email: email,
+        password: password, <span class="comment">// En producción: NUNCA guardar contraseña en texto plano</span>
+        fechaRegistro: <span class="keyword">new</span> Date().<span class="function">toISOString</span>(),
+        activo: <span class="keyword">true</span>,
+        rol: <span class="string">'usuario'</span>
+    };
+    
+    <span class="comment">// Guardar en localStorage</span>
+    users.<span class="function">push</span>(newUser);
+    localStorage.<span class="function">setItem</span>(<span class="string">'registeredUsers'</span>, JSON.<span class="function">stringify</span>(users));
+    
+    <span class="comment">// Auto-login después del registro</span>
+    localStorage.<span class="function">setItem</span>(<span class="string">'currentUser'</span>, JSON.<span class="function">stringify</span>(newUser));
+    
+    <span class="function">showAlert</span>(<span class="string">'¡Cuenta creada exitosamente!'</span>, <span class="string">'success'</span>);
+    
+    <span class="comment">// Redirigir al panel de usuario</span>
+    <span class="function">setTimeout</span>(() => {
+        window.location.href = <span class="string">'../usuario/mi-cuenta.html'</span>;
+    }, 1500);
+}
+
+<span class="comment">// ====== MANEJAR LOGIN ======</span>
+<span class="keyword">async function</span> <span class="function">handleLogin</span>(event) {
+    event.<span class="function">preventDefault</span>();
+    
+    <span class="keyword">const</span> email = document.<span class="function">getElementById</span>(<span class="string">'loginEmail'</span>).value;
+    <span class="keyword">const</span> password = document.<span class="function">getElementById</span>(<span class="string">'loginPassword'</span>).value;
+    
+    <span class="comment">// Obtener usuarios</span>
+    <span class="keyword">const</span> users = JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'registeredUsers'</span>)) || [];
+    
+    <span class="comment">// Verificar credenciales de admin</span>
+    <span class="keyword">if</span> (email === <span class="string">'admin@test.com'</span> && password === <span class="string">'admin123'</span>) {
+        <span class="keyword">const</span> adminUser = { id: 0, nombre: <span class="string">'Admin'</span>, email, rol: <span class="string">'admin'</span> };
+        localStorage.<span class="function">setItem</span>(<span class="string">'currentUser'</span>, JSON.<span class="function">stringify</span>(adminUser));
+        <span class="function">showAlert</span>(<span class="string">'¡Bienvenido Admin!'</span>, <span class="string">'success'</span>);
+        <span class="function">setTimeout</span>(() => window.location.href = <span class="string">'../admin/index.html'</span>, 1000);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Buscar usuario normal</span>
+    <span class="keyword">const</span> user = users.<span class="function">find</span>(u => u.email === email && u.password === password);
+    
+    <span class="keyword">if</span> (!user) {
+        <span class="function">showAlert</span>(<span class="string">'Credenciales incorrectas'</span>, <span class="string">'error'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="keyword">if</span> (!user.activo) {
+        <span class="function">showAlert</span>(<span class="string">'Tu cuenta está desactivada'</span>, <span class="string">'error'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Guardar sesión</span>
+    localStorage.<span class="function">setItem</span>(<span class="string">'currentUser'</span>, JSON.<span class="function">stringify</span>(user));
+    
+    <span class="function">showAlert</span>(<span class="string">'¡Bienvenido '</span> + user.nombre + <span class="string">'!'</span>, <span class="string">'success'</span>);
+    
+    <span class="comment">// Redirigir según rol</span>
+    <span class="function">setTimeout</span>(() => {
+        window.location.href = user.rol === <span class="string">'admin'</span> 
+            ? <span class="string">'../admin/index.html'</span> 
+            : <span class="string">'../usuario/mi-cuenta.html'</span>;
+    }, 1000);
+}</pre>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="codeValidation">
+                    <div class="code-block">
+<pre><span class="comment">/**
+ * VALIDACIÓN DE FORMULARIOS
+ */</span>
+
+<span class="comment">// Verificar fuerza de contraseña</span>
+<span class="keyword">function</span> <span class="function">checkPasswordStrength</span>() {
+    <span class="keyword">const</span> password = document.<span class="function">getElementById</span>(<span class="string">'registerPassword'</span>).value;
+    <span class="keyword">const</span> fill = document.<span class="function">getElementById</span>(<span class="string">'strengthFill'</span>);
+    <span class="keyword">const</span> text = document.<span class="function">getElementById</span>(<span class="string">'strengthText'</span>);
+    
+    <span class="keyword">let</span> strength = 0;
+    <span class="keyword">let</span> label = <span class="string">'Muy débil'</span>;
+    <span class="keyword">let</span> color = <span class="string">'#ef4444'</span>;
+    
+    <span class="comment">// Criterios de fuerza</span>
+    <span class="keyword">if</span> (password.length >= 6) strength++;
+    <span class="keyword">if</span> (password.length >= 8) strength++;
+    <span class="keyword">if</span> (/[A-Z]/.<span class="function">test</span>(password)) strength++;
+    <span class="keyword">if</span> (/[0-9]/.<span class="function">test</span>(password)) strength++;
+    <span class="keyword">if</span> (/[!@#$%^&*]/.<span class="function">test</span>(password)) strength++;
+    
+    <span class="comment">// Determinar nivel</span>
+    <span class="keyword">switch</span>(strength) {
+        <span class="keyword">case</span> 1: label = <span class="string">'Débil'</span>; color = <span class="string">'#f59e0b'</span>; <span class="keyword">break</span>;
+        <span class="keyword">case</span> 2: label = <span class="string">'Regular'</span>; color = <span class="string">'#eab308'</span>; <span class="keyword">break</span>;
+        <span class="keyword">case</span> 3: label = <span class="string">'Buena'</span>; color = <span class="string">'#22c55e'</span>; <span class="keyword">break</span>;
+        <span class="keyword">case</span> 4: label = <span class="string">'Fuerte'</span>; color = <span class="string">'#10b981'</span>; <span class="keyword">break</span>;
+        <span class="keyword">case</span> 5: label = <span class="string">'Muy fuerte'</span>; color = <span class="string">'#059669'</span>; <span class="keyword">break</span>;
+    }
+    
+    fill.style.width = (strength * 20) + <span class="string">'%'</span>;
+    fill.style.background = color;
+    text.textContent = label;
+    text.style.color = color;
+}
+
+<span class="comment">// Mostrar/Ocultar contraseña</span>
+<span class="keyword">function</span> <span class="function">togglePassword</span>(inputId) {
+    <span class="keyword">const</span> input = document.<span class="function">getElementById</span>(inputId);
+    <span class="keyword">const</span> icon = input.nextElementSibling.<span class="function">querySelector</span>(<span class="string">'i'</span>);
+    
+    <span class="keyword">if</span> (input.type === <span class="string">'password'</span>) {
+        input.type = <span class="string">'text'</span>;
+        icon.className = <span class="string">'bi bi-eye-slash'</span>;
+    } <span class="keyword">else</span> {
+        input.type = <span class="string">'password'</span>;
+        icon.className = <span class="string">'bi bi-eye'</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="codeStorage">
+                    <div class="code-block">
+<pre><span class="comment">/**
+ * MANEJO DE localStorage
+ * 
+ * Claves usadas:
+ * - registeredUsers: Array de todos los usuarios registrados
+ * - currentUser: Usuario actualmente logueado
+ * - allOrders: Todos los pedidos (para el Admin)
+ */</span>
+
+<span class="comment">// ====== ESTRUCTURA DE USUARIO ======</span>
+<span class="keyword">const</span> userSchema = {
+    id: Number,           <span class="comment">// ID único (timestamp)</span>
+    nombre: String,       <span class="comment">// Nombre completo</span>
+    email: String,        <span class="comment">// Email único</span>
+    password: String,     <span class="comment">// Contraseña (en producción: hash)</span>
+    fechaRegistro: String,<span class="comment">// ISO date</span>
+    activo: Boolean,      <span class="comment">// Si puede hacer login</span>
+    rol: String           <span class="comment">// 'usuario' o 'admin'</span>
+};
+
+<span class="comment">// ====== ESTRUCTURA DE PEDIDO ======</span>
+<span class="keyword">const</span> orderSchema = {
+    id: String,           <span class="comment">// ID del pedido</span>
+    fecha: String,        <span class="comment">// ISO date</span>
+    cliente: String,      <span class="comment">// Nombre del cliente</span>
+    email: String,        <span class="comment">// Email del cliente</span>
+    productos: Array,     <span class="comment">// Lista de productos</span>
+    subtotal: Number,
+    envio: Number,
+    descuento: Number,
+    total: Number,
+    estado: String,       <span class="comment">// pendiente/procesando/enviado/entregado</span>
+    direccion: Object,    <span class="comment">// Dirección de envío</span>
+    metodoPago: String
+};
+
+<span class="comment">// ====== FUNCIONES ÚTILES ======</span>
+<span class="keyword">function</span> <span class="function">getUsers</span>() {
+    <span class="keyword">return</span> JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'registeredUsers'</span>)) || [];
+}
+
+<span class="keyword">function</span> <span class="function">getCurrentUser</span>() {
+    <span class="keyword">return</span> JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'currentUser'</span>));
+}
+
+<span class="keyword">function</span> <span class="function">getOrders</span>() {
+    <span class="keyword">return</span> JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'allOrders'</span>)) || [];
+}
+
+<span class="keyword">function</span> <span class="function">logout</span>() {
+    localStorage.<span class="function">removeItem</span>(<span class="string">'currentUser'</span>);
+    window.location.href = <span class="string">'../index.html'</span>;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================
+        // FUNCIONES DE AUTENTICACIÓN
+        // ============================================
+        
+        // Mostrar formulario (login/register)
+        function showForm(type) {
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(type + 'Form').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Ocultar alerta al cambiar
+            document.getElementById('authAlert').classList.remove('show');
+        }
+        
+        // Mostrar alerta
+        function showAlert(message, type) {
+            const alert = document.getElementById('authAlert');
+            const msgEl = document.getElementById('alertMessage');
+            
+            alert.className = `auth-alert show ${type}`;
+            alert.querySelector('i').className = type === 'success' ? 'bi bi-check-circle' : 'bi bi-exclamation-circle';
+            msgEl.textContent = message;
+            
+            // Auto-ocultar después de 5 segundos
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Manejar registro
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('registerName').value.trim();
+            const apellido = document.getElementById('registerLastName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Validaciones
+            if (password !== confirmPassword) {
+                showAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            // Obtener usuarios existentes
+            const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            // Verificar si el email ya existe
+            if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+                showAlert('Este email ya está registrado', 'error');
+                return;
+            }
+            
+            // Crear nuevo usuario
+            const newUser = {
+                id: Date.now(),
+                nombre: nombre + (apellido ? ' ' + apellido : ''),
+                email: email.toLowerCase(),
+                password: password,
+                fechaRegistro: new Date().toISOString(),
+                activo: true,
+                rol: 'usuario'
+            };
+            
+            // Guardar en localStorage (registeredUsers)
+            users.push(newUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+            
+            // Auto-login
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            console.log('✅ Usuario registrado:', newUser);
+            console.log('📊 Total usuarios:', users.length);
+            
+            showAlert('¡Cuenta creada exitosamente! Redirigiendo...', 'success');
+            
+            // Redirigir al panel de usuario
+            setTimeout(() => {
+                window.location.href = '../usuario/mi-cuenta.html';
+            }, 1500);
+        }
+        
+        // Manejar login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            
+            // Credenciales de admin (para demo)
+            if (email === 'admin@test.com' && password === 'admin123') {
+                const adminUser = {
+                    id: 0,
+                    nombre: 'Administrador',
+                    email: email,
+                    rol: 'admin'
+                };
+                localStorage.setItem('currentUser', JSON.stringify(adminUser));
+                showAlert('¡Bienvenido Admin!', 'success');
+                setTimeout(() => window.location.href = '../admin/index.html', 1000);
+                return;
+            }
+            
+            // Obtener usuarios
+            const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            
+            // Buscar usuario
+            const user = users.find(u => 
+                u.email.toLowerCase() === email && u.password === password
+            );
+            
+            if (!user) {
+                showAlert('Credenciales incorrectas', 'error');
+                return;
+            }
+            
+            if (!user.activo) {
+                showAlert('Tu cuenta está desactivada. Contacta al admin.', 'error');
+                return;
+            }
+            
+            // Guardar sesión
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            showAlert('¡Bienvenido ' + user.nombre.split(' ')[0] + '!', 'success');
+            
+            // Redirigir según rol
+            setTimeout(() => {
+                window.location.href = user.rol === 'admin' 
+                    ? '../admin/index.html' 
+                    : '../usuario/mi-cuenta.html';
+            }, 1000);
+        }
+        
+        // Verificar fuerza de contraseña
+        function checkPasswordStrength() {
+            const password = document.getElementById('registerPassword').value;
+            const fill = document.getElementById('strengthFill');
+            const text = document.getElementById('strengthText');
+            
+            let strength = 0;
+            let label = 'Muy débil';
+            let color = '#ef4444';
+            
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+            
+            switch(strength) {
+                case 1: label = 'Débil'; color = '#f59e0b'; break;
+                case 2: label = 'Regular'; color = '#eab308'; break;
+                case 3: label = 'Buena'; color = '#22c55e'; break;
+                case 4: label = 'Fuerte'; color = '#10b981'; break;
+                case 5: label = 'Muy fuerte'; color = '#059669'; break;
+            }
+            
+            fill.style.width = (strength * 20) + '%';
+            fill.style.background = color;
+            text.textContent = label;
+            text.style.color = color;
+        }
+        
+        // Mostrar/Ocultar contraseña
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.parentElement.querySelector('.input-group-text i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        }
+        
+        // Login social (simulado)
+        function socialLogin(provider) {
+            showAlert(`Login con ${provider} (simulado)`, 'success');
+            
+            const socialUser = {
+                id: Date.now(),
+                nombre: 'Usuario ' + provider,
+                email: `user_${Date.now()}@${provider}.com`,
+                fechaRegistro: new Date().toISOString(),
+                activo: true,
+                rol: 'usuario',
+                provider: provider
+            };
+            
+            // Guardar como usuario registrado
+            const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            users.push(socialUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(socialUser));
+            
+            setTimeout(() => {
+                window.location.href = '../usuario/mi-cuenta.html';
+            }, 1500);
+        }
+        
+        // Verificar si ya está logueado
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (currentUser) {
+                showAlert('Ya tienes sesión iniciada. Redirigiendo...', 'success');
+                setTimeout(() => {
+                    window.location.href = currentUser.rol === 'admin' 
+                        ? '../admin/index.html' 
+                        : '../usuario/mi-cuenta.html';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

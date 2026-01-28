@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Avanzado - Patrones y Arquitectura</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #1a1a2e; color: #eee; }
+        .hero-ecommerce {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .code-block {
+            background: #16213e;
+            color: #e0e0e0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            position: relative;
+            border: 1px solid #1f4068;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .function { color: #82aaff; }
+        .code-block .number { color: #f78c6c; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .example-card {
+            background: #16213e;
+            border-radius: 16px;
+            border: 1px solid #1f4068;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .example-header {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 20px;
+        }
+        .example-body { padding: 25px; }
+        .badge-advanced {
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+        a { color: #f093fb; }
+    </style>
+</head>
+<body>
+    <section class="hero-ecommerce">
+        <div class="container">
+            <a href="../index.html" class="btn btn-outline-light btn-sm mb-4">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la Guía
+            </a>
+            <span class="badge-advanced mb-3 d-inline-block">NIVEL AVANZADO</span>
+            <h1 class="display-4 fw-bold">E-commerce Avanzado</h1>
+            <p class="lead">Arquitectura de carrito, inventario, cupones, y checkout profesional</p>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        <!-- ================================================
+             1. CLASE CART MANAGER AVANZADA
+             ================================================ -->
+        <section id="cart-manager" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-cart4 me-2"></i>1. Cart Manager Profesional</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Sistema completo de carrito con eventos, persistencia y validaciones.</p>
+                    
+                    <div class="code-block" style="max-height: 600px;">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * CART MANAGER PROFESIONAL
+ * Sistema completo con eventos, persistencia y validaciones
+ */</span>
+
+<span class="keyword">class</span> CartManager {
+    <span class="keyword">static</span> STORAGE_KEY = <span class="string">'cart_data'</span>;
+    
+    <span class="function">constructor</span>(options = {}) {
+        <span class="keyword">this</span>.items = [];
+        <span class="keyword">this</span>.listeners = {};
+        <span class="keyword">this</span>.maxQuantityPerItem = options.maxQuantityPerItem || <span class="number">99</span>;
+        <span class="keyword">this</span>.autoSave = options.autoSave !== <span class="keyword">false</span>;
+        
+        <span class="comment">// Cargar datos guardados</span>
+        <span class="keyword">this</span>.<span class="function">_loadFromStorage</span>();
+    }
+    
+    <span class="comment">// ====== SISTEMA DE EVENTOS ======</span>
+    <span class="function">on</span>(event, callback) {
+        <span class="keyword">if</span> (!<span class="keyword">this</span>.listeners[event]) {
+            <span class="keyword">this</span>.listeners[event] = [];
+        }
+        <span class="keyword">this</span>.listeners[event].<span class="function">push</span>(callback);
+        <span class="keyword">return</span> () => <span class="keyword">this</span>.<span class="function">off</span>(event, callback);
+    }
+    
+    <span class="function">off</span>(event, callback) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.listeners[event]) {
+            <span class="keyword">this</span>.listeners[event] = <span class="keyword">this</span>.listeners[event]
+                .<span class="function">filter</span>(cb => cb !== callback);
+        }
+    }
+    
+    <span class="function">_emit</span>(event, data) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.listeners[event]) {
+            <span class="keyword">this</span>.listeners[event].<span class="function">forEach</span>(cb => <span class="function">cb</span>(data));
+        }
+        <span class="comment">// Evento genérico de cambio</span>
+        <span class="keyword">if</span> (event !== <span class="string">'change'</span>) {
+            <span class="keyword">this</span>.<span class="function">_emit</span>(<span class="string">'change'</span>, { event, data });
+        }
+    }
+    
+    <span class="comment">// ====== OPERACIONES DE CARRITO ======</span>
+    <span class="function">addItem</span>(product, quantity = <span class="number">1</span>) {
+        <span class="keyword">const</span> existingIndex = <span class="keyword">this</span>.items.<span class="function">findIndex</span>(item => 
+            item.id === product.id && 
+            JSON.<span class="function">stringify</span>(item.variant || {}) === JSON.<span class="function">stringify</span>(product.variant || {})
+        );
+        
+        <span class="keyword">if</span> (existingIndex > -<span class="number">1</span>) {
+            <span class="keyword">const</span> newQty = <span class="keyword">this</span>.items[existingIndex].quantity + quantity;
+            <span class="keyword">this</span>.<span class="function">updateQuantity</span>(existingIndex, newQty);
+        } <span class="keyword">else</span> {
+            <span class="keyword">const</span> cartItem = {
+                ...product,
+                quantity: <span class="keyword">Math</span>.<span class="function">min</span>(quantity, <span class="keyword">this</span>.maxQuantityPerItem),
+                addedAt: Date.<span class="function">now</span>()
+            };
+            <span class="keyword">this</span>.items.<span class="function">push</span>(cartItem);
+            <span class="keyword">this</span>.<span class="function">_emit</span>(<span class="string">'itemAdded'</span>, cartItem);
+        }
+        
+        <span class="keyword">this</span>.<span class="function">_persist</span>();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">removeItem</span>(index) {
+        <span class="keyword">const</span> removed = <span class="keyword">this</span>.items.<span class="function">splice</span>(index, <span class="number">1</span>)[<span class="number">0</span>];
+        <span class="keyword">if</span> (removed) {
+            <span class="keyword">this</span>.<span class="function">_emit</span>(<span class="string">'itemRemoved'</span>, removed);
+            <span class="keyword">this</span>.<span class="function">_persist</span>();
+        }
+        <span class="keyword">return</span> removed;
+    }
+    
+    <span class="function">removeByProductId</span>(productId) {
+        <span class="keyword">const</span> index = <span class="keyword">this</span>.items.<span class="function">findIndex</span>(item => item.id === productId);
+        <span class="keyword">if</span> (index > -<span class="number">1</span>) {
+            <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">removeItem</span>(index);
+        }
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+    
+    <span class="function">updateQuantity</span>(index, quantity) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.items[index]) {
+            <span class="keyword">const</span> newQty = <span class="keyword">Math</span>.<span class="function">max</span>(<span class="number">0</span>, <span class="keyword">Math</span>.<span class="function">min</span>(quantity, <span class="keyword">this</span>.maxQuantityPerItem));
+            
+            <span class="keyword">if</span> (newQty === <span class="number">0</span>) {
+                <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">removeItem</span>(index);
+            }
+            
+            <span class="keyword">this</span>.items[index].quantity = newQty;
+            <span class="keyword">this</span>.<span class="function">_emit</span>(<span class="string">'quantityUpdated'</span>, { index, quantity: newQty });
+            <span class="keyword">this</span>.<span class="function">_persist</span>();
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">clear</span>() {
+        <span class="keyword">this</span>.items = [];
+        <span class="keyword">this</span>.<span class="function">_emit</span>(<span class="string">'cartCleared'</span>, {});
+        <span class="keyword">this</span>.<span class="function">_persist</span>();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// ====== CÁLCULOS ======</span>
+    <span class="keyword">get</span> <span class="function">subtotal</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.items.<span class="function">reduce</span>((sum, item) => {
+            <span class="keyword">return</span> sum + (item.price * item.quantity);
+        }, <span class="number">0</span>);
+    }
+    
+    <span class="keyword">get</span> <span class="function">totalItems</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.items.<span class="function">reduce</span>((sum, item) => sum + item.quantity, <span class="number">0</span>);
+    }
+    
+    <span class="keyword">get</span> <span class="function">isEmpty</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.items.length === <span class="number">0</span>;
+    }
+    
+    <span class="function">getItemTotal</span>(index) {
+        <span class="keyword">const</span> item = <span class="keyword">this</span>.items[index];
+        <span class="keyword">return</span> item ? item.price * item.quantity : <span class="number">0</span>;
+    }
+    
+    <span class="comment">// ====== PERSISTENCIA ======</span>
+    <span class="function">_persist</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.autoSave) {
+            localStorage.<span class="function">setItem</span>(CartManager.STORAGE_KEY, JSON.<span class="function">stringify</span>({
+                items: <span class="keyword">this</span>.items,
+                updatedAt: Date.<span class="function">now</span>()
+            }));
+        }
+    }
+    
+    <span class="function">_loadFromStorage</span>() {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> saved = localStorage.<span class="function">getItem</span>(CartManager.STORAGE_KEY);
+            <span class="keyword">if</span> (saved) {
+                <span class="keyword">const</span> data = JSON.<span class="function">parse</span>(saved);
+                <span class="keyword">this</span>.items = data.items || [];
+            }
+        } <span class="keyword">catch</span> (e) {
+            console.<span class="function">error</span>(<span class="string">'Error loading cart:'</span>, e);
+        }
+    }
+    
+    <span class="function">toJSON</span>() {
+        <span class="keyword">return</span> {
+            items: <span class="keyword">this</span>.items,
+            subtotal: <span class="keyword">this</span>.subtotal,
+            totalItems: <span class="keyword">this</span>.totalItems
+        };
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> cart = <span class="keyword">new</span> CartManager();
+
+<span class="comment">// Escuchar eventos</span>
+cart.<span class="function">on</span>(<span class="string">'itemAdded'</span>, (item) => {
+    console.<span class="function">log</span>(<span class="string">'🛒 Agregado:'</span>, item.name);
+    <span class="function">showNotification</span>(<span class="string">`${item.name} agregado al carrito`</span>);
+});
+
+cart.<span class="function">on</span>(<span class="string">'change'</span>, () => {
+    <span class="function">updateCartBadge</span>(cart.totalItems);
+    <span class="function">renderCart</span>(cart.items);
+});
+
+<span class="comment">// Agregar producto</span>
+cart.<span class="function">addItem</span>({ id: <span class="number">1</span>, name: <span class="string">'iPhone 15'</span>, price: <span class="number">999</span> }, <span class="number">2</span>);</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             2. SISTEMA DE CUPONES
+             ================================================ -->
+        <section id="coupons" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-ticket-perforated me-2"></i>2. Sistema de Cupones y Descuentos</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Manejo de cupones con diferentes tipos de descuento.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * SISTEMA DE CUPONES
+ */</span>
+
+<span class="keyword">class</span> CouponManager {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.coupons = <span class="keyword">new</span> Map();
+        <span class="keyword">this</span>.appliedCoupon = <span class="keyword">null</span>;
+    }
+    
+    <span class="comment">// Registrar cupón</span>
+    <span class="function">registerCoupon</span>(coupon) {
+        <span class="keyword">this</span>.coupons.<span class="function">set</span>(coupon.code.<span class="function">toUpperCase</span>(), {
+            ...coupon,
+            code: coupon.code.<span class="function">toUpperCase</span>()
+        });
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Validar cupón</span>
+    <span class="function">validateCoupon</span>(code, cartData) {
+        <span class="keyword">const</span> coupon = <span class="keyword">this</span>.coupons.<span class="function">get</span>(code.<span class="function">toUpperCase</span>());
+        
+        <span class="keyword">if</span> (!coupon) {
+            <span class="keyword">return</span> { valid: <span class="keyword">false</span>, error: <span class="string">'Cupón no encontrado'</span> };
+        }
+        
+        <span class="comment">// Verificar fechas</span>
+        <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+        <span class="keyword">if</span> (coupon.startDate && now < coupon.startDate) {
+            <span class="keyword">return</span> { valid: <span class="keyword">false</span>, error: <span class="string">'Cupón aún no está activo'</span> };
+        }
+        <span class="keyword">if</span> (coupon.endDate && now > coupon.endDate) {
+            <span class="keyword">return</span> { valid: <span class="keyword">false</span>, error: <span class="string">'Cupón expirado'</span> };
+        }
+        
+        <span class="comment">// Verificar usos</span>
+        <span class="keyword">if</span> (coupon.maxUses && coupon.usedCount >= coupon.maxUses) {
+            <span class="keyword">return</span> { valid: <span class="keyword">false</span>, error: <span class="string">'Cupón agotado'</span> };
+        }
+        
+        <span class="comment">// Verificar mínimo de compra</span>
+        <span class="keyword">if</span> (coupon.minPurchase && cartData.subtotal < coupon.minPurchase) {
+            <span class="keyword">return</span> { 
+                valid: <span class="keyword">false</span>, 
+                error: <span class="string">`Mínimo de compra: $${coupon.minPurchase}`</span> 
+            };
+        }
+        
+        <span class="comment">// Verificar productos aplicables</span>
+        <span class="keyword">if</span> (coupon.applicableProducts) {
+            <span class="keyword">const</span> hasApplicable = cartData.items.<span class="function">some</span>(item => 
+                coupon.applicableProducts.<span class="function">includes</span>(item.id)
+            );
+            <span class="keyword">if</span> (!hasApplicable) {
+                <span class="keyword">return</span> { valid: <span class="keyword">false</span>, error: <span class="string">'No aplicable a estos productos'</span> };
+            }
+        }
+        
+        <span class="keyword">return</span> { valid: <span class="keyword">true</span>, coupon };
+    }
+    
+    <span class="comment">// Calcular descuento</span>
+    <span class="function">calculateDiscount</span>(coupon, cartData) {
+        <span class="keyword">let</span> discount = <span class="number">0</span>;
+        
+        <span class="keyword">switch</span> (coupon.type) {
+            <span class="keyword">case</span> <span class="string">'percentage'</span>:
+                discount = (cartData.subtotal * coupon.value) / <span class="number">100</span>;
+                <span class="keyword">break</span>;
+                
+            <span class="keyword">case</span> <span class="string">'fixed'</span>:
+                discount = coupon.value;
+                <span class="keyword">break</span>;
+                
+            <span class="keyword">case</span> <span class="string">'freeShipping'</span>:
+                discount = cartData.shipping || <span class="number">0</span>;
+                <span class="keyword">break</span>;
+                
+            <span class="keyword">case</span> <span class="string">'buyXgetY'</span>:
+                <span class="comment">// Compra X, lleva Y gratis</span>
+                <span class="keyword">const</span> eligible = cartData.items
+                    .<span class="function">filter</span>(item => coupon.applicableProducts.<span class="function">includes</span>(item.id));
+                <span class="keyword">const</span> totalQty = eligible.<span class="function">reduce</span>((sum, i) => sum + i.quantity, <span class="number">0</span>);
+                <span class="keyword">const</span> freeItems = <span class="keyword">Math</span>.<span class="function">floor</span>(totalQty / (coupon.buyX + coupon.getY)) * coupon.getY;
+                <span class="keyword">const</span> cheapest = <span class="keyword">Math</span>.<span class="function">min</span>(...eligible.<span class="function">map</span>(i => i.price));
+                discount = freeItems * cheapest;
+                <span class="keyword">break</span>;
+        }
+        
+        <span class="comment">// Aplicar máximo descuento si existe</span>
+        <span class="keyword">if</span> (coupon.maxDiscount) {
+            discount = <span class="keyword">Math</span>.<span class="function">min</span>(discount, coupon.maxDiscount);
+        }
+        
+        <span class="keyword">return</span> <span class="keyword">Math</span>.<span class="function">round</span>(discount * <span class="number">100</span>) / <span class="number">100</span>;
+    }
+    
+    <span class="comment">// Aplicar cupón</span>
+    <span class="function">applyCoupon</span>(code, cartData) {
+        <span class="keyword">const</span> validation = <span class="keyword">this</span>.<span class="function">validateCoupon</span>(code, cartData);
+        
+        <span class="keyword">if</span> (!validation.valid) {
+            <span class="keyword">return</span> validation;
+        }
+        
+        <span class="keyword">const</span> discount = <span class="keyword">this</span>.<span class="function">calculateDiscount</span>(validation.coupon, cartData);
+        <span class="keyword">this</span>.appliedCoupon = { ...validation.coupon, discount };
+        
+        <span class="keyword">return</span> {
+            valid: <span class="keyword">true</span>,
+            coupon: <span class="keyword">this</span>.appliedCoupon,
+            discount
+        };
+    }
+    
+    <span class="function">removeCoupon</span>() {
+        <span class="keyword">this</span>.appliedCoupon = <span class="keyword">null</span>;
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> couponManager = <span class="keyword">new</span> CouponManager();
+
+<span class="comment">// Registrar cupones</span>
+couponManager
+    .<span class="function">registerCoupon</span>({
+        code: <span class="string">'VERANO20'</span>,
+        type: <span class="string">'percentage'</span>,
+        value: <span class="number">20</span>,
+        maxDiscount: <span class="number">50</span>,
+        minPurchase: <span class="number">100</span>,
+        endDate: <span class="keyword">new</span> Date(<span class="string">'2025-08-31'</span>).<span class="function">getTime</span>()
+    })
+    .<span class="function">registerCoupon</span>({
+        code: <span class="string">'ENVIOGRATIS'</span>,
+        type: <span class="string">'freeShipping'</span>,
+        minPurchase: <span class="number">50</span>
+    })
+    .<span class="function">registerCoupon</span>({
+        code: <span class="string">'3X2CAMISETAS'</span>,
+        type: <span class="string">'buyXgetY'</span>,
+        buyX: <span class="number">2</span>,
+        getY: <span class="number">1</span>,
+        applicableProducts: [<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>] <span class="comment">// IDs de camisetas</span>
+    });
+
+<span class="comment">// Aplicar cupón</span>
+<span class="keyword">const</span> result = couponManager.<span class="function">applyCoupon</span>(<span class="string">'VERANO20'</span>, cart.<span class="function">toJSON</span>());
+<span class="keyword">if</span> (result.valid) {
+    console.<span class="function">log</span>(<span class="string">`✅ Descuento aplicado: $${result.discount}`</span>);
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             3. INVENTARIO Y STOCK
+             ================================================ -->
+        <section id="inventory" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-box-seam me-2"></i>3. Control de Inventario</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Sistema de control de stock con reservas y alertas.</p>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * SISTEMA DE INVENTARIO
+ */</span>
+
+<span class="keyword">class</span> InventoryManager {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.products = <span class="keyword">new</span> Map();
+        <span class="keyword">this</span>.reservations = <span class="keyword">new</span> Map();
+        <span class="keyword">this</span>.lowStockThreshold = <span class="number">5</span>;
+    }
+    
+    <span class="comment">// Agregar producto al inventario</span>
+    <span class="function">addProduct</span>(product) {
+        <span class="keyword">this</span>.products.<span class="function">set</span>(product.id, {
+            ...product,
+            stock: product.stock || <span class="number">0</span>,
+            reserved: <span class="number">0</span>
+        });
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Obtener stock disponible (total - reservado)</span>
+    <span class="function">getAvailableStock</span>(productId) {
+        <span class="keyword">const</span> product = <span class="keyword">this</span>.products.<span class="function">get</span>(productId);
+        <span class="keyword">if</span> (!product) <span class="keyword">return</span> <span class="number">0</span>;
+        <span class="keyword">return</span> product.stock - product.reserved;
+    }
+    
+    <span class="comment">// Verificar disponibilidad</span>
+    <span class="function">checkAvailability</span>(productId, quantity) {
+        <span class="keyword">const</span> available = <span class="keyword">this</span>.<span class="function">getAvailableStock</span>(productId);
+        <span class="keyword">return</span> {
+            available: available >= quantity,
+            currentStock: available,
+            requested: quantity
+        };
+    }
+    
+    <span class="comment">// Reservar stock (para checkout)</span>
+    <span class="function">reserveStock</span>(sessionId, items) {
+        <span class="keyword">const</span> reservationId = <span class="string">`res_${Date.now()}_${Math.random().toString(36).slice(2)}`</span>;
+        <span class="keyword">const</span> reserved = [];
+        <span class="keyword">const</span> failed = [];
+        
+        <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> items) {
+            <span class="keyword">const</span> product = <span class="keyword">this</span>.products.<span class="function">get</span>(item.productId);
+            
+            <span class="keyword">if</span> (!product || <span class="keyword">this</span>.<span class="function">getAvailableStock</span>(item.productId) < item.quantity) {
+                failed.<span class="function">push</span>({ ...item, reason: <span class="string">'Stock insuficiente'</span> });
+                <span class="keyword">continue</span>;
+            }
+            
+            <span class="comment">// Reservar</span>
+            product.reserved += item.quantity;
+            reserved.<span class="function">push</span>(item);
+        }
+        
+        <span class="keyword">if</span> (reserved.length > <span class="number">0</span>) {
+            <span class="keyword">this</span>.reservations.<span class="function">set</span>(reservationId, {
+                sessionId,
+                items: reserved,
+                createdAt: Date.<span class="function">now</span>(),
+                expiresAt: Date.<span class="function">now</span>() + (<span class="number">15</span> * <span class="number">60</span> * <span class="number">1000</span>) <span class="comment">// 15 minutos</span>
+            });
+        }
+        
+        <span class="keyword">return</span> { reservationId, reserved, failed };
+    }
+    
+    <span class="comment">// Confirmar compra (descontar del stock)</span>
+    <span class="function">confirmPurchase</span>(reservationId) {
+        <span class="keyword">const</span> reservation = <span class="keyword">this</span>.reservations.<span class="function">get</span>(reservationId);
+        <span class="keyword">if</span> (!reservation) {
+            <span class="keyword">return</span> { success: <span class="keyword">false</span>, error: <span class="string">'Reserva no encontrada'</span> };
+        }
+        
+        <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> reservation.items) {
+            <span class="keyword">const</span> product = <span class="keyword">this</span>.products.<span class="function">get</span>(item.productId);
+            <span class="keyword">if</span> (product) {
+                product.stock -= item.quantity;
+                product.reserved -= item.quantity;
+                
+                <span class="comment">// Verificar bajo stock</span>
+                <span class="keyword">if</span> (product.stock <= <span class="keyword">this</span>.lowStockThreshold) {
+                    <span class="keyword">this</span>.<span class="function">_emitLowStockAlert</span>(product);
+                }
+            }
+        }
+        
+        <span class="keyword">this</span>.reservations.<span class="function">delete</span>(reservationId);
+        <span class="keyword">return</span> { success: <span class="keyword">true</span> };
+    }
+    
+    <span class="comment">// Cancelar reserva</span>
+    <span class="function">cancelReservation</span>(reservationId) {
+        <span class="keyword">const</span> reservation = <span class="keyword">this</span>.reservations.<span class="function">get</span>(reservationId);
+        <span class="keyword">if</span> (!reservation) <span class="keyword">return</span>;
+        
+        <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> reservation.items) {
+            <span class="keyword">const</span> product = <span class="keyword">this</span>.products.<span class="function">get</span>(item.productId);
+            <span class="keyword">if</span> (product) {
+                product.reserved -= item.quantity;
+            }
+        }
+        
+        <span class="keyword">this</span>.reservations.<span class="function">delete</span>(reservationId);
+    }
+    
+    <span class="comment">// Limpiar reservas expiradas</span>
+    <span class="function">cleanExpiredReservations</span>() {
+        <span class="keyword">const</span> now = Date.<span class="function">now</span>();
+        <span class="keyword">for</span> (<span class="keyword">const</span> [id, reservation] <span class="keyword">of</span> <span class="keyword">this</span>.reservations) {
+            <span class="keyword">if</span> (now > reservation.expiresAt) {
+                <span class="keyword">this</span>.<span class="function">cancelReservation</span>(id);
+            }
+        }
+    }
+    
+    <span class="function">_emitLowStockAlert</span>(product) {
+        console.<span class="function">warn</span>(<span class="string">`⚠️ BAJO STOCK: ${product.name} (${product.stock} unidades)`</span>);
+        <span class="comment">// Aquí podrías enviar notificación, email, etc.</span>
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> inventory = <span class="keyword">new</span> InventoryManager();
+
+<span class="comment">// Agregar productos</span>
+inventory
+    .<span class="function">addProduct</span>({ id: <span class="number">1</span>, name: <span class="string">'iPhone 15'</span>, stock: <span class="number">50</span> })
+    .<span class="function">addProduct</span>({ id: <span class="number">2</span>, name: <span class="string">'MacBook Pro'</span>, stock: <span class="number">20</span> });
+
+<span class="comment">// Al agregar al carrito, verificar stock</span>
+<span class="keyword">const</span> check = inventory.<span class="function">checkAvailability</span>(<span class="number">1</span>, <span class="number">5</span>);
+<span class="keyword">if</span> (!check.available) {
+    <span class="function">showError</span>(<span class="string">`Solo hay ${check.currentStock} disponibles`</span>);
+}
+
+<span class="comment">// Al iniciar checkout, reservar</span>
+<span class="keyword">const</span> reservation = inventory.<span class="function">reserveStock</span>(<span class="string">'session123'</span>, [
+    { productId: <span class="number">1</span>, quantity: <span class="number">2</span> }
+]);
+
+<span class="comment">// Al confirmar pago</span>
+inventory.<span class="function">confirmPurchase</span>(reservation.reservationId);</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================
+             4. CHECKOUT COMPLETO
+             ================================================ -->
+        <section id="checkout" class="mb-5">
+            <div class="example-card">
+                <div class="example-header">
+                    <h3 class="mb-0"><i class="bi bi-credit-card me-2"></i>4. Proceso de Checkout Completo</h3>
+                </div>
+                <div class="example-body">
+                    <p class="mb-4">Flujo de checkout con validaciones, cálculos y orden final.</p>
+                    
+                    <div class="code-block" style="max-height: 550px;">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+<pre><span class="comment">/**
+ * CHECKOUT MANAGER
+ * Proceso completo de pago
+ */</span>
+
+<span class="keyword">class</span> CheckoutManager {
+    <span class="function">constructor</span>(cart, inventory, couponManager) {
+        <span class="keyword">this</span>.cart = cart;
+        <span class="keyword">this</span>.inventory = inventory;
+        <span class="keyword">this</span>.couponManager = couponManager;
+        <span class="keyword">this</span>.shippingMethods = [];
+        <span class="keyword">this</span>.taxRate = <span class="number">0.16</span>; <span class="comment">// 16% IVA</span>
+        <span class="keyword">this</span>.reservationId = <span class="keyword">null</span>;
+    }
+    
+    <span class="comment">// Configurar métodos de envío</span>
+    <span class="function">setShippingMethods</span>(methods) {
+        <span class="keyword">this</span>.shippingMethods = methods;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Iniciar checkout</span>
+    <span class="keyword">async</span> <span class="function">initCheckout</span>() {
+        <span class="comment">// Verificar carrito no vacío</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.cart.isEmpty) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'El carrito está vacío'</span>);
+        }
+        
+        <span class="comment">// Reservar inventario</span>
+        <span class="keyword">const</span> items = <span class="keyword">this</span>.cart.items.<span class="function">map</span>(item => ({
+            productId: item.id,
+            quantity: item.quantity
+        }));
+        
+        <span class="keyword">const</span> reservation = <span class="keyword">this</span>.inventory.<span class="function">reserveStock</span>(<span class="string">'checkout'</span>, items);
+        
+        <span class="keyword">if</span> (reservation.failed.length > <span class="number">0</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Algunos productos no tienen stock suficiente'</span>);
+        }
+        
+        <span class="keyword">this</span>.reservationId = reservation.reservationId;
+        
+        <span class="keyword">return</span> {
+            success: <span class="keyword">true</span>,
+            reservationId: <span class="keyword">this</span>.reservationId,
+            expiresIn: <span class="number">15</span> * <span class="number">60</span> <span class="comment">// 15 minutos</span>
+        };
+    }
+    
+    <span class="comment">// Calcular totales</span>
+    <span class="function">calculateTotals</span>(shippingMethodId) {
+        <span class="keyword">const</span> subtotal = <span class="keyword">this</span>.cart.subtotal;
+        
+        <span class="comment">// Envío</span>
+        <span class="keyword">const</span> shipping = <span class="keyword">this</span>.shippingMethods
+            .<span class="function">find</span>(m => m.id === shippingMethodId)?.price || <span class="number">0</span>;
+        
+        <span class="comment">// Descuento de cupón</span>
+        <span class="keyword">const</span> couponDiscount = <span class="keyword">this</span>.couponManager.appliedCoupon?.discount || <span class="number">0</span>;
+        
+        <span class="comment">// Subtotal después de descuento</span>
+        <span class="keyword">const</span> subtotalAfterDiscount = subtotal - couponDiscount;
+        
+        <span class="comment">// Impuestos</span>
+        <span class="keyword">const</span> tax = subtotalAfterDiscount * <span class="keyword">this</span>.taxRate;
+        
+        <span class="comment">// Total</span>
+        <span class="keyword">const</span> total = subtotalAfterDiscount + shipping + tax;
+        
+        <span class="keyword">return</span> {
+            subtotal: <span class="keyword">this</span>.<span class="function">_round</span>(subtotal),
+            shipping: <span class="keyword">this</span>.<span class="function">_round</span>(shipping),
+            couponDiscount: <span class="keyword">this</span>.<span class="function">_round</span>(couponDiscount),
+            subtotalAfterDiscount: <span class="keyword">this</span>.<span class="function">_round</span>(subtotalAfterDiscount),
+            tax: <span class="keyword">this</span>.<span class="function">_round</span>(tax),
+            total: <span class="keyword">this</span>.<span class="function">_round</span>(total)
+        };
+    }
+    
+    <span class="comment">// Crear orden</span>
+    <span class="keyword">async</span> <span class="function">createOrder</span>(customerData, shippingMethodId, paymentMethod) {
+        <span class="keyword">const</span> totals = <span class="keyword">this</span>.<span class="function">calculateTotals</span>(shippingMethodId);
+        
+        <span class="keyword">const</span> order = {
+            id: <span class="string">`ORD-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`</span>,
+            customer: customerData,
+            items: <span class="keyword">this</span>.cart.items.<span class="function">map</span>(item => ({
+                productId: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                total: item.price * item.quantity
+            })),
+            shipping: {
+                method: <span class="keyword">this</span>.shippingMethods.<span class="function">find</span>(m => m.id === shippingMethodId),
+                address: customerData.shippingAddress
+            },
+            payment: {
+                method: paymentMethod,
+                status: <span class="string">'pending'</span>
+            },
+            coupon: <span class="keyword">this</span>.couponManager.appliedCoupon?.code || <span class="keyword">null</span>,
+            totals,
+            status: <span class="string">'pending'</span>,
+            createdAt: <span class="keyword">new</span> Date().<span class="function">toISOString</span>()
+        };
+        
+        <span class="keyword">return</span> order;
+    }
+    
+    <span class="comment">// Confirmar orden (después del pago)</span>
+    <span class="keyword">async</span> <span class="function">confirmOrder</span>(order) {
+        <span class="comment">// Confirmar reserva de inventario</span>
+        <span class="keyword">this</span>.inventory.<span class="function">confirmPurchase</span>(<span class="keyword">this</span>.reservationId);
+        
+        <span class="comment">// Limpiar carrito</span>
+        <span class="keyword">this</span>.cart.<span class="function">clear</span>();
+        
+        <span class="comment">// Limpiar cupón</span>
+        <span class="keyword">this</span>.couponManager.<span class="function">removeCoupon</span>();
+        
+        <span class="comment">// Guardar orden</span>
+        <span class="keyword">this</span>.<span class="function">_saveOrder</span>(order);
+        
+        order.status = <span class="string">'confirmed'</span>;
+        order.payment.status = <span class="string">'completed'</span>;
+        
+        <span class="keyword">return</span> order;
+    }
+    
+    <span class="comment">// Cancelar checkout</span>
+    <span class="function">cancelCheckout</span>() {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.reservationId) {
+            <span class="keyword">this</span>.inventory.<span class="function">cancelReservation</span>(<span class="keyword">this</span>.reservationId);
+            <span class="keyword">this</span>.reservationId = <span class="keyword">null</span>;
+        }
+    }
+    
+    <span class="function">_saveOrder</span>(order) {
+        <span class="keyword">const</span> orders = JSON.<span class="function">parse</span>(localStorage.<span class="function">getItem</span>(<span class="string">'orders'</span>) || <span class="string">'[]'</span>);
+        orders.<span class="function">push</span>(order);
+        localStorage.<span class="function">setItem</span>(<span class="string">'orders'</span>, JSON.<span class="function">stringify</span>(orders));
+    }
+    
+    <span class="function">_round</span>(num) {
+        <span class="keyword">return</span> <span class="keyword">Math</span>.<span class="function">round</span>(num * <span class="number">100</span>) / <span class="number">100</span>;
+    }
+}
+
+<span class="comment">// ====== USO ======</span>
+<span class="keyword">const</span> checkout = <span class="keyword">new</span> CheckoutManager(cart, inventory, couponManager);
+
+checkout.<span class="function">setShippingMethods</span>([
+    { id: <span class="string">'standard'</span>, name: <span class="string">'Estándar (5-7 días)'</span>, price: <span class="number">5.99</span> },
+    { id: <span class="string">'express'</span>, name: <span class="string">'Express (2-3 días)'</span>, price: <span class="number">12.99</span> },
+    { id: <span class="string">'overnight'</span>, name: <span class="string">'Siguiente día'</span>, price: <span class="number">24.99</span> }
+]);
+
+<span class="comment">// Iniciar checkout</span>
+<span class="keyword">await</span> checkout.<span class="function">initCheckout</span>();
+
+<span class="comment">// Calcular totales</span>
+<span class="keyword">const</span> totals = checkout.<span class="function">calculateTotals</span>(<span class="string">'express'</span>);
+
+<span class="comment">// Crear y confirmar orden</span>
+<span class="keyword">const</span> order = <span class="keyword">await</span> checkout.<span class="function">createOrder</span>(
+    { name: <span class="string">'Juan'</span>, email: <span class="string">'juan@email.com'</span>, shippingAddress: <span class="string">'Calle 123'</span> },
+    <span class="string">'express'</span>,
+    <span class="string">'card'</span>
+);
+
+<span class="keyword">const</span> confirmedOrder = <span class="keyword">await</span> checkout.<span class="function">confirmOrder</span>(order);</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="tienda.html" class="btn btn-outline-info">
+                <i class="bi bi-arrow-left me-2"></i>E-commerce Básico
+            </a>
+            <a href="../auth/avanzado.html" class="btn btn-info">
+                Auth Avanzado <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const code = btn.parentElement.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code);
+            btn.innerHTML = '<i class="bi bi-check2"></i> Copiado!';
+            setTimeout(() => btn.innerHTML = '<i class="bi bi-clipboard"></i>', 2000);
+        }
+    </script>
+</body>
+</html>

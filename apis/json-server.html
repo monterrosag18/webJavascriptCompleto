@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Server - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            max-height: 500px;
+        }
+        .terminal-block {
+            background: #0d1117;
+            color: #58a6ff;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        .terminal-block .prompt {
+            color: #7ee787;
+        }
+        .terminal-block .command {
+            color: #fff;
+        }
+        .endpoint-card {
+            border-left: 4px solid;
+            transition: all 0.3s;
+        }
+        .endpoint-card:hover {
+            transform: translateX(5px);
+        }
+        .method-get { border-color: #28a745; }
+        .method-post { border-color: #ffc107; }
+        .method-put { border-color: #17a2b8; }
+        .method-patch { border-color: #6f42c1; }
+        .method-delete { border-color: #dc3545; }
+        
+        .method-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .badge-get { background: #28a745; }
+        .badge-post { background: #ffc107; color: #000; }
+        .badge-put { background: #17a2b8; }
+        .badge-patch { background: #6f42c1; }
+        .badge-delete { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="fetch.html">Fetch API</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="json-server.html">JSON Server</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-success text-white py-5 mt-5">
+        <div class="container">
+            <h1 class="display-4 fw-bold"><i class="bi bi-server me-3"></i>JSON Server</h1>
+            <p class="lead">Crea una API REST falsa completa en menos de 30 segundos</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        
+        <!-- INTRODUCCIÓN -->
+        <section class="mb-5 pb-5 border-bottom">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4">
+                        <i class="bi bi-question-circle me-2 text-primary"></i>¿Qué es JSON Server?
+                    </h2>
+                    <p class="lead">JSON Server es una herramienta que te permite crear una <strong>API REST completa</strong> a partir de un simple archivo JSON. Es perfecta para:</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Prototipar aplicaciones frontend rápidamente</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Aprender a consumir APIs REST</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Hacer pruebas sin backend real</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Mockear datos para desarrollo</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5><i class="bi bi-lightning-fill text-warning me-2"></i>Características</h5>
+                            <ul class="mb-0 small">
+                                <li>GET, POST, PUT, PATCH, DELETE</li>
+                                <li>Filtrado y ordenamiento</li>
+                                <li>Paginación</li>
+                                <li>Búsqueda full-text</li>
+                                <li>Relaciones entre datos</li>
+                                <li>Persistencia automática</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INSTALACIÓN -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-primary me-2">1</span>Instalación
+            </h2>
+            
+            <div class="alert alert-info mb-4">
+                <i class="bi bi-info-circle me-2"></i>
+                Necesitas tener <strong>Node.js</strong> instalado en tu computadora.
+            </div>
+            
+            <h5 class="fw-bold mb-3">Instalación Global (recomendada)</h5>
+            <div class="terminal-block mb-4">
+                <span class="prompt">$</span> <span class="command">npm install -g json-server</span>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Instalación en proyecto</h5>
+            <div class="terminal-block mb-4">
+                <span class="prompt">$</span> <span class="command">npm install json-server --save-dev</span>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Verificar instalación</h5>
+            <div class="terminal-block">
+                <span class="prompt">$</span> <span class="command">json-server --version</span>
+            </div>
+        </section>
+
+        <!-- CREAR db.json -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-success me-2">2</span>Crear Base de Datos (db.json)
+            </h2>
+            <p class="text-muted mb-4">Crea un archivo <code>db.json</code> en la raíz de tu proyecto:</p>
+            
+            <div class="code-block mb-3">
+<pre><code>{
+    <span class="string">"usuarios"</span>: [
+        {
+            <span class="string">"id"</span>: 1,
+            <span class="string">"nombre"</span>: <span class="string">"Juan García"</span>,
+            <span class="string">"email"</span>: <span class="string">"juan@email.com"</span>,
+            <span class="string">"edad"</span>: 28,
+            <span class="string">"activo"</span>: true
+        },
+        {
+            <span class="string">"id"</span>: 2,
+            <span class="string">"nombre"</span>: <span class="string">"María López"</span>,
+            <span class="string">"email"</span>: <span class="string">"maria@email.com"</span>,
+            <span class="string">"edad"</span>: 32,
+            <span class="string">"activo"</span>: true
+        },
+        {
+            <span class="string">"id"</span>: 3,
+            <span class="string">"nombre"</span>: <span class="string">"Carlos Ruiz"</span>,
+            <span class="string">"email"</span>: <span class="string">"carlos@email.com"</span>,
+            <span class="string">"edad"</span>: 25,
+            <span class="string">"activo"</span>: false
+        }
+    ],
+    <span class="string">"productos"</span>: [
+        {
+            <span class="string">"id"</span>: 1,
+            <span class="string">"nombre"</span>: <span class="string">"Laptop Pro"</span>,
+            <span class="string">"precio"</span>: 1299.99,
+            <span class="string">"categoria"</span>: <span class="string">"electronica"</span>,
+            <span class="string">"stock"</span>: 15,
+            <span class="string">"usuarioId"</span>: 1
+        },
+        {
+            <span class="string">"id"</span>: 2,
+            <span class="string">"nombre"</span>: <span class="string">"Smartphone X"</span>,
+            <span class="string">"precio"</span>: 799.99,
+            <span class="string">"categoria"</span>: <span class="string">"electronica"</span>,
+            <span class="string">"stock"</span>: 30,
+            <span class="string">"usuarioId"</span>: 1
+        },
+        {
+            <span class="string">"id"</span>: 3,
+            <span class="string">"nombre"</span>: <span class="string">"Auriculares BT"</span>,
+            <span class="string">"precio"</span>: 149.99,
+            <span class="string">"categoria"</span>: <span class="string">"accesorios"</span>,
+            <span class="string">"stock"</span>: 50,
+            <span class="string">"usuarioId"</span>: 2
+        }
+    ],
+    <span class="string">"pedidos"</span>: [
+        {
+            <span class="string">"id"</span>: 1,
+            <span class="string">"usuarioId"</span>: 1,
+            <span class="string">"productoId"</span>: 2,
+            <span class="string">"cantidad"</span>: 2,
+            <span class="string">"total"</span>: 1599.98,
+            <span class="string">"fecha"</span>: <span class="string">"2024-01-15"</span>,
+            <span class="string">"estado"</span>: <span class="string">"completado"</span>
+        },
+        {
+            <span class="string">"id"</span>: 2,
+            <span class="string">"usuarioId"</span>: 2,
+            <span class="string">"productoId"</span>: 3,
+            <span class="string">"cantidad"</span>: 1,
+            <span class="string">"total"</span>: 149.99,
+            <span class="string">"fecha"</span>: <span class="string">"2024-01-16"</span>,
+            <span class="string">"estado"</span>: <span class="string">"pendiente"</span>
+        }
+    ]
+}</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar db.json
+            </button>
+        </section>
+
+        <!-- INICIAR SERVIDOR -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-info me-2">3</span>Iniciar el Servidor
+            </h2>
+            
+            <h5 class="fw-bold mb-3">Comando básico</h5>
+            <div class="terminal-block mb-4">
+                <span class="prompt">$</span> <span class="command">json-server --watch db.json</span>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Con puerto personalizado</h5>
+            <div class="terminal-block mb-4">
+                <span class="prompt">$</span> <span class="command">json-server --watch db.json --port 3001</span>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Opciones comunes</h5>
+            <div class="terminal-block mb-4">
+<span class="comment"># Puerto personalizado</span>
+<span class="prompt">$</span> <span class="command">json-server db.json --port 5000</span>
+
+<span class="comment"># Delay en respuestas (simular latencia)</span>
+<span class="prompt">$</span> <span class="command">json-server db.json --delay 1000</span>
+
+<span class="comment"># Host personalizado</span>
+<span class="prompt">$</span> <span class="command">json-server db.json --host 0.0.0.0</span>
+
+<span class="comment"># Rutas personalizadas</span>
+<span class="prompt">$</span> <span class="command">json-server db.json --routes routes.json</span>
+
+<span class="comment"># Combinado</span>
+<span class="prompt">$</span> <span class="command">json-server db.json --watch --port 3001 --delay 500</span>
+            </div>
+            
+            <h5 class="fw-bold mb-3">Script en package.json</h5>
+            <div class="code-block">
+<pre><code>{
+    <span class="string">"scripts"</span>: {
+        <span class="string">"server"</span>: <span class="string">"json-server --watch db.json --port 3001"</span>,
+        <span class="string">"dev"</span>: <span class="string">"concurrently \"npm run server\" \"npm start\""</span>
+    }
+}</code></pre>
+            </div>
+            
+            <div class="alert alert-success mt-4">
+                <strong>¡Listo!</strong> El servidor estará corriendo en <code>http://localhost:3000</code>
+            </div>
+        </section>
+
+        <!-- ENDPOINTS AUTOMÁTICOS -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-warning text-dark me-2">4</span>Endpoints Generados Automáticamente
+            </h2>
+            <p class="text-muted mb-4">JSON Server genera automáticamente todos los endpoints CRUD:</p>
+            
+            <div class="row g-3">
+                <!-- GET All -->
+                <div class="col-md-6">
+                    <div class="card endpoint-card method-get">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="method-badge badge-get">GET</span>
+                                <code>/usuarios</code>
+                            </div>
+                            <p class="text-muted mb-0 small">Obtener todos los usuarios</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GET One -->
+                <div class="col-md-6">
+                    <div class="card endpoint-card method-get">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="method-badge badge-get">GET</span>
+                                <code>/usuarios/1</code>
+                            </div>
+                            <p class="text-muted mb-0 small">Obtener usuario por ID</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- POST -->
+                <div class="col-md-6">
+                    <div class="card endpoint-card method-post">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="method-badge badge-post">POST</span>
+                                <code>/usuarios</code>
+                            </div>
+                            <p class="text-muted mb-0 small">Crear nuevo usuario</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PUT -->
+                <div class="col-md-6">
+                    <div class="card endpoint-card method-put">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="method-badge badge-put">PUT</span>
+                                <code>/usuarios/1</code>
+                            </div>
+                            <p class="text-muted mb-0 small">Reemplazar usuario completo</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PATCH -->
+                <div class="col-md-6">
+                    <div class="card endpoint-card method-patch">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="method-badge badge-patch">PATCH</span>
+                                <code>/usuarios/1</code>
+                            </div>
+                            <p class="text-muted mb-0 small">Actualizar campos específicos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- DELETE -->
+                <div class="col-md-6">
+                    <div class="card endpoint-card method-delete">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="method-badge badge-delete">DELETE</span>
+                                <code>/usuarios/1</code>
+                            </div>
+                            <p class="text-muted mb-0 small">Eliminar usuario</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FILTRADO Y BÚSQUEDA -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-danger me-2">5</span>Filtrado, Ordenamiento y Paginación
+            </h2>
+            
+            <div class="accordion" id="filterAccordion">
+                <!-- Filtrado -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#filter1">
+                            <i class="bi bi-funnel me-2"></i>Filtrado
+                        </button>
+                    </h2>
+                    <div id="filter1" class="accordion-collapse collapse show" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// Filtrar por campo exacto</span>
+GET /usuarios?activo=true
+GET /productos?categoria=electronica
+
+<span class="comment">// Filtrar por múltiples campos</span>
+GET /productos?categoria=electronica&stock_gte=10
+
+<span class="comment">// Operadores de comparación</span>
+GET /productos?precio_gte=100      <span class="comment">// >= 100</span>
+GET /productos?precio_lte=500      <span class="comment">// <= 500</span>
+GET /productos?precio_gt=100       <span class="comment">// > 100</span>
+GET /productos?precio_lt=500       <span class="comment">// < 500</span>
+GET /productos?precio_ne=299       <span class="comment">// != 299</span>
+
+<span class="comment">// Filtrar por rango</span>
+GET /productos?precio_gte=100&precio_lte=500
+
+<span class="comment">// Búsqueda en texto (case insensitive)</span>
+GET /usuarios?nombre_like=juan
+
+<span class="comment">// Búsqueda full-text (todos los campos)</span>
+GET /usuarios?q=juan</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ordenamiento -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filter2">
+                            <i class="bi bi-sort-alpha-down me-2"></i>Ordenamiento
+                        </button>
+                    </h2>
+                    <div id="filter2" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// Ordenar ascendente</span>
+GET /productos?_sort=precio
+
+<span class="comment">// Ordenar descendente</span>
+GET /productos?_sort=precio&_order=desc
+
+<span class="comment">// Ordenar por múltiples campos</span>
+GET /productos?_sort=categoria,precio&_order=asc,desc
+
+<span class="comment">// Ejemplos prácticos</span>
+<span class="comment">// Productos más baratos primero</span>
+GET /productos?_sort=precio&_order=asc
+
+<span class="comment">// Usuarios más recientes (por ID)</span>
+GET /usuarios?_sort=id&_order=desc
+
+<span class="comment">// Ordenar alfabéticamente</span>
+GET /productos?_sort=nombre&_order=asc</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paginación -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filter3">
+                            <i class="bi bi-list-ol me-2"></i>Paginación
+                        </button>
+                    </h2>
+                    <div id="filter3" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// Paginación básica</span>
+GET /productos?_page=1&_limit=10
+
+<span class="comment">// Segunda página</span>
+GET /productos?_page=2&_limit=10
+
+<span class="comment">// Solo limitar resultados</span>
+GET /productos?_limit=5
+
+<span class="comment">// Slice (inicio, fin)</span>
+GET /productos?_start=0&_end=10
+GET /productos?_start=10&_end=20
+
+<span class="comment">// El header X-Total-Count contiene el total</span>
+<span class="comment">// de registros para calcular páginas</span>
+
+<span class="keyword">// JavaScript para paginación</span>
+<span class="keyword">async function</span> <span class="function">fetchPage</span>(page, limit = 10) {
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(
+        <span class="string">`http://localhost:3000/productos?_page=${page}&_limit=${limit}`</span>
+    );
+    
+    <span class="keyword">const</span> total = response.headers.<span class="function">get</span>(<span class="string">'X-Total-Count'</span>);
+    <span class="keyword">const</span> totalPages = Math.<span class="function">ceil</span>(total / limit);
+    <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+    
+    <span class="keyword">return</span> { data, total, totalPages, currentPage: page };
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Relaciones -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filter4">
+                            <i class="bi bi-diagram-3 me-2"></i>Relaciones entre Datos
+                        </button>
+                    </h2>
+                    <div id="filter4" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                        <div class="accordion-body">
+                            <div class="code-block">
+<pre><code><span class="comment">// Expandir relación (incluir datos relacionados)</span>
+<span class="comment">// Si producto tiene usuarioId, obtener usuario:</span>
+GET /productos?_expand=usuario
+
+<span class="comment">// Resultado:</span>
+{
+    "id": 1,
+    "nombre": "Laptop Pro",
+    "usuarioId": 1,
+    "usuario": {          <span class="comment">// Datos del usuario incluidos</span>
+        "id": 1,
+        "nombre": "Juan García",
+        "email": "juan@email.com"
+    }
+}
+
+<span class="comment">// Incrustar hijos (obtener productos de un usuario)</span>
+GET /usuarios/1?_embed=productos
+
+<span class="comment">// Resultado:</span>
+{
+    "id": 1,
+    "nombre": "Juan García",
+    "productos": [        <span class="comment">// Array de productos del usuario</span>
+        { "id": 1, "nombre": "Laptop Pro", ... },
+        { "id": 2, "nombre": "Smartphone X", ... }
+    ]
+}
+
+<span class="comment">// Obtener solo los hijos</span>
+GET /usuarios/1/productos
+
+<span class="comment">// Combinar expand y filtros</span>
+GET /pedidos?_expand=usuario&_expand=producto&estado=pendiente</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EJEMPLO COMPLETO CRUD -->
+        <section class="mb-5 pb-5 border-bottom">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-purple me-2" style="background: #6f42c1;">6</span>Ejemplo Completo: CRUD con JSON Server
+            </h2>
+            
+            <div class="code-block">
+<pre><code><span class="comment">// ============================================</span>
+<span class="comment">// API SERVICE PARA JSON SERVER</span>
+<span class="comment">// ============================================</span>
+
+<span class="keyword">const</span> API_URL = <span class="string">'http://localhost:3000'</span>;
+
+<span class="keyword">class</span> <span class="function">ApiService</span> {
+    <span class="keyword">constructor</span>(resource) {
+        this.endpoint = <span class="string">`${API_URL}/${resource}`</span>;
+    }
+    
+    <span class="comment">// ===== GET ALL =====</span>
+    <span class="keyword">async</span> <span class="function">getAll</span>(params = {}) {
+        <span class="keyword">const</span> query = <span class="keyword">new</span> URLSearchParams(params).<span class="function">toString</span>();
+        <span class="keyword">const</span> url = query ? <span class="string">`${this.endpoint}?${query}`</span> : this.endpoint;
+        
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(url);
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw new</span> Error(<span class="string">`Error: ${response.status}`</span>);
+        }
+        
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">const</span> total = response.headers.<span class="function">get</span>(<span class="string">'X-Total-Count'</span>);
+        
+        <span class="keyword">return</span> { data, total: total ? parseInt(total) : data.length };
+    }
+    
+    <span class="comment">// ===== GET BY ID =====</span>
+    <span class="keyword">async</span> <span class="function">getById</span>(id) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${this.endpoint}/${id}`</span>);
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">if</span> (response.status === 404) {
+                <span class="keyword">throw new</span> Error(<span class="string">'Recurso no encontrado'</span>);
+            }
+            <span class="keyword">throw new</span> Error(<span class="string">`Error: ${response.status}`</span>);
+        }
+        
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+    
+    <span class="comment">// ===== CREATE =====</span>
+    <span class="keyword">async</span> <span class="function">create</span>(data) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(this.endpoint, {
+            method: <span class="string">'POST'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+            },
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw new</span> Error(<span class="string">'Error al crear'</span>);
+        }
+        
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+    
+    <span class="comment">// ===== UPDATE (PUT - reemplaza todo) =====</span>
+    <span class="keyword">async</span> <span class="function">update</span>(id, data) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${this.endpoint}/${id}`</span>, {
+            method: <span class="string">'PUT'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+            },
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw new</span> Error(<span class="string">'Error al actualizar'</span>);
+        }
+        
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+    
+    <span class="comment">// ===== PATCH (actualización parcial) =====</span>
+    <span class="keyword">async</span> <span class="function">patch</span>(id, data) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${this.endpoint}/${id}`</span>, {
+            method: <span class="string">'PATCH'</span>,
+            headers: {
+                <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>
+            },
+            body: JSON.<span class="function">stringify</span>(data)
+        });
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw new</span> Error(<span class="string">'Error al actualizar'</span>);
+        }
+        
+        <span class="keyword">return</span> response.<span class="function">json</span>();
+    }
+    
+    <span class="comment">// ===== DELETE =====</span>
+    <span class="keyword">async</span> <span class="function">delete</span>(id) {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">`${this.endpoint}/${id}`</span>, {
+            method: <span class="string">'DELETE'</span>
+        });
+        
+        <span class="keyword">if</span> (!response.ok) {
+            <span class="keyword">throw new</span> Error(<span class="string">'Error al eliminar'</span>);
+        }
+        
+        <span class="keyword">return</span> true;
+    }
+    
+    <span class="comment">// ===== BÚSQUEDA =====</span>
+    <span class="keyword">async</span> <span class="function">search</span>(query) {
+        <span class="keyword">return</span> this.<span class="function">getAll</span>({ q: query });
+    }
+    
+    <span class="comment">// ===== CON PAGINACIÓN =====</span>
+    <span class="keyword">async</span> <span class="function">paginate</span>(page = 1, limit = 10, filters = {}) {
+        <span class="keyword">const</span> params = {
+            _page: page,
+            _limit: limit,
+            ...filters
+        };
+        <span class="keyword">return</span> this.<span class="function">getAll</span>(params);
+    }
+}
+
+<span class="comment">// ============================================</span>
+<span class="comment">// USO DEL API SERVICE</span>
+<span class="comment">// ============================================</span>
+
+<span class="comment">// Crear instancias para cada recurso</span>
+<span class="keyword">const</span> usuariosApi = <span class="keyword">new</span> ApiService(<span class="string">'usuarios'</span>);
+<span class="keyword">const</span> productosApi = <span class="keyword">new</span> ApiService(<span class="string">'productos'</span>);
+<span class="keyword">const</span> pedidosApi = <span class="keyword">new</span> ApiService(<span class="string">'pedidos'</span>);
+
+<span class="comment">// Obtener todos los usuarios</span>
+<span class="keyword">const</span> { data: usuarios } = <span class="keyword">await</span> usuariosApi.<span class="function">getAll</span>();
+
+<span class="comment">// Obtener usuario por ID</span>
+<span class="keyword">const</span> usuario = <span class="keyword">await</span> usuariosApi.<span class="function">getById</span>(1);
+
+<span class="comment">// Crear nuevo usuario</span>
+<span class="keyword">const</span> nuevoUsuario = <span class="keyword">await</span> usuariosApi.<span class="function">create</span>({
+    nombre: <span class="string">'Ana Torres'</span>,
+    email: <span class="string">'ana@email.com'</span>,
+    edad: 27,
+    activo: true
+});
+
+<span class="comment">// Actualizar usuario</span>
+<span class="keyword">await</span> usuariosApi.<span class="function">patch</span>(1, { activo: false });
+
+<span class="comment">// Eliminar usuario</span>
+<span class="keyword">await</span> usuariosApi.<span class="function">delete</span>(3);
+
+<span class="comment">// Buscar productos</span>
+<span class="keyword">const</span> { data: results } = <span class="keyword">await</span> productosApi.<span class="function">search</span>(<span class="string">'laptop'</span>);
+
+<span class="comment">// Paginar productos</span>
+<span class="keyword">const</span> { data, total } = <span class="keyword">await</span> productosApi.<span class="function">paginate</span>(1, 10, {
+    _sort: <span class="string">'precio'</span>,
+    _order: <span class="string">'desc'</span>
+});
+
+<span class="comment">// Filtrar por categoría</span>
+<span class="keyword">const</span> electronica = <span class="keyword">await</span> productosApi.<span class="function">getAll</span>({
+    categoria: <span class="string">'electronica'</span>,
+    _sort: <span class="string">'precio'</span>
+});</code></pre>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2 copy-btn">
+                <i class="bi bi-clipboard me-1"></i>Copiar Código
+            </button>
+        </section>
+
+        <!-- RUTAS PERSONALIZADAS -->
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4">
+                <span class="badge bg-dark me-2">7</span>Rutas Personalizadas
+            </h2>
+            
+            <p>Crea un archivo <code>routes.json</code> para personalizar las rutas:</p>
+            
+            <div class="code-block mb-4">
+<pre><code>{
+    <span class="string">"/api/*"</span>: <span class="string">"/$1"</span>,
+    <span class="string">"/api/v1/*"</span>: <span class="string">"/$1"</span>,
+    <span class="string">"/users/:id"</span>: <span class="string">"/usuarios/:id"</span>,
+    <span class="string">"/products"</span>: <span class="string">"/productos"</span>,
+    <span class="string">"/products/:id"</span>: <span class="string">"/productos/:id"</span>
+}
+
+<span class="comment">// Ejecutar con rutas personalizadas:</span>
+<span class="comment">// json-server db.json --routes routes.json</span>
+
+<span class="comment">// Ahora puedes usar:</span>
+<span class="comment">// GET /api/usuarios  -> /usuarios</span>
+<span class="comment">// GET /api/v1/productos  -> /productos</span>
+<span class="comment">// GET /users/1  -> /usuarios/1</span></code></pre>
+            </div>
+            
+            <div class="alert alert-info">
+                <h5><i class="bi bi-lightbulb me-2"></i>Tip: Middleware Personalizado</h5>
+                <p class="mb-0">Para lógica más compleja, puedes crear un archivo <code>server.js</code> con middleware personalizado. Consulta la <a href="https://github.com/typicode/json-server" target="_blank">documentación oficial</a>.</p>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between">
+            <a href="fetch.html" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Fetch API
+            </a>
+            <a href="../index.html" class="btn btn-primary">
+                Volver al Inicio <i class="bi bi-house ms-2"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-0">WebGuía Completa - JSON Server</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

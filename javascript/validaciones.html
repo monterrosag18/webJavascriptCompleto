@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validaciones JavaScript - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ee5a24, #f79f1f);
+        }
+        .code-block pre {
+            margin: 0;
+            color: #e4e4e7;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+        .code-block .function { color: #8be9fd; }
+        .code-block .comment { color: #6272a4; font-style: italic; }
+        .code-block .regex { color: #f1fa8c; }
+        
+        .btn-copy {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .btn-copy:hover { background: rgba(255,255,255,0.2); }
+        
+        .concept-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #ee5a24;
+        }
+        
+        .validation-demo input {
+            transition: all 0.3s;
+        }
+        .validation-demo input.is-valid {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25);
+        }
+        .validation-demo input.is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220,53,69,0.25);
+        }
+        
+        .regex-table td:first-child {
+            font-family: 'Fira Code', monospace;
+            color: #f1fa8c;
+            background: #1a1a2e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="eventos.html">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storage.html">Storage</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="validaciones.html">Validaciones</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="text-center py-5 mb-5" style="background: linear-gradient(135deg, #ee5a24, #f79f1f);">
+        <div class="container text-white">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="bi bi-shield-check me-3"></i>Validaciones de Formularios
+            </h1>
+            <p class="lead mb-0">Regex, validación en tiempo real y mejores prácticas</p>
+        </div>
+    </section>
+
+    <div class="container py-4">
+        <!-- 1. Validación HTML5 -->
+        <section class="concept-card">
+            <h4><span class="badge bg-warning text-dark me-2">1</span>Validación Nativa HTML5</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">&lt;!-- ATRIBUTOS DE VALIDACIÓN HTML5 --&gt;</span>
+
+<span class="comment">&lt;!-- required - Campo obligatorio --&gt;</span>
+&lt;input type="text" <span class="keyword">required</span>&gt;
+
+<span class="comment">&lt;!-- minlength/maxlength - Longitud de texto --&gt;</span>
+&lt;input type="text" <span class="keyword">minlength</span>="<span class="number">3</span>" <span class="keyword">maxlength</span>="<span class="number">50</span>"&gt;
+
+<span class="comment">&lt;!-- min/max - Rango de números --&gt;</span>
+&lt;input type="number" <span class="keyword">min</span>="<span class="number">0</span>" <span class="keyword">max</span>="<span class="number">100</span>"&gt;
+
+<span class="comment">&lt;!-- pattern - Expresión regular --&gt;</span>
+&lt;input type="text" <span class="keyword">pattern</span>="<span class="regex">[A-Za-z]{3,}</span>"&gt;
+
+<span class="comment">&lt;!-- type - Validación automática por tipo --&gt;</span>
+&lt;input type="email"&gt; <span class="comment">&lt;!-- Valida formato email --&gt;</span>
+&lt;input type="url"&gt;   <span class="comment">&lt;!-- Valida formato URL --&gt;</span>
+&lt;input type="tel"&gt;   <span class="comment">&lt;!-- Para teléfonos --&gt;</span>
+&lt;input type="number"&gt;<span class="comment">&lt;!-- Solo números --&gt;</span>
+
+<span class="comment">&lt;!-- Ejemplo completo --&gt;</span>
+&lt;form id="miForm"&gt;
+    &lt;input type="text" 
+           name="nombre"
+           required
+           minlength="2"
+           maxlength="50"
+           placeholder="Nombre"&gt;
+           
+    &lt;input type="email"
+           name="email"
+           required
+           placeholder="Email"&gt;
+           
+    &lt;input type="password"
+           name="password"
+           required
+           minlength="8"
+           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+           title="Debe contener al menos 8 caracteres, una mayúscula, una minúscula y un número"&gt;
+           
+    &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;</pre>
+            </div>
+        </section>
+
+        <!-- 2. Constraint Validation API -->
+        <section class="concept-card">
+            <h4><span class="badge bg-primary me-2">2</span>Constraint Validation API (JavaScript)</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// CONSTRAINT VALIDATION API</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> form = document.<span class="function">querySelector</span>(<span class="string">'#miForm'</span>);
+<span class="keyword">const</span> email = document.<span class="function">querySelector</span>(<span class="string">'#email'</span>);
+
+<span class="comment">// PROPIEDADES DE VALIDITY</span>
+console.<span class="function">log</span>(email.validity);
+<span class="comment">/*
+ValidityState {
+    valueMissing: false,    // required pero vacío
+    typeMismatch: false,    // tipo incorrecto (email, url)
+    patternMismatch: false, // no cumple pattern
+    tooLong: false,         // excede maxlength
+    tooShort: false,        // menor que minlength
+    rangeUnderflow: false,  // menor que min
+    rangeOverflow: false,   // mayor que max
+    stepMismatch: false,    // no cumple step
+    badInput: false,        // valor que no se puede convertir
+    customError: false,     // error personalizado
+    valid: true             // true si todo está bien
+}
+*/</span>
+
+<span class="comment">// MÉTODOS ÚTILES</span>
+
+<span class="comment">// checkValidity() - Verifica si es válido</span>
+<span class="keyword">if</span> (email.<span class="function">checkValidity</span>()) {
+    console.<span class="function">log</span>(<span class="string">'Email válido'</span>);
+} <span class="keyword">else</span> {
+    console.<span class="function">log</span>(<span class="string">'Email inválido'</span>);
+}
+
+<span class="comment">// reportValidity() - Verifica y muestra mensaje</span>
+email.<span class="function">reportValidity</span>();
+
+<span class="comment">// setCustomValidity() - Error personalizado</span>
+email.<span class="function">setCustomValidity</span>(<span class="string">'Este email ya está registrado'</span>);
+email.<span class="function">reportValidity</span>();
+
+<span class="comment">// Limpiar error personalizado</span>
+email.<span class="function">setCustomValidity</span>(<span class="string">''</span>);
+
+<span class="comment">// validationMessage - Mensaje de error actual</span>
+console.<span class="function">log</span>(email.validationMessage);
+
+<span class="comment">// VALIDAR FORMULARIO COMPLETO</span>
+form.<span class="function">addEventListener</span>(<span class="string">'submit'</span>, (e) => {
+    <span class="keyword">if</span> (!form.<span class="function">checkValidity</span>()) {
+        e.<span class="function">preventDefault</span>();
+        e.<span class="function">stopPropagation</span>();
+        
+        <span class="comment">// Mostrar errores</span>
+        form.classList.<span class="function">add</span>(<span class="string">'was-validated'</span>);
+    }
+});
+
+<span class="comment">// VALIDACIÓN EN TIEMPO REAL</span>
+email.<span class="function">addEventListener</span>(<span class="string">'input'</span>, () => {
+    <span class="keyword">if</span> (email.validity.valid) {
+        email.classList.<span class="function">remove</span>(<span class="string">'is-invalid'</span>);
+        email.classList.<span class="function">add</span>(<span class="string">'is-valid'</span>);
+    } <span class="keyword">else</span> {
+        email.classList.<span class="function">remove</span>(<span class="string">'is-valid'</span>);
+        email.classList.<span class="function">add</span>(<span class="string">'is-invalid'</span>);
+    }
+});</pre>
+            </div>
+        </section>
+
+        <!-- 3. Regex Comunes -->
+        <section class="concept-card">
+            <h4><span class="badge bg-success me-2">3</span>Expresiones Regulares Comunes</h4>
+            
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered regex-table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Regex</th>
+                            <th>Uso</th>
+                            <th>Ejemplo Válido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/^[a-zA-Z]+$/</td>
+                            <td>Solo letras</td>
+                            <td>Juan</td>
+                        </tr>
+                        <tr>
+                            <td>/^[0-9]+$/</td>
+                            <td>Solo números</td>
+                            <td>12345</td>
+                        </tr>
+                        <tr>
+                            <td>/^[a-zA-Z0-9]+$/</td>
+                            <td>Alfanumérico</td>
+                            <td>User123</td>
+                        </tr>
+                        <tr>
+                            <td>/^\d{8,}$/</td>
+                            <td>Mínimo 8 dígitos</td>
+                            <td>12345678</td>
+                        </tr>
+                        <tr>
+                            <td>/^\S+@\S+\.\S+$/</td>
+                            <td>Email básico</td>
+                            <td>test@mail.com</td>
+                        </tr>
+                        <tr>
+                            <td>/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/</td>
+                            <td>Password seguro</td>
+                            <td>Pass1234</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// EXPRESIONES REGULARES DE VALIDACIÓN</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">const</span> Regex = {
+    <span class="comment">// Email</span>
+    email: <span class="regex">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>,
+    
+    <span class="comment">// Email más estricto</span>
+    emailStrict: <span class="regex">/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</span>,
+    
+    <span class="comment">// Teléfono España (+34 o sin prefijo)</span>
+    telefonoES: <span class="regex">/^(\+34)?[6-9]\d{8}$/</span>,
+    
+    <span class="comment">// Teléfono internacional</span>
+    telefonoInt: <span class="regex">/^\+?[1-9]\d{1,14}$/</span>,
+    
+    <span class="comment">// DNI/NIE España</span>
+    dniES: <span class="regex">/^[0-9]{8}[A-Z]$/</span>,
+    nieES: <span class="regex">/^[XYZ][0-9]{7}[A-Z]$/</span>,
+    
+    <span class="comment">// Código Postal España</span>
+    cpES: <span class="regex">/^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$/</span>,
+    
+    <span class="comment">// URL</span>
+    url: <span class="regex">/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/</span>,
+    
+    <span class="comment">// Tarjeta de crédito (formato básico)</span>
+    creditCard: <span class="regex">/^[0-9]{13,19}$/</span>,
+    
+    <span class="comment">// IBAN</span>
+    iban: <span class="regex">/^[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}$/</span>,
+    
+    <span class="comment">// Password seguro (min 8, mayús, minús, número)</span>
+    passwordSeguro: <span class="regex">/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/</span>,
+    
+    <span class="comment">// Password muy seguro (+ caracter especial)</span>
+    passwordMuySeguro: <span class="regex">/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/</span>,
+    
+    <span class="comment">// Solo letras (incluye acentos)</span>
+    soloLetras: <span class="regex">/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/</span>,
+    
+    <span class="comment">// Nombre de usuario</span>
+    username: <span class="regex">/^[a-zA-Z0-9_]{3,20}$/</span>,
+    
+    <span class="comment">// Fecha DD/MM/YYYY</span>
+    fechaDMY: <span class="regex">/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19|20)\d\d$/</span>,
+    
+    <span class="comment">// Hora HH:MM</span>
+    hora: <span class="regex">/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/</span>,
+    
+    <span class="comment">// IPv4</span>
+    ipv4: <span class="regex">/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/</span>,
+    
+    <span class="comment">// Hexadecimal (color)</span>
+    hexColor: <span class="regex">/^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/</span>
+};
+
+<span class="comment">// Uso</span>
+<span class="keyword">function</span> <span class="function">validar</span>(regex, valor) {
+    <span class="keyword">return</span> regex.<span class="function">test</span>(valor);
+}
+
+<span class="function">validar</span>(Regex.email, <span class="string">'test@email.com'</span>); <span class="comment">// true</span>
+<span class="function">validar</span>(Regex.telefonoES, <span class="string">'612345678'</span>);  <span class="comment">// true</span>
+<span class="function">validar</span>(Regex.dniES, <span class="string">'12345678A'</span>);      <span class="comment">// true</span></pre>
+            </div>
+        </section>
+
+        <!-- 4. Clase Validador Completa -->
+        <section class="concept-card">
+            <h4><span class="badge bg-danger me-2">4</span>Clase Validador Completa</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// VALIDADOR COMPLETO REUTILIZABLE</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">Validador</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.errores = [];
+    }
+    
+    <span class="comment">// Limpiar errores</span>
+    <span class="function">reset</span>() {
+        <span class="keyword">this</span>.errores = [];
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Añadir error</span>
+    <span class="function">addError</span>(campo, mensaje) {
+        <span class="keyword">this</span>.errores.<span class="function">push</span>({ campo, mensaje });
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// ¿Es válido?</span>
+    <span class="keyword">get</span> <span class="function">isValid</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.errores.length === <span class="number">0</span>;
+    }
+    
+    <span class="comment">// Obtener errores de un campo</span>
+    <span class="function">getErrors</span>(campo) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.errores
+            .<span class="function">filter</span>(e => e.campo === campo)
+            .<span class="function">map</span>(e => e.mensaje);
+    }
+    
+    <span class="comment">// VALIDACIONES</span>
+    
+    <span class="function">required</span>(valor, campo, mensaje = <span class="string">'Este campo es obligatorio'</span>) {
+        <span class="keyword">if</span> (!valor || valor.<span class="function">trim</span>() === <span class="string">''</span>) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">email</span>(valor, campo, mensaje = <span class="string">'Email inválido'</span>) {
+        <span class="keyword">const</span> regex = <span class="regex">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;
+        <span class="keyword">if</span> (valor && !regex.<span class="function">test</span>(valor)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">minLength</span>(valor, min, campo, mensaje) {
+        mensaje = mensaje || <span class="string">`Mínimo ${min} caracteres`</span>;
+        <span class="keyword">if</span> (valor && valor.length < min) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">maxLength</span>(valor, max, campo, mensaje) {
+        mensaje = mensaje || <span class="string">`Máximo ${max} caracteres`</span>;
+        <span class="keyword">if</span> (valor && valor.length > max) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">pattern</span>(valor, regex, campo, mensaje = <span class="string">'Formato inválido'</span>) {
+        <span class="keyword">if</span> (valor && !regex.<span class="function">test</span>(valor)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">match</span>(valor1, valor2, campo, mensaje = <span class="string">'Los campos no coinciden'</span>) {
+        <span class="keyword">if</span> (valor1 !== valor2) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">numeric</span>(valor, campo, mensaje = <span class="string">'Debe ser numérico'</span>) {
+        <span class="keyword">if</span> (valor && <span class="function">isNaN</span>(valor)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">range</span>(valor, min, max, campo, mensaje) {
+        mensaje = mensaje || <span class="string">`Debe estar entre ${min} y ${max}`</span>;
+        <span class="keyword">const</span> num = <span class="function">Number</span>(valor);
+        <span class="keyword">if</span> (valor && (num < min || num > max)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, mensaje);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="function">password</span>(valor, campo) {
+        <span class="keyword">if</span> (!/[a-z]/.<span class="function">test</span>(valor)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, <span class="string">'Debe contener minúsculas'</span>);
+        }
+        <span class="keyword">if</span> (!/[A-Z]/.<span class="function">test</span>(valor)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, <span class="string">'Debe contener mayúsculas'</span>);
+        }
+        <span class="keyword">if</span> (!/[0-9]/.<span class="function">test</span>(valor)) {
+            <span class="keyword">this</span>.<span class="function">addError</span>(campo, <span class="string">'Debe contener números'</span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+}
+
+<span class="comment">// USO</span>
+<span class="keyword">const</span> validador = <span class="keyword">new</span> <span class="function">Validador</span>();
+
+<span class="keyword">const</span> datos = {
+    nombre: <span class="string">'Ana'</span>,
+    email: <span class="string">'ana@email.com'</span>,
+    password: <span class="string">'Pass123'</span>,
+    confirmPassword: <span class="string">'Pass123'</span>,
+    edad: <span class="number">25</span>
+};
+
+validador
+    .<span class="function">reset</span>()
+    .<span class="function">required</span>(datos.nombre, <span class="string">'nombre'</span>)
+    .<span class="function">minLength</span>(datos.nombre, <span class="number">2</span>, <span class="string">'nombre'</span>)
+    .<span class="function">required</span>(datos.email, <span class="string">'email'</span>)
+    .<span class="function">email</span>(datos.email, <span class="string">'email'</span>)
+    .<span class="function">required</span>(datos.password, <span class="string">'password'</span>)
+    .<span class="function">minLength</span>(datos.password, <span class="number">8</span>, <span class="string">'password'</span>)
+    .<span class="function">password</span>(datos.password, <span class="string">'password'</span>)
+    .<span class="function">match</span>(datos.password, datos.confirmPassword, <span class="string">'confirmPassword'</span>)
+    .<span class="function">range</span>(datos.edad, <span class="number">18</span>, <span class="number">120</span>, <span class="string">'edad'</span>);
+
+<span class="keyword">if</span> (validador.isValid) {
+    console.<span class="function">log</span>(<span class="string">'Todo válido!'</span>);
+} <span class="keyword">else</span> {
+    console.<span class="function">log</span>(<span class="string">'Errores:'</span>, validador.errores);
+}</pre>
+            </div>
+        </section>
+
+        <!-- 5. Validación en Tiempo Real -->
+        <section class="concept-card">
+            <h4><span class="badge bg-info me-2">5</span>Validación en Tiempo Real</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// VALIDACIÓN EN TIEMPO REAL</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">class</span> <span class="function">FormValidator</span> {
+    <span class="keyword">constructor</span>(formId) {
+        <span class="keyword">this</span>.form = document.<span class="function">getElementById</span>(formId);
+        <span class="keyword">this</span>.rules = <span class="keyword">new</span> <span class="function">Map</span>();
+        <span class="keyword">this</span>.<span class="function">init</span>();
+    }
+    
+    <span class="comment">// Añadir reglas a un campo</span>
+    <span class="function">addRules</span>(fieldName, rules) {
+        <span class="keyword">this</span>.rules.<span class="function">set</span>(fieldName, rules);
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    
+    <span class="comment">// Inicializar eventos</span>
+    <span class="function">init</span>() {
+        <span class="keyword">this</span>.form.<span class="function">addEventListener</span>(<span class="string">'submit'</span>, (e) => {
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.<span class="function">validateAll</span>()) {
+                e.<span class="function">preventDefault</span>();
+            }
+        });
+        
+        <span class="comment">// Validar en input y blur</span>
+        <span class="keyword">this</span>.form.<span class="function">querySelectorAll</span>(<span class="string">'input, select, textarea'</span>).<span class="function">forEach</span>(field => {
+            field.<span class="function">addEventListener</span>(<span class="string">'input'</span>, () => <span class="keyword">this</span>.<span class="function">validateField</span>(field));
+            field.<span class="function">addEventListener</span>(<span class="string">'blur'</span>, () => <span class="keyword">this</span>.<span class="function">validateField</span>(field));
+        });
+    }
+    
+    <span class="comment">// Validar un campo</span>
+    <span class="function">validateField</span>(field) {
+        <span class="keyword">const</span> rules = <span class="keyword">this</span>.rules.<span class="function">get</span>(field.name);
+        <span class="keyword">if</span> (!rules) <span class="keyword">return</span> <span class="keyword">true</span>;
+        
+        <span class="keyword">const</span> value = field.value.<span class="function">trim</span>();
+        <span class="keyword">const</span> errors = [];
+        
+        rules.<span class="function">forEach</span>(rule => {
+            <span class="keyword">if</span> (!rule.<span class="function">validate</span>(value, <span class="keyword">this</span>.form)) {
+                errors.<span class="function">push</span>(rule.message);
+            }
+        });
+        
+        <span class="keyword">this</span>.<span class="function">showFieldStatus</span>(field, errors);
+        <span class="keyword">return</span> errors.length === <span class="number">0</span>;
+    }
+    
+    <span class="comment">// Validar todos los campos</span>
+    <span class="function">validateAll</span>() {
+        <span class="keyword">let</span> isValid = <span class="keyword">true</span>;
+        
+        <span class="keyword">this</span>.rules.<span class="function">forEach</span>((_, fieldName) => {
+            <span class="keyword">const</span> field = <span class="keyword">this</span>.form.<span class="function">querySelector</span>(<span class="string">`[name="${fieldName}"]`</span>);
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.<span class="function">validateField</span>(field)) {
+                isValid = <span class="keyword">false</span>;
+            }
+        });
+        
+        <span class="keyword">return</span> isValid;
+    }
+    
+    <span class="comment">// Mostrar estado visual</span>
+    <span class="function">showFieldStatus</span>(field, errors) {
+        <span class="keyword">const</span> container = field.parentElement;
+        <span class="keyword">let</span> feedback = container.<span class="function">querySelector</span>(<span class="string">'.invalid-feedback'</span>);
+        
+        <span class="keyword">if</span> (!feedback) {
+            feedback = document.<span class="function">createElement</span>(<span class="string">'div'</span>);
+            feedback.className = <span class="string">'invalid-feedback'</span>;
+            container.<span class="function">appendChild</span>(feedback);
+        }
+        
+        <span class="keyword">if</span> (errors.length > <span class="number">0</span>) {
+            field.classList.<span class="function">remove</span>(<span class="string">'is-valid'</span>);
+            field.classList.<span class="function">add</span>(<span class="string">'is-invalid'</span>);
+            feedback.textContent = errors[<span class="number">0</span>];
+        } <span class="keyword">else</span> <span class="keyword">if</span> (field.value) {
+            field.classList.<span class="function">remove</span>(<span class="string">'is-invalid'</span>);
+            field.classList.<span class="function">add</span>(<span class="string">'is-valid'</span>);
+            feedback.textContent = <span class="string">''</span>;
+        }
+    }
+}
+
+<span class="comment">// DEFINIR REGLAS</span>
+<span class="keyword">const</span> validator = <span class="keyword">new</span> <span class="function">FormValidator</span>(<span class="string">'registerForm'</span>);
+
+validator
+    .<span class="function">addRules</span>(<span class="string">'email'</span>, [
+        { 
+            <span class="function">validate</span>: v => v.length > <span class="number">0</span>, 
+            message: <span class="string">'El email es obligatorio'</span> 
+        },
+        { 
+            <span class="function">validate</span>: v => <span class="regex">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.<span class="function">test</span>(v), 
+            message: <span class="string">'Email inválido'</span> 
+        }
+    ])
+    .<span class="function">addRules</span>(<span class="string">'password'</span>, [
+        { <span class="function">validate</span>: v => v.length >= <span class="number">8</span>, message: <span class="string">'Mínimo 8 caracteres'</span> },
+        { <span class="function">validate</span>: v => <span class="regex">/[A-Z]/</span>.<span class="function">test</span>(v), message: <span class="string">'Debe tener mayúscula'</span> },
+        { <span class="function">validate</span>: v => <span class="regex">/[0-9]/</span>.<span class="function">test</span>(v), message: <span class="string">'Debe tener número'</span> }
+    ])
+    .<span class="function">addRules</span>(<span class="string">'confirmPassword'</span>, [
+        { 
+            <span class="function">validate</span>: (v, form) => v === form.<span class="function">querySelector</span>(<span class="string">'[name="password"]'</span>).value,
+            message: <span class="string">'Las contraseñas no coinciden'</span>
+        }
+    ]);</pre>
+            </div>
+        </section>
+
+        <!-- 6. Validación de DNI/NIF Español -->
+        <section class="concept-card">
+            <h4><span class="badge bg-secondary me-2">6</span>Validación de DNI/NIF Español</h4>
+            
+            <div class="code-block">
+                <button class="btn-copy" onclick="copyCode(this)">
+                    <i class="bi bi-clipboard"></i> Copiar
+                </button>
+                <pre>
+<span class="comment">// ========================================</span>
+<span class="comment">// VALIDAR DNI/NIE ESPAÑOL</span>
+<span class="comment">// ========================================</span>
+
+<span class="keyword">function</span> <span class="function">validarDNI</span>(dni) {
+    <span class="keyword">const</span> letras = <span class="string">'TRWAGMYFPDXBNJZSQVHLCKE'</span>;
+    
+    <span class="comment">// Limpiar y mayúsculas</span>
+    dni = dni.<span class="function">toUpperCase</span>().<span class="function">replace</span>(<span class="regex">/\s/g</span>, <span class="string">''</span>);
+    
+    <span class="comment">// Validar formato</span>
+    <span class="keyword">if</span> (!<span class="regex">/^[0-9]{8}[A-Z]$/</span>.<span class="function">test</span>(dni)) {
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+    
+    <span class="keyword">const</span> numero = <span class="function">parseInt</span>(dni.<span class="function">slice</span>(<span class="number">0</span>, <span class="number">8</span>));
+    <span class="keyword">const</span> letra = dni.<span class="function">charAt</span>(<span class="number">8</span>);
+    
+    <span class="keyword">return</span> letra === letras[numero % <span class="number">23</span>];
+}
+
+<span class="keyword">function</span> <span class="function">validarNIE</span>(nie) {
+    <span class="keyword">const</span> letras = <span class="string">'TRWAGMYFPDXBNJZSQVHLCKE'</span>;
+    
+    nie = nie.<span class="function">toUpperCase</span>().<span class="function">replace</span>(<span class="regex">/\s/g</span>, <span class="string">''</span>);
+    
+    <span class="comment">// Validar formato</span>
+    <span class="keyword">if</span> (!<span class="regex">/^[XYZ][0-9]{7}[A-Z]$/</span>.<span class="function">test</span>(nie)) {
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+    
+    <span class="comment">// Convertir X, Y, Z a números</span>
+    <span class="keyword">let</span> nieNumero = nie
+        .<span class="function">replace</span>(<span class="string">'X'</span>, <span class="string">'0'</span>)
+        .<span class="function">replace</span>(<span class="string">'Y'</span>, <span class="string">'1'</span>)
+        .<span class="function">replace</span>(<span class="string">'Z'</span>, <span class="string">'2'</span>);
+    
+    <span class="keyword">const</span> numero = <span class="function">parseInt</span>(nieNumero.<span class="function">slice</span>(<span class="number">0</span>, <span class="number">8</span>));
+    <span class="keyword">const</span> letra = nie.<span class="function">charAt</span>(<span class="number">8</span>);
+    
+    <span class="keyword">return</span> letra === letras[numero % <span class="number">23</span>];
+}
+
+<span class="comment">// Validar DNI o NIE</span>
+<span class="keyword">function</span> <span class="function">validarDocumento</span>(documento) {
+    documento = documento.<span class="function">toUpperCase</span>().<span class="function">trim</span>();
+    
+    <span class="keyword">if</span> (<span class="regex">/^[0-9]/</span>.<span class="function">test</span>(documento)) {
+        <span class="keyword">return</span> <span class="function">validarDNI</span>(documento);
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> <span class="function">validarNIE</span>(documento);
+    }
+}
+
+<span class="comment">// Ejemplos</span>
+<span class="function">validarDNI</span>(<span class="string">'12345678Z'</span>); <span class="comment">// true</span>
+<span class="function">validarNIE</span>(<span class="string">'X1234567L'</span>); <span class="comment">// true</span>
+<span class="function">validarDocumento</span>(<span class="string">'12345678Z'</span>); <span class="comment">// true</span></pre>
+            </div>
+        </section>
+
+        <!-- Demo Interactiva -->
+        <section class="card my-5">
+            <div class="card-header bg-dark text-white">
+                <i class="bi bi-play-circle me-2"></i>Demo: Validación en Tiempo Real
+            </div>
+            <div class="card-body validation-demo">
+                <form id="demoForm" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="demoEmail" placeholder="tu@email.com">
+                            <div class="form-text" id="emailFeedback"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">DNI/NIE</label>
+                            <input type="text" class="form-control" id="demoDNI" placeholder="12345678A">
+                            <div class="form-text" id="dniFeedback"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="demoPassword" placeholder="Mín 8 caracteres">
+                            <div class="form-text" id="passwordFeedback"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Teléfono España</label>
+                            <input type="tel" class="form-control" id="demoTelefono" placeholder="612345678">
+                            <div class="form-text" id="telefonoFeedback"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Navegación -->
+        <div class="d-flex justify-content-between mt-5">
+            <a href="storage.html" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Storage
+            </a>
+            <a href="../apis/fetch.html" class="btn btn-primary">
+                Fetch API<i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">Validaciones de Formularios | Guía Completa</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+        
+        // Validaciones demo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const telefonoRegex = /^(\+34)?[6-9]\d{8}$/;
+        const dniRegex = /^[0-9]{8}[A-Z]$/;
+        const nieRegex = /^[XYZ][0-9]{7}[A-Z]$/;
+        const letras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+        
+        function validarDNI(dni) {
+            dni = dni.toUpperCase().replace(/\s/g, '');
+            if (!dniRegex.test(dni)) return false;
+            const numero = parseInt(dni.slice(0, 8));
+            const letra = dni.charAt(8);
+            return letra === letras[numero % 23];
+        }
+        
+        function validarNIE(nie) {
+            nie = nie.toUpperCase().replace(/\s/g, '');
+            if (!nieRegex.test(nie)) return false;
+            let nieNumero = nie.replace('X', '0').replace('Y', '1').replace('Z', '2');
+            const numero = parseInt(nieNumero.slice(0, 8));
+            const letra = nie.charAt(8);
+            return letra === letras[numero % 23];
+        }
+        
+        function setValidation(input, feedbackId, isValid, message) {
+            const feedback = document.getElementById(feedbackId);
+            input.classList.remove('is-valid', 'is-invalid');
+            if (input.value) {
+                input.classList.add(isValid ? 'is-valid' : 'is-invalid');
+                feedback.textContent = isValid ? '✓ Válido' : message;
+                feedback.className = 'form-text ' + (isValid ? 'text-success' : 'text-danger');
+            } else {
+                feedback.textContent = '';
+            }
+        }
+        
+        document.getElementById('demoEmail').addEventListener('input', function() {
+            setValidation(this, 'emailFeedback', emailRegex.test(this.value), 'Email inválido');
+        });
+        
+        document.getElementById('demoDNI').addEventListener('input', function() {
+            const val = this.value.toUpperCase();
+            const isValid = validarDNI(val) || validarNIE(val);
+            setValidation(this, 'dniFeedback', isValid, 'DNI/NIE inválido');
+        });
+        
+        document.getElementById('demoPassword').addEventListener('input', function() {
+            const val = this.value;
+            let isValid = val.length >= 8 && /[A-Z]/.test(val) && /[a-z]/.test(val) && /[0-9]/.test(val);
+            let msg = [];
+            if (val.length < 8) msg.push('8+ caracteres');
+            if (!/[A-Z]/.test(val)) msg.push('mayúscula');
+            if (!/[a-z]/.test(val)) msg.push('minúscula');
+            if (!/[0-9]/.test(val)) msg.push('número');
+            setValidation(this, 'passwordFeedback', isValid, 'Falta: ' + msg.join(', '));
+        });
+        
+        document.getElementById('demoTelefono').addEventListener('input', function() {
+            setValidation(this, 'telefonoFeedback', telefonoRegex.test(this.value), 'Teléfono inválido');
+        });
+    </script>
+</body>
+</html>

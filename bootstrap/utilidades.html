@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Utilidades - Guía Completa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+        }
+        
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 60px 0;
+        }
+        
+        .hero h1 {
+            font-weight: 700;
+        }
+        
+        .example-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .example-card h3 {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .preview-area {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .demo-box {
+            background: #6c757d;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        .sticky-nav {
+            position: sticky;
+            top: 20px;
+        }
+        
+        .table-utilities {
+            font-size: 14px;
+        }
+        
+        .table-utilities code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <a href="../index.html" class="btn btn-outline-light mb-4">
+                <i class="bi bi-arrow-left me-2"></i>Volver a la Guía
+            </a>
+            <h1><i class="bi bi-tools me-3"></i>Bootstrap 5 Utilidades</h1>
+            <p class="lead mb-0">Clases de utilidad para spacing, colores, display, flexbox y más</p>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-lg-3 mb-4">
+                <div class="sticky-nav">
+                    <div class="example-card">
+                        <h5 class="fw-bold mb-3">📋 Contenido</h5>
+                        <nav class="nav flex-column">
+                            <a class="nav-link px-0" href="#spacing">1. Spacing (Margin/Padding)</a>
+                            <a class="nav-link px-0" href="#colores">2. Colores</a>
+                            <a class="nav-link px-0" href="#display">3. Display</a>
+                            <a class="nav-link px-0" href="#flex">4. Flexbox</a>
+                            <a class="nav-link px-0" href="#sizing">5. Sizing (Tamaños)</a>
+                            <a class="nav-link px-0" href="#text">6. Texto</a>
+                            <a class="nav-link px-0" href="#borders">7. Bordes</a>
+                            <a class="nav-link px-0" href="#shadows">8. Sombras</a>
+                            <a class="nav-link px-0" href="#position">9. Position</a>
+                            <a class="nav-link px-0" href="#otros">10. Otros Útiles</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- 1. SPACING -->
+                <section id="spacing" class="example-card">
+                    <h3><i class="bi bi-arrows-expand text-primary me-2"></i>1. Spacing (Margin y Padding)</h3>
+                    <p class="text-muted">Control de márgenes y padding con clases utilitarias</p>
+                    
+                    <div class="alert alert-info">
+                        <strong>Formato:</strong> <code>{propiedad}{lado}-{tamaño}</code> o <code>{propiedad}{lado}-{breakpoint}-{tamaño}</code>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Propiedades</h6>
+                            <ul class="list-unstyled">
+                                <li><code>m</code> - margin</li>
+                                <li><code>p</code> - padding</li>
+                            </ul>
+                            
+                            <h6 class="fw-bold mt-3">Lados</h6>
+                            <ul class="list-unstyled">
+                                <li><code>t</code> - top</li>
+                                <li><code>b</code> - bottom</li>
+                                <li><code>s</code> - start (left en LTR)</li>
+                                <li><code>e</code> - end (right en LTR)</li>
+                                <li><code>x</code> - horizontal (left + right)</li>
+                                <li><code>y</code> - vertical (top + bottom)</li>
+                                <li>(vacío) - todos los lados</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Tamaños</h6>
+                            <ul class="list-unstyled">
+                                <li><code>0</code> - 0</li>
+                                <li><code>1</code> - 0.25rem (4px)</li>
+                                <li><code>2</code> - 0.5rem (8px)</li>
+                                <li><code>3</code> - 1rem (16px)</li>
+                                <li><code>4</code> - 1.5rem (24px)</li>
+                                <li><code>5</code> - 3rem (48px)</li>
+                                <li><code>auto</code> - auto (solo margin)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-area mt-4">
+                        <h6 class="fw-bold mb-3">Ejemplos Visuales</h6>
+                        <div class="bg-primary text-white p-3 mb-2">p-3 (padding: 1rem en todos los lados)</div>
+                        <div class="bg-success text-white py-2 px-4 mb-2">py-2 px-4 (vertical 0.5rem, horizontal 1.5rem)</div>
+                        <div class="bg-info text-white pt-4 pb-2 ps-3 pe-5 mb-2">pt-4 pb-2 ps-3 pe-5</div>
+                        <div class="d-flex gap-3">
+                            <div class="bg-warning text-dark p-2 me-auto">me-auto (margin-end: auto)</div>
+                            <div class="bg-danger text-white p-2">Otro elemento</div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Padding en todos los lados --&gt;
+&lt;div class="p-3"&gt;...&lt;/div&gt;           &lt;!-- padding: 1rem --&gt;
+
+&lt;!-- Margin horizontal y vertical --&gt;
+&lt;div class="mx-4 my-2"&gt;...&lt;/div&gt;     &lt;!-- margin-x: 1.5rem, margin-y: 0.5rem --&gt;
+
+&lt;!-- Cada lado individual --&gt;
+&lt;div class="mt-3 mb-2 ms-4 me-1"&gt;...&lt;/div&gt;
+
+&lt;!-- Centrar elemento con margin auto --&gt;
+&lt;div class="mx-auto" style="width: 200px"&gt;Centrado&lt;/div&gt;
+
+&lt;!-- Responsivo (diferente spacing por breakpoint) --&gt;
+&lt;div class="p-2 p-md-4 p-lg-5"&gt;
+    Más padding en pantallas más grandes
+&lt;/div&gt;
+
+&lt;!-- Gap para flexbox/grid --&gt;
+&lt;div class="d-flex gap-3"&gt;...&lt;/div&gt;  &lt;!-- gap: 1rem --&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 2. COLORES -->
+                <section id="colores" class="example-card">
+                    <h3><i class="bi bi-palette text-primary me-2"></i>2. Colores</h3>
+                    <p class="text-muted">Colores de texto, fondo y enlaces</p>
+                    
+                    <h6 class="fw-bold mb-3">Colores de Texto</h6>
+                    <div class="preview-area">
+                        <p class="text-primary">.text-primary</p>
+                        <p class="text-secondary">.text-secondary</p>
+                        <p class="text-success">.text-success</p>
+                        <p class="text-danger">.text-danger</p>
+                        <p class="text-warning bg-dark">.text-warning</p>
+                        <p class="text-info bg-dark">.text-info</p>
+                        <p class="text-light bg-dark">.text-light</p>
+                        <p class="text-dark">.text-dark</p>
+                        <p class="text-body">.text-body</p>
+                        <p class="text-muted">.text-muted</p>
+                        <p class="text-white bg-dark">.text-white</p>
+                        <p class="text-black-50">.text-black-50</p>
+                        <p class="text-white-50 bg-dark">.text-white-50</p>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Colores de Fondo</h6>
+                    <div class="preview-area">
+                        <div class="row g-2">
+                            <div class="col-md-4"><div class="bg-primary text-white p-2 rounded">.bg-primary</div></div>
+                            <div class="col-md-4"><div class="bg-secondary text-white p-2 rounded">.bg-secondary</div></div>
+                            <div class="col-md-4"><div class="bg-success text-white p-2 rounded">.bg-success</div></div>
+                            <div class="col-md-4"><div class="bg-danger text-white p-2 rounded">.bg-danger</div></div>
+                            <div class="col-md-4"><div class="bg-warning text-dark p-2 rounded">.bg-warning</div></div>
+                            <div class="col-md-4"><div class="bg-info text-dark p-2 rounded">.bg-info</div></div>
+                            <div class="col-md-4"><div class="bg-light text-dark p-2 rounded border">.bg-light</div></div>
+                            <div class="col-md-4"><div class="bg-dark text-white p-2 rounded">.bg-dark</div></div>
+                            <div class="col-md-4"><div class="bg-body-secondary p-2 rounded">.bg-body-secondary</div></div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Fondos con Opacidad</h6>
+                    <div class="preview-area">
+                        <div class="row g-2">
+                            <div class="col-md-3"><div class="bg-primary bg-opacity-100 text-white p-2 rounded">.bg-opacity-100</div></div>
+                            <div class="col-md-3"><div class="bg-primary bg-opacity-75 text-white p-2 rounded">.bg-opacity-75</div></div>
+                            <div class="col-md-3"><div class="bg-primary bg-opacity-50 text-white p-2 rounded">.bg-opacity-50</div></div>
+                            <div class="col-md-3"><div class="bg-primary bg-opacity-25 p-2 rounded">.bg-opacity-25</div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Colores de texto --&gt;
+&lt;p class="text-primary"&gt;Texto primario&lt;/p&gt;
+&lt;p class="text-success"&gt;Texto éxito&lt;/p&gt;
+&lt;p class="text-danger"&gt;Texto peligro&lt;/p&gt;
+&lt;p class="text-muted"&gt;Texto atenuado&lt;/p&gt;
+
+&lt;!-- Fondos --&gt;
+&lt;div class="bg-primary text-white"&gt;Fondo primario&lt;/div&gt;
+&lt;div class="bg-success text-white"&gt;Fondo éxito&lt;/div&gt;
+&lt;div class="bg-warning text-dark"&gt;Fondo advertencia&lt;/div&gt;
+
+&lt;!-- Fondos con opacidad --&gt;
+&lt;div class="bg-primary bg-opacity-75"&gt;75% opacidad&lt;/div&gt;
+&lt;div class="bg-primary bg-opacity-50"&gt;50% opacidad&lt;/div&gt;
+&lt;div class="bg-primary bg-opacity-25"&gt;25% opacidad&lt;/div&gt;
+
+&lt;!-- Gradientes (requiere activar en Sass) --&gt;
+&lt;div class="bg-primary bg-gradient"&gt;Con gradiente&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 3. DISPLAY -->
+                <section id="display" class="example-card">
+                    <h3><i class="bi bi-grid-3x3 text-primary me-2"></i>3. Display</h3>
+                    <p class="text-muted">Control de la propiedad display</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-utilities table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Clase</th>
+                                    <th>Equivalente CSS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>.d-none</code></td><td>display: none</td></tr>
+                                <tr><td><code>.d-inline</code></td><td>display: inline</td></tr>
+                                <tr><td><code>.d-inline-block</code></td><td>display: inline-block</td></tr>
+                                <tr><td><code>.d-block</code></td><td>display: block</td></tr>
+                                <tr><td><code>.d-grid</code></td><td>display: grid</td></tr>
+                                <tr><td><code>.d-flex</code></td><td>display: flex</td></tr>
+                                <tr><td><code>.d-inline-flex</code></td><td>display: inline-flex</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Display Responsivo</h6>
+                    <div class="preview-area">
+                        <div class="d-none d-md-block bg-primary text-white p-2 mb-2">
+                            Solo visible en md y superior (≥768px)
+                        </div>
+                        <div class="d-block d-lg-none bg-success text-white p-2 mb-2">
+                            Visible solo en pantallas menores a lg (&lt;992px)
+                        </div>
+                        <div class="d-none d-sm-block d-md-none bg-warning text-dark p-2">
+                            Solo visible en sm (≥576px y &lt;768px)
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Ocultar elemento --&gt;
+&lt;div class="d-none"&gt;No visible&lt;/div&gt;
+
+&lt;!-- Mostrar como bloque --&gt;
+&lt;span class="d-block"&gt;Ahora es bloque&lt;/span&gt;
+
+&lt;!-- Flexbox --&gt;
+&lt;div class="d-flex"&gt;...&lt;/div&gt;
+
+&lt;!-- Grid --&gt;
+&lt;div class="d-grid gap-2"&gt;...&lt;/div&gt;
+
+&lt;!-- Responsivo: ocultar en móvil, mostrar en md+ --&gt;
+&lt;div class="d-none d-md-block"&gt;Solo desktop&lt;/div&gt;
+
+&lt;!-- Responsivo: mostrar solo en móvil --&gt;
+&lt;div class="d-block d-md-none"&gt;Solo móvil&lt;/div&gt;
+
+&lt;!-- Breakpoints disponibles:
+     d-{value}           - xs (siempre)
+     d-sm-{value}        - ≥576px
+     d-md-{value}        - ≥768px
+     d-lg-{value}        - ≥992px
+     d-xl-{value}        - ≥1200px
+     d-xxl-{value}       - ≥1400px
+--&gt;
+
+&lt;!-- Ejemplo: visible solo en tablet --&gt;
+&lt;div class="d-none d-md-block d-lg-none"&gt;
+    Solo visible entre 768px y 991px
+&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 4. FLEXBOX -->
+                <section id="flex" class="example-card">
+                    <h3><i class="bi bi-columns-gap text-primary me-2"></i>4. Flexbox Utilities</h3>
+                    <p class="text-muted">Control completo de layouts flexbox</p>
+                    
+                    <h6 class="fw-bold mb-3">Dirección</h6>
+                    <div class="preview-area">
+                        <div class="d-flex flex-row bg-light p-2 mb-2">
+                            <div class="bg-primary text-white p-2 m-1">1</div>
+                            <div class="bg-primary text-white p-2 m-1">2</div>
+                            <div class="bg-primary text-white p-2 m-1">3</div>
+                            <span class="ms-2 align-self-center">.flex-row (default)</span>
+                        </div>
+                        <div class="d-flex flex-row-reverse bg-light p-2 mb-2">
+                            <div class="bg-success text-white p-2 m-1">1</div>
+                            <div class="bg-success text-white p-2 m-1">2</div>
+                            <div class="bg-success text-white p-2 m-1">3</div>
+                            <span class="me-2 align-self-center">.flex-row-reverse</span>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Justify Content (eje principal)</h6>
+                    <div class="preview-area">
+                        <div class="d-flex justify-content-start bg-light p-2 mb-2">
+                            <div class="bg-info p-2 m-1">1</div>
+                            <div class="bg-info p-2 m-1">2</div>
+                            <span class="ms-2">.justify-content-start</span>
+                        </div>
+                        <div class="d-flex justify-content-center bg-light p-2 mb-2">
+                            <div class="bg-info p-2 m-1">1</div>
+                            <div class="bg-info p-2 m-1">2</div>
+                            <span class="ms-2">.justify-content-center</span>
+                        </div>
+                        <div class="d-flex justify-content-end bg-light p-2 mb-2">
+                            <div class="bg-info p-2 m-1">1</div>
+                            <div class="bg-info p-2 m-1">2</div>
+                            <span class="ms-2">.justify-content-end</span>
+                        </div>
+                        <div class="d-flex justify-content-between bg-light p-2 mb-2">
+                            <div class="bg-info p-2 m-1">1</div>
+                            <div class="bg-info p-2 m-1">2</div>
+                            <div class="bg-info p-2 m-1">.justify-content-between</div>
+                        </div>
+                        <div class="d-flex justify-content-around bg-light p-2 mb-2">
+                            <div class="bg-info p-2 m-1">1</div>
+                            <div class="bg-info p-2 m-1">2</div>
+                            <div class="bg-info p-2 m-1">.justify-content-around</div>
+                        </div>
+                        <div class="d-flex justify-content-evenly bg-light p-2">
+                            <div class="bg-info p-2 m-1">1</div>
+                            <div class="bg-info p-2 m-1">2</div>
+                            <div class="bg-info p-2 m-1">.justify-content-evenly</div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Align Items (eje cruzado)</h6>
+                    <div class="preview-area">
+                        <div class="d-flex align-items-start bg-light p-2 mb-2" style="height: 80px">
+                            <div class="bg-warning p-2 m-1">1</div>
+                            <div class="bg-warning p-2 m-1">2</div>
+                            <span class="ms-2">.align-items-start</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-light p-2 mb-2" style="height: 80px">
+                            <div class="bg-warning p-2 m-1">1</div>
+                            <div class="bg-warning p-2 m-1">2</div>
+                            <span class="ms-2">.align-items-center</span>
+                        </div>
+                        <div class="d-flex align-items-end bg-light p-2" style="height: 80px">
+                            <div class="bg-warning p-2 m-1">1</div>
+                            <div class="bg-warning p-2 m-1">2</div>
+                            <span class="ms-2">.align-items-end</span>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Flex Grow, Shrink y Fill</h6>
+                    <div class="preview-area">
+                        <div class="d-flex bg-light p-2 mb-2">
+                            <div class="bg-danger text-white p-2 flex-grow-1">flex-grow-1</div>
+                            <div class="bg-danger text-white p-2 ms-1">Normal</div>
+                        </div>
+                        <div class="d-flex bg-light p-2">
+                            <div class="bg-success text-white p-2 flex-fill">flex-fill</div>
+                            <div class="bg-success text-white p-2 ms-1 flex-fill">flex-fill</div>
+                            <div class="bg-success text-white p-2 ms-1 flex-fill">flex-fill</div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Contenedor Flex --&gt;
+&lt;div class="d-flex"&gt;...&lt;/div&gt;
+
+&lt;!-- Dirección --&gt;
+&lt;div class="d-flex flex-row"&gt;...&lt;/div&gt;
+&lt;div class="d-flex flex-column"&gt;...&lt;/div&gt;
+&lt;div class="d-flex flex-row-reverse"&gt;...&lt;/div&gt;
+
+&lt;!-- Justify Content (eje principal) --&gt;
+&lt;div class="d-flex justify-content-start"&gt;...&lt;/div&gt;
+&lt;div class="d-flex justify-content-center"&gt;...&lt;/div&gt;
+&lt;div class="d-flex justify-content-end"&gt;...&lt;/div&gt;
+&lt;div class="d-flex justify-content-between"&gt;...&lt;/div&gt;
+&lt;div class="d-flex justify-content-around"&gt;...&lt;/div&gt;
+&lt;div class="d-flex justify-content-evenly"&gt;...&lt;/div&gt;
+
+&lt;!-- Align Items (eje cruzado) --&gt;
+&lt;div class="d-flex align-items-start"&gt;...&lt;/div&gt;
+&lt;div class="d-flex align-items-center"&gt;...&lt;/div&gt;
+&lt;div class="d-flex align-items-end"&gt;...&lt;/div&gt;
+&lt;div class="d-flex align-items-stretch"&gt;...&lt;/div&gt;
+
+&lt;!-- Align Self (item individual) --&gt;
+&lt;div class="align-self-start"&gt;...&lt;/div&gt;
+&lt;div class="align-self-center"&gt;...&lt;/div&gt;
+&lt;div class="align-self-end"&gt;...&lt;/div&gt;
+
+&lt;!-- Flex Wrap --&gt;
+&lt;div class="d-flex flex-wrap"&gt;...&lt;/div&gt;
+&lt;div class="d-flex flex-nowrap"&gt;...&lt;/div&gt;
+
+&lt;!-- Grow, Shrink, Fill --&gt;
+&lt;div class="flex-grow-1"&gt;Crece para llenar&lt;/div&gt;
+&lt;div class="flex-shrink-0"&gt;No se encoge&lt;/div&gt;
+&lt;div class="flex-fill"&gt;Igual tamaño&lt;/div&gt;
+
+&lt;!-- Gap (espaciado entre items) --&gt;
+&lt;div class="d-flex gap-3"&gt;...&lt;/div&gt;
+
+&lt;!-- Orden --&gt;
+&lt;div class="order-1"&gt;...&lt;/div&gt;
+&lt;div class="order-2"&gt;...&lt;/div&gt;
+&lt;div class="order-first"&gt;...&lt;/div&gt;
+&lt;div class="order-last"&gt;...&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 5. SIZING -->
+                <section id="sizing" class="example-card">
+                    <h3><i class="bi bi-aspect-ratio text-primary me-2"></i>5. Sizing (Tamaños)</h3>
+                    <p class="text-muted">Control de ancho, alto y tamaños máximos</p>
+                    
+                    <h6 class="fw-bold mb-3">Width (Ancho)</h6>
+                    <div class="preview-area">
+                        <div class="w-25 bg-primary text-white p-2 mb-2">.w-25 (25%)</div>
+                        <div class="w-50 bg-primary text-white p-2 mb-2">.w-50 (50%)</div>
+                        <div class="w-75 bg-primary text-white p-2 mb-2">.w-75 (75%)</div>
+                        <div class="w-100 bg-primary text-white p-2 mb-2">.w-100 (100%)</div>
+                        <div class="w-auto bg-success text-white p-2 d-inline-block">.w-auto</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Height (Alto)</h6>
+                    <div class="preview-area">
+                        <div class="d-flex" style="height: 150px">
+                            <div class="h-25 bg-info text-white p-2 me-2">.h-25</div>
+                            <div class="h-50 bg-info text-white p-2 me-2">.h-50</div>
+                            <div class="h-75 bg-info text-white p-2 me-2">.h-75</div>
+                            <div class="h-100 bg-info text-white p-2 me-2">.h-100</div>
+                            <div class="h-auto bg-warning text-dark p-2">.h-auto</div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Max Width/Height y Viewport</h6>
+                    <div class="preview-area">
+                        <div class="mw-100 bg-danger text-white p-2 mb-2">.mw-100 (max-width: 100%)</div>
+                        <div class="vw-100 bg-success text-white p-2 mb-2">.vw-100 (width: 100vw)</div>
+                        <div class="min-vw-100 bg-warning text-dark p-2">.min-vw-100</div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Width (ancho) --&gt;
+&lt;div class="w-25"&gt;25% de ancho&lt;/div&gt;
+&lt;div class="w-50"&gt;50% de ancho&lt;/div&gt;
+&lt;div class="w-75"&gt;75% de ancho&lt;/div&gt;
+&lt;div class="w-100"&gt;100% de ancho&lt;/div&gt;
+&lt;div class="w-auto"&gt;Ancho automático&lt;/div&gt;
+
+&lt;!-- Height (alto) --&gt;
+&lt;div class="h-25"&gt;25% de alto&lt;/div&gt;
+&lt;div class="h-50"&gt;50% de alto&lt;/div&gt;
+&lt;div class="h-100"&gt;100% de alto&lt;/div&gt;
+
+&lt;!-- Max width/height --&gt;
+&lt;div class="mw-100"&gt;max-width: 100%&lt;/div&gt;
+&lt;div class="mh-100"&gt;max-height: 100%&lt;/div&gt;
+
+&lt;!-- Viewport units --&gt;
+&lt;div class="vw-100"&gt;100% viewport width&lt;/div&gt;
+&lt;div class="vh-100"&gt;100% viewport height&lt;/div&gt;
+&lt;div class="min-vw-100"&gt;min 100vw&lt;/div&gt;
+&lt;div class="min-vh-100"&gt;min 100vh&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 6. TEXTO -->
+                <section id="text" class="example-card">
+                    <h3><i class="bi bi-fonts text-primary me-2"></i>6. Texto</h3>
+                    <p class="text-muted">Utilidades de tipografía y alineación de texto</p>
+                    
+                    <h6 class="fw-bold mb-3">Alineación</h6>
+                    <div class="preview-area">
+                        <p class="text-start">.text-start - Alineado a la izquierda</p>
+                        <p class="text-center">.text-center - Centrado</p>
+                        <p class="text-end">.text-end - Alineado a la derecha</p>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Transformaciones</h6>
+                    <div class="preview-area">
+                        <p class="text-lowercase">.text-lowercase - TODO EN MINÚSCULAS</p>
+                        <p class="text-uppercase">.text-uppercase - todo en mayúsculas</p>
+                        <p class="text-capitalize">.text-capitalize - primera letra mayúscula</p>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Peso y Estilo</h6>
+                    <div class="preview-area">
+                        <p class="fw-bold">.fw-bold - Negrita</p>
+                        <p class="fw-bolder">.fw-bolder - Más negrita</p>
+                        <p class="fw-semibold">.fw-semibold - Semi negrita</p>
+                        <p class="fw-medium">.fw-medium - Medio</p>
+                        <p class="fw-normal">.fw-normal - Normal</p>
+                        <p class="fw-light">.fw-light - Ligero</p>
+                        <p class="fw-lighter">.fw-lighter - Más ligero</p>
+                        <p class="fst-italic">.fst-italic - Cursiva</p>
+                        <p class="fst-normal">.fst-normal - Normal (no cursiva)</p>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Decoración y Wrap</h6>
+                    <div class="preview-area">
+                        <p class="text-decoration-underline">.text-decoration-underline</p>
+                        <p class="text-decoration-line-through">.text-decoration-line-through</p>
+                        <p class="text-decoration-none"><a href="#">.text-decoration-none</a></p>
+                        <p class="text-wrap bg-light p-2" style="width: 200px">.text-wrap - Este texto largo se ajustará</p>
+                        <p class="text-nowrap bg-light p-2 overflow-hidden" style="width: 200px">.text-nowrap - Este texto no se ajusta</p>
+                        <p class="text-truncate bg-light p-2" style="width: 200px">.text-truncate - Texto largo truncado con puntos suspensivos</p>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3">Tamaño de Fuente</h6>
+                    <div class="preview-area">
+                        <p class="fs-1">.fs-1 (calc(1.375rem + 1.5vw))</p>
+                        <p class="fs-2">.fs-2</p>
+                        <p class="fs-3">.fs-3</p>
+                        <p class="fs-4">.fs-4</p>
+                        <p class="fs-5">.fs-5</p>
+                        <p class="fs-6">.fs-6 (1rem)</p>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Alineación (responsiva: text-{breakpoint}-{value}) --&gt;
+&lt;p class="text-start"&gt;Izquierda&lt;/p&gt;
+&lt;p class="text-center"&gt;Centro&lt;/p&gt;
+&lt;p class="text-end"&gt;Derecha&lt;/p&gt;
+&lt;p class="text-md-center"&gt;Centro solo en md+&lt;/p&gt;
+
+&lt;!-- Transformaciones --&gt;
+&lt;p class="text-lowercase"&gt;minúsculas&lt;/p&gt;
+&lt;p class="text-uppercase"&gt;MAYÚSCULAS&lt;/p&gt;
+&lt;p class="text-capitalize"&gt;Capitalizado&lt;/p&gt;
+
+&lt;!-- Peso --&gt;
+&lt;p class="fw-bold"&gt;Negrita&lt;/p&gt;
+&lt;p class="fw-semibold"&gt;Semi-negrita&lt;/p&gt;
+&lt;p class="fw-normal"&gt;Normal&lt;/p&gt;
+&lt;p class="fw-light"&gt;Ligero&lt;/p&gt;
+
+&lt;!-- Cursiva --&gt;
+&lt;p class="fst-italic"&gt;Cursiva&lt;/p&gt;
+
+&lt;!-- Decoración --&gt;
+&lt;p class="text-decoration-underline"&gt;Subrayado&lt;/p&gt;
+&lt;p class="text-decoration-line-through"&gt;Tachado&lt;/p&gt;
+&lt;a class="text-decoration-none"&gt;Sin subrayado&lt;/a&gt;
+
+&lt;!-- Tamaño de fuente --&gt;
+&lt;p class="fs-1"&gt;Más grande&lt;/p&gt;
+&lt;p class="fs-6"&gt;Más pequeño&lt;/p&gt;
+
+&lt;!-- Truncado con ... --&gt;
+&lt;p class="text-truncate" style="width: 200px"&gt;
+    Texto muy largo que será truncado
+&lt;/p&gt;
+
+&lt;!-- Line Height --&gt;
+&lt;p class="lh-1"&gt;Line height 1&lt;/p&gt;
+&lt;p class="lh-sm"&gt;Line height small&lt;/p&gt;
+&lt;p class="lh-base"&gt;Line height base&lt;/p&gt;
+&lt;p class="lh-lg"&gt;Line height large&lt;/p&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 7. BORDES -->
+                <section id="borders" class="example-card">
+                    <h3><i class="bi bi-square text-primary me-2"></i>7. Bordes</h3>
+                    <p class="text-muted">Control de bordes, colores y border-radius</p>
+                    
+                    <h6 class="fw-bold mb-3">Agregar Bordes</h6>
+                    <div class="preview-area d-flex flex-wrap gap-3">
+                        <div class="p-3 bg-light border">.border</div>
+                        <div class="p-3 bg-light border-top">.border-top</div>
+                        <div class="p-3 bg-light border-end">.border-end</div>
+                        <div class="p-3 bg-light border-bottom">.border-bottom</div>
+                        <div class="p-3 bg-light border-start">.border-start</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Quitar Bordes</h6>
+                    <div class="preview-area d-flex flex-wrap gap-3">
+                        <div class="p-3 bg-light border border-0">.border-0</div>
+                        <div class="p-3 bg-light border border-top-0">.border-top-0</div>
+                        <div class="p-3 bg-light border border-end-0">.border-end-0</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Colores de Borde</h6>
+                    <div class="preview-area d-flex flex-wrap gap-3">
+                        <div class="p-3 bg-light border border-primary">.border-primary</div>
+                        <div class="p-3 bg-light border border-secondary">.border-secondary</div>
+                        <div class="p-3 bg-light border border-success">.border-success</div>
+                        <div class="p-3 bg-light border border-danger">.border-danger</div>
+                        <div class="p-3 bg-light border border-warning">.border-warning</div>
+                        <div class="p-3 bg-light border border-info">.border-info</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Grosor de Borde</h6>
+                    <div class="preview-area d-flex flex-wrap gap-3">
+                        <div class="p-3 bg-light border border-1">.border-1</div>
+                        <div class="p-3 bg-light border border-2">.border-2</div>
+                        <div class="p-3 bg-light border border-3">.border-3</div>
+                        <div class="p-3 bg-light border border-4">.border-4</div>
+                        <div class="p-3 bg-light border border-5">.border-5</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Border Radius</h6>
+                    <div class="preview-area d-flex flex-wrap gap-3 align-items-center">
+                        <div class="p-3 bg-primary text-white rounded">.rounded</div>
+                        <div class="p-3 bg-primary text-white rounded-0">.rounded-0</div>
+                        <div class="p-3 bg-primary text-white rounded-1">.rounded-1</div>
+                        <div class="p-3 bg-primary text-white rounded-2">.rounded-2</div>
+                        <div class="p-3 bg-primary text-white rounded-3">.rounded-3</div>
+                        <div class="p-3 bg-primary text-white rounded-4">.rounded-4</div>
+                        <div class="p-3 bg-primary text-white rounded-5">.rounded-5</div>
+                        <div class="p-3 bg-success text-white rounded-circle" style="width:60px;height:60px">.rounded-circle</div>
+                        <div class="p-3 bg-info text-white rounded-pill">.rounded-pill</div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Agregar bordes --&gt;
+&lt;div class="border"&gt;Todos los bordes&lt;/div&gt;
+&lt;div class="border-top"&gt;Solo arriba&lt;/div&gt;
+&lt;div class="border-end"&gt;Solo derecha&lt;/div&gt;
+&lt;div class="border-bottom"&gt;Solo abajo&lt;/div&gt;
+&lt;div class="border-start"&gt;Solo izquierda&lt;/div&gt;
+
+&lt;!-- Quitar bordes --&gt;
+&lt;div class="border border-0"&gt;Sin bordes&lt;/div&gt;
+&lt;div class="border border-top-0"&gt;Sin borde arriba&lt;/div&gt;
+
+&lt;!-- Colores --&gt;
+&lt;div class="border border-primary"&gt;Borde primario&lt;/div&gt;
+&lt;div class="border border-success"&gt;Borde success&lt;/div&gt;
+&lt;div class="border border-danger"&gt;Borde danger&lt;/div&gt;
+
+&lt;!-- Grosor --&gt;
+&lt;div class="border border-1"&gt;1px&lt;/div&gt;
+&lt;div class="border border-3"&gt;3px&lt;/div&gt;
+&lt;div class="border border-5"&gt;5px&lt;/div&gt;
+
+&lt;!-- Border Radius --&gt;
+&lt;div class="rounded"&gt;Default&lt;/div&gt;
+&lt;div class="rounded-0"&gt;Sin radius&lt;/div&gt;
+&lt;div class="rounded-3"&gt;Radius 3&lt;/div&gt;
+&lt;div class="rounded-circle"&gt;Círculo&lt;/div&gt;
+&lt;div class="rounded-pill"&gt;Píldora&lt;/div&gt;
+
+&lt;!-- Radius por lado --&gt;
+&lt;div class="rounded-top"&gt;Solo arriba&lt;/div&gt;
+&lt;div class="rounded-end"&gt;Solo derecha&lt;/div&gt;
+&lt;div class="rounded-bottom"&gt;Solo abajo&lt;/div&gt;
+&lt;div class="rounded-start"&gt;Solo izquierda&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 8. SOMBRAS -->
+                <section id="shadows" class="example-card">
+                    <h3><i class="bi bi-layers text-primary me-2"></i>8. Sombras</h3>
+                    <p class="text-muted">Box shadows predefinidos</p>
+                    
+                    <div class="preview-area">
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <div class="p-4 bg-white shadow-none">.shadow-none</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-4 bg-white shadow-sm">.shadow-sm</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-4 bg-white shadow">.shadow</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-4 bg-white shadow-lg">.shadow-lg</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Sin sombra --&gt;
+&lt;div class="shadow-none"&gt;...&lt;/div&gt;
+
+&lt;!-- Sombra pequeña --&gt;
+&lt;div class="shadow-sm"&gt;...&lt;/div&gt;
+
+&lt;!-- Sombra normal --&gt;
+&lt;div class="shadow"&gt;...&lt;/div&gt;
+
+&lt;!-- Sombra grande --&gt;
+&lt;div class="shadow-lg"&gt;...&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 9. POSITION -->
+                <section id="position" class="example-card">
+                    <h3><i class="bi bi-pin-map text-primary me-2"></i>9. Position</h3>
+                    <p class="text-muted">Control de posicionamiento de elementos</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-utilities table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Clase</th>
+                                    <th>Equivalente CSS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>.position-static</code></td><td>position: static</td></tr>
+                                <tr><td><code>.position-relative</code></td><td>position: relative</td></tr>
+                                <tr><td><code>.position-absolute</code></td><td>position: absolute</td></tr>
+                                <tr><td><code>.position-fixed</code></td><td>position: fixed</td></tr>
+                                <tr><td><code>.position-sticky</code></td><td>position: sticky</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Utilidades Top/Bottom/Start/End</h6>
+                    <div class="preview-area position-relative" style="height: 200px">
+                        <div class="position-absolute top-0 start-0 bg-primary text-white p-2">top-0 start-0</div>
+                        <div class="position-absolute top-0 end-0 bg-success text-white p-2">top-0 end-0</div>
+                        <div class="position-absolute top-50 start-50 translate-middle bg-warning text-dark p-2">Centrado</div>
+                        <div class="position-absolute bottom-0 start-0 bg-danger text-white p-2">bottom-0 start-0</div>
+                        <div class="position-absolute bottom-0 end-0 bg-info text-white p-2">bottom-0 end-0</div>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Position --&gt;
+&lt;div class="position-static"&gt;...&lt;/div&gt;
+&lt;div class="position-relative"&gt;...&lt;/div&gt;
+&lt;div class="position-absolute"&gt;...&lt;/div&gt;
+&lt;div class="position-fixed"&gt;...&lt;/div&gt;
+&lt;div class="position-sticky"&gt;...&lt;/div&gt;
+
+&lt;!-- Posición con valores --&gt;
+&lt;div class="position-absolute top-0 start-0"&gt;Arriba izquierda&lt;/div&gt;
+&lt;div class="position-absolute top-0 end-0"&gt;Arriba derecha&lt;/div&gt;
+&lt;div class="position-absolute bottom-0 start-0"&gt;Abajo izquierda&lt;/div&gt;
+&lt;div class="position-absolute bottom-0 end-0"&gt;Abajo derecha&lt;/div&gt;
+
+&lt;!-- Valores disponibles: 0, 50, 100 --&gt;
+&lt;div class="position-absolute top-50"&gt;50% desde arriba&lt;/div&gt;
+
+&lt;!-- Centrar absolutamente --&gt;
+&lt;div class="position-absolute top-50 start-50 translate-middle"&gt;
+    Centrado
+&lt;/div&gt;
+
+&lt;!-- Translate utilities --&gt;
+&lt;div class="translate-middle"&gt;Centra X e Y&lt;/div&gt;
+&lt;div class="translate-middle-x"&gt;Solo centra X&lt;/div&gt;
+&lt;div class="translate-middle-y"&gt;Solo centra Y&lt;/div&gt;
+
+&lt;!-- Fixed positions --&gt;
+&lt;div class="fixed-top"&gt;Fijado arriba&lt;/div&gt;
+&lt;div class="fixed-bottom"&gt;Fijado abajo&lt;/div&gt;
+&lt;div class="sticky-top"&gt;Sticky arriba&lt;/div&gt;</code></pre>
+                    </div>
+                </section>
+
+                <!-- 10. OTROS -->
+                <section id="otros" class="example-card">
+                    <h3><i class="bi bi-three-dots text-primary me-2"></i>10. Otras Utilidades Útiles</h3>
+                    <p class="text-muted">Overflow, visibility, opacity, z-index y más</p>
+                    
+                    <h6 class="fw-bold mb-3">Overflow</h6>
+                    <div class="preview-area">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="overflow-auto bg-light p-2" style="height: 80px; width: 150px">
+                                    .overflow-auto - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="overflow-hidden bg-light p-2" style="height: 80px; width: 150px">
+                                    .overflow-hidden - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="overflow-scroll bg-light p-2" style="height: 80px; width: 150px">
+                                    .overflow-scroll - Lorem ipsum dolor sit amet consectetur.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Opacity</h6>
+                    <div class="preview-area d-flex gap-3">
+                        <div class="bg-primary text-white p-3 opacity-100">.opacity-100</div>
+                        <div class="bg-primary text-white p-3 opacity-75">.opacity-75</div>
+                        <div class="bg-primary text-white p-3 opacity-50">.opacity-50</div>
+                        <div class="bg-primary text-white p-3 opacity-25">.opacity-25</div>
+                        <div class="bg-primary text-white p-3 opacity-0">.opacity-0</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Visibility</h6>
+                    <div class="preview-area">
+                        <div class="visible bg-success text-white p-2 d-inline-block me-3">.visible</div>
+                        <div class="invisible bg-danger text-white p-2 d-inline-block">.invisible (ocupa espacio)</div>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">User Select</h6>
+                    <div class="preview-area">
+                        <p class="user-select-all bg-light p-2">.user-select-all - Click para seleccionar todo</p>
+                        <p class="user-select-auto bg-light p-2">.user-select-auto - Selección normal</p>
+                        <p class="user-select-none bg-light p-2">.user-select-none - No seleccionable</p>
+                    </div>
+                    
+                    <h6 class="fw-bold mb-3 mt-4">Pointer Events</h6>
+                    <div class="preview-area">
+                        <a href="#" class="pe-none">pe-none - Link no clickeable</a>
+                        <br>
+                        <a href="#" class="pe-auto">pe-auto - Link normal</a>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> Copiar</button>
+<pre><code>&lt;!-- Overflow --&gt;
+&lt;div class="overflow-auto"&gt;...&lt;/div&gt;
+&lt;div class="overflow-hidden"&gt;...&lt;/div&gt;
+&lt;div class="overflow-visible"&gt;...&lt;/div&gt;
+&lt;div class="overflow-scroll"&gt;...&lt;/div&gt;
+
+&lt;!-- Overflow por eje --&gt;
+&lt;div class="overflow-x-auto"&gt;...&lt;/div&gt;
+&lt;div class="overflow-y-hidden"&gt;...&lt;/div&gt;
+
+&lt;!-- Opacity --&gt;
+&lt;div class="opacity-100"&gt;100%&lt;/div&gt;
+&lt;div class="opacity-75"&gt;75%&lt;/div&gt;
+&lt;div class="opacity-50"&gt;50%&lt;/div&gt;
+&lt;div class="opacity-25"&gt;25%&lt;/div&gt;
+&lt;div class="opacity-0"&gt;0%&lt;/div&gt;
+
+&lt;!-- Visibility --&gt;
+&lt;div class="visible"&gt;Visible&lt;/div&gt;
+&lt;div class="invisible"&gt;Invisible (ocupa espacio)&lt;/div&gt;
+
+&lt;!-- User Select --&gt;
+&lt;div class="user-select-all"&gt;Click selecciona todo&lt;/div&gt;
+&lt;div class="user-select-auto"&gt;Normal&lt;/div&gt;
+&lt;div class="user-select-none"&gt;No seleccionable&lt;/div&gt;
+
+&lt;!-- Pointer Events --&gt;
+&lt;a class="pe-none"&gt;No clickeable&lt;/a&gt;
+&lt;a class="pe-auto"&gt;Clickeable&lt;/a&gt;
+
+&lt;!-- Z-Index (0, 1, 2, 3, n1, n2, n3) --&gt;
+&lt;div class="z-0"&gt;z-index: 0&lt;/div&gt;
+&lt;div class="z-1"&gt;z-index: 1&lt;/div&gt;
+&lt;div class="z-2"&gt;z-index: 2&lt;/div&gt;
+&lt;div class="z-3"&gt;z-index: 3&lt;/div&gt;
+
+&lt;!-- Ratio para videos/iframes --&gt;
+&lt;div class="ratio ratio-16x9"&gt;
+    &lt;iframe src="..."&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;div class="ratio ratio-4x3"&gt;...&lt;/div&gt;
+&lt;div class="ratio ratio-1x1"&gt;...&lt;/div&gt;
+&lt;div class="ratio ratio-21x9"&gt;...&lt;/div&gt;
+
+&lt;!-- Object Fit para imágenes --&gt;
+&lt;img class="object-fit-contain"&gt;
+&lt;img class="object-fit-cover"&gt;
+&lt;img class="object-fit-fill"&gt;
+&lt;img class="object-fit-scale"&gt;
+&lt;img class="object-fit-none"&gt;</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.parentElement;
+            const code = codeBlock.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerHTML = '<i class="bi bi-check"></i> ¡Copiado!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

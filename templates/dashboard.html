@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Panel Completo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --header-height: 60px;
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --info-color: #36b9cc;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --dark-color: #5a5c69;
+            --sidebar-bg: #1a1a2e;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            z-index: 1000;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+        
+        .nav-section {
+            padding: 10px 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar .nav-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(78, 115, 223, 0.2);
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .topbar {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 8px 15px 8px 40px;
+            border: 1px solid #e3e6f0;
+            border-radius: 50px;
+            background: #f8f9fc;
+        }
+        
+        .search-box input:focus {
+            background: white;
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+        
+        .topbar-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .topbar-icon {
+            position: relative;
+            color: var(--secondary-color);
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .topbar-icon .badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            font-size: 10px;
+        }
+        
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px;
+        }
+        
+        .page-title {
+            margin-bottom: 30px;
+        }
+        
+        .page-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card.primary { border-color: var(--primary-color); }
+        .stat-card.success { border-color: var(--success-color); }
+        .stat-card.info { border-color: var(--info-color); }
+        .stat-card.warning { border-color: var(--warning-color); }
+        
+        .stat-card .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .stat-card.primary .stat-icon { background: rgba(78, 115, 223, 0.1); color: var(--primary-color); }
+        .stat-card.success .stat-icon { background: rgba(28, 200, 138, 0.1); color: var(--success-color); }
+        .stat-card.info .stat-icon { background: rgba(54, 185, 204, 0.1); color: var(--info-color); }
+        .stat-card.warning .stat-icon { background: rgba(246, 194, 62, 0.1); color: var(--warning-color); }
+        
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .stat-card .stat-label {
+            color: var(--secondary-color);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-card .stat-change {
+            font-size: 12px;
+        }
+        
+        /* Cards */
+        .dashboard-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-card .card-header {
+            padding: 15px 25px;
+            border-bottom: 1px solid #e3e6f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .dashboard-card .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .dashboard-card .card-body {
+            padding: 25px;
+        }
+        
+        /* Tables */
+        .dashboard-table {
+            width: 100%;
+        }
+        
+        .dashboard-table th {
+            background: #f8f9fc;
+            padding: 12px 15px;
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .dashboard-table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .dashboard-table tbody tr:hover {
+            background: #f8f9fc;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* Progress bars */
+        .progress-sm {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        /* Activity Timeline */
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .activity-content h6 {
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        .activity-content p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--secondary-color);
+        }
+        
+        /* Responsive */
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-speedometer2 me-2"></i>
+            AdminPanel
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">Principal</div>
+            <a href="#" class="nav-link active">
+                <i class="bi bi-house"></i>
+                Dashboard
+            </a>
+            <a href="#" class="nav-link">
+                <i class="bi bi-graph-up"></i>
+                Analíticas
+            </a>
+            
+            <div class="nav-section">Gestión</div>
+            <a href="#" class="nav-link">
+                <i class="bi bi-people"></i>
+                Usuarios
+            </a>
+            <a href="#" class="nav-link">
+                <i class="bi bi-box-seam"></i>
+                Productos
+            </a>
+            <a href="#" class="nav-link">
+                <i class="bi bi-cart3"></i>
+                Pedidos
+                <span class="badge bg-danger ms-auto">5</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="bi bi-chat-dots"></i>
+                Mensajes
+                <span class="badge bg-primary ms-auto">12</span>
+            </a>
+            
+            <div class="nav-section">Configuración</div>
+            <a href="#" class="nav-link">
+                <i class="bi bi-gear"></i>
+                Ajustes
+            </a>
+            <a href="#" class="nav-link">
+                <i class="bi bi-shield-lock"></i>
+                Seguridad
+            </a>
+            
+            <div class="nav-section mt-4">Recursos</div>
+            <a href="../index.html" class="nav-link">
+                <i class="bi bi-arrow-left"></i>
+                Volver a la Guía
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <button class="btn d-lg-none" onclick="toggleSidebar()">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+            
+            <div class="search-box d-none d-md-block">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Buscar...">
+            </div>
+            
+            <div class="topbar-icons">
+                <div class="topbar-icon">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-danger rounded-pill">3</span>
+                </div>
+                <div class="topbar-icon">
+                    <i class="bi bi-envelope"></i>
+                    <span class="badge bg-primary rounded-pill">7</span>
+                </div>
+                <div class="vr mx-2"></div>
+                <div class="user-dropdown dropdown">
+                    <div class="d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                        <img src="https://via.placeholder.com/40" alt="User" class="user-avatar">
+                        <div class="d-none d-md-block">
+                            <div class="fw-semibold small">Juan García</div>
+                            <div class="text-muted" style="font-size: 11px;">Administrador</div>
+                        </div>
+                        <i class="bi bi-chevron-down small"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Mi Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Configuración</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- Page Title -->
+            <div class="page-title d-flex justify-content-between align-items-center">
+                <div>
+                    <h1>Dashboard</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-download me-2"></i>Exportar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card primary">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">Ingresos Mensuales</div>
+                                <div class="stat-value">$45,230</div>
+                                <div class="stat-change text-success">
+                                    <i class="bi bi-arrow-up"></i> 12.5% vs mes anterior
+                                </div>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card success">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">Usuarios Activos</div>
+                                <div class="stat-value">2,847</div>
+                                <div class="stat-change text-success">
+                                    <i class="bi bi-arrow-up"></i> 8.2% vs mes anterior
+                                </div>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card info">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">Pedidos Nuevos</div>
+                                <div class="stat-value">384</div>
+                                <div class="stat-change text-danger">
+                                    <i class="bi bi-arrow-down"></i> 3.1% vs mes anterior
+                                </div>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="bi bi-cart"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="stat-card warning">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-label">Tickets Pendientes</div>
+                                <div class="stat-value">18</div>
+                                <div class="stat-change text-success">
+                                    <i class="bi bi-arrow-down"></i> 5 menos que ayer
+                                </div>
+                            </div>
+                            <div class="stat-icon">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <!-- Sales Chart -->
+                <div class="col-xl-8 mb-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-graph-up me-2 text-primary"></i>Ventas Mensuales</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                                    Este Año
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Este Año</a></li>
+                                    <li><a class="dropdown-item" href="#">Año Anterior</a></li>
+                                    <li><a class="dropdown-item" href="#">Últimos 6 meses</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="salesChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pie Chart -->
+                <div class="col-xl-4 mb-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-pie-chart me-2 text-success"></i>Fuentes de Tráfico</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="pieChart" height="260"></canvas>
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-circle-fill text-primary me-2"></i>Directo</span>
+                                    <span class="fw-semibold">45%</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-circle-fill text-success me-2"></i>Social</span>
+                                    <span class="fw-semibold">30%</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="bi bi-circle-fill text-info me-2"></i>Referidos</span>
+                                    <span class="fw-semibold">15%</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="bi bi-circle-fill text-warning me-2"></i>Otros</span>
+                                    <span class="fw-semibold">10%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tables and Activity -->
+            <div class="row">
+                <!-- Recent Orders -->
+                <div class="col-xl-8 mb-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-receipt me-2 text-info"></i>Pedidos Recientes</h5>
+                            <a href="#" class="btn btn-sm btn-primary">Ver Todos</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="dashboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Producto</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#2845</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://via.placeholder.com/30" class="rounded-circle" alt="">
+                                                    María López
+                                                </div>
+                                            </td>
+                                            <td>iPhone 15 Pro</td>
+                                            <td class="fw-semibold">$999.99</td>
+                                            <td><span class="status-badge bg-success bg-opacity-10 text-success">Completado</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#2844</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://via.placeholder.com/30" class="rounded-circle" alt="">
+                                                    Carlos Ruiz
+                                                </div>
+                                            </td>
+                                            <td>MacBook Pro M3</td>
+                                            <td class="fw-semibold">$1,999.99</td>
+                                            <td><span class="status-badge bg-warning bg-opacity-10 text-warning">Pendiente</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#2843</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://via.placeholder.com/30" class="rounded-circle" alt="">
+                                                    Ana Torres
+                                                </div>
+                                            </td>
+                                            <td>AirPods Pro</td>
+                                            <td class="fw-semibold">$249.99</td>
+                                            <td><span class="status-badge bg-info bg-opacity-10 text-info">Enviado</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#2842</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://via.placeholder.com/30" class="rounded-circle" alt="">
+                                                    Pedro Sánchez
+                                                </div>
+                                            </td>
+                                            <td>Samsung Galaxy S24</td>
+                                            <td class="fw-semibold">$899.99</td>
+                                            <td><span class="status-badge bg-danger bg-opacity-10 text-danger">Cancelado</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#2841</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="https://via.placeholder.com/30" class="rounded-circle" alt="">
+                                                    Laura Martín
+                                                </div>
+                                            </td>
+                                            <td>Watch Ultra</td>
+                                            <td class="fw-semibold">$799.99</td>
+                                            <td><span class="status-badge bg-success bg-opacity-10 text-success">Completado</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="col-xl-4 mb-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-clock-history me-2 text-warning"></i>Actividad Reciente</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-item">
+                                <div class="activity-icon bg-primary bg-opacity-10 text-primary">
+                                    <i class="bi bi-cart-plus"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Nuevo pedido #2845</h6>
+                                    <p>María López realizó una compra de $999.99</p>
+                                    <small class="text-muted">Hace 5 minutos</small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon bg-success bg-opacity-10 text-success">
+                                    <i class="bi bi-person-plus"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Nuevo usuario registrado</h6>
+                                    <p>Juan García se unió a la plataforma</p>
+                                    <small class="text-muted">Hace 15 minutos</small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon bg-warning bg-opacity-10 text-warning">
+                                    <i class="bi bi-exclamation-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Stock bajo</h6>
+                                    <p>iPhone 15 Pro tiene solo 5 unidades</p>
+                                    <small class="text-muted">Hace 30 minutos</small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon bg-info bg-opacity-10 text-info">
+                                    <i class="bi bi-chat-dots"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h6>Nueva reseña</h6>
+                                    <p>Carlos dejó una reseña de 5 estrellas</p>
+                                    <small class="text-muted">Hace 1 hora</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-list-check me-2 text-success"></i>Progreso de Metas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Ventas Mensuales</span>
+                                    <span class="fw-semibold">$45,230 / $50,000</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Nuevos Usuarios</span>
+                                    <span class="fw-semibold">2,847 / 3,000</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tickets Resueltos</span>
+                                    <span class="fw-semibold">156 / 200</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-info" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Satisfacción Cliente</span>
+                                    <span class="fw-semibold">4.8 / 5.0</span>
+                                </div>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-warning" style="width: 96%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Top Products -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h5><i class="bi bi-trophy me-2 text-warning"></i>Productos Top</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="https://via.placeholder.com/50" class="rounded" alt="">
+                                    <div>
+                                        <h6 class="mb-0">iPhone 15 Pro</h6>
+                                        <small class="text-muted">Electrónica</small>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-semibold">$999.99</div>
+                                    <small class="text-success">256 ventas</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="https://via.placeholder.com/50" class="rounded" alt="">
+                                    <div>
+                                        <h6 class="mb-0">MacBook Pro M3</h6>
+                                        <small class="text-muted">Electrónica</small>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-semibold">$1,999.99</div>
+                                    <small class="text-success">189 ventas</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="https://via.placeholder.com/50" class="rounded" alt="">
+                                    <div>
+                                        <h6 class="mb-0">AirPods Pro</h6>
+                                        <small class="text-muted">Accesorios</small>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-semibold">$249.99</div>
+                                    <small class="text-success">432 ventas</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="https://via.placeholder.com/50" class="rounded" alt="">
+                                    <div>
+                                        <h6 class="mb-0">Watch Ultra</h6>
+                                        <small class="text-muted">Wearables</small>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-semibold">$799.99</div>
+                                    <small class="text-success">178 ventas</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+        
+        // Sales Chart
+        const salesCtx = document.getElementById('salesChart').getContext('2d');
+        new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Ventas 2024',
+                    data: [30000, 35000, 32000, 40000, 38000, 45000, 42000, 48000, 44000, 50000, 45230, 0],
+                    borderColor: '#4e73df',
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Ventas 2023',
+                    data: [25000, 28000, 30000, 35000, 33000, 38000, 36000, 40000, 38000, 42000, 40000, 45000],
+                    borderColor: '#1cc88a',
+                    backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Directo', 'Social', 'Referidos', 'Otros'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html>

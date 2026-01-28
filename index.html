@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Guía Web Completa - Bootstrap, JavaScript, E-commerce y más</title>
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Search Modal Styles -->
+    <style>
+        .search-modal .modal-content {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        .search-modal .modal-header {
+            border-bottom: 1px solid #eee;
+            padding: 0;
+        }
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            gap: 1rem;
+        }
+        .search-input-wrapper i {
+            color: #6c757d;
+            font-size: 1.25rem;
+        }
+        .search-input-wrapper input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        .search-input-wrapper input::placeholder {
+            color: #adb5bd;
+        }
+        .search-shortcut {
+            background: #f1f3f4;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #5f6368;
+            font-weight: 500;
+        }
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .search-result-item:hover, .search-result-item.active {
+            background: #f0f4ff;
+            color: inherit;
+        }
+        .search-result-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        .search-result-icon.bootstrap { background: #e8dbff; color: #7952b3; }
+        .search-result-icon.javascript { background: #fff3cd; color: #856404; }
+        .search-result-icon.auth { background: #d4edda; color: #155724; }
+        .search-result-icon.ecommerce { background: #cce5ff; color: #004085; }
+        .search-result-icon.api { background: #f8d7da; color: #721c24; }
+        .search-result-icon.template { background: #d1ecf1; color: #0c5460; }
+        .search-result-info h6 {
+            margin: 0;
+            font-weight: 600;
+        }
+        .search-result-info small {
+            color: #6c757d;
+        }
+        .search-result-info .highlight {
+            background: #fff3cd;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        .search-category {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .search-no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+        .search-no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        .search-btn-nav {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .search-btn-nav:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .search-btn-nav kbd {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         NAVBAR - Navegación Principal
+         ============================================ -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-code-slash me-2"></i>WebGuía Completa
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-house me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bootstrap me-1"></i>Bootstrap
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="bootstrap/componentes.html">🧩 Componentes</a></li>
+                            <li><a class="dropdown-item" href="bootstrap/grid.html">📐 Sistema Grid</a></li>
+                            <li><a class="dropdown-item" href="bootstrap/formularios.html">📝 Formularios</a></li>
+                            <li><a class="dropdown-item" href="bootstrap/utilidades.html">🛠️ Utilidades</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="bootstrap/avanzado.html">🔥 Avanzado</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-filetype-js me-1"></i>JavaScript
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="javascript/dom.html">🌳 DOM</a></li>
+                            <li><a class="dropdown-item" href="javascript/eventos.html">🎯 Eventos</a></li>
+                            <li><a class="dropdown-item" href="javascript/arrays-objetos.html">📦 Arrays/Objetos</a></li>
+                            <li><a class="dropdown-item" href="javascript/funciones.html">⚡ Funciones</a></li>
+                            <li><a class="dropdown-item" href="javascript/async.html">⏳ Async/Await</a></li>
+                            <li><a class="dropdown-item" href="javascript/es6-moderno.html">🚀 ES6+ Moderno</a></li>
+                            <li><a class="dropdown-item" href="javascript/storage.html">💾 Storage API</a></li>
+                            <li><a class="dropdown-item" href="javascript/validaciones.html">✅ Validaciones</a></li>
+                            <li><a class="dropdown-item" href="javascript/patrones.html">🧩 Patrones Diseño</a></li>
+                            <li><a class="dropdown-item" href="javascript/ejercicios.html">📝 Ejercicios</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-warning fw-bold" href="javascript/cheatsheet.html">⭐ CHEATSHEET EXAMEN</a></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="javascript/avanzado.html">🔥 Avanzado</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-lock me-1"></i>Auth
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="auth/login.html">🔐 Login (5 diseños)</a></li>
+                            <li><a class="dropdown-item" href="auth/registro.html">📋 Registro (5 diseños)</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="auth/avanzado.html">🔥 Auth Avanzado</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-cart me-1"></i>E-commerce
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="ecommerce/tienda.html">🏪 Tienda Online</a></li>
+                            <li><a class="dropdown-item" href="ecommerce/carrito.html">🛒 Carrito de Compras</a></li>
+                            <li><a class="dropdown-item" href="ecommerce/checkout.html">💳 Checkout</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="ecommerce/avanzado.html">🔥 E-commerce Avanzado</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-cloud me-1"></i>APIs
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="apis/fetch.html">📡 Fetch API</a></li>
+                            <li><a class="dropdown-item" href="apis/json-server.html">🗄️ JSON Server</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="apis/avanzado.html">🔥 APIs Avanzado</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="templates/landing.html">
+                            <i class="bi bi-window me-1"></i>Landing Pages
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="templates/dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <!-- Ejemplo Proyecto Completo -->
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-bold" href="ejemplo-proyecto/index.html">
+                            <i class="bi bi-rocket-takeoff me-1"></i>Proyecto Final
+                        </a>
+                    </li>
+                    <!-- Panel Admin y Usuario -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>Paneles
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="auth/auth-sistema.html">🔐 Login/Registro</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="admin/index.html">👨‍💼 Panel Admin</a></li>
+                            <li><a class="dropdown-item" href="usuario/mi-cuenta.html">👤 Mi Cuenta</a></li>
+                        </ul>
+                    </li>
+                    <!-- Botón de Búsqueda -->
+                    <li class="nav-item ms-lg-3">
+                        <button class="search-btn-nav" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            <i class="bi bi-search"></i>
+                            <span class="d-none d-lg-inline">Buscar...</span>
+                            <kbd class="d-none d-lg-inline">Ctrl+K</kbd>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         MODAL DE BÚSQUEDA - Command Palette Style
+         ============================================ -->
+    <div class="modal fade search-modal" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="search-input-wrapper w-100">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar temas, funciones, ejemplos..." autocomplete="off">
+                        <span class="search-shortcut">ESC para cerrar</span>
+                    </div>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="search-results" id="searchResults">
+                        <!-- Resultados populares por defecto -->
+                        <div class="search-category">🔥 Búsquedas Populares</div>
+                        <a href="javascript/arrays-objetos.html" class="search-result-item">
+                            <div class="search-result-icon javascript"><i class="bi bi-collection"></i></div>
+                            <div class="search-result-info">
+                                <h6>map, filter, reduce</h6>
+                                <small>JavaScript → Arrays y Objetos</small>
+                            </div>
+                        </a>
+                        <a href="javascript/async.html" class="search-result-item">
+                            <div class="search-result-icon javascript"><i class="bi bi-hourglass-split"></i></div>
+                            <div class="search-result-info">
+                                <h6>fetch, async/await, Promises</h6>
+                                <small>JavaScript → Asíncrono</small>
+                            </div>
+                        </a>
+                        <a href="javascript/dom.html" class="search-result-item">
+                            <div class="search-result-icon javascript"><i class="bi bi-diagram-3"></i></div>
+                            <div class="search-result-info">
+                                <h6>querySelector, getElementById</h6>
+                                <small>JavaScript → DOM</small>
+                            </div>
+                        </a>
+                        <a href="javascript/storage.html" class="search-result-item">
+                            <div class="search-result-icon javascript"><i class="bi bi-database"></i></div>
+                            <div class="search-result-info">
+                                <h6>localStorage, sessionStorage</h6>
+                                <small>JavaScript → Storage API</small>
+                            </div>
+                        </a>
+                        <a href="javascript/cheatsheet.html" class="search-result-item">
+                            <div class="search-result-icon javascript"><i class="bi bi-star-fill"></i></div>
+                            <div class="search-result-info">
+                                <h6>⭐ Cheatsheet para Examen</h6>
+                                <small>Todo JavaScript resumido</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         HERO SECTION - Sección Principal
+         ============================================ -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6">
+                    <h1 class="display-3 fw-bold text-white mb-4">
+                        Tu Guía Web <span class="text-warning">Completa</span>
+                    </h1>
+                    <p class="lead text-light mb-4">
+                        Todo lo que necesitas para crear sitios web profesionales: Bootstrap, JavaScript, 
+                        E-commerce, APIs, Login/Registro, Dashboard y mucho más. 
+                        <strong>¡Copia el código y úsalo!</strong>
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#contenido" class="btn btn-warning btn-lg">
+                            <i class="bi bi-rocket-takeoff me-2"></i>Comenzar
+                        </a>
+                        <a href="ecommerce/tienda.html" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-cart me-2"></i>Ver Tienda
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="code-preview">
+                        <pre><code class="text-success">
+// 🚀 Tu código está aquí
+const webCompleta = {
+    bootstrap: "✅ Componentes",
+    javascript: "✅ DOM, Eventos, APIs",
+    ecommerce: "✅ Tienda Funcional",
+    auth: "✅ Login/Registro",
+    dashboard: "✅ Panel Admin"
+};
+
+console.log("¡Éxito en tu prueba! 💪");
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+         CONTENIDO PRINCIPAL
+         ============================================ -->
+    <main id="contenido" class="py-5">
+        <div class="container">
+            <!-- Título de Sección -->
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">📚 Contenido Disponible</h2>
+                <p class="lead text-muted">Haz clic en cualquier tarjeta para ver ejemplos con código copiable</p>
+            </div>
+
+            <!-- Cards de Categorías -->
+            <div class="row g-4">
+                <!-- Bootstrap Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-primary text-white mb-3">
+                                <i class="bi bi-bootstrap fs-1"></i>
+                            </div>
+                            <h4 class="card-title">Bootstrap 5</h4>
+                            <p class="card-text text-muted">
+                                Sistema Grid, Componentes, Formularios, Modales, Carruseles, 
+                                Navegación y todas las utilidades.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Ejemplos de Navbar</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Ejemplos de Cards</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Ejemplos de Modales</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Ejemplos de Formularios</li>
+                            </ul>
+                            <a href="bootstrap/componentes.html" class="btn btn-primary mt-3">
+                                Ver Ejemplos <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-warning text-dark mb-3">
+                                <i class="bi bi-filetype-js fs-1"></i>
+                            </div>
+                            <h4 class="card-title">JavaScript Completo</h4>
+                            <p class="card-text text-muted">
+                                DOM, Eventos, Arrays, Objetos, Funciones, Async/Await, 
+                                LocalStorage, y mucho más.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Manipulación del DOM</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Todos los Eventos</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Validaciones</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>LocalStorage/SessionStorage</li>
+                            </ul>
+                            <a href="javascript/dom.html" class="btn btn-warning mt-3">
+                                Ver Ejemplos <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auth Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-success text-white mb-3">
+                                <i class="bi bi-shield-lock fs-1"></i>
+                            </div>
+                            <h4 class="card-title">Login & Registro</h4>
+                            <p class="card-text text-muted">
+                                Múltiples diseños de formularios de autenticación con 
+                                validaciones completas y diferentes estilos.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Diseños de Login</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Diseños de Registro</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Validaciones JS</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Sistema Completo Auth</li>
+                            </ul>
+                            <a href="auth/login.html" class="btn btn-success mt-3">
+                                Ver Ejemplos <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E-commerce Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-danger text-white mb-3">
+                                <i class="bi bi-cart4 fs-1"></i>
+                            </div>
+                            <h4 class="card-title">E-commerce Completo</h4>
+                            <p class="card-text text-muted">
+                                Tienda online funcional con carrito de compras, checkout, 
+                                catálogo de productos y gestión de pedidos.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Tienda Funcional</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Carritos de Compras</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Proceso de Checkout</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Filtros y Búsqueda</li>
+                            </ul>
+                            <a href="ecommerce/tienda.html" class="btn btn-danger mt-3">
+                                Ver Tienda <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- APIs Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-info text-white mb-3">
+                                <i class="bi bi-cloud-arrow-down fs-1"></i>
+                            </div>
+                            <h4 class="card-title">APIs & JSON</h4>
+                            <p class="card-text text-muted">
+                                Fetch API, consumo de APIs REST, JSON Server para 
+                                backend local, CRUD completo y más.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Fetch API Ejemplos</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>JSON Server Setup</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>CRUD Completo</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Manejo de Errores</li>
+                            </ul>
+                            <a href="apis/fetch.html" class="btn btn-info mt-3">
+                                Ver Ejemplos <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Templates Card -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box bg-purple text-white mb-3">
+                                <i class="bi bi-window-stack fs-1"></i>
+                            </div>
+                            <h4 class="card-title">Templates Listos</h4>
+                            <p class="card-text text-muted">
+                                Landing Pages profesionales, Dashboard administrativo, 
+                                páginas de error y más templates listos para usar.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>5+ Landing Pages</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Dashboard Completo</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Páginas de Error</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Portfolios</li>
+                            </ul>
+                            <a href="templates/landing.html" class="btn btn-purple mt-3">
+                                Ver Templates <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto Final Card - NUEVO -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow" style="border-left: 4px solid #f59e0b !important; background: linear-gradient(135deg, #fef3c7, #fff);">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box text-white mb-3" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                <i class="bi bi-rocket-takeoff fs-1"></i>
+                            </div>
+                            <h4 class="card-title">🚀 Proyecto Final Completo</h4>
+                            <p class="card-text text-muted">
+                                Mini tienda completa que integra TODO: login, carrito, checkout. 
+                                <strong>Perfecto para el examen.</strong>
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Tienda con productos</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Sistema de Login</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Carrito funcional</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Checkout completo</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Todo integrado</li>
+                            </ul>
+                            <a href="ejemplo-proyecto/index.html" class="btn btn-warning text-dark fw-bold mt-3 w-100">
+                                ⭐ Ver Proyecto Final <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Admin Card - NUEVO -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 card-hover border-0 shadow" style="border-left: 4px solid #7c3aed !important;">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-box text-white mb-3" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                <i class="bi bi-speedometer2 fs-1"></i>
+                            </div>
+                            <h4 class="card-title">🔥 Panel Admin Completo</h4>
+                            <p class="card-text text-muted">
+                                Dashboard de administración con gestión de usuarios, pedidos y productos. 
+                                Ideal para e-commerce.
+                            </p>
+                            <ul class="list-unstyled text-start">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Dashboard con Charts</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Gestión de Usuarios</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Gestión de Pedidos</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Gestión de Productos</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Todo con localStorage</li>
+                            </ul>
+                            <div class="d-grid gap-2 mt-3">
+                                <a href="admin/index.html" class="btn text-white" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                    👨‍💼 Ver Panel Admin <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                                <a href="usuario/mi-cuenta.html" class="btn btn-outline-secondary btn-sm">
+                                    👤 Ver Panel Usuario
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================
+                 SECCIÓN AVANZADA - NIVEL PRO
+                 ============================================ -->
+            <section class="mt-5 pt-5" id="avanzado">
+                <div class="text-center mb-5">
+                    <span class="badge bg-danger mb-3 px-3 py-2 fs-6">🔥 NIVEL AVANZADO</span>
+                    <h2 class="display-6 fw-bold">Contenido Avanzado</h2>
+                    <p class="lead text-muted">Patrones profesionales, técnicas avanzadas y código de nivel senior</p>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Bootstrap Avanzado -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow" style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: #eee;">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-box me-3" style="background: linear-gradient(135deg, #7952b3, #563d7c);">
+                                        <i class="bi bi-bootstrap fs-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Bootstrap Avanzado</h5>
+                                        <small class="text-warning">Glassmorphism, Efectos, Animaciones</small>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled small mb-3" style="color: #aaa;">
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Glassmorphism CSS</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Gradient Borders</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Hover Effects Pro</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Skeleton Loaders</li>
+                                </ul>
+                                <a href="bootstrap/avanzado.html" class="btn btn-outline-light btn-sm w-100">
+                                    Ver Avanzado <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JavaScript Avanzado -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow" style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: #eee;">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-box me-3" style="background: linear-gradient(135deg, #f7df1e, #c9b30c);">
+                                        <i class="bi bi-filetype-js fs-4 text-dark"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">JavaScript Avanzado</h5>
+                                        <small class="text-warning">Closures, Proxy, Generators</small>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled small mb-3" style="color: #aaa;">
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Closures & Memoization</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Currying Functions</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Proxy & Reflect</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Generators & Iterators</li>
+                                </ul>
+                                <a href="javascript/avanzado.html" class="btn btn-outline-light btn-sm w-100">
+                                    Ver Avanzado <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- APIs Avanzado -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow" style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: #eee;">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-box me-3" style="background: linear-gradient(135deg, #00b4d8, #0077b6);">
+                                        <i class="bi bi-cloud fs-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">APIs Avanzado</h5>
+                                        <small class="text-warning">Interceptores, Cache, Retry</small>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled small mb-3" style="color: #aaa;">
+                                    <li><i class="bi bi-check2 text-success me-2"></i>HTTP Client con Interceptores</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Retry & Exponential Backoff</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>AbortController & Timeout</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Cache & SWR Pattern</li>
+                                </ul>
+                                <a href="apis/avanzado.html" class="btn btn-outline-light btn-sm w-100">
+                                    Ver Avanzado <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- E-commerce Avanzado -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow" style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: #eee;">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-box me-3" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                                        <i class="bi bi-cart4 fs-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">E-commerce Avanzado</h5>
+                                        <small class="text-warning">Cart Manager, Cupones, Checkout</small>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled small mb-3" style="color: #aaa;">
+                                    <li><i class="bi bi-check2 text-success me-2"></i>CartManager con Eventos</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Sistema de Cupones</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Control de Inventario</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Checkout Completo</li>
+                                </ul>
+                                <a href="ecommerce/avanzado.html" class="btn btn-outline-light btn-sm w-100">
+                                    Ver Avanzado <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Auth Avanzado -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow" style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: #eee;">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="icon-box me-3" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                        <i class="bi bi-shield-lock fs-4 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Auth Avanzado</h5>
+                                        <small class="text-warning">JWT, RBAC, Session Manager</small>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled small mb-3" style="color: #aaa;">
+                                    <li><i class="bi bi-check2 text-success me-2"></i>JWT Auth Manager</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Roles y Permisos (RBAC)</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Protección de Rutas</li>
+                                    <li><i class="bi bi-check2 text-success me-2"></i>Session & Tab Sync</li>
+                                </ul>
+                                <a href="auth/avanzado.html" class="btn btn-outline-light btn-sm w-100">
+                                    Ver Avanzado <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Todo En Uno Card -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow position-relative overflow-hidden" style="background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3); background-size: 400% 400%; animation: gradientBG 8s ease infinite;">
+                            <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-stars display-1 text-white"></i>
+                                </div>
+                                <h4 class="text-white fw-bold mb-3">🎯 Todo en Uno</h4>
+                                <p class="text-white-50 mb-4">
+                                    Todos los patrones avanzados combinados en un proyecto completo
+                                </p>
+                                <a href="ejemplo-proyecto/index.html" class="btn btn-light btn-lg fw-bold">
+                                    <i class="bi bi-rocket-takeoff me-2"></i>Ver Proyecto Final
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <style>
+                @keyframes gradientBG {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+            </style>
+
+            <!-- Quick Reference Section -->
+            <section class="mt-5 pt-5">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold">⚡ Referencia Rápida</h3>
+                    <p class="text-muted">Código que usarás constantemente</p>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Código Bootstrap básico -->
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-bootstrap me-2"></i>Estructura HTML con Bootstrap
+                            </div>
+                            <div class="card-body">
+                                <pre class="bg-dark text-light p-3 rounded"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Mi Página&lt;/title&gt;
+    &lt;!-- Bootstrap CSS --&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+    &lt;!-- Bootstrap Icons --&gt;
+    &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Tu contenido aquí --&gt;
+    
+    &lt;!-- Bootstrap JS --&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                                <button class="btn btn-sm btn-outline-primary mt-2 copy-btn" data-target="bootstrap-base">
+                                    <i class="bi bi-clipboard me-1"></i>Copiar Código
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Código JS básico -->
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-warning text-dark">
+                                <i class="bi bi-filetype-js me-2"></i>JavaScript Esencial
+                            </div>
+                            <div class="card-body">
+                                <pre class="bg-dark text-light p-3 rounded"><code>// ====== SELECTORES DOM ======
+const elemento = document.getElementById('id');
+const elementos = document.querySelectorAll('.clase');
+
+// ====== EVENTOS ======
+elemento.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('Click!');
+});
+
+// ====== LOCALSTORAGE ======
+localStorage.setItem('clave', JSON.stringify(datos));
+const datos = JSON.parse(localStorage.getItem('clave'));
+
+// ====== FETCH API ======
+fetch('url')
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));</code></pre>
+                                <button class="btn btn-sm btn-outline-warning mt-2 copy-btn" data-target="js-base">
+                                    <i class="bi bi-clipboard me-1"></i>Copiar Código
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-code-slash me-2"></i>WebGuía Completa</h5>
+                    <p class="text-muted">Tu recurso completo para desarrollo web.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Creado con ❤️ para tu éxito</p>
+                    <p class="text-muted small">¡Buena suerte en tu prueba! 💪</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    <!-- Search Functionality -->
+    <script>
+        // Base de datos de búsqueda - Todo el contenido indexado
+        const searchIndex = [
+            // JavaScript - DOM
+            { title: 'querySelector', desc: 'Seleccionar elementos del DOM', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom seleccionar elemento css selector query' },
+            { title: 'getElementById', desc: 'Seleccionar por ID', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom id elemento seleccionar' },
+            { title: 'querySelectorAll', desc: 'Seleccionar múltiples elementos', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom seleccionar todos elementos lista nodelist' },
+            { title: 'createElement', desc: 'Crear elementos HTML', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom crear elemento nuevo html' },
+            { title: 'appendChild', desc: 'Añadir elementos al DOM', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom añadir agregar hijo elemento append' },
+            { title: 'innerHTML', desc: 'Modificar contenido HTML', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom html contenido modificar cambiar' },
+            { title: 'textContent', desc: 'Modificar texto de elementos', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom texto contenido modificar' },
+            { title: 'classList', desc: 'Manipular clases CSS', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom clases css add remove toggle contains' },
+            { title: 'setAttribute', desc: 'Modificar atributos', url: 'javascript/dom.html', category: 'javascript', keywords: 'dom atributos set get remove attribute' },
+            
+            // JavaScript - Eventos
+            { title: 'addEventListener', desc: 'Escuchar eventos del DOM', url: 'javascript/eventos.html', category: 'javascript', keywords: 'eventos listener click submit input change' },
+            { title: 'click', desc: 'Evento de clic', url: 'javascript/eventos.html', category: 'javascript', keywords: 'evento click mouse boton' },
+            { title: 'submit', desc: 'Evento de envío de formulario', url: 'javascript/eventos.html', category: 'javascript', keywords: 'evento formulario form submit enviar' },
+            { title: 'input', desc: 'Evento de entrada de texto', url: 'javascript/eventos.html', category: 'javascript', keywords: 'evento input texto escribir' },
+            { title: 'preventDefault', desc: 'Prevenir comportamiento por defecto', url: 'javascript/eventos.html', category: 'javascript', keywords: 'evento prevenir default cancelar' },
+            { title: 'stopPropagation', desc: 'Detener propagación de eventos', url: 'javascript/eventos.html', category: 'javascript', keywords: 'evento propagacion bubbling detener parar' },
+            { title: 'event delegation', desc: 'Delegación de eventos', url: 'javascript/eventos.html', category: 'javascript', keywords: 'evento delegacion padre hijo dinamico' },
+            
+            // JavaScript - Arrays
+            { title: 'map', desc: 'Transformar elementos de un array', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array map transformar recorrer nuevo' },
+            { title: 'filter', desc: 'Filtrar elementos de un array', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array filter filtrar condicion' },
+            { title: 'reduce', desc: 'Reducir array a un valor', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array reduce acumular sumar total' },
+            { title: 'find', desc: 'Encontrar un elemento', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array find buscar encontrar primero' },
+            { title: 'findIndex', desc: 'Encontrar índice de elemento', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array findindex indice posicion buscar' },
+            { title: 'some', desc: 'Verificar si algún elemento cumple', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array some alguno condicion verificar' },
+            { title: 'every', desc: 'Verificar si todos cumplen', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array every todos condicion verificar' },
+            { title: 'includes', desc: 'Verificar si existe elemento', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array includes contiene existe verificar' },
+            { title: 'forEach', desc: 'Iterar sobre un array', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array foreach recorrer iterar loop' },
+            { title: 'push pop shift unshift', desc: 'Métodos para modificar arrays', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array push pop shift unshift añadir quitar' },
+            { title: 'sort', desc: 'Ordenar arrays', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array sort ordenar alfabetico numerico' },
+            { title: 'slice splice', desc: 'Extraer o modificar partes del array', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'array slice splice cortar extraer eliminar' },
+            { title: 'spread operator', desc: 'Operador de propagación ...', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'spread operator copiar combinar arrays objetos' },
+            { title: 'destructuring', desc: 'Desestructuración de arrays y objetos', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'destructuring desestructurar extraer variables' },
+            
+            // JavaScript - Objetos
+            { title: 'Object.keys', desc: 'Obtener claves de un objeto', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'objeto keys claves propiedades' },
+            { title: 'Object.values', desc: 'Obtener valores de un objeto', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'objeto values valores' },
+            { title: 'Object.entries', desc: 'Obtener pares clave-valor', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'objeto entries pares clave valor' },
+            { title: 'Object.assign', desc: 'Copiar objetos', url: 'javascript/arrays-objetos.html', category: 'javascript', keywords: 'objeto assign copiar mezclar merge' },
+            
+            // JavaScript - Funciones
+            { title: 'arrow functions', desc: 'Funciones flecha =>', url: 'javascript/funciones.html', category: 'javascript', keywords: 'funcion arrow flecha es6 sintaxis' },
+            { title: 'callbacks', desc: 'Funciones como parámetros', url: 'javascript/funciones.html', category: 'javascript', keywords: 'funcion callback parametro asincrono' },
+            { title: 'closures', desc: 'Clausuras en JavaScript', url: 'javascript/funciones.html', category: 'javascript', keywords: 'funcion closure clausura scope ambito' },
+            { title: 'higher order functions', desc: 'Funciones de orden superior', url: 'javascript/funciones.html', category: 'javascript', keywords: 'funcion orden superior map filter reduce' },
+            { title: 'rest parameters', desc: 'Parámetros rest ...args', url: 'javascript/funciones.html', category: 'javascript', keywords: 'funcion rest parametros args spread' },
+            { title: 'default parameters', desc: 'Valores por defecto', url: 'javascript/funciones.html', category: 'javascript', keywords: 'funcion parametros default defecto' },
+            
+            // JavaScript - Async
+            { title: 'fetch', desc: 'Realizar peticiones HTTP', url: 'javascript/async.html', category: 'javascript', keywords: 'fetch api http request get post ajax' },
+            { title: 'async await', desc: 'Código asíncrono moderno', url: 'javascript/async.html', category: 'javascript', keywords: 'async await asincrono promise esperar' },
+            { title: 'Promises', desc: 'Promesas en JavaScript', url: 'javascript/async.html', category: 'javascript', keywords: 'promise promesa then catch finally' },
+            { title: 'Promise.all', desc: 'Ejecutar promesas en paralelo', url: 'javascript/async.html', category: 'javascript', keywords: 'promise all paralelo multiple' },
+            { title: 'try catch', desc: 'Manejo de errores', url: 'javascript/async.html', category: 'javascript', keywords: 'error try catch finally manejar' },
+            { title: 'then catch', desc: 'Encadenar promesas', url: 'javascript/async.html', category: 'javascript', keywords: 'promise then catch encadenar' },
+            
+            // JavaScript - ES6+
+            { title: 'let const', desc: 'Declaración de variables', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'variable let const var declarar' },
+            { title: 'template literals', desc: 'Template strings con backticks', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'template literal string backtick interpolacion' },
+            { title: 'optional chaining', desc: 'Operador ?. para acceso seguro', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'optional chaining interrogacion punto seguro null' },
+            { title: 'nullish coalescing', desc: 'Operador ?? para valores nulos', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'nullish coalescing doble interrogacion null undefined' },
+            { title: 'classes', desc: 'Clases en JavaScript', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'class clase constructor herencia extends' },
+            { title: 'modules import export', desc: 'Módulos ES6', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'module modulo import export es6' },
+            { title: 'Map Set', desc: 'Estructuras de datos Map y Set', url: 'javascript/es6-moderno.html', category: 'javascript', keywords: 'map set estructura datos coleccion' },
+            
+            // JavaScript - Storage
+            { title: 'localStorage', desc: 'Almacenamiento local permanente', url: 'javascript/storage.html', category: 'javascript', keywords: 'localstorage almacenamiento local guardar' },
+            { title: 'sessionStorage', desc: 'Almacenamiento de sesión', url: 'javascript/storage.html', category: 'javascript', keywords: 'sessionstorage sesion almacenamiento temporal' },
+            { title: 'JSON.stringify', desc: 'Convertir a JSON string', url: 'javascript/storage.html', category: 'javascript', keywords: 'json stringify convertir string texto' },
+            { title: 'JSON.parse', desc: 'Parsear JSON a objeto', url: 'javascript/storage.html', category: 'javascript', keywords: 'json parse convertir objeto' },
+            { title: 'getItem setItem', desc: 'Métodos de storage', url: 'javascript/storage.html', category: 'javascript', keywords: 'storage getitem setitem removeitem guardar obtener' },
+            
+            // JavaScript - Validaciones
+            { title: 'Expresiones regulares', desc: 'Regex para validación', url: 'javascript/validaciones.html', category: 'javascript', keywords: 'regex regexp expresion regular validar patron' },
+            { title: 'Validar email', desc: 'Validación de correo electrónico', url: 'javascript/validaciones.html', category: 'javascript', keywords: 'validar email correo electronico regex' },
+            { title: 'Validar teléfono', desc: 'Validación de número telefónico', url: 'javascript/validaciones.html', category: 'javascript', keywords: 'validar telefono numero patron' },
+            { title: 'Validar formulario', desc: 'Validación de formularios', url: 'javascript/validaciones.html', category: 'javascript', keywords: 'validar formulario form campos required' },
+            { title: 'checkValidity', desc: 'API de validación HTML5', url: 'javascript/validaciones.html', category: 'javascript', keywords: 'validar checkvalidity html5 api constraint' },
+            
+            // JavaScript - Patrones
+            { title: 'Singleton', desc: 'Patrón Singleton', url: 'javascript/patrones.html', category: 'javascript', keywords: 'patron singleton instancia unica' },
+            { title: 'Factory', desc: 'Patrón Factory', url: 'javascript/patrones.html', category: 'javascript', keywords: 'patron factory fabrica crear objetos' },
+            { title: 'Observer', desc: 'Patrón Observer/PubSub', url: 'javascript/patrones.html', category: 'javascript', keywords: 'patron observer pubsub eventos suscripcion' },
+            { title: 'Module Pattern', desc: 'Patrón Módulo', url: 'javascript/patrones.html', category: 'javascript', keywords: 'patron modulo iife encapsulacion privado' },
+            
+            // JavaScript - Ejercicios
+            { title: 'FizzBuzz', desc: 'Ejercicio clásico', url: 'javascript/ejercicios.html', category: 'javascript', keywords: 'ejercicio fizzbuzz practica' },
+            { title: 'Palíndromo', desc: 'Verificar palíndromos', url: 'javascript/ejercicios.html', category: 'javascript', keywords: 'ejercicio palindromo string reverso' },
+            { title: 'Fibonacci', desc: 'Secuencia de Fibonacci', url: 'javascript/ejercicios.html', category: 'javascript', keywords: 'ejercicio fibonacci secuencia recursion' },
+            { title: 'Debounce Throttle', desc: 'Optimización de eventos', url: 'javascript/ejercicios.html', category: 'javascript', keywords: 'debounce throttle optimizar eventos limite' },
+            
+            // JavaScript - Cheatsheet
+            { title: '⭐ Cheatsheet Examen', desc: 'Resumen completo para estudiar', url: 'javascript/cheatsheet.html', category: 'javascript', keywords: 'cheatsheet resumen examen estudiar todo' },
+            
+            // Bootstrap
+            { title: 'Navbar', desc: 'Barra de navegación', url: 'bootstrap/componentes.html', category: 'bootstrap', keywords: 'navbar navegacion menu header' },
+            { title: 'Cards', desc: 'Tarjetas Bootstrap', url: 'bootstrap/componentes.html', category: 'bootstrap', keywords: 'card tarjeta contenedor' },
+            { title: 'Modal', desc: 'Ventanas modales', url: 'bootstrap/componentes.html', category: 'bootstrap', keywords: 'modal ventana popup dialogo' },
+            { title: 'Carousel', desc: 'Carrusel de imágenes', url: 'bootstrap/componentes.html', category: 'bootstrap', keywords: 'carousel carrusel slider imagenes' },
+            { title: 'Buttons', desc: 'Botones Bootstrap', url: 'bootstrap/componentes.html', category: 'bootstrap', keywords: 'button boton btn primary secondary' },
+            { title: 'Alerts', desc: 'Alertas y mensajes', url: 'bootstrap/componentes.html', category: 'bootstrap', keywords: 'alert alerta mensaje notificacion' },
+            { title: 'Grid System', desc: 'Sistema de rejilla', url: 'bootstrap/grid.html', category: 'bootstrap', keywords: 'grid rejilla columnas row col responsive' },
+            { title: 'Flexbox', desc: 'Utilidades flexbox', url: 'bootstrap/grid.html', category: 'bootstrap', keywords: 'flex flexbox alinear justify align' },
+            { title: 'Formularios', desc: 'Inputs y formularios', url: 'bootstrap/formularios.html', category: 'bootstrap', keywords: 'form formulario input select textarea' },
+            { title: 'Form validation', desc: 'Validación de formularios', url: 'bootstrap/formularios.html', category: 'bootstrap', keywords: 'form validacion is-valid is-invalid' },
+            { title: 'Utilidades', desc: 'Clases de utilidad', url: 'bootstrap/utilidades.html', category: 'bootstrap', keywords: 'utility margin padding display text color' },
+            { title: 'Spacing', desc: 'Margin y Padding', url: 'bootstrap/utilidades.html', category: 'bootstrap', keywords: 'm p margin padding mt mb ms me pt pb' },
+            
+            // Auth
+            { title: 'Login', desc: '5 diseños de login', url: 'auth/login.html', category: 'auth', keywords: 'login iniciar sesion usuario password' },
+            { title: 'Registro', desc: '5 diseños de registro', url: 'auth/registro.html', category: 'auth', keywords: 'registro signup crear cuenta usuario' },
+            
+            // E-commerce
+            { title: 'Tienda Online', desc: 'Catálogo de productos', url: 'ecommerce/tienda.html', category: 'ecommerce', keywords: 'tienda productos catalogo shop ecommerce' },
+            { title: 'Carrito de Compras', desc: 'Sistema de carrito', url: 'ecommerce/carrito.html', category: 'ecommerce', keywords: 'carrito cart compras agregar quitar' },
+            { title: 'Checkout', desc: 'Proceso de pago', url: 'ecommerce/checkout.html', category: 'ecommerce', keywords: 'checkout pago compra finalizar' },
+            
+            // APIs
+            { title: 'Fetch API', desc: 'Consumir APIs REST', url: 'apis/fetch.html', category: 'api', keywords: 'fetch api rest http get post put delete' },
+            { title: 'JSON Server', desc: 'API mock para desarrollo', url: 'apis/json-server.html', category: 'api', keywords: 'json server mock api fake backend' },
+            { title: 'CRUD', desc: 'Operaciones Create Read Update Delete', url: 'apis/fetch.html', category: 'api', keywords: 'crud crear leer actualizar eliminar' },
+            
+            // Templates
+            { title: 'Landing Page', desc: '5 diseños de landing', url: 'templates/landing.html', category: 'template', keywords: 'landing page pagina inicio hero' },
+            { title: 'Dashboard', desc: 'Panel de administración', url: 'templates/dashboard.html', category: 'template', keywords: 'dashboard panel admin graficos charts' },
+            
+            // Panel Admin
+            { title: '👨‍💼 Panel Admin', desc: 'Dashboard de administración completo', url: 'admin/index.html', category: 'admin', keywords: 'admin dashboard panel administrador tienda' },
+            { title: 'Gestión de Usuarios', desc: 'CRUD de usuarios registrados', url: 'admin/usuarios.html', category: 'admin', keywords: 'usuarios admin gestionar crud lista' },
+            { title: 'Gestión de Pedidos', desc: 'Ver y gestionar pedidos', url: 'admin/pedidos.html', category: 'admin', keywords: 'pedidos ordenes admin estado envio' },
+            { title: 'Gestión de Productos', desc: 'Inventario de productos', url: 'admin/productos.html', category: 'admin', keywords: 'productos inventario admin stock agregar' },
+            { title: '👤 Mi Cuenta', desc: 'Panel de usuario', url: 'usuario/mi-cuenta.html', category: 'usuario', keywords: 'cuenta usuario perfil pedidos direcciones' },
+            { title: 'Sistema de Login', desc: 'Auth funcional con localStorage', url: 'auth/auth-sistema.html', category: 'auth', keywords: 'login registro auth sesion localStorage' },
+        ];
+
+        // Función de búsqueda
+        function search(query) {
+            if (!query.trim()) {
+                return [];
+            }
+            
+            const terms = query.toLowerCase().split(' ');
+            
+            return searchIndex
+                .map(item => {
+                    const searchText = `${item.title} ${item.desc} ${item.keywords}`.toLowerCase();
+                    let score = 0;
+                    
+                    terms.forEach(term => {
+                        if (item.title.toLowerCase().includes(term)) score += 10;
+                        if (item.desc.toLowerCase().includes(term)) score += 5;
+                        if (item.keywords.toLowerCase().includes(term)) score += 3;
+                    });
+                    
+                    return { ...item, score };
+                })
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 10);
+        }
+
+        // Renderizar resultados
+        function renderResults(results, query) {
+            const container = document.getElementById('searchResults');
+            
+            if (results.length === 0 && query.trim()) {
+                container.innerHTML = `
+                    <div class="search-no-results">
+                        <i class="bi bi-search"></i>
+                        <p>No se encontraron resultados para "<strong>${query}</strong>"</p>
+                        <small>Intenta con otros términos como: map, fetch, localStorage, grid...</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (results.length === 0) {
+                // Mostrar búsquedas populares si no hay query
+                container.innerHTML = `
+                    <div class="search-category">🔥 Búsquedas Populares</div>
+                    <a href="javascript/arrays-objetos.html" class="search-result-item">
+                        <div class="search-result-icon javascript"><i class="bi bi-collection"></i></div>
+                        <div class="search-result-info">
+                            <h6>map, filter, reduce</h6>
+                            <small>JavaScript → Arrays y Objetos</small>
+                        </div>
+                    </a>
+                    <a href="javascript/async.html" class="search-result-item">
+                        <div class="search-result-icon javascript"><i class="bi bi-hourglass-split"></i></div>
+                        <div class="search-result-info">
+                            <h6>fetch, async/await, Promises</h6>
+                            <small>JavaScript → Asíncrono</small>
+                        </div>
+                    </a>
+                    <a href="javascript/dom.html" class="search-result-item">
+                        <div class="search-result-icon javascript"><i class="bi bi-diagram-3"></i></div>
+                        <div class="search-result-info">
+                            <h6>querySelector, getElementById</h6>
+                            <small>JavaScript → DOM</small>
+                        </div>
+                    </a>
+                    <a href="javascript/storage.html" class="search-result-item">
+                        <div class="search-result-icon javascript"><i class="bi bi-database"></i></div>
+                        <div class="search-result-info">
+                            <h6>localStorage, sessionStorage</h6>
+                            <small>JavaScript → Storage API</small>
+                        </div>
+                    </a>
+                    <a href="javascript/cheatsheet.html" class="search-result-item">
+                        <div class="search-result-icon javascript"><i class="bi bi-star-fill"></i></div>
+                        <div class="search-result-info">
+                            <h6>⭐ Cheatsheet para Examen</h6>
+                            <small>Todo JavaScript resumido</small>
+                        </div>
+                    </a>
+                `;
+                return;
+            }
+
+            // Agrupar por categoría
+            const grouped = {};
+            results.forEach(item => {
+                if (!grouped[item.category]) grouped[item.category] = [];
+                grouped[item.category].push(item);
+            });
+
+            const categoryNames = {
+                javascript: '💛 JavaScript',
+                bootstrap: '💜 Bootstrap',
+                auth: '🔐 Autenticación',
+                ecommerce: '🛒 E-commerce',
+                api: '🌐 APIs',
+                template: '📄 Templates',
+                admin: '👨‍💼 Panel Admin',
+                usuario: '👤 Usuario'
+            };
+
+            const categoryIcons = {
+                javascript: 'bi-filetype-js',
+                bootstrap: 'bi-bootstrap',
+                auth: 'bi-shield-lock',
+                ecommerce: 'bi-cart',
+                api: 'bi-cloud',
+                template: 'bi-window',
+                admin: 'bi-speedometer2',
+                usuario: 'bi-person'
+            };
+
+            let html = '';
+            for (const [category, items] of Object.entries(grouped)) {
+                html += `<div class="search-category">${categoryNames[category] || category}</div>`;
+                items.forEach(item => {
+                    // Resaltar términos buscados
+                    let title = item.title;
+                    let desc = item.desc;
+                    query.split(' ').forEach(term => {
+                        if (term.trim()) {
+                            const regex = new RegExp(`(${term})`, 'gi');
+                            title = title.replace(regex, '<span class="highlight">$1</span>');
+                            desc = desc.replace(regex, '<span class="highlight">$1</span>');
+                        }
+                    });
+                    
+                    html += `
+                        <a href="${item.url}" class="search-result-item">
+                            <div class="search-result-icon ${item.category}">
+                                <i class="bi ${categoryIcons[item.category] || 'bi-file'}"></i>
+                            </div>
+                            <div class="search-result-info">
+                                <h6>${title}</h6>
+                                <small>${desc}</small>
+                            </div>
+                        </a>
+                    `;
+                });
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const searchModal = document.getElementById('searchModal');
+            
+            // Buscar mientras escribe
+            searchInput.addEventListener('input', (e) => {
+                const results = search(e.target.value);
+                renderResults(results, e.target.value);
+            });
+            
+            // Focus en input cuando abre modal
+            searchModal.addEventListener('shown.bs.modal', () => {
+                searchInput.focus();
+                searchInput.value = '';
+                renderResults([], '');
+            });
+            
+            // Atajo de teclado Ctrl+K
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    const modal = new bootstrap.Modal(searchModal);
+                    modal.show();
+                }
+            });
+            
+            // Navegación con teclado en resultados
+            searchInput.addEventListener('keydown', (e) => {
+                const items = document.querySelectorAll('.search-result-item');
+                const active = document.querySelector('.search-result-item.active');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (!active && items.length) {
+                        items[0].classList.add('active');
+                    } else if (active && active.nextElementSibling?.classList.contains('search-result-item')) {
+                        active.classList.remove('active');
+                        active.nextElementSibling.classList.add('active');
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (active && active.previousElementSibling?.classList.contains('search-result-item')) {
+                        active.classList.remove('active');
+                        active.previousElementSibling.classList.add('active');
+                    }
+                } else if (e.key === 'Enter' && active) {
+                    e.preventDefault();
+                    window.location.href = active.href;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
