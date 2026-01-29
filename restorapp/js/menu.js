@@ -57,6 +57,9 @@ function renderCart() {
     const cartContainer = document.getElementById('cartItems');
     const emptyCart = document.getElementById('emptyCart');
 
+    // Siempre recarga el carrito desde localStorage antes de renderizar
+    cart.items = cart.loadCart();
+
     if (cart.items.length === 0) {
         emptyCart.style.display = 'block';
         cartContainer.innerHTML = '';
@@ -177,6 +180,9 @@ function setupEventListeners() {
         cart.clearCart();
         renderCart();
         showToast('Order confirmed! Thank you!');
+        setTimeout(() => {
+            window.location.href = 'recent-orders.html';
+        }, 1200); // Espera a que se muestre el toast
     });
 }
 
