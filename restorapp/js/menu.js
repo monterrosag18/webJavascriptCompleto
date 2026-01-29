@@ -122,6 +122,13 @@ function removeFromCart(productId) {
 // Event Listeners
 // ==========================================
 function setupEventListeners() {
+    // Sidebar Logout
+    document.getElementById('sidebarLogout').addEventListener('click', (e) => {
+        e.preventDefault();
+        userManager.logout();
+        window.location.href = 'index.html';
+    });
+
     // Category tabs
     document.querySelectorAll('.category-tab').forEach(tab => {
         tab.addEventListener('click', () => {

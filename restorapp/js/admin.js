@@ -138,6 +138,13 @@ function selectOrder(orderId) {
 // Event Listeners
 // ==========================================
 function setupEventListeners() {
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        userManager.logout();
+        window.location.href = '../index.html';
+    });
+
     // Update status
     document.getElementById('updateStatusBtn').addEventListener('click', () => {
         if (!selectedOrderId) return;

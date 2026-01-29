@@ -158,10 +158,22 @@ function showOrderDetail(orderId) {
 // Event Listeners
 // ==========================================
 function setupEventListeners() {
-    // Logout
+    // Sidebar Logout
+    document.getElementById('sidebarLogout').addEventListener('click', (e) => {
+        e.preventDefault();
+        userManager.logout();
+        window.location.href = 'index.html';
+    });
+
+    // Logout button in profile
     document.getElementById('logoutBtn').addEventListener('click', () => {
         userManager.logout();
         window.location.href = 'index.html';
+    });
+
+    // Edit Profile button
+    document.getElementById('editProfileBtn').addEventListener('click', () => {
+        showEditProfileModal();
     });
 
     // Filter tabs
@@ -175,5 +187,82 @@ function setupEventListeners() {
                 renderOrders(tab.dataset.filter);
             }
         });
+    });
+}
+
+// ==========================================
+// Edit Profile Modal
+// ==========================================
+function showEditProfileModal() {
+    const user = userManager.currentUser;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.id = 'editProfileModal';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark-card text-white">
+                <div class="modal-header border-dark">
+                    <h5 class="modal-title">Edit Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Full Name</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="editName" value="${user.name}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Email</label>
+                            <input type="email" class="form-control bg-dark text-white border-secondary" 
+                                   id="editEmail" value="${user.email}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted">Phone</label>
+                            <input type="tel" class="form-control bg-dark text-white border-secondary" 
+                                   id="editPhone" value="${user.phone || ''}" placeholder="+1 (555) 000-0000">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-dark">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="saveProfileBtn">
+                        <i class="bi bi-check2 me-1"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+
+    // Save button handler
+    document.getElementById('saveProfileBtn').addEventListener('click', () => {
+        const newName = document.getElementById('editName').value.trim();
+        const newEmail = document.getElementById('editEmail').value.trim();
+        const newPhone = document.getElementById('editPhone').value.trim();
+
+        if (!newName || !newEmail) {
+            alert('Name and email are required');
+            return;
+        }
+
+        // Update user
+        user.name = newName;
+        user.email = newEmail;
+        user.phone = newPhone;
+        user.initials = newName.split(' ').map(n => n[0]).join('').toUpperCase();
+        
+        userManager.saveUser(user);
+        loadUserProfile();
+        
+        bsModal.hide();
+    });
+
+    modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
     });
 }
